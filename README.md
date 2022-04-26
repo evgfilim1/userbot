@@ -1,12 +1,14 @@
 # userbot
 
+[![wakatime](https://wakatime.com/badge/github/evgfilim1/userbot.svg)](https://wakatime.com/badge/github/evgfilim1/userbot)
+
 The userbot I use with some specific features written in Pyrogram.
 
 ## Features
 
 ### Commands
 
-_Command prefix is `.`_
+Commands work only when sent by the user who runs userbot. Command prefix is `.`.
 
 ```
 List of commands available:
@@ -33,7 +35,8 @@ help — Sends this message
 
 ### Hooks (triggers)
 
-Triggers can be enabled by `.<hookname>here` and disabled by `.no<hookname>here`
+Triggers can be enabled by `.<hookname>here` and disabled by `.no<hookname>here`. They are disabled
+everywhere by default. To check if a hook is enabled or disabled, use `.hookshere`.
 
 - `duck`: Sends a duck emoji (🦆) when someone writes "дак" (pronounced as "duck") or "кря"
   (pronounces as "krya", English equivalent is "quack")
@@ -43,6 +46,8 @@ Triggers can be enabled by `.<hookname>here` and disabled by `.no<hookname>here`
   sticker itself
 
 ### Shortcuts
+
+Shortcuts work only when sent by the user who runs userbot.
 
 - `yt:<id>` — Sends a YouTube video with the specified ID
 - `@<id>` — Mentions a user with the specified ID
