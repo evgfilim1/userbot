@@ -53,11 +53,15 @@ Shortcuts work only when sent by the user who runs userbot.
 - `@<id>` — Mentions a user with the specified ID
   - `@<id>:Some name@` — Mentions a user with the specified ID with a custom name
 - `github:<username>` or `gh:<username>` — Sends a GitHub link to the specified user's profile
-  - `github:<username>/<repo>` — ... to the specified repo
+  - `github:<username>/<repo>` — ... to the specified repo, `<repo>` can be "`@`" which means "same
+    as `<username>`"
+  - `github:<username>/<repo>:/<path>` — ... to the specified path on the default branch
+  - `github:<username>/<repo>:/<path>#<line1>` — ... to the specified line in file
+  - `github:<username>/<repo>:/<path>#<line1>-<line2>` — ... to the specified lines in file
   - `github:<username>/<repo>@<branch-or-commit>` — ... to the specified branch or commit of the repo
-  - `github:<username>/<repo>@<branch-or-commit>/<path>` — ... to the specified path on the branch or commit
-  - `github:<username>/<repo>@<branch-or-commit>/<path>#<line1>` — ... to the specified line in file
-  - `github:<username>/<repo>@<branch-or-commit>/<path>#<line1>-<line2>` — ... to the specified lines in file
+  - `github:<username>/<repo>@<branch-or-commit>:/<path>` — ... to the specified path on the branch or commit
+  - `github:<username>/<repo>@<branch-or-commit>:/<path>#<line1>` — ... to the specified line in file
+  - `github:<username>/<repo>@<branch-or-commit>:/<path>#<line1>-<line2>` — ... to the specified lines in file
   - `github:<username>/<repo>#<issue-or-pr>` — ... to the specified issue or pull request
 
 ## Installation and running

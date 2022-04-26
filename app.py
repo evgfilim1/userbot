@@ -69,10 +69,10 @@ PACK_ALIASES = {
     "1px": "onepixel",
     "amogus": "tradinoi",
 }
-GH_PATTERN = re.compile(  # https://regex101.com/r/xQBXIG/3
+GH_PATTERN = re.compile(  # https://regex101.com/r/bvjYVf/1
     r"(?:github|gh):(?P<username>[a-zA-Z0-9\-_]+)(?:/(?P<repo>[a-zA-Z0-9\-_.]+|@)"
-    r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_]+))?"
-    r"(?:/(?:(?P<path>[a-zA-Z0-9.\-_/]+)(?:#(?P<line1>\d+)(?:-(?P<line2>\d+))?)?)?)?)?)?"
+    r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_/]+))?(?::/(?:(?P<path>[a-zA-Z0-9.\-_/]+)"
+    r"(?:#L?(?P<line1>\d+)(?:-L?(?P<line2>\d+))?)?)?)?)?)?"
 )
 # endregion
 
@@ -403,7 +403,6 @@ async def mention(match: re.Match[str]) -> str:
 async def github(match: re.Match[str], *, client: AsyncClient) -> str:
     """Sends a link to a GitHub repository"""
     m = GitHubMatch(**match.groupdict())
-    print(m)
     url = f"https://github.com/{m.username}"
     text = m.username
     if not m.repo:
@@ -419,7 +418,12 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
     elif m.branch:
         path = m.path or ""
         url += f"/tree/{m.branch}/{path}"
-        text += f"@{m.branch}{f':/{path}' if path else ''}"
+        if len(m.branch) == 40:  # Full commit hash
+            text += f"@{m.branch[:7]}"
+        else:
+            text += f"@{m.branch}"
+        if path:
+            text += f":/{path}"
     elif m.issue:
         url += f"/issues/{m.issue}"
         text += f"#{m.issue}"
@@ -430,13 +434,13 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
         text += f"#L{m.line1}"
         if m.line2:
             url += f"-L{m.line2}"
-            text += f"-{m.line2}"
+            text += f"-L{m.line2}"
     return f"<a href='{url}'>{text}</a>"
 # endregion
 
 
-async def _main(client: Client, storage: Storage):
-    async with client, storage:
+async def _main(client: Client, storage: Storage, github_client: AsyncClient) -> None:
+    async with client, storage, github_client:
         await idle()
 
 
@@ -470,7 +474,7 @@ def main():
     hooks.register(client, storage)
     shortcuts.register(client)
 
-    client.run(_main(client, storage))
+    client.run(_main(client, storage, github_client))
 
 
 if __name__ == "__main__":
