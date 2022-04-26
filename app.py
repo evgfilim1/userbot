@@ -289,7 +289,11 @@ async def user_color(client: Client, message: Message, _: str):
     await message.delete()
 
 
-@commands.add("userfirstmsg", usage="[reply]", can_be_long=True)
+@commands.add(
+    "userfirstmsg",
+    usage="[reply]",
+    waiting_message="<i>Searching for user's first message...</i>",
+)
 async def user_first_message(client: Client, message: Message, _: str):
     """Replies to user's very first message in the chat"""
     if (user := (message.reply_to_message or message).from_user) is None:

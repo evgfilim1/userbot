@@ -28,7 +28,7 @@ class _CommandHandler:
     handler: _HandlerWithArgs
     usage: str | None
     doc: str | None
-    can_be_long: bool = False
+    waiting_message: str | None = None
 
     async def __call__(self, client: Client, message: Message):
         args = message.text.lstrip(self.prefix)
@@ -38,8 +38,11 @@ class _CommandHandler:
         else:
             args = args.removeprefix(self.command)
         args = args.lstrip()
-        if self.can_be_long:
-            await message.edit(f"<b>⌚ Executing</b> <code>{html.escape(message.text)}</code>")
+        if self.waiting_message is not None:
+            if self.waiting_message == "":
+                await message.edit(f"<b>⌚ Executing</b> <code>{html.escape(message.text)}</code>")
+            else:
+                await message.edit(f"⌚ {self.waiting_message}")
         try:
             result = await self.handler(client, message, args)
         except Exception as e:
@@ -109,7 +112,7 @@ class CommandsModule:
         *,
         usage: str | None = None,
         doc: str | None = None,
-        can_be_long: bool = False,
+        waiting_message: str | None = None,
     ) -> Callable[[_HandlerWithArgs], _HandlerWithArgs]:
         def _decorator(f: _HandlerWithArgs) -> _HandlerWithArgs:
             self.add_handler(
@@ -118,7 +121,7 @@ class CommandsModule:
                 prefix=prefix,
                 usage=usage,
                 doc=doc,
-                can_be_long=can_be_long,
+                waiting_message=waiting_message,
             )
             return f
 
@@ -132,7 +135,7 @@ class CommandsModule:
         *,
         usage: str | None = None,
         doc: str | None = None,
-        can_be_long: bool = False,
+        waiting_message: str | None = None,
     ) -> None:
         self._handlers.append(
             _CommandHandler(
@@ -141,7 +144,7 @@ class CommandsModule:
                 handler=handler,
                 usage=usage,
                 doc=doc or getattr(handler, "__doc__", None),
-                can_be_long=can_be_long,
+                waiting_message=waiting_message,
             )
         )
 
