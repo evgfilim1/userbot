@@ -1,0 +1,468 @@
+# TODO (2022-04-26): I'm ready for git!
+
+from __future__ import annotations
+
+import asyncio
+import html
+import logging
+import random
+import re
+from calendar import TextCalendar
+from datetime import datetime
+from functools import partial
+
+import d20
+import yaml
+from httpx import AsyncClient
+from pyrogram import Client, filters
+from pyrogram.errors import BadRequest, MessageNotModified, ReactionInvalid, ReactionEmpty
+from pyrogram.methods.utilities.idle import idle
+from pyrogram.raw import functions, types
+from pyrogram.types import Message, Sticker
+
+from modules import CommandsModule, HooksModule, ShortcutTransformersModule
+from utils import (
+    sticker,
+    create_filled_pic,
+    edit_or_reply,
+    get_text,
+    ru2en_tr,
+    en2ru_tr,
+    enru2ruen_tr,
+    HTMLDiceStringifier, GitHubMatch,
+)
+from storage import PickleStorage, Storage
+
+TAP_STICKER = "CAADAgADVDIAAulVBRivj7VIBrE0GRYE"
+TAP_FLT = "AgADVDIAAulVBRg"
+MIBIB_STICKER = "CAACAgIAAx0CV1p3VwABAyvIYJY88iCdTjk40KWSi6qaQXm2dzkAAlwAAw56-wrkoTwgHGVmzx4E"
+MIBIB_FLT = "AgADXAADDnr7Cg"
+LONGCAT = dict(
+    head_white=[
+        "CAADBAADZQMAAuJy2QABJ1cx-fQb77sWBA",
+        "CAADBAADgQMAAuJy2QABf0C0EPLQO0UWBA",
+        "CAADBAADfQMAAuJy2QABdqWPKQVZFjAWBA",
+    ],
+    head_black=[
+        "CAADBAADawMAAuJy2QABFA81XvWYIZ8WBA",
+        "CAADBAADdQMAAuJy2QABt8J1yVBTIQoWBA",
+        "CAADBAADdwMAAuJy2QABtC8HfQgRltwWBA",
+    ],
+    body_white="CAADBAADZwMAAuJy2QABQmx2g0C_s3cWBA",
+    body_black="CAADBAADbQMAAuJy2QABwedDhS7jvv0WBA",
+    feet_white=[
+        "CAADBAADewMAAuJy2QABUy5kWdB3OU0WBA",
+        "CAADBAADfwMAAuJy2QABCmgtpnxudVYWBA",
+        "CAADBAADcQMAAuJy2QABQCpE5DuquCEWBA",
+    ],
+    feet_black=[
+        "CAADBAADbwMAAuJy2QAB281pZP4ga8cWBA",
+        "CAADBAADeQMAAuJy2QABvWnzh6NyAu4WBA",
+    ],
+)
+PACK_ALIASES = {
+    "a": "Degrodpack",
+    "aa": "TrialITA",
+    "ls": "ls_solyanka",
+    "thomas": "thomas_shelby_kringepack",
+    "hehe": "nothehe",
+    "1px": "onepixel",
+    "amogus": "tradinoi",
+}
+GH_PATTERN = re.compile(  # https://regex101.com/r/xQBXIG/3
+    r"(?:github|gh):(?P<username>[a-zA-Z0-9\-_]+)(?:/(?P<repo>[a-zA-Z0-9\-_.]+|@)"
+    r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_]+))?"
+    r"(?:/(?:(?P<path>[a-zA-Z0-9.\-_/]+)(?:#(?P<line1>\d+)(?:-(?P<line2>\d+))?)?)?)?)?)?"
+)
+
+logging.basicConfig(level=logging.WARNING)
+commands = CommandsModule()
+hooks = HooksModule()
+shortcuts = ShortcutTransformersModule()
+
+
+@hooks.add("duck", filters.regex(r"\b(?:дак|кря)\b", flags=re.I))
+async def on_duck(_: Client, message: Message) -> None:
+    await message.reply("🦆" * len(message.matches))
+
+
+@hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | sticker(TAP_FLT)))
+async def on_tap(_: Client, message: Message) -> None:
+    await message.reply_sticker(TAP_STICKER)
+
+
+@hooks.add("mibib", filters.sticker & sticker(MIBIB_FLT))
+async def mibib(client: Client, message: Message):
+    # TODO (2022-02-13): Don't send it again for N minutes
+    if random.random() <= (1 / 5):
+        await client.send_sticker(message.chat.id, MIBIB_STICKER)
+
+
+async def check_hooks(_: Client, message: Message, __: str, storage: Storage):
+    enabled = await storage.list_enabled_hooks(message.chat.id)
+    return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"
+
+
+@commands.add("longcat", usage="")
+async def longcat(client: Client, message: Message, _: str):
+    """Sends random longcat"""
+    key = "black" if random.random() >= 0.5 else "white"
+    head, body, tail = (
+        random.choice(LONGCAT[f"head_{key}"]),
+        LONGCAT[f"body_{key}"],
+        random.choice(LONGCAT[f"feet_{key}"]),
+    )
+    body_len = random.randint(0, 3)
+    await message.delete()
+    for s in (head, *((body,) * body_len), tail):
+        await client.send_sticker(message.chat.id, s)
+
+
+@commands.add(["delete", "delet", "del"], usage="<reply>")
+async def delete_this(_: Client, message: Message, __: str):
+    """Deletes replied message"""
+    try:
+        await message.reply_to_message.delete()
+    except BadRequest:
+        pass
+    await message.delete()
+
+
+@commands.add("dump", usage="[dot-separated-attrs]")
+async def dump(_: Client, message: Message, args: str):
+    """Dumps entire message or its specified attribute"""
+    obj = message.reply_to_message or message
+    attrs = args.split(".")
+    for attr in attrs:
+        if attr:
+            obj = getattr(obj, attr, None)
+    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{str(obj)}</pre>"
+
+
+@commands.add("id", usage="<reply>")
+async def mention_with_id(_: Client, message: Message, __: str):
+    """Sends replied user's ID as link"""
+    user = message.reply_to_message.from_user
+    return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
+
+
+@commands.add(["roll", "dice"], usage="<dice-spec>")
+async def dice(_: Client, __: Message, args: str):
+    """Rolls dice according to d20.roll syntax"""
+    return f"🎲 {d20.roll(args, stringifier=HTMLDiceStringifier())}"
+
+
+@commands.add("promote", usage="<admin-title>")
+async def promote(client: Client, message: Message, args: str):
+    """Promotes a user to an admin without any rights but with title"""
+    await client.send(
+        functions.channels.EditAdmin(
+            channel=await client.resolve_peer(message.chat.id),
+            user_id=await client.resolve_peer(message.reply_to_message.from_user.id),
+            admin_rights=types.chat_admin_rights.ChatAdminRights(
+                change_info=False,
+                delete_messages=False,
+                ban_users=False,
+                invite_users=False,
+                pin_messages=False,
+                add_admins=False,
+                anonymous=False,
+                manage_call=False,
+                other=True,
+            ),
+            rank=args,
+        )
+    )
+    return f"Должность в чате установлена на <i>{html.escape(args)}</i>"
+
+
+@commands.add("calc", usage="<python-expr>")
+async def calc(_: Client, message: Message, args: str):
+    """Evaluates Python expression"""
+    result = html.escape(f"{args} = {eval(args)!r}", quote=False)
+    await message.edit(f"<code>{result}</code>", parse_mode="HTML")
+
+
+@commands.add("rnds", usage="<pack-link|pack-alias>")
+async def random_sticker(client: Client, message: Message, args: str):
+    """Sends random sticker from specified pack"""
+    set_name = PACK_ALIASES.get(args, args)
+    stickerset: types.messages.StickerSet = await client.send(
+        functions.messages.GetStickerSet(
+            stickerset=types.InputStickerSetShortName(
+                short_name=set_name,
+            ),
+            hash=0,
+        ),
+    )
+    sticker_raw: types.Document = random.choice(stickerset.documents)
+    attributes = {type(i): i for i in sticker_raw.attributes}
+    s = await Sticker._parse(  # huh...
+        client,
+        sticker_raw,
+        attributes.get(types.DocumentAttributeImageSize, None),
+        attributes[types.DocumentAttributeSticker],
+        attributes[types.DocumentAttributeFilename],
+    )
+    kw = {}
+    if message.reply_to_message is not None:
+        kw["reply_to_message_id"] = message.reply_to_message.message_id
+    await client.send_sticker(message.chat.id, s.file_id, **kw)
+    await message.delete()
+
+
+@commands.add("tr", usage="<reply> ['en'|'ru']")
+async def tr(_: Client, message: Message, args: str):
+    """Swaps keyboard layout from en to ru or vice versa"""
+    # TODO (2021-12-01): detect ambiguous replacements via previous char
+    # TODO (2022-02-17): work with entities
+    text = get_text(message.reply_to_message)
+    if args == "en":
+        tr_abc = ru2en_tr
+    elif args == "ru":
+        tr_abc = en2ru_tr
+    else:
+        tr_abc = enru2ruen_tr
+    translated = text.translate(tr_abc)
+    answer, delete = edit_or_reply(message)
+    try:
+        await answer(translated)
+    except MessageNotModified:
+        pass
+    if delete:
+        await message.delete()
+
+
+@commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
+async def sed(_: Client, message: Message, args: str):
+    """sed-like replacement"""
+    # TODO (2022-02-17): work with entities
+    text = get_text(message.reply_to_message)
+    find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
+    find_re = find_re.replace("\\/", "/")
+    replace_re = replace_re.replace("\\/", "/")
+    flags = 0
+    for flag in flags_str:
+        flags |= getattr(re, flag.upper())
+    text = re.sub(find_re, replace_re, text, flags=flags)
+    answer, delete = edit_or_reply(message)
+    try:
+        await answer(text)
+    except MessageNotModified:
+        pass
+    if delete:
+        await message.delete()
+
+
+@commands.add("color", usage="<color-spec>")
+async def color(client: Client, message: Message, args: str):
+    """Sends a specified color sample"""
+    tmp = create_filled_pic(args)
+    reply = getattr(message.reply_to_message, "message_id", None)
+    await client.send_photo(
+        message.chat.id,
+        tmp,
+        caption=f"Color {args}",
+        reply_to_message_id=reply,
+        disable_notification=True,
+    )
+    await message.delete()
+
+
+@commands.add("usercolor", usage="<reply>")
+async def user_color(client: Client, message: Message, _: str):
+    """Sends a color sample of user's color as shown in clients"""
+    colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
+    c = f"#{colors[message.reply_to_message.from_user.id % 7]}"
+    tmp = create_filled_pic(c)
+    await client.send_photo(
+        message.chat.id,
+        tmp,
+        caption=f"Your color is {c}",
+        reply_to_message_id=message.reply_to_message.message_id,
+        disable_notification=True,
+    )
+    await message.delete()
+
+
+@commands.add("userfirstmsg", usage="[reply]", can_be_long=True)
+async def user_first_message(client: Client, message: Message, _: str):
+    """Replies to user's very first message in the chat"""
+    # TODO (2022-02-17): make it more time and request efficient
+    min_date, min_msg_id = 2**64, 0
+    if (user := (message.reply_to_message or message).from_user) is None:
+        return "Cannot search for first message from channel"
+    chat_peer = await client.resolve_peer(message.chat.id)
+    user_peer = await client.resolve_peer(user.id)
+    offset = 0
+    while True:
+        messages: types.messages.Messages = await client.send(
+            functions.messages.Search(
+                peer=chat_peer,
+                q="",
+                filter=types.InputMessagesFilterEmpty(),
+                min_date=0,
+                max_date=0,
+                offset_id=0,
+                add_offset=offset,
+                limit=100,
+                min_id=0,
+                max_id=0,
+                from_id=user_peer,
+                hash=0,
+            ),
+            sleep_threshold=60,
+        )
+        if not messages.messages:
+            break
+        for m in messages.messages:
+            if m.date < min_date:
+                min_date, min_msg_id = m.date, m.id
+        offset += len(messages.messages)
+        await asyncio.sleep(0.1)
+    if min_msg_id == 0:
+        return "Cannot find any messages from this user"
+    await client.send_message(
+        message.chat.id,
+        f"This is the first message of {user.mention}",
+        reply_to_message_id=min_msg_id,
+        disable_notification=True,
+    )
+    await message.delete()
+
+
+@commands.add("r", usage="<reply> [emoji]")
+async def put_reaction(client: Client, message: Message, args: str) -> str | None:
+    """Reacts to a message with a specified emoji or removes any reaction"""
+    try:
+        await client.send_reaction(
+            message.chat.id,
+            message.reply_to_message.message_id,
+            args,
+        )
+    except ReactionInvalid:
+        return args
+    except ReactionEmpty:
+        pass  # ignore
+    await message.delete()
+
+
+@commands.add("rs", usage="<reply>")
+async def get_reactions(_: Client, message: Message, __: str) -> str:
+    """Gets message reactions"""
+    rs = message.reply_to_message.reactions
+    if not rs:
+        return "<i>No reactions</i>"
+    return "; ".join(f"{r.emoji}: {r.count}" for r in rs)
+
+
+@commands.add("rr", usage="<reply>")
+async def put_random_reaction(client: Client, message: Message, _: str) -> None:
+    """Reacts to a message with a random emoji"""
+    chat = await client.get_chat(message.chat.id)
+    await client.send_reaction(
+        message.chat.id,
+        message.reply_to_message.message_id,
+        random.choice(chat.available_reactions),
+    )
+    await message.delete()
+
+
+@shortcuts.add(r"yt:([a-zA-Z0-9_\-]{11})")
+async def youtube(match: re.Match[str]) -> str:
+    """Sends a link to a YouTube video"""
+    return f"https://youtu.be/{match[1]}"
+
+
+@shortcuts.add(r"@(\d+)(?::(.+)@)?")
+async def mention(match: re.Match[str]) -> str:
+    """Mentions a user by ID"""
+    return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
+
+
+async def github(match: re.Match[str], *, client: AsyncClient) -> str:
+    """Sends a link to a GitHub repository"""
+    m = GitHubMatch(**match.groupdict())
+    print(m)
+    url = f"https://github.com/{m.username}"
+    text = m.username
+    if not m.repo:
+        return f"<a href='{url}'>{text}</a>"
+    if m.repo == "@":
+        m.repo = m.username
+    url += f"/{m.repo}"
+    text += f"/{m.repo}"
+    if not m.branch and m.path:
+        m.branch = (await client.get(f"/repos/{m.username}/{m.repo}")).json()["default_branch"]
+        url += f"/tree/{m.branch}/{m.path}"
+        text += f":/{m.path}"
+    elif m.branch:
+        path = m.path or ""
+        url += f"/tree/{m.branch}/{path}"
+        text += f"@{m.branch}{f':/{path}' if path else ''}"
+    elif m.issue:
+        url += f"/issues/{m.issue}"
+        text += f"#{m.issue}"
+    if not m.path:
+        return f"<a href='{url}'>{text}</a>"
+    if m.line1:
+        url += f"#L{m.line1}"
+        text += f"#L{m.line1}"
+        if m.line2:
+            url += f"-L{m.line2}"
+            text += f"-{m.line2}"
+    return f"<a href='{url}'>{text}</a>"
+
+
+@commands.add("cal", usage="<month> [year]")
+async def calendar(_: Client, __: Message, args: str) -> str:
+    """Sends a calendar for a specified month and year"""
+    args_list = args.split()
+    month = int(args_list[0])
+    if len(args_list) == 2:
+        year = int(args_list[1])
+    else:
+        year = datetime.utcnow().year
+    return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+
+
+async def _main(client: Client, storage: Storage):
+    async with client, storage:
+        await idle()
+
+
+def main():
+    for file in ("config.yaml", "/data/config.yaml", "/config.yaml"):
+        try:
+            with open(file) as f:
+                config = yaml.safe_load(f)
+        except FileNotFoundError:
+            continue
+        else:
+            break
+    else:
+        raise FileNotFoundError("Config file not found!")
+    client = Client(
+        config["session"],
+        config["api_id"],
+        config["api_hash"],
+        app_version="selfbot 0.2.0-beta",
+        device_model="Linux",
+        system_version="Python 3.10",
+        **config.get("kwargs", {}),
+    )
+    storage = PickleStorage(config.get("data_location", f"{config['session']}.pkl"))
+    github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
+
+    commands.add_handler(partial(check_hooks, storage=storage), ["hookshere", "hooks_here"])
+    shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
+
+    commands.register(client, with_help=True)
+    hooks.register(client, storage)
+    shortcuts.register(client)
+
+    client.run(_main(client, storage))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  main:
+    build: .
+    restart: unless-stopped
+    configs:
+      - config.yaml
+    volumes:
+      - data:/data
+configs:
+  config.yaml:
+    file: ./config.yaml
+volumes:
+  data:
