@@ -1,5 +1,3 @@
-# TODO (2022-04-26): I'm ready for git!
-
 from __future__ import annotations
 
 import asyncio
@@ -33,6 +31,7 @@ from utils import (
 )
 from storage import PickleStorage, Storage
 
+# region constants
 TAP_STICKER = "CAADAgADVDIAAulVBRivj7VIBrE0GRYE"
 TAP_FLT = "AgADVDIAAulVBRg"
 MIBIB_STICKER = "CAACAgIAAx0CV1p3VwABAyvIYJY88iCdTjk40KWSi6qaQXm2dzkAAlwAAw56-wrkoTwgHGVmzx4E"
@@ -74,6 +73,7 @@ GH_PATTERN = re.compile(  # https://regex101.com/r/xQBXIG/3
     r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_]+))?"
     r"(?:/(?:(?P<path>[a-zA-Z0-9.\-_/]+)(?:#(?P<line1>\d+)(?:-(?P<line2>\d+))?)?)?)?)?)?"
 )
+# endregion
 
 logging.basicConfig(level=logging.WARNING)
 commands = CommandsModule()
@@ -81,6 +81,7 @@ hooks = HooksModule()
 shortcuts = ShortcutTransformersModule()
 
 
+# region hooks
 @hooks.add("duck", filters.regex(r"\b(?:дак|кря)\b", flags=re.I))
 async def on_duck(_: Client, message: Message) -> None:
     await message.reply("🦆" * len(message.matches))
@@ -101,8 +102,10 @@ async def mibib(client: Client, message: Message):
 async def check_hooks(_: Client, message: Message, __: str, storage: Storage):
     enabled = await storage.list_enabled_hooks(message.chat.id)
     return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"
+# endregion
 
 
+# region commands
 @commands.add("longcat", usage="")
 async def longcat(client: Client, message: Message, _: str):
     """Sends random longcat"""
@@ -368,6 +371,20 @@ async def put_random_reaction(client: Client, message: Message, _: str) -> None:
     await message.delete()
 
 
+@commands.add("cal", usage="<month> [year]")
+async def calendar(_: Client, __: Message, args: str) -> str:
+    """Sends a calendar for a specified month and year"""
+    args_list = args.split()
+    month = int(args_list[0])
+    if len(args_list) == 2:
+        year = int(args_list[1])
+    else:
+        year = datetime.utcnow().year
+    return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+# endregion
+
+
+# region shortcuts
 @shortcuts.add(r"yt:([a-zA-Z0-9_\-]{11})")
 async def youtube(match: re.Match[str]) -> str:
     """Sends a link to a YouTube video"""
@@ -412,18 +429,7 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
             url += f"-L{m.line2}"
             text += f"-{m.line2}"
     return f"<a href='{url}'>{text}</a>"
-
-
-@commands.add("cal", usage="<month> [year]")
-async def calendar(_: Client, __: Message, args: str) -> str:
-    """Sends a calendar for a specified month and year"""
-    args_list = args.split()
-    month = int(args_list[0])
-    if len(args_list) == 2:
-        year = int(args_list[1])
-    else:
-        year = datetime.utcnow().year
-    return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+# endregion
 
 
 async def _main(client: Client, storage: Storage):
