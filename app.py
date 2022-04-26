@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import html
 import logging
 import random
@@ -288,47 +287,40 @@ async def user_color(client: Client, message: Message, _: str):
     await message.delete()
 
 
-@commands.add("userfirstmsg", usage="[reply]", can_be_long=True)
+@commands.add("userfirstmsg", usage="[reply]")
 async def user_first_message(client: Client, message: Message, _: str):
     """Replies to user's very first message in the chat"""
-    # TODO (2022-02-17): make it more time and request efficient
-    min_date, min_msg_id = 2**64, 0
     if (user := (message.reply_to_message or message).from_user) is None:
         return "Cannot search for first message from channel"
     chat_peer = await client.resolve_peer(message.chat.id)
     user_peer = await client.resolve_peer(user.id)
-    offset = 0
-    while True:
-        messages: types.messages.Messages = await client.send(
-            functions.messages.Search(
-                peer=chat_peer,
-                q="",
-                filter=types.InputMessagesFilterEmpty(),
-                min_date=0,
-                max_date=0,
-                offset_id=0,
-                add_offset=offset,
-                limit=100,
-                min_id=0,
-                max_id=0,
-                from_id=user_peer,
-                hash=0,
-            ),
-            sleep_threshold=60,
-        )
-        if not messages.messages:
-            break
-        for m in messages.messages:
-            if m.date < min_date:
-                min_date, min_msg_id = m.date, m.id
-        offset += len(messages.messages)
-        await asyncio.sleep(0.1)
-    if min_msg_id == 0:
-        return "Cannot find any messages from this user"
+    messages: types.messages.Messages = await client.send(
+        functions.messages.Search(
+            peer=chat_peer,
+            q="",
+            filter=types.InputMessagesFilterEmpty(),
+            min_date=0,
+            max_date=0,
+            offset_id=1,
+            add_offset=-1,
+            limit=1,
+            min_id=0,
+            max_id=0,
+            from_id=user_peer,
+            hash=0,
+        ),
+        sleep_threshold=60,
+    )
+    if not messages.messages:
+        return "🐞⚠ Cannot find any messages from this user (wtf?)"
+    first_msg_raw = messages.messages[0]
+    text = f"This is the first message of {user.mention}"
+    if isinstance(first_msg_raw.peer_id, types.PeerChannel):
+        text += f"\nPermalink: https://t.me/c/{first_msg_raw.peer_id.channel_id}/{first_msg_raw.id}"
     await client.send_message(
         message.chat.id,
-        f"This is the first message of {user.mention}",
-        reply_to_message_id=min_msg_id,
+        text,
+        reply_to_message_id=first_msg_raw.id,
         disable_notification=True,
     )
     await message.delete()
