@@ -5,9 +5,10 @@ import html
 import logging
 import re
 from dataclasses import dataclass
-from typing import Optional, Awaitable, Callable, TypeAlias
+from typing import Awaitable, Callable, Optional, TypeAlias
 
-from pyrogram import Client, filters as flt
+from pyrogram import Client
+from pyrogram import filters as flt
 from pyrogram.handlers import MessageHandler
 from pyrogram.types import Message
 

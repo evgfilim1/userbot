@@ -4,12 +4,12 @@ import functools
 import html
 from dataclasses import dataclass
 from io import BytesIO
-from typing import TypeVar, Protocol, Optional
+from typing import Optional, Protocol, TypeVar
 
-from PIL import Image
 from d20 import SimpleStringifier
+from PIL import Image
 from pyrogram import filters
-from pyrogram.types import Message, User, Chat
+from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")
 

@@ -4,7 +4,7 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import TypeVar, Type
+from typing import Type, TypeVar
 
 _T = TypeVar("_T", bound="Storage")
 
