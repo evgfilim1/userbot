@@ -1,14 +1,13 @@
-from __future__ import annotations
-
 import functools
 import html
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Optional, Protocol, TypeVar
+from typing import Protocol, TypeVar
 
 from d20 import SimpleStringifier
 from PIL import Image
 from pyrogram import filters
+from pyrogram.enums import ParseMode
 from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")
@@ -21,7 +20,7 @@ enru2ruen_tr = str.maketrans(_kb_ru + _kb_en, _kb_en + _kb_ru)
 
 
 class MessageMethod(Protocol):
-    async def __call__(self, text: str, *, parse_mode: str | None) -> Message:
+    async def __call__(self, text: str, *, parse_mode: ParseMode | None) -> Message:
         pass
 
 
@@ -64,7 +63,10 @@ def get_sender(message: Message) -> User | Chat:
 def send_helper(fn: MessageMethod, prefix: str = "") -> AnswerMethod:
     @functools.wraps(fn)
     async def wrapper(text: str, prefix_override: str | None = None) -> Message:
-        return await fn(f"{prefix_override or prefix}{html.escape(text)}", parse_mode="HTML")
+        return await fn(
+            f"{prefix_override or prefix}{html.escape(text)}",
+            parse_mode=ParseMode.HTML,
+        )
 
     return wrapper
 
@@ -112,9 +114,9 @@ class HTMLDiceStringifier(SimpleStringifier):
 @dataclass()
 class GitHubMatch:
     username: str
-    repo: Optional[str]
-    issue: Optional[str]
-    branch: Optional[str]
-    path: Optional[str]
-    line1: Optional[str]
-    line2: Optional[str]
+    repo: str | None
+    issue: str | None
+    branch: str | None
+    path: str | None
+    line1: str | None
+    line2: str | None

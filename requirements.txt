@@ -1,6 +1,6 @@
 d20~=1.1.2
-httpx[http2]~=0.21.3
-Pillow~=9.0.1
-Pyrogram~=1.4.7
+httpx[http2]~=0.22.0
+Pillow~=9.1.0
+Pyrogram~=2.0.16
 PyYAML~=6.0.0
 TgCrypto~=1.2.3

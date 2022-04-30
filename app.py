@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import asyncio
 import html
 import logging
@@ -94,21 +92,23 @@ async def on_tap(_: Client, message: Message) -> None:
 
 
 @hooks.add("mibib", filters.sticker & sticker(MIBIB_FLT))
-async def mibib(client: Client, message: Message):
+async def mibib(client: Client, message: Message) -> None:
     # TODO (2022-02-13): Don't send it again for N minutes
     if random.random() <= (1 / 5):
         await client.send_sticker(message.chat.id, MIBIB_STICKER)
 
 
-async def check_hooks(_: Client, message: Message, __: str, storage: Storage):
+async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
     enabled = await storage.list_enabled_hooks(message.chat.id)
     return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"
+
+
 # endregion
 
 
 # region commands
 @commands.add("longcat", usage="")
-async def longcat(client: Client, message: Message, _: str):
+async def longcat(client: Client, message: Message, _: str) -> None:
     """Sends random longcat"""
     key = "black" if random.random() >= 0.5 else "white"
     head, body, tail = (
@@ -123,7 +123,7 @@ async def longcat(client: Client, message: Message, _: str):
 
 
 @commands.add(["delete", "delet", "del"], usage="<reply>")
-async def delete_this(_: Client, message: Message, __: str):
+async def delete_this(_: Client, message: Message, __: str) -> None:
     """Deletes replied message"""
     try:
         await message.reply_to_message.delete()
@@ -133,7 +133,7 @@ async def delete_this(_: Client, message: Message, __: str):
 
 
 @commands.add("dump", usage="[dot-separated-attrs]")
-async def dump(_: Client, message: Message, args: str):
+async def dump(_: Client, message: Message, args: str) -> str:
     """Dumps entire message or its specified attribute"""
     obj = message.reply_to_message or message
     attrs = args.split(".")
@@ -144,22 +144,22 @@ async def dump(_: Client, message: Message, args: str):
 
 
 @commands.add("id", usage="<reply>")
-async def mention_with_id(_: Client, message: Message, __: str):
+async def mention_with_id(_: Client, message: Message, __: str) -> str:
     """Sends replied user's ID as link"""
     user = message.reply_to_message.from_user
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
 @commands.add(["roll", "dice"], usage="<dice-spec>")
-async def dice(_: Client, __: Message, args: str):
+async def dice(_: Client, __: Message, args: str) -> str:
     """Rolls dice according to d20.roll syntax"""
     return f"🎲 {d20.roll(args, stringifier=HTMLDiceStringifier())}"
 
 
 @commands.add("promote", usage="<admin-title>")
-async def promote(client: Client, message: Message, args: str):
+async def promote(client: Client, message: Message, args: str) -> str:
     """Promotes a user to an admin without any rights but with title"""
-    await client.send(
+    await client.invoke(
         functions.channels.EditAdmin(
             channel=await client.resolve_peer(message.chat.id),
             user_id=await client.resolve_peer(message.reply_to_message.from_user.id),
@@ -181,17 +181,17 @@ async def promote(client: Client, message: Message, args: str):
 
 
 @commands.add("calc", usage="<python-expr>")
-async def calc(_: Client, message: Message, args: str):
+async def calc(_: Client, __: Message, args: str) -> str:
     """Evaluates Python expression"""
     result = html.escape(f"{args} = {eval(args)!r}", quote=False)
-    await message.edit(f"<code>{result}</code>", parse_mode="HTML")
+    return f"<code>{result}</code>"
 
 
 @commands.add("rnds", usage="<pack-link|pack-alias>")
-async def random_sticker(client: Client, message: Message, args: str):
+async def random_sticker(client: Client, message: Message, args: str) -> None:
     """Sends random sticker from specified pack"""
     set_name = PACK_ALIASES.get(args, args)
-    stickerset: types.messages.StickerSet = await client.send(
+    stickerset: types.messages.StickerSet = await client.invoke(
         functions.messages.GetStickerSet(
             stickerset=types.InputStickerSetShortName(
                 short_name=set_name,
@@ -210,13 +210,13 @@ async def random_sticker(client: Client, message: Message, args: str):
     )
     kw = {}
     if message.reply_to_message is not None:
-        kw["reply_to_message_id"] = message.reply_to_message.message_id
+        kw["reply_to_message_id"] = message.reply_to_message.id
     await client.send_sticker(message.chat.id, s.file_id, **kw)
     await message.delete()
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
-async def tr(_: Client, message: Message, args: str):
+async def tr(_: Client, message: Message, args: str) -> None:
     """Swaps keyboard layout from en to ru or vice versa"""
     # TODO (2021-12-01): detect ambiguous replacements via previous char
     # TODO (2022-02-17): work with entities
@@ -238,7 +238,7 @@ async def tr(_: Client, message: Message, args: str):
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
-async def sed(_: Client, message: Message, args: str):
+async def sed(_: Client, message: Message, args: str) -> None:
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)
@@ -259,7 +259,7 @@ async def sed(_: Client, message: Message, args: str):
 
 
 @commands.add("color", usage="<color-spec>")
-async def color(client: Client, message: Message, args: str):
+async def color(client: Client, message: Message, args: str) -> None:
     """Sends a specified color sample"""
     tmp = create_filled_pic(args)
     reply = getattr(message.reply_to_message, "message_id", None)
@@ -274,7 +274,7 @@ async def color(client: Client, message: Message, args: str):
 
 
 @commands.add("usercolor", usage="<reply>")
-async def user_color(client: Client, message: Message, _: str):
+async def user_color(client: Client, message: Message, _: str) -> None:
     """Sends a color sample of user's color as shown in clients"""
     colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
     c = f"#{colors[message.reply_to_message.from_user.id % 7]}"
@@ -283,7 +283,7 @@ async def user_color(client: Client, message: Message, _: str):
         message.chat.id,
         tmp,
         caption=f"Your color is {c}",
-        reply_to_message_id=message.reply_to_message.message_id,
+        reply_to_message_id=message.reply_to_message.id,
         disable_notification=True,
     )
     await message.delete()
@@ -294,7 +294,7 @@ async def user_color(client: Client, message: Message, _: str):
     usage="[reply]",
     waiting_message="<i>Searching for user's first message...</i>",
 )
-async def user_first_message(client: Client, message: Message, _: str):
+async def user_first_message(client: Client, message: Message, _: str) -> str | None:
     """Replies to user's very first message in the chat"""
     if (user := (message.reply_to_message or message).from_user) is None:
         return "Cannot search for first message from channel"
@@ -303,7 +303,7 @@ async def user_first_message(client: Client, message: Message, _: str):
     first_msg_raw = None
     while True:
         # It's rather slow, but it works properly
-        messages: types.messages.Messages = await client.send(
+        messages: types.messages.Messages = await client.invoke(
             functions.messages.Search(
                 peer=chat_peer,
                 q="",
@@ -342,14 +342,10 @@ async def user_first_message(client: Client, message: Message, _: str):
 
 
 @commands.add("r", usage="<reply> [emoji]")
-async def put_reaction(client: Client, message: Message, args: str) -> str | None:
+async def put_reaction(_: Client, message: Message, args: str) -> str | None:
     """Reacts to a message with a specified emoji or removes any reaction"""
     try:
-        await client.send_reaction(
-            message.chat.id,
-            message.reply_to_message.message_id,
-            args,
-        )
+        await message.reply_to_message.react(args)
     except ReactionInvalid:
         return args
     except ReactionEmpty:
@@ -363,18 +359,14 @@ async def get_reactions(_: Client, message: Message, __: str) -> str:
     rs = message.reply_to_message.reactions
     if not rs:
         return "<i>No reactions</i>"
-    return "; ".join(f"{r.emoji}: {r.count}" for r in rs)
+    return "; ".join(f"<code>{r.emoji}</code>: {r.count}" for r in rs)
 
 
 @commands.add("rr", usage="<reply>")
 async def put_random_reaction(client: Client, message: Message, _: str) -> None:
     """Reacts to a message with a random emoji"""
     chat = await client.get_chat(message.chat.id)
-    await client.send_reaction(
-        message.chat.id,
-        message.reply_to_message.message_id,
-        random.choice(chat.available_reactions),
-    )
+    await message.reply_to_message.react(random.choice(chat.available_reactions))
     await message.delete()
 
 
@@ -388,6 +380,8 @@ async def calendar(_: Client, __: Message, args: str) -> str:
     else:
         year = datetime.utcnow().year
     return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+
+
 # endregion
 
 
@@ -440,6 +434,8 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
             url += f"-L{m.line2}"
             text += f"-L{m.line2}"
     return f"<a href='{url}'>{text}</a>"
+
+
 # endregion
 
 
@@ -448,7 +444,7 @@ async def _main(client: Client, storage: Storage, github_client: AsyncClient) ->
         await idle()
 
 
-def main():
+def main() -> None:
     for file in ("config.yaml", "/data/config.yaml", "/config.yaml"):
         try:
             with open(file) as f:
@@ -460,12 +456,11 @@ def main():
     else:
         raise FileNotFoundError("Config file not found!")
     client = Client(
-        config["session"],
-        config["api_id"],
-        config["api_hash"],
-        app_version="selfbot 0.2.0-beta",
+        name=config["session"],
+        api_id=config["api_id"],
+        api_hash=config["api_hash"],
+        app_version="evgfilim1/userbot 0.2.x",
         device_model="Linux",
-        system_version="Python 3.10",
         **config.get("kwargs", {}),
     )
     storage = PickleStorage(config.get("data_location", f"{config['session']}.pkl"))
