@@ -472,6 +472,14 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
     return f"<a href='{url}'>{text}</a>"
 
 
+@shortcuts.add(r":uwu(\d+)?:")
+async def uwu(match: re.Match[str]) -> str:
+    if not match[1]:
+        return "🥺👉👈"
+    count = int(match[1])
+    return "👉" * count + "👈" * count
+
+
 # endregion
 
 
