@@ -6,6 +6,7 @@ import re
 from calendar import TextCalendar
 from datetime import datetime
 from functools import partial
+from tempfile import NamedTemporaryFile
 
 import d20
 import yaml
@@ -380,6 +381,41 @@ async def calendar(_: Client, __: Message, args: str) -> str:
     else:
         year = datetime.utcnow().year
     return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+
+
+@commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
+async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
+    """Converts a video to a mpeg4 gif"""
+    msg = message.reply_to_message if message.reply_to_message else message
+    video = msg.video
+    if not video:
+        return "⚠ No video found"
+    with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".mp4") as dst:
+        await client.download_media(video.file_id, src.name)
+        proc = await asyncio.subprocess.create_subprocess_exec(
+            "/usr/bin/ffmpeg",
+            "-hide_banner",
+            "-i",
+            src.name,
+            "-c",
+            "copy",
+            "-an",
+            "-movflags",
+            "+faststart",
+            "-y",
+            dst.name,
+            stdin=asyncio.subprocess.DEVNULL,
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        _, stderr = await proc.communicate()
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"Process finished with error code {proc.returncode}\n{stderr.decode()}"
+            )
+        await msg.reply_animation(dst.name)
+    if message.reply_to_message:
+        await message.delete()
 
 
 # endregion
