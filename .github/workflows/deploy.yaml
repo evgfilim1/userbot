@@ -54,8 +54,8 @@ jobs:
     environment:
       name: production
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Get docker-compose.prod.yaml file
+        run: wget -q "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/raw/$GITHUB_REF_NAME/docker-compose.prod.yaml"
 
       - name: Deploy Docker app
         uses: wshihadeh/docker-deployment-action@master
