@@ -4,6 +4,7 @@ import logging
 import random
 import re
 from calendar import TextCalendar
+from collections import Counter
 from datetime import datetime, timedelta
 from functools import partial
 from tempfile import NamedTemporaryFile
@@ -12,7 +13,8 @@ import d20
 import yaml
 from httpx import AsyncClient
 from pyrogram import Client, filters
-from pyrogram.errors import BadRequest, MessageNotModified, ReactionEmpty, ReactionInvalid
+from pyrogram.errors import BadRequest, MessageNotModified, ReactionEmpty, ReactionInvalid, \
+    MsgIdInvalid
 from pyrogram.methods.utilities.idle import idle
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, Sticker
@@ -355,12 +357,58 @@ async def put_reaction(_: Client, message: Message, args: str) -> str | None:
 
 
 @commands.add("rs", usage="<reply>")
-async def get_reactions(_: Client, message: Message, __: str) -> str:
+async def get_reactions(client: Client, message: Message, __: str) -> str:
     """Gets message reactions"""
-    rs = message.reply_to_message.reactions
-    if not rs:
-        return "<i>No reactions</i>"
-    return "; ".join(f"<code>{r.emoji}</code>: {r.count}" for r in rs)
+    peer = await client.resolve_peer(message.chat.id)
+    ids = [types.InputMessageID(id=message.reply_to_message.id)]
+    if isinstance(peer, types.InputPeerChannel):
+        messages: types.messages.Messages = await client.invoke(
+            functions.messages.GetMessages(
+                id=ids,
+            )
+        )
+    else:
+        messages: types.messages.Messages = await client.invoke(
+            functions.channels.GetMessages(
+                channel=peer,
+                id=ids,
+            )
+        )
+    t = ""
+    if not isinstance(messages.messages[0], types.MessageEmpty) \
+            and (reactions := messages.messages[0].reactions) is not None:
+        for r in reactions.results:
+            t += f"<code>{r.reaction}</code>: {r.count}\n"
+            for rr in (reactions.recent_reactions or []):
+                if rr.reaction == r.reaction:
+                    peer = await client.get_chat(rr.peer_id.user_id)
+                    peer_name = f"{peer.first_name or 'Deleted Account'} (#{peer.id})"
+                    t += f"- <a href='tg://user?id={rr.peer_id.user_id}'>{peer_name}</a>\n"
+    else:
+        try:
+            messages: types.messages.MessageReactionsList = await client.invoke(
+                functions.messages.GetMessageReactionsList(
+                    peer=peer,
+                    id=message.reply_to_message.id,
+                    limit=100,
+                )
+            )
+        except MsgIdInvalid:
+            return "⚠ Message not found, deleted or has no reactions"
+        reactions = {}
+        for r in messages.reactions:
+            reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
+        for reaction, peers in reactions.items():
+            t += f"<code>{reaction}</code>: {len(peers)}\n"
+            for peer_id in peers:
+                for user in messages.users:
+                    if user.id == peer_id:
+                        peer_name = f"{user.first_name or 'Deleted Account'} (#{user.id})"
+                        break
+                else:
+                    peer_name = peer_id
+                t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a>\n"
+    return t
 
 
 @commands.add("rr", usage="<reply>")
