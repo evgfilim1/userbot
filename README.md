@@ -31,6 +31,7 @@ rs <reply> — Gets message reactions
 rr <reply> — Reacts to a message with a random emoji
 cal <month> [year] — Sends a calendar for a specified month and year
 togif [reply] — Converts a video to a mpeg4 gif
+chatban <id> [time] [reason...] — Bans a user in a chat
 help — Sends this message
 ```
 

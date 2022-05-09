@@ -4,7 +4,7 @@ import logging
 import random
 import re
 from calendar import TextCalendar
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import partial
 from tempfile import NamedTemporaryFile
 
@@ -416,6 +416,41 @@ async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
         await msg.reply_animation(dst.name)
     if message.reply_to_message:
         await message.delete()
+
+
+@commands.add("chatban", usage="<id> [time] [reason...]")
+async def chat_ban(client: Client, message: Message, args: str) -> str:
+    """Bans a user in a chat"""
+    args_list = args.split(" ")
+    user_id = int(args_list[0])
+    if len(args_list) > 1:
+        match = re.fullmatch(r"(\d+)([mhdwy])?", args_list[1], re.I)
+        time_sec = int(match[1])
+        match match[2]:
+            case "m" | "M":
+                time_sec *= 60
+            case "h" | "H":
+                time_sec *= 60 * 60
+            case "d" | "D":
+                time_sec *= 60 * 60 * 24
+            case "w" | "W":
+                time_sec *= 60 * 60 * 24 * 7
+            case "y" | "Y":
+                time_sec *= 60 * 60 * 24 * 365
+        delta = timedelta(seconds=time_sec)
+        time = datetime.now() + delta
+    else:
+        delta = None
+        time = datetime.fromtimestamp(0)
+    reason = " ".join(args_list[2:])
+    await client.ban_chat_member(message.chat.id, user_id, time)
+    user = await client.get_chat(user_id)
+    t = f"<a href='tg://user?id={user_id}'>{user.first_name}</a> <b>banned</b> in this chat"
+    if delta:
+        t += f" for <i>{args_list[1]}</i>."
+    if reason:
+        t += f"\n<b>Reason:</b> {reason}"
+    return t
 
 
 # endregion
