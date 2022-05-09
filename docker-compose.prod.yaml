@@ -1,0 +1,8 @@
+version: "3"
+services:
+  main:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - /home/github/userbot/config.yaml:/config.yaml:ro
+      - /home/github/userbot/data:/data
