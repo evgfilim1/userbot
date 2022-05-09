@@ -453,6 +453,12 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     return t
 
 
+@commands.add('testerror')
+async def test_error(_: Client, __: Message, ___: str) -> None:
+    """Always throws an error"""
+    raise RuntimeError("Test error")
+
+
 # endregion
 
 

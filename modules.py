@@ -46,6 +46,7 @@ class _CommandHandler:
         try:
             result = await self.handler(client, message, args)
         except Exception as e:
+            # TODO (2022-05-09): add a line of source code from traceback
             await message.edit(
                 f"<b>[‼] An error occurred during executing command.</b>\n\n"
                 f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
