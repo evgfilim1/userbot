@@ -30,6 +30,7 @@ r <reply> [emoji] — Reacts to a message with a specified emoji or removes any 
 rs <reply> — Gets message reactions
 rr <reply> — Reacts to a message with a random emoji
 cal <month> [year] — Sends a calendar for a specified month and year
+togif [reply] — Converts a video to a mpeg4 gif
 help — Sends this message
 ```
 
@@ -63,6 +64,8 @@ Shortcuts work only when sent by the user who runs userbot.
   - `github:<username>/<repo>@<branch-or-commit>:/<path>#<line1>` — ... to the specified line in file
   - `github:<username>/<repo>@<branch-or-commit>:/<path>#<line1>-<line2>` — ... to the specified lines in file
   - `github:<username>/<repo>#<issue-or-pr>` — ... to the specified issue or pull request
+- `:uwu:` — Sends a `🥺👉👈` emoji
+  - `:uwu<number>:` — Sends a `👉👈` emoji with the specified number of finger pairs
 
 ## Installation and running
 
