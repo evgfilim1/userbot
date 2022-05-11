@@ -5,7 +5,10 @@ WORKDIR /app
 RUN useradd -rUd /app userbot
 
 COPY --chown=userbot:userbot requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && apt update \
+    && apt install -y --no-install-recommends ffmpeg \
+    && apt clean
 
 COPY --chown=userbot:userbot *.py ./
 
