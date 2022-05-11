@@ -141,8 +141,8 @@ cython_debug/
 # Pyrogram sessions
 *.session*
 
-# App storage
-*.pkl
+# App data directory
+/data/
 
 # App config file
 config.yaml

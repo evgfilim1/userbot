@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 import pickle
 from abc import ABC, abstractmethod
+from os import PathLike
+from pathlib import Path
 from types import TracebackType
 from typing import Type, TypeVar
 
@@ -51,20 +53,20 @@ class Storage(ABC):
 
 
 class PickleStorage(Storage):
-    def __init__(self, filename: str):
-        self._filename = filename
+    def __init__(self, filename: str | PathLike):
+        self._file = Path(filename)
         self._data = {}
 
     async def connect(self) -> None:
         try:
-            with open(self._filename, "rb") as f:
+            with self._file.open("rb") as f:
                 self._data = pickle.load(f)
         except FileNotFoundError:
             pass
         await super().connect()
 
     async def close(self) -> None:
-        with open(self._filename, "wb") as f:
+        with self._file.open("wb") as f:
             pickle.dump(self._data, f)
         await super().close()
 

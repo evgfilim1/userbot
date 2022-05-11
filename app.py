@@ -4,9 +4,9 @@ import logging
 import random
 import re
 from calendar import TextCalendar
-from collections import Counter
 from datetime import datetime, timedelta
 from functools import partial
+from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import d20
@@ -501,7 +501,7 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     return t
 
 
-@commands.add('testerror')
+@commands.add("testerror")
 async def test_error(_: Client, __: Message, ___: str) -> None:
     """Always throws an error"""
     raise RuntimeError("Test error")
@@ -588,15 +588,21 @@ def main() -> None:
             break
     else:
         raise FileNotFoundError("Config file not found!")
+    data_dir = Path(config.get("data_location", "data")).resolve()
+    if not data_dir.exists():
+        data_dir.mkdir()
+    if not data_dir.is_dir():
+        raise NotADirectoryError("config.yaml: `data_location` must be a directory")
     client = Client(
         name=config["session"],
         api_id=config["api_id"],
         api_hash=config["api_hash"],
         app_version="evgfilim1/userbot 0.2.x",
         device_model="Linux",
-        **config.get("kwargs", {}),
+        workdir=str(data_dir),
+        **(config.get("kwargs") or {}),
     )
-    storage = PickleStorage(config.get("data_location", f"{config['session']}.pkl"))
+    storage = PickleStorage(data_dir / f"{config['session']}.pkl")
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
     commands.add_handler(partial(check_hooks, storage=storage), ["hookshere", "hooks_here"])
