@@ -375,11 +375,13 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
             )
         )
     t = ""
-    if not isinstance(messages.messages[0], types.MessageEmpty) \
-            and (reactions := messages.messages[0].reactions) is not None:
+    if (
+        not isinstance(messages.messages[0], types.MessageEmpty)
+        and (reactions := messages.messages[0].reactions) is not None
+    ):
         for r in reactions.results:
             t += f"<code>{r.reaction}</code>: {r.count}\n"
-            for rr in (reactions.recent_reactions or []):
+            for rr in reactions.recent_reactions or []:
                 if rr.reaction == r.reaction:
                     peer = await client.get_chat(rr.peer_id.user_id)
                     peer_name = f"{peer.first_name or 'Deleted Account'} (#{peer.id})"
@@ -605,7 +607,7 @@ def main() -> None:
     storage = PickleStorage(data_dir / f"{config['session']}.pkl")
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
-    commands.add_handler(partial(check_hooks, storage=storage), ["hookshere", "hooks_here"])
+    commands.add_handler(check_hooks, ["hookshere", "hooks_here"], kwargs={"storage": storage})
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
 
     commands.register(client, with_help=True)

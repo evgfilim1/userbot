@@ -3,7 +3,7 @@ import html
 import logging
 import re
 from dataclasses import dataclass
-from typing import Awaitable, Callable, TypeAlias
+from typing import Any, Awaitable, Callable, Protocol
 
 from pyrogram import Client
 from pyrogram import filters as flt
@@ -13,9 +13,34 @@ from pyrogram.types import Message
 
 from storage import Storage
 
-_HandlerWithArgs: TypeAlias = Callable[[Client, Message, str], Awaitable[str | None]]
-_Handler: TypeAlias = Callable[[Client, Message], Awaitable[None]]
-_TransformHandler: TypeAlias = Callable[[re.Match[str]], Awaitable[str | None]]
+
+class CommandHandler(Protocol):
+    async def __call__(
+        self,
+        client: Client,
+        message: Message,
+        args: str,
+        **kwargs: Any,
+    ) -> str | None:
+        pass
+
+
+class Handler(Protocol):
+    async def __call__(
+        self,
+        client: Client,
+        message: Message,
+    ) -> None:
+        pass
+
+
+class TransformHandler(Protocol):
+    async def __call__(
+        self,
+        match: re.Match[str],
+    ) -> str | None:
+        pass
+
 
 _log = logging.getLogger(__name__)
 
@@ -24,11 +49,12 @@ _log = logging.getLogger(__name__)
 class _CommandHandler:
     command: str
     prefix: str
-    handler: _HandlerWithArgs
+    handler: CommandHandler
     handle_edits: bool
     usage: str | None
     doc: str | None
     waiting_message: str | None
+    kwargs: dict[str, Any]
 
     async def __call__(self, client: Client, message: Message):
         args = message.text.lstrip(self.prefix)
@@ -44,7 +70,7 @@ class _CommandHandler:
             else:
                 await message.edit(f"⌚ {self.waiting_message}")
         try:
-            result = await self.handler(client, message, args)
+            result = await self.handler(client, message, args, **(self.kwargs or {}))
         except Exception as e:
             # TODO (2022-05-09): add a line of source code from traceback
             await message.edit(
@@ -67,7 +93,7 @@ class _CommandHandler:
 class _HookHandler:
     name: str
     filters: flt.Filter
-    handler: _Handler
+    handler: Handler
     handle_edits: bool
 
     async def add_handler(self, _: Client, message: Message, storage: Storage):
@@ -86,7 +112,7 @@ class _HookHandler:
 @dataclass()
 class _ShortcutHandler:
     regex: re.Pattern[str]
-    handler: _TransformHandler
+    handler: TransformHandler
     handle_edits: bool
 
     async def __call__(self, client: Client, message: Message):
@@ -97,7 +123,7 @@ class _ShortcutHandler:
         await message.edit(text, parse_mode=ParseMode.HTML)
 
 
-def _generate_auto_help_handler(text: str) -> _HandlerWithArgs:
+def _generate_auto_help_handler(text: str) -> CommandHandler:
     async def _auto_help_handler(_: Client, __: Message, ___: str) -> str:
         return text
 
@@ -117,8 +143,9 @@ class CommandsModule:
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
-    ) -> Callable[[_HandlerWithArgs], _HandlerWithArgs]:
-        def _decorator(f: _HandlerWithArgs) -> _HandlerWithArgs:
+        kwargs: dict[str, Any] | None = None,
+    ) -> Callable[[CommandHandler], CommandHandler]:
+        def _decorator(f: CommandHandler) -> CommandHandler:
             self.add_handler(
                 handler=f,
                 command=command,
@@ -127,6 +154,7 @@ class CommandsModule:
                 usage=usage,
                 doc=doc,
                 waiting_message=waiting_message,
+                kwargs=kwargs,
             )
             return f
 
@@ -134,7 +162,7 @@ class CommandsModule:
 
     def add_handler(
         self,
-        handler: _HandlerWithArgs,
+        handler: CommandHandler,
         command: str | list[str],
         prefix: str = ".",
         *,
@@ -142,6 +170,7 @@ class CommandsModule:
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
+        kwargs: dict[str, Any] | None = None,
     ) -> None:
         self._handlers.append(
             _CommandHandler(
@@ -152,6 +181,7 @@ class CommandsModule:
                 usage=usage,
                 doc=doc or getattr(handler, "__doc__", None),
                 waiting_message=waiting_message,
+                kwargs=kwargs or {},
             )
         )
 
@@ -181,6 +211,7 @@ class CommandsModule:
                     usage="",
                     doc="Sends this message",
                     waiting_message=None,
+                    kwargs={},
                 )
             )
         for handler in self._handlers:
@@ -200,8 +231,8 @@ class HooksModule:
         filters: flt.Filter,
         *,
         handle_edits: bool = True,
-    ) -> Callable[[_Handler], _Handler]:
-        def _decorator(f: _Handler) -> _Handler:
+    ) -> Callable[[Handler], Handler]:
+        def _decorator(f: Handler) -> Handler:
             self.add_handler(
                 handler=f,
                 name=name,
@@ -214,7 +245,7 @@ class HooksModule:
 
     def add_handler(
         self,
-        handler: _Handler,
+        handler: Handler,
         name: str,
         filters: flt.Filter,
         *,
@@ -236,7 +267,7 @@ class HooksModule:
     def _wrapper(
         f: Callable[[Client, Message, Storage], Awaitable[None]],
         storage: Storage,
-    ) -> _Handler:
+    ) -> Handler:
         @functools.wraps(f)
         async def wrapper(client: Client, message: Message) -> None:
             return await f(client, message, storage)
@@ -290,8 +321,8 @@ class ShortcutTransformersModule:
         pattern: str | re.Pattern[str],
         *,
         handle_edits: bool = True,
-    ) -> Callable[[_TransformHandler], _TransformHandler]:
-        def _decorator(f: _TransformHandler) -> _TransformHandler:
+    ) -> Callable[[TransformHandler], TransformHandler]:
+        def _decorator(f: TransformHandler) -> TransformHandler:
             self.add_handler(
                 handler=f,
                 pattern=pattern,
@@ -303,7 +334,7 @@ class ShortcutTransformersModule:
 
     def add_handler(
         self,
-        handler: _TransformHandler,
+        handler: TransformHandler,
         pattern: str | re.Pattern[str],
         *,
         handle_edits: bool = True,
