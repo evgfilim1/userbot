@@ -136,7 +136,7 @@ async def downloader(client: Client, message: Message, filename: str, data_dir: 
         MessageMediaType.DICE,
         MessageMediaType.GAME,
     ):
-        return "⚠ No downloadable media found"
+        return "⚠ <b>No downloadable media found</b>"
     media_type = message.media.value
     media_dir = data_dir
     if not filename:
@@ -146,6 +146,7 @@ async def downloader(client: Client, message: Message, filename: str, data_dir: 
     media = getattr(message, media_type)
     filename = filename or getattr(media, "file_name", None)
     output_io = await client.download_media(message, in_memory=True)
+    output_io.seek(0)
     if not filename:
         filename = f"{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
         mime = getattr(media, "mime_type", None)

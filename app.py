@@ -528,7 +528,7 @@ async def download(client: Client, message: Message, args: str, *, data_dir: Pat
         try:
             t += await downloader(client, m, args if len(all_messages) == 1 else "", data_dir)
         except Exception as e:
-            t += f"⚠ {type(e).__name__}: {e}"
+            t += f"⚠ <code>{type(e).__name__}: {e}</code>"
         finally:
             t += "\n"
     return t
