@@ -1,6 +1,8 @@
+aiofiles~=0.8.0
 d20~=1.1.2
 httpx[http2]~=0.22.0
 Pillow~=9.1.0
 Pyrogram~=2.0.16
+python-magic~=0.4.25
 PyYAML~=6.0.0
 TgCrypto~=1.2.3

@@ -13,8 +13,13 @@ import d20
 import yaml
 from httpx import AsyncClient
 from pyrogram import Client, filters
-from pyrogram.errors import BadRequest, MessageNotModified, ReactionEmpty, ReactionInvalid, \
-    MsgIdInvalid
+from pyrogram.errors import (
+    BadRequest,
+    MessageNotModified,
+    MsgIdInvalid,
+    ReactionEmpty,
+    ReactionInvalid,
+)
 from pyrogram.methods.utilities.idle import idle
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, Sticker
@@ -25,6 +30,7 @@ from utils import (
     GitHubMatch,
     HTMLDiceStringifier,
     create_filled_pic,
+    downloader,
     edit_or_reply,
     en2ru_tr,
     enru2ruen_tr,
@@ -509,6 +515,25 @@ async def test_error(_: Client, __: Message, ___: str) -> None:
     raise RuntimeError("Test error")
 
 
+async def download(client: Client, message: Message, args: str, *, data_dir: Path) -> str:
+    """Downloads a file or files"""
+    msg = message.reply_to_message if message.reply_to_message else message
+    if msg.media_group_id:
+        all_messages = await msg.get_media_group()
+    else:
+        all_messages = [msg]
+
+    t = ""
+    for m in all_messages:
+        try:
+            t += await downloader(client, m, args if len(all_messages) == 1 else "", data_dir)
+        except Exception as e:
+            t += f"⚠ {type(e).__name__}: {e}"
+        finally:
+            t += "\n"
+    return t
+
+
 # endregion
 
 
@@ -608,6 +633,13 @@ def main() -> None:
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
     commands.add_handler(check_hooks, ["hookshere", "hooks_here"], kwargs={"storage": storage})
+    commands.add_handler(
+        download,
+        ["download", "dl"],
+        usage="[reply] [filename]",
+        waiting_message="<i>Downloading file(s)...</i>",
+        kwargs={"data_dir": data_dir},
+    )
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
 
     commands.register(client, with_help=True)

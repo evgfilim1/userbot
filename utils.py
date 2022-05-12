@@ -2,12 +2,15 @@ import functools
 import html
 from dataclasses import dataclass
 from io import BytesIO
+from pathlib import Path
 from typing import Protocol, TypeVar
 
+import aiofiles
+import magic
 from d20 import SimpleStringifier
 from PIL import Image
-from pyrogram import filters
-from pyrogram.enums import ParseMode
+from pyrogram import Client, filters
+from pyrogram.enums import MessageMediaType, ParseMode
 from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")
@@ -120,3 +123,43 @@ class GitHubMatch:
     path: str | None
     line1: str | None
     line2: str | None
+
+
+async def downloader(client: Client, message: Message, filename: str, data_dir: Path) -> str:
+    if message.media in (
+        None,
+        MessageMediaType.CONTACT,
+        MessageMediaType.LOCATION,
+        MessageMediaType.VENUE,
+        MessageMediaType.POLL,
+        MessageMediaType.WEB_PAGE,
+        MessageMediaType.DICE,
+        MessageMediaType.GAME,
+    ):
+        return "⚠ No downloadable media found"
+    media_type = message.media.value
+    media_dir = data_dir
+    if not filename:
+        media_dir /= media_type
+        if not media_dir.exists():
+            media_dir.mkdir()
+    media = getattr(message, media_type)
+    filename = filename or getattr(media, "file_name", None)
+    output_io = await client.download_media(message, in_memory=True)
+    if not filename:
+        filename = (
+            f"{media_type}/{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
+        )
+        mime = getattr(media, "mime_type", None)
+        if not mime:
+            mime = magic.from_buffer(output_io.read(2048), mime=True)
+        ext = client.guess_extension(mime)
+        if not ext:
+            ext = ".bin"
+        filename += ext
+    output_io.seek(0)
+    output = media_dir / filename
+    async with aiofiles.open(output, "wb") as f:
+        while chunk := output_io.read(1048576 * 4):  # 4 MiB
+            await f.write(chunk)
+    return f"The file has been downloaded to <code>{output}</code>"

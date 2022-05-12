@@ -5,9 +5,10 @@ WORKDIR /app
 RUN useradd -Ud /app userbot
 
 COPY --chown=userbot:userbot requirements.txt ./
+# FIXME (2022-05-12): final image is too big because ffmpeg dependencies are too big
 RUN pip install --no-cache-dir -r requirements.txt \
     && apt update \
-    && apt install -y --no-install-recommends ffmpeg \
+    && apt install -y --no-install-recommends ffmpeg libmagic1 \
     && apt clean
 
 COPY --chown=userbot:userbot *.py ./
