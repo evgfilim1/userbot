@@ -147,9 +147,7 @@ async def downloader(client: Client, message: Message, filename: str, data_dir: 
     filename = filename or getattr(media, "file_name", None)
     output_io = await client.download_media(message, in_memory=True)
     if not filename:
-        filename = (
-            f"{media_type}/{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
-        )
+        filename = f"{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
         mime = getattr(media, "mime_type", None)
         if not mime:
             mime = magic.from_buffer(output_io.read(2048), mime=True)
