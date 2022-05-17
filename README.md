@@ -47,6 +47,8 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
   sticker itself
 - `mibib`: Sends a sticker (with 20% chance) with an animated pixelated bear when someone sends that
   sticker itself
+- `bra`: Sends a picture from [this](https://www.reddit.com/r/anime_irl/comments/u4zxol/anime_irl/)
+  Reddit post when someone sends "бра" or "bra"
 
 ### Shortcuts
 

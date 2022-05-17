@@ -4,7 +4,7 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .constants import MIBIB_FLT, MIBIB_STICKER, TAP_FLT, TAP_STICKER
+from .constants import BRA_MEME_PICTURE, MIBIB_FLT, MIBIB_STICKER, TAP_FLT, TAP_STICKER
 from .modules import HooksModule
 from .storage import Storage
 from .utils import sticker
@@ -27,6 +27,11 @@ async def mibib(client: Client, message: Message) -> None:
     # TODO (2022-02-13): Don't send it again for N minutes
     if random.random() <= (1 / 5):
         await client.send_sticker(message.chat.id, MIBIB_STICKER)
+
+
+@hooks.add("bra", filters.regex(r"\b(?:бра|bra)\b", flags=re.I))
+async def on_bra(_: Client, message: Message) -> None:
+    await message.reply_photo(BRA_MEME_PICTURE)
 
 
 async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
