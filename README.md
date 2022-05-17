@@ -81,7 +81,9 @@ Shortcuts work only when sent by the user who runs userbot.
       # ...
     data_location: /data  # Data location
     ```
-2. Make sure docker is installed, then run `docker-compose up --build`.
-3. Go through interactive authentication (needed only once as `/data` is mounted as docker volume).
-4. Stop the script by pressing `^C` (`Ctrl-C`).
-5. Run `docker-compose up -d` to run in the background.
+2. Make sure docker is installed, then run `docker-compose build`.
+3. Go through interactive authentication (needed only once as `/data` is mounted as docker volume)
+  by running `docker-compose run --rm main python -m userbot`.
+4. Stop the script by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd> as soon as you see `Bot started` message
+  in console.
+5. Run `docker-compose up -d` to run the userbot in the background.

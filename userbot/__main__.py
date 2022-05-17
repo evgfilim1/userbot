@@ -14,10 +14,13 @@ from userbot.shortcuts import github, shortcuts
 from userbot.storage import PickleStorage, Storage
 
 logging.basicConfig(level=logging.WARNING)
+_log = logging.getLogger(__name__)
+_log.setLevel(logging.INFO)
 
 
 async def _main(client: Client, storage: Storage, github_client: AsyncClient) -> None:
     async with client, storage, github_client:
+        _log.info("Bot started")
         await idle()
 
 
