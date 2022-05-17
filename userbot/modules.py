@@ -11,7 +11,7 @@ from pyrogram.enums import ParseMode
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
-from storage import Storage
+from .storage import Storage
 
 
 class CommandHandler(Protocol):
@@ -93,6 +93,8 @@ class _CommandHandler:
                 try:
                     await message.edit(result, parse_mode=ParseMode.HTML)
                 except Exception as e:
+                    # TODO (2022-05-17): add a "MessageTooLong" exception handler
+                    #  that posts the result as a file or paste
                     text = self._report_exception(message, e)
                     await message.edit(text, parse_mode=ParseMode.HTML)
 

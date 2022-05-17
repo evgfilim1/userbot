@@ -1,18 +1,14 @@
 import asyncio
 import html
-import logging
 import random
 import re
 from calendar import TextCalendar
 from datetime import datetime, timedelta
-from functools import partial
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import d20
-import yaml
-from httpx import AsyncClient
-from pyrogram import Client, filters
+from pyrogram import Client
 from pyrogram.errors import (
     BadRequest,
     MessageNotModified,
@@ -20,14 +16,12 @@ from pyrogram.errors import (
     ReactionEmpty,
     ReactionInvalid,
 )
-from pyrogram.methods.utilities.idle import idle
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, Sticker
 
-from modules import CommandsModule, HooksModule, ShortcutTransformersModule
-from storage import PickleStorage, Storage
-from utils import (
-    GitHubMatch,
+from .constants import LONGCAT, PACK_ALIASES
+from .modules import CommandsModule
+from .utils import (
     HTMLDiceStringifier,
     create_filled_pic,
     downloader,
@@ -36,86 +30,11 @@ from utils import (
     enru2ruen_tr,
     get_text,
     ru2en_tr,
-    sticker,
 )
 
-# region constants
-TAP_STICKER = "CAADAgADVDIAAulVBRivj7VIBrE0GRYE"
-TAP_FLT = "AgADVDIAAulVBRg"
-MIBIB_STICKER = "CAACAgIAAx0CV1p3VwABAyvIYJY88iCdTjk40KWSi6qaQXm2dzkAAlwAAw56-wrkoTwgHGVmzx4E"
-MIBIB_FLT = "AgADXAADDnr7Cg"
-LONGCAT = dict(
-    head_white=[
-        "CAADBAADZQMAAuJy2QABJ1cx-fQb77sWBA",
-        "CAADBAADgQMAAuJy2QABf0C0EPLQO0UWBA",
-        "CAADBAADfQMAAuJy2QABdqWPKQVZFjAWBA",
-    ],
-    head_black=[
-        "CAADBAADawMAAuJy2QABFA81XvWYIZ8WBA",
-        "CAADBAADdQMAAuJy2QABt8J1yVBTIQoWBA",
-        "CAADBAADdwMAAuJy2QABtC8HfQgRltwWBA",
-    ],
-    body_white="CAADBAADZwMAAuJy2QABQmx2g0C_s3cWBA",
-    body_black="CAADBAADbQMAAuJy2QABwedDhS7jvv0WBA",
-    feet_white=[
-        "CAADBAADewMAAuJy2QABUy5kWdB3OU0WBA",
-        "CAADBAADfwMAAuJy2QABCmgtpnxudVYWBA",
-        "CAADBAADcQMAAuJy2QABQCpE5DuquCEWBA",
-    ],
-    feet_black=[
-        "CAADBAADbwMAAuJy2QAB281pZP4ga8cWBA",
-        "CAADBAADeQMAAuJy2QABvWnzh6NyAu4WBA",
-    ],
-)
-PACK_ALIASES = {
-    "a": "Degrodpack",
-    "aa": "TrialITA",
-    "ls": "ls_solyanka",
-    "thomas": "thomas_shelby_kringepack",
-    "hehe": "nothehe",
-    "1px": "onepixel",
-    "amogus": "tradinoi",
-}
-GH_PATTERN = re.compile(  # https://regex101.com/r/bvjYVf/1
-    r"(?:github|gh):(?P<username>[a-zA-Z0-9\-_]+)(?:/(?P<repo>[a-zA-Z0-9\-_.]+|@)"
-    r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_/]+))?(?::/(?:(?P<path>[a-zA-Z0-9.\-_/]+)"
-    r"(?:#L?(?P<line1>\d+)(?:-L?(?P<line2>\d+))?)?)?)?)?)?"
-)
-# endregion
-
-logging.basicConfig(level=logging.WARNING)
 commands = CommandsModule()
-hooks = HooksModule()
-shortcuts = ShortcutTransformersModule()
 
 
-# region hooks
-@hooks.add("duck", filters.regex(r"\b(?:дак|кря)\b", flags=re.I))
-async def on_duck(_: Client, message: Message) -> None:
-    await message.reply("🦆" * len(message.matches))
-
-
-@hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | sticker(TAP_FLT)))
-async def on_tap(_: Client, message: Message) -> None:
-    await message.reply_sticker(TAP_STICKER)
-
-
-@hooks.add("mibib", filters.sticker & sticker(MIBIB_FLT))
-async def mibib(client: Client, message: Message) -> None:
-    # TODO (2022-02-13): Don't send it again for N minutes
-    if random.random() <= (1 / 5):
-        await client.send_sticker(message.chat.id, MIBIB_STICKER)
-
-
-async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
-    enabled = await storage.list_enabled_hooks(message.chat.id)
-    return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"
-
-
-# endregion
-
-
-# region commands
 @commands.add("longcat", usage="")
 async def longcat(client: Client, message: Message, _: str) -> None:
     """Sends random longcat"""
@@ -532,122 +451,3 @@ async def download(client: Client, message: Message, args: str, *, data_dir: Pat
         finally:
             t += "\n"
     return t
-
-
-# endregion
-
-
-# region shortcuts
-@shortcuts.add(r"yt:([a-zA-Z0-9_\-]{11})")
-async def youtube(match: re.Match[str]) -> str:
-    """Sends a link to a YouTube video"""
-    return f"https://youtu.be/{match[1]}"
-
-
-@shortcuts.add(r"@(\d+)(?::(.+)@)?")
-async def mention(match: re.Match[str]) -> str:
-    """Mentions a user by ID"""
-    return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
-
-
-async def github(match: re.Match[str], *, client: AsyncClient) -> str:
-    """Sends a link to a GitHub repository"""
-    m = GitHubMatch(**match.groupdict())
-    url = f"https://github.com/{m.username}"
-    text = m.username
-    if not m.repo:
-        return f"<a href='{url}'>{text}</a>"
-    if m.repo == "@":
-        m.repo = m.username
-    url += f"/{m.repo}"
-    text += f"/{m.repo}"
-    if not m.branch and m.path:
-        m.branch = (await client.get(f"/repos/{m.username}/{m.repo}")).json()["default_branch"]
-        url += f"/tree/{m.branch}/{m.path}"
-        text += f":/{m.path}"
-    elif m.branch:
-        path = m.path or ""
-        url += f"/tree/{m.branch}/{path}"
-        if len(m.branch) == 40:  # Full commit hash
-            text += f"@{m.branch[:7]}"
-        else:
-            text += f"@{m.branch}"
-        if path:
-            text += f":/{path}"
-    elif m.issue:
-        url += f"/issues/{m.issue}"
-        text += f"#{m.issue}"
-    if not m.path:
-        return f"<a href='{url}'>{text}</a>"
-    if m.line1:
-        url += f"#L{m.line1}"
-        text += f"#L{m.line1}"
-        if m.line2:
-            url += f"-L{m.line2}"
-            text += f"-L{m.line2}"
-    return f"<a href='{url}'>{text}</a>"
-
-
-@shortcuts.add(r":uwu(\d+)?:")
-async def uwu(match: re.Match[str]) -> str:
-    if not match[1]:
-        return "🥺👉👈"
-    count = int(match[1])
-    return "👉" * count + "👈" * count
-
-
-# endregion
-
-
-async def _main(client: Client, storage: Storage, github_client: AsyncClient) -> None:
-    async with client, storage, github_client:
-        await idle()
-
-
-def main() -> None:
-    for file in ("config.yaml", "/data/config.yaml", "/config.yaml"):
-        try:
-            with open(file) as f:
-                config = yaml.safe_load(f)
-        except FileNotFoundError:
-            continue
-        else:
-            break
-    else:
-        raise FileNotFoundError("Config file not found!")
-    data_dir = Path(config.get("data_location", "data")).resolve()
-    if not data_dir.exists():
-        data_dir.mkdir()
-    if not data_dir.is_dir():
-        raise NotADirectoryError("config.yaml: `data_location` must be a directory")
-    client = Client(
-        name=config["session"],
-        api_id=config["api_id"],
-        api_hash=config["api_hash"],
-        app_version="evgfilim1/userbot 0.2.x",
-        device_model="Linux",
-        workdir=str(data_dir),
-        **(config.get("kwargs") or {}),
-    )
-    storage = PickleStorage(data_dir / f"{config['session']}.pkl")
-    github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
-
-    commands.add_handler(check_hooks, ["hookshere", "hooks_here"], kwargs={"storage": storage})
-    commands.add_handler(
-        download,
-        ["download", "dl"],
-        usage="[reply] [filename]",
-        waiting_message="<i>Downloading file(s)...</i>",
-        kwargs={"data_dir": data_dir},
-    )
-    shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
-
-    commands.register(client, with_help=True)
-    hooks.register(client, storage)
-    shortcuts.register(client)
-
-    client.run(_main(client, storage, github_client))
-
-
-if __name__ == "__main__":
-    main()

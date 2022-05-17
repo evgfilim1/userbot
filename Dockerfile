@@ -11,10 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && apt install -y --no-install-recommends ffmpeg libmagic1 \
     && apt clean
 
-COPY --chown=userbot:userbot *.py ./
+COPY --chown=userbot:userbot userbot ./userbot
 
 RUN mkdir -pm700 /data && chown -R userbot:userbot /data
 VOLUME /data
 
 USER userbot:userbot
-ENTRYPOINT ["/usr/local/bin/python", "/app/app.py"]
+ENTRYPOINT ["/usr/local/bin/python", "-m", "userbot"]
