@@ -83,7 +83,7 @@ class _CommandHandler:
             else:
                 await message.edit(f"⌚ {self.waiting_message}")
         try:
-            result = await self.handler(client, message, args, **(self.kwargs or {}))
+            result = await self.handler(client, message, args, **self.kwargs)
         except Exception as e:
             # TODO (2022-05-09): add a line of source code from traceback
             text = self._report_exception(message, e)
