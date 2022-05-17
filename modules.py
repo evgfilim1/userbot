@@ -56,6 +56,19 @@ class _CommandHandler:
     waiting_message: str | None
     kwargs: dict[str, Any]
 
+    def _report_exception(self, message: Message, e: Exception) -> str:
+        """Logs an exception to the logger and returns a message to be sent to the user."""
+        _log.exception(
+            "An error occurred during executing %r",
+            message.text,
+            extra={"command": self.command},
+        )
+        return (
+            f"<b>[‼] An error occurred during executing command.</b>\n\n"
+            f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
+            f"<b>Error:</b> <code>{html.escape(f'{e.__class__.__name__}: {e}')}</code>"
+        )
+
     async def __call__(self, client: Client, message: Message):
         args = message.text.lstrip(self.prefix)
         if not isinstance(self.command, str):
@@ -73,20 +86,15 @@ class _CommandHandler:
             result = await self.handler(client, message, args, **(self.kwargs or {}))
         except Exception as e:
             # TODO (2022-05-09): add a line of source code from traceback
-            await message.edit(
-                f"<b>[‼] An error occurred during executing command.</b>\n\n"
-                f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
-                f"<b>Error:</b> <code>{html.escape(f'{e.__class__.__name__}: {e}')}</code>",
-                parse_mode=ParseMode.HTML,
-            )
-            _log.exception(
-                "An error occurred during executing %r",
-                message.text,
-                extra={"command": self.command},
-            )
+            text = self._report_exception(message, e)
+            await message.edit(text, parse_mode=ParseMode.HTML)
         else:
             if result is not None:
-                await message.edit(result, parse_mode=ParseMode.HTML)
+                try:
+                    await message.edit(result, parse_mode=ParseMode.HTML)
+                except Exception as e:
+                    text = self._report_exception(message, e)
+                    await message.edit(text, parse_mode=ParseMode.HTML)
 
 
 @dataclass()
