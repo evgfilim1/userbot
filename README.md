@@ -1,6 +1,7 @@
 # userbot
 
 [![wakatime](https://wakatime.com/badge/github/evgfilim1/userbot.svg)](https://wakatime.com/badge/github/evgfilim1/userbot)
+[![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 The userbot I use with some specific features written in Pyrogram.
 
@@ -32,6 +33,7 @@ rr <reply> — Reacts to a message with a random emoji
 cal <month> [year] — Sends a calendar for a specified month and year
 togif [reply] — Converts a video to a mpeg4 gif
 chatban <id> [time] [reason...] — Bans a user in a chat
+tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
 download|dl [reply] [filename] — Downloads a file or files
 help — Sends this message
 ```

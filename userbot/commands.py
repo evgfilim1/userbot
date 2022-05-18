@@ -8,6 +8,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import d20
+from PIL import Image
 from pyrogram import Client
 from pyrogram.errors import (
     BadRequest,
@@ -451,3 +452,33 @@ async def download(client: Client, message: Message, args: str, *, data_dir: Pat
         finally:
             t += "\n"
     return t
+
+
+@commands.add(
+    "tosticker",
+    usage="[reply] ['png'|'webp']",
+    waiting_message="<i>Converting to sticker...</i>",
+)
+async def to_sticker(client: Client, message: Message, args: str) -> None:
+    """Converts a photo to a sticker-ready png or webp"""
+    msg = message.reply_to_message if message.reply_to_message else message
+    output_io = await client.download_media(msg, in_memory=True)
+    output_io.seek(0)
+    im: Image.Image = Image.open(output_io)
+    im.thumbnail((512, 512))
+    output_io.seek(0)
+    fmt = args.lower() if args else "png"
+    if fmt not in ("png", "webp"):
+        raise ValueError(f"Unsupported format: {fmt}")
+    im.save(output_io, args or "png")
+    output_io.seek(0)
+    output_io.name = f"sticker.{fmt}"
+    match fmt:
+        case "png":
+            await msg.reply_document(output_io, file_name="sticker.png")
+        case "webp":
+            await msg.reply_sticker(output_io)
+        case _:
+            raise AssertionError("Wrong format, this should never happen")
+    if message.reply_to_message:
+        await message.delete()
