@@ -70,6 +70,7 @@ Shortcuts work only when sent by the user who runs userbot.
   - `github:<username>/<repo>#<issue-or-pr>` — ... to the specified issue or pull request
 - `:uwu:` — Sends a `🥺👉👈` emoji
   - `:uwu<number>:` — Sends a `👉👈` emoji with the specified number of finger pairs
+- `google://<query>/` — Sends a link to a Google search for the specified query
 
 ## Installation and running
 

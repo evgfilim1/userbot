@@ -1,4 +1,5 @@
 import re
+from urllib.parse import quote_plus
 
 from httpx import AsyncClient
 
@@ -60,7 +61,15 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
 
 @shortcuts.add(r":uwu(\d+)?:")
 async def uwu(match: re.Match[str]) -> str:
+    """Sends `🥺👉👈` emoji or `👉👈` emoji with the specified number of finger pairs"""
     if not match[1]:
         return "🥺👉👈"
     count = int(match[1])
     return "👉" * count + "👈" * count
+
+
+@shortcuts.add(r"google://(.+)/")
+async def google(match: re.Match[str]) -> str:
+    """Sends a link to a Google search"""
+    link = f"https://www.google.com/search?q={quote_plus(match[1])}"
+    return f"<b>Google:</b> <a href='{link}'>{match[1]}</a>"
