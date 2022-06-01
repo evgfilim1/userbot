@@ -3,13 +3,16 @@ import html
 import logging
 import re
 from dataclasses import dataclass
+from io import BytesIO
 from pathlib import Path
 from traceback import extract_tb
 from typing import TYPE_CHECKING, Any, Awaitable, Callable, Protocol
 
+from httpx import AsyncClient, HTTPError
 from pyrogram import Client
 from pyrogram import filters as flt
 from pyrogram.enums import ParseMode
+from pyrogram.errors import MessageTooLong, SlowmodeWait
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
@@ -17,6 +20,10 @@ from .storage import Storage
 
 if TYPE_CHECKING:
     from traceback import FrameSummary
+
+
+SNIP = "<...snip...>"
+nekobin = AsyncClient(base_url="https://nekobin.com/")
 
 
 class CommandHandler(Protocol):
@@ -78,18 +85,20 @@ class _CommandHandler:
             last_frame = frame
         tb = ""
         if last_own_frame is not None and last_frame is not None:
-            tb += '  ...\n  File "{}", line {}, in {}\n    {}\n'.format(
+            tb += '  {snip}\n  File "{}", line {}, in {}\n    {}\n'.format(
                 last_own_frame.filename,
                 last_own_frame.lineno,
                 last_own_frame.name,
                 last_own_frame.line.strip(),
+                snip=SNIP,
             )
             if last_frame is not last_own_frame:
-                tb += '  ...\n  File "{}", line {}, in {}\n    {}\n'.format(
+                tb += '  {snip}\n  File "{}", line {}, in {}\n    {}\n'.format(
                     last_frame.filename,
                     last_frame.lineno,
                     last_frame.name,
                     last_frame.line.strip(),
+                    snip=SNIP,
                 )
         tb += type(e).__qualname__
         exc_value = str(e)
@@ -99,7 +108,8 @@ class _CommandHandler:
         return (
             f"<b>[‼] An error occurred during executing command.</b>\n\n"
             f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
-            f"<b>Traceback:</b>\n{tb}"
+            f"<b>Traceback:</b>\n{tb}\n\n"
+            f"<i>More info can be found in logs.</i>"
         )
 
     async def __call__(self, client: Client, message: Message):
@@ -121,14 +131,42 @@ class _CommandHandler:
             text = self._report_exception(message, e)
             await message.edit(text, parse_mode=ParseMode.HTML)
         else:
-            if result is not None:
+            if result is None:
+                return
+            try:
+                await message.edit(result, parse_mode=ParseMode.HTML)
+            except MessageTooLong as e:
+                text = (
+                    f"<b>[✅] Successfully executed.</b>\n\n"
+                    f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
+                    f"<b>Result:</b>"
+                )
                 try:
-                    await message.edit(result, parse_mode=ParseMode.HTML)
-                except Exception as e:
-                    # TODO (2022-05-17): add a "MessageTooLong" exception handler
-                    #  that posts the result as a file or paste
-                    text = self._report_exception(message, e)
-                    await message.edit(text, parse_mode=ParseMode.HTML)
+                    res = await nekobin.post("/api/documents", json={"content": result})
+                    res.raise_for_status()
+                except HTTPError:
+                    # Nekobin is down, try to send result as a file
+                    try:
+                        await message.reply_document(
+                            BytesIO(result.encode("utf-8")),
+                            file_name="result.html",  # default parse mode for the bot is html
+                        )
+                    except SlowmodeWait:
+                        # Cannot send file, report `MessageTooLong` exception.
+                        # It's ok to log entire exception chain here
+                        text = self._report_exception(message, e)
+                        await message.edit(text, parse_mode=ParseMode.HTML)
+                    else:
+                        await message.edit(f"{text} <i>See reply</i>", parse_mode=ParseMode.HTML)
+                else:
+                    await message.edit(
+                        f"{text} {nekobin.base_url.join(res.json()['result']['key'])}.html",
+                        parse_mode=ParseMode.HTML,
+                        disable_web_page_preview=True,
+                    )
+            except Exception as e:
+                text = self._report_exception(message, e)
+                await message.edit(text, parse_mode=ParseMode.HTML)
 
 
 @dataclass()
