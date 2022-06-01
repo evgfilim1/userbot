@@ -3,7 +3,9 @@ import html
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, Awaitable, Callable, Protocol
+from pathlib import Path
+from traceback import extract_tb
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, Protocol
 
 from pyrogram import Client
 from pyrogram import filters as flt
@@ -12,6 +14,9 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
 from .storage import Storage
+
+if TYPE_CHECKING:
+    from traceback import FrameSummary
 
 
 class CommandHandler(Protocol):
@@ -63,10 +68,38 @@ class _CommandHandler:
             message.text,
             extra={"command": self.command},
         )
+        last_own_frame = None
+        last_frame = None
+        own_package_name = Path(__file__).parent
+        for i, frame in enumerate(extract_tb(e.__traceback__)):
+            frame: FrameSummary
+            if frame.filename is not None and Path(frame.filename).parent == own_package_name:
+                last_own_frame = frame
+            last_frame = frame
+        tb = ""
+        if last_own_frame is not None and last_frame is not None:
+            tb += '  ...\n  File "{}", line {}, in {}\n    {}\n'.format(
+                last_own_frame.filename,
+                last_own_frame.lineno,
+                last_own_frame.name,
+                last_own_frame.line.strip(),
+            )
+            if last_frame is not last_own_frame:
+                tb += '  ...\n  File "{}", line {}, in {}\n    {}\n'.format(
+                    last_frame.filename,
+                    last_frame.lineno,
+                    last_frame.name,
+                    last_frame.line.strip(),
+                )
+        tb += type(e).__qualname__
+        exc_value = str(e)
+        if exc_value:
+            tb += f": {exc_value}"
+        tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
         return (
             f"<b>[‼] An error occurred during executing command.</b>\n\n"
             f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
-            f"<b>Error:</b> <code>{html.escape(f'{e.__class__.__name__}: {e}')}</code>"
+            f"<b>Traceback:</b>\n{tb}"
         )
 
     async def __call__(self, client: Client, message: Message):
@@ -85,7 +118,6 @@ class _CommandHandler:
         try:
             result = await self.handler(client, message, args, **self.kwargs)
         except Exception as e:
-            # TODO (2022-05-09): add a line of source code from traceback
             text = self._report_exception(message, e)
             await message.edit(text, parse_mode=ParseMode.HTML)
         else:
