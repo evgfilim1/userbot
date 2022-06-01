@@ -56,7 +56,7 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
         if m.line2:
             url += f"-L{m.line2}"
             text += f"-L{m.line2}"
-    return f"<a href='{url}'>{text}</a>"
+    return f"<a href='{url}'>github:{text}</a>"
 
 
 @shortcuts.add(r":uwu(\d+)?:")
