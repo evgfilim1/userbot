@@ -2,6 +2,7 @@ version: "3"
 services:
   main:
     build: .
+    image: evgfilim1/userbot:staging
     restart: unless-stopped
     volumes:
       - ./config.yaml:/config.yaml:ro
