@@ -65,4 +65,4 @@ jobs:
           ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           stack_file_name: docker-compose.prod.yaml
-          pull_images_first: true
+          pull_images_first: "true"
