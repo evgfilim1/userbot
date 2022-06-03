@@ -58,11 +58,14 @@ jobs:
         run: wget -q "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/raw/$GITHUB_REF_NAME/docker-compose.prod.yaml"
 
       - name: Deploy Docker app
-        uses: wshihadeh/docker-deployment-action@master
-        with:
-          args: -p userbot up -d main
-          remote_docker_host: github@server.evgfilim1.me
-          ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          stack_file_name: docker-compose.prod.yaml
-          pull_images_first: "true"
+        env:
+          DOCKER_HOST: ssh://github@server.evgfilim1.me
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+        run: |
+          set -eu
+          mkdir ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" >~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_PUBLIC_KEY" >~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+          docker-compose -f docker-compose.prod.yaml -p userbot pull
+          docker-compose -f docker-compose.prod.yaml -p userbot up -d main
