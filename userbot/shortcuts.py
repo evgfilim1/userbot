@@ -27,7 +27,7 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
     url = f"https://github.com/{m.username}"
     text = m.username
     if not m.repo:
-        return f"<a href='{url}'>{text}</a>"
+        return f"<b>GitHub:</b> <a href='{url}'>{text}</a>"
     if m.repo == "@":
         m.repo = m.username
     url += f"/{m.repo}"
@@ -49,14 +49,14 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
         url += f"/issues/{m.issue}"
         text += f"#{m.issue}"
     if not m.path:
-        return f"<a href='{url}'>{text}</a>"
+        return f"<b>GitHub:</b> <a href='{url}'>{text}</a>"
     if m.line1:
         url += f"#L{m.line1}"
         text += f"#L{m.line1}"
         if m.line2:
             url += f"-L{m.line2}"
             text += f"-L{m.line2}"
-    return f"<a href='{url}'>github:{text}</a>"
+    return f"<b>GitHub:</b> <a href='{url}'>{text}</a>"
 
 
 @shortcuts.add(r":uwu(\d+)?:")
