@@ -1,5 +1,6 @@
 import asyncio
 import html
+import logging
 import random
 import re
 from calendar import TextCalendar
@@ -287,7 +288,7 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
     """Gets message reactions"""
     peer = await client.resolve_peer(message.chat.id)
     ids = [types.InputMessageID(id=message.reply_to_message.id)]
-    if isinstance(peer, types.InputPeerChannel):
+    if not isinstance(peer, types.InputPeerChannel):
         messages: types.messages.Messages = await client.invoke(
             functions.messages.GetMessages(
                 id=ids,
@@ -296,7 +297,10 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
     else:
         messages: types.messages.Messages = await client.invoke(
             functions.channels.GetMessages(
-                channel=peer,
+                channel=types.InputChannel(
+                    channel_id=peer.channel_id,
+                    access_hash=peer.access_hash,
+                ),
                 id=ids,
             )
         )
@@ -322,7 +326,7 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
                 )
             )
         except MsgIdInvalid:
-            return "⚠ Message not found, deleted or has no reactions"
+            return "<i>Message not found or has no reactions</i>"
         reactions = {}
         for r in messages.reactions:
             reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
@@ -336,7 +340,7 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
                 else:
                     peer_name = peer_id
                 t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a>\n"
-    return t
+    return t or "<i>No reactions here</i>"
 
 
 @commands.add("rr", usage="<reply>")
