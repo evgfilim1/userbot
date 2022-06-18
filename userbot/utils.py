@@ -129,45 +129,6 @@ class GitHubMatch:
     line2: str | None
 
 
-async def downloader(client: Client, message: Message, filename: str, data_dir: Path) -> str:
-    if message.media in (
-        None,
-        MessageMediaType.CONTACT,
-        MessageMediaType.LOCATION,
-        MessageMediaType.VENUE,
-        MessageMediaType.POLL,
-        MessageMediaType.WEB_PAGE,
-        MessageMediaType.DICE,
-        MessageMediaType.GAME,
-    ):
-        return "⚠ <b>No downloadable media found</b>"
-    media_type = message.media.value
-    media_dir = data_dir
-    if not filename:
-        media_dir /= media_type
-        if not media_dir.exists():
-            media_dir.mkdir()
-    media = getattr(message, media_type)
-    filename = filename or getattr(media, "file_name", None)
-    output_io = await client.download_media(message, in_memory=True)
-    output_io.seek(0)
-    if not filename:
-        filename = f"{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
-        mime = getattr(media, "mime_type", None)
-        if not mime:
-            mime = magic.from_buffer(output_io.read(2048), mime=True)
-        ext = client.guess_extension(mime)
-        if not ext:
-            ext = ".bin"
-        filename += ext
-    output_io.seek(0)
-    output = media_dir / filename
-    async with aiofiles.open(output, "wb") as f:
-        while chunk := output_io.read(1048576 * 4):  # 4 MiB
-            await f.write(chunk)
-    return f"The file has been downloaded to <code>{output}</code>"
-
-
 def parse_delta(delta: str) -> timedelta | None:
     total_sec = 0
     for match in re.finditer(r"(\d+)([smhdwy])", delta, re.I):

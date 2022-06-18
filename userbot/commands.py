@@ -9,10 +9,12 @@ from datetime import datetime, time, timedelta
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
+import aiofiles
 import d20
+import magic
 from PIL import Image
 from pyrogram import Client
-from pyrogram.enums import ChatType, ParseMode
+from pyrogram.enums import ChatType, MessageMediaType, ParseMode
 from pyrogram.errors import (
     BadRequest,
     MessageNotModified,
@@ -30,7 +32,6 @@ from .utils import (
     HTMLDiceStringifier,
     Unset,
     create_filled_pic,
-    downloader,
     edit_or_reply,
     en2ru_tr,
     enru2ruen_tr,
@@ -438,6 +439,45 @@ async def test_error(_: Client, __: Message, ___: str) -> None:
     raise RuntimeError("Test error")
 
 
+async def _downloader(client: Client, message: Message, filename: str, data_dir: Path) -> str:
+    if message.media in (
+        None,
+        MessageMediaType.CONTACT,
+        MessageMediaType.LOCATION,
+        MessageMediaType.VENUE,
+        MessageMediaType.POLL,
+        MessageMediaType.WEB_PAGE,
+        MessageMediaType.DICE,
+        MessageMediaType.GAME,
+    ):
+        return "⚠ <b>No downloadable media found</b>"
+    media_type = message.media.value
+    media_dir = data_dir
+    if not filename:
+        media_dir /= media_type
+        if not media_dir.exists():
+            media_dir.mkdir()
+    media = getattr(message, media_type)
+    filename = filename or getattr(media, "file_name", None)
+    output_io = await client.download_media(message, in_memory=True)
+    output_io.seek(0)
+    if not filename:
+        filename = f"{message.date.strftime('%Y%m%d%H%M%S')}_{message.chat.id}_{message.id}"
+        mime = getattr(media, "mime_type", None)
+        if not mime:
+            mime = magic.from_buffer(output_io.read(2048), mime=True)
+        ext = client.guess_extension(mime)
+        if not ext:
+            ext = ".bin"
+        filename += ext
+    output_io.seek(0)
+    output = media_dir / filename
+    async with aiofiles.open(output, "wb") as f:
+        while chunk := output_io.read(1048576 * 4):  # 4 MiB
+            await f.write(chunk)
+    return f"The file has been downloaded to <code>{output}</code>"
+
+
 async def download(client: Client, message: Message, args: str, *, data_dir: Path) -> str:
     """Downloads a file or files"""
     msg = message.reply_to_message if message.reply_to_message else message
@@ -449,7 +489,7 @@ async def download(client: Client, message: Message, args: str, *, data_dir: Pat
     t = ""
     for m in all_messages:
         try:
-            t += await downloader(client, m, args if len(all_messages) == 1 else "", data_dir)
+            t += await _downloader(client, m, args if len(all_messages) == 1 else "", data_dir)
         except Exception as e:
             t += f"⚠ <code>{type(e).__name__}: {e}</code>"
         finally:
