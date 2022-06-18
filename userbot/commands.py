@@ -486,3 +486,16 @@ async def to_sticker(client: Client, message: Message, args: str) -> None:
             raise AssertionError("Wrong format, this should never happen")
     if message.reply_to_message:
         await message.delete()
+
+
+@commands.add("caps", usage="<reply>")
+async def caps(_: Client, message: Message, __: str) -> None:
+    """Toggles capslock on the message"""
+    text = get_text(message.reply_to_message)
+    answer, delete = edit_or_reply(message)
+    try:
+        await answer(text.swapcase())
+    except MessageNotModified:
+        pass
+    if delete:
+        await message.delete()
