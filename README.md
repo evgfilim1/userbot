@@ -14,30 +14,30 @@ Commands work only when sent by the user who runs userbot. Command prefix is `.`
 ```
 List of commands available:
 
-longcat — Sends random longcat
+cal [month] [year] — Sends a calendar for a specified month and year
+calc <python-expr> — Evaluates Python expression
+caps <reply> — Toggles capslock on the message
+chatban <id> [time] [reason...] — Bans a user in a chat
+color <color-spec> — Sends a specified color sample
 delete|delet|del <reply> — Deletes replied message
+download|dl [reply] [filename] — Downloads a file or files
 dump [dot-separated-attrs] — Dumps entire message or its specified attribute
 id <reply> — Sends replied user's ID as link
-roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
+longcat — Sends random longcat
 promote <admin-title> — Promotes a user to an admin without any rights but with title
-calc <python-expr> — Evaluates Python expression
-rnds <pack-link|pack-alias> — Sends random sticker from specified pack
-tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
-s <reply> <find-re>/<replace-re>/[flags] — sed-like replacement
-color <color-spec> — Sends a specified color sample
-usercolor <reply> — Sends a color sample of user's color as shown in clients
-userfirstmsg [reply] — Replies to user's very first message in the chat
 r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
-rs <reply> — Gets message reactions
-rr <reply> — Reacts to a message with a random emoji
-cal [month] [year] — Sends a calendar for a specified month and year
-togif [reply] — Converts a video to a mpeg4 gif
-chatban <id> [time] [reason...] — Bans a user in a chat
-tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
-caps <reply> — Toggles capslock on the message
 remind [reply] <time> [message...] — Sets a reminder
 remindme [reply] <time> [message...] — Sets a reminder for myself
-download|dl [reply] [filename] — Downloads a file or files
+rnds <pack-link|pack-alias> — Sends random sticker from specified pack
+roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
+rr <reply> — Reacts to a message with a random emoji
+rs <reply> — Gets message reactions
+s <reply> <find-re>/<replace-re>/[flags] — sed-like replacement
+togif [reply] — Converts a video to a mpeg4 gif
+tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
+tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
+usercolor <reply> — Sends a color sample of user's color as shown in clients
+userfirstmsg [reply] — Replies to user's very first message in the chat
 help — Sends this message
 ```
 

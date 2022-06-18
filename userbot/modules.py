@@ -59,7 +59,7 @@ _log = logging.getLogger(__name__)
 
 @dataclass()
 class _CommandHandler:
-    command: str
+    command: str | list[str]
     prefix: str
     handler: CommandHandler
     handle_edits: bool
@@ -210,6 +210,12 @@ def _generate_auto_help_handler(text: str) -> CommandHandler:
     return _auto_help_handler
 
 
+def _command_handler_sort_key(handler: _CommandHandler) -> str:
+    if isinstance(handler.command, str):
+        return handler.command
+    return handler.command[0]
+
+
 class CommandsModule:
     def __init__(self):
         self._handlers: list[_CommandHandler] = []
@@ -271,7 +277,7 @@ class CommandsModule:
     def register(self, client: Client, *, with_help: bool = False) -> None:
         if with_help:
             text = "<b>List of commands available:</b>\n\n"
-            for handler in self._handlers:
+            for handler in sorted(self._handlers, key=_command_handler_sort_key):
                 if handler.usage is None:
                     continue
                 if isinstance(handler.command, str):
