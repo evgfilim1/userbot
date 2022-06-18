@@ -351,15 +351,20 @@ async def put_random_reaction(client: Client, message: Message, _: str) -> None:
     await message.delete()
 
 
-@commands.add("cal", usage="<month> [year]")
-async def calendar(_: Client, __: Message, args: str) -> str:
+@commands.add("cal", usage="[month] [year]")
+async def calendar(_: Client, message: Message, args: str) -> str:
     """Sends a calendar for a specified month and year"""
     args_list = args.split()
-    month = int(args_list[0])
+    # It's more reliable to get current date/time from the message
+    now = message.edit_date or message.date or datetime.now()
+    if len(args_list) >= 1:
+        month = int(args_list[0])
+    else:
+        month = now.month
     if len(args_list) == 2:
         year = int(args_list[1])
     else:
-        year = datetime.utcnow().year
+        year = now.year
     return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
 
 

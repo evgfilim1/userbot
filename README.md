@@ -30,7 +30,7 @@ userfirstmsg [reply] — Replies to user's very first message in the chat
 r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
 rs <reply> — Gets message reactions
 rr <reply> — Reacts to a message with a random emoji
-cal <month> [year] — Sends a calendar for a specified month and year
+cal [month] [year] — Sends a calendar for a specified month and year
 togif [reply] — Converts a video to a mpeg4 gif
 chatban <id> [time] [reason...] — Bans a user in a chat
 tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
