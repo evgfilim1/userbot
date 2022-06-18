@@ -414,9 +414,10 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     """Bans a user in a chat"""
     args_list = args.split(" ")
     user_id = int(args_list[0])
+    now = message.edit_date or message.date or datetime.now()
     if len(args_list) > 1:
         delta = parse_delta(args_list[1])
-        t = datetime.now() + delta
+        t = now + delta
     else:
         delta = None
         t = datetime.fromtimestamp(0)
