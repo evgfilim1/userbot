@@ -34,7 +34,9 @@ cal [month] [year] — Sends a calendar for a specified month and year
 togif [reply] — Converts a video to a mpeg4 gif
 chatban <id> [time] [reason...] — Bans a user in a chat
 tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
-caps <reply> — Turns capslock on/off
+caps <reply> — Toggles capslock on the message
+remind [reply] <time> [message...] — Sets a reminder
+remindme [reply] <time> [message...] — Sets a reminder for myself
 download|dl [reply] [filename] — Downloads a file or files
 help — Sends this message
 ```

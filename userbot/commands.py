@@ -1,16 +1,18 @@
+# FIXME (2022-06-18): 550+ lines may become unreadable at some moment, refactor this ASAP.
+
 import asyncio
 import html
-import logging
 import random
 import re
 from calendar import TextCalendar
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import d20
 from PIL import Image
 from pyrogram import Client
+from pyrogram.enums import ChatType, ParseMode
 from pyrogram.errors import (
     BadRequest,
     MessageNotModified,
@@ -20,6 +22,7 @@ from pyrogram.errors import (
 )
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, Sticker
+from pyrogram.utils import get_channel_id
 
 from .constants import LONGCAT, PACK_ALIASES
 from .modules import CommandsModule
@@ -31,6 +34,7 @@ from .utils import (
     en2ru_tr,
     enru2ruen_tr,
     get_text,
+    parse_delta,
     ru2en_tr,
 )
 
@@ -409,33 +413,20 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     args_list = args.split(" ")
     user_id = int(args_list[0])
     if len(args_list) > 1:
-        match = re.fullmatch(r"(\d+)([mhdwy])?", args_list[1], re.I)
-        time_sec = int(match[1])
-        match match[2]:
-            case "m" | "M":
-                time_sec *= 60
-            case "h" | "H":
-                time_sec *= 60 * 60
-            case "d" | "D":
-                time_sec *= 60 * 60 * 24
-            case "w" | "W":
-                time_sec *= 60 * 60 * 24 * 7
-            case "y" | "Y":
-                time_sec *= 60 * 60 * 24 * 365
-        delta = timedelta(seconds=time_sec)
-        time = datetime.now() + delta
+        delta = parse_delta(args_list[1])
+        t = datetime.now() + delta
     else:
         delta = None
-        time = datetime.fromtimestamp(0)
+        t = datetime.fromtimestamp(0)
     reason = " ".join(args_list[2:])
-    await client.ban_chat_member(message.chat.id, user_id, time)
+    await client.ban_chat_member(message.chat.id, user_id, t)
     user = await client.get_chat(user_id)
-    t = f"<a href='tg://user?id={user_id}'>{user.first_name}</a> <b>banned</b> in this chat"
+    text = f"<a href='tg://user?id={user_id}'>{user.first_name}</a> <b>banned</b> in this chat"
     if delta:
-        t += f" for <i>{args_list[1]}</i>."
+        text += f" for <i>{args_list[1]}</i>."
     if reason:
-        t += f"\n<b>Reason:</b> {reason}"
-    return t
+        text += f"\n<b>Reason:</b> {reason}"
+    return text
 
 
 @commands.add("testerror")
@@ -504,3 +495,58 @@ async def caps(_: Client, message: Message, __: str) -> None:
         pass
     if delete:
         await message.delete()
+
+
+def _remind_common(message: Message, args_list: list[str]) -> datetime:
+    """Common code for `remind` and `remind_me`"""
+    now = message.edit_date or message.date or datetime.now()
+    if (delta := parse_delta(args_list[0])) is not None:
+        t = now + delta
+    else:
+        h, m = map(int, args_list[0].split(":", maxsplit=1))
+        parsed_time = time(h, m)
+        if parsed_time < now.time():
+            t = datetime.combine(now + timedelta(days=1), parsed_time)
+        else:
+            t = datetime.combine(now, parsed_time)
+    return t
+
+
+@commands.add("remind", usage="[reply] <time> [message...]")
+async def remind(client: Client, message: Message, args: str) -> str:
+    """Sets a reminder"""
+    args_list = args.split(" ")
+    if len(args_list) >= 2:
+        text = " ".join(args_list[1:])
+    else:
+        text = "⏰ <b>Reminder!</b>"
+    t = _remind_common(message, args_list)
+    await client.send_message(
+        message.chat.id,
+        text,
+        parse_mode=ParseMode.HTML,
+        reply_to_message_id=message.reply_to_message_id,
+        schedule_date=t,
+    )
+    return f"⏰ Reminder was set for <i>{t.time()}</i>"
+
+
+@commands.add("remindme", usage="[reply] <time> [message...]")
+async def remind_me(client: Client, message: Message, args: str) -> str:
+    """Sets a reminder for myself"""
+    args_list = args.split(" ")
+    if len(args_list) >= 2:
+        text = " ".join(args_list[1:])
+    else:
+        text = "⏰ <b>Reminder!</b>"
+    if message.reply_to_message_id is not None and message.chat.type == ChatType.SUPERGROUP:
+        chat_id = get_channel_id(message.chat.id)
+        text += f"\n\nhttps://t.me/c/{chat_id}/{message.reply_to_message_id}"
+    t = _remind_common(message, args_list)
+    await client.send_message(
+        "me",
+        text,
+        parse_mode=ParseMode.HTML,
+        schedule_date=t,
+    )
+    return f"⏰ Reminder was set for <i>{t.time()}</i>"

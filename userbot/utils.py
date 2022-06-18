@@ -1,6 +1,8 @@
 import functools
 import html
+import re
 from dataclasses import dataclass
+from datetime import timedelta
 from io import BytesIO
 from pathlib import Path
 from typing import Protocol, TypeVar
@@ -162,3 +164,24 @@ async def downloader(client: Client, message: Message, filename: str, data_dir: 
         while chunk := output_io.read(1048576 * 4):  # 4 MiB
             await f.write(chunk)
     return f"The file has been downloaded to <code>{output}</code>"
+
+
+def parse_delta(delta: str) -> timedelta | None:
+    total_sec = 0
+    for match in re.finditer(r"(\d+)([smhdwy])", delta, re.I):
+        time_sec = int(match[1])
+        match match[2]:
+            case "m" | "M":
+                time_sec *= 60
+            case "h" | "H":
+                time_sec *= 60 * 60
+            case "d" | "D":
+                time_sec *= 60 * 60 * 24
+            case "w" | "W":
+                time_sec *= 60 * 60 * 24 * 7
+            case "y" | "Y":
+                time_sec *= 60 * 60 * 24 * 365
+        total_sec += time_sec
+    if total_sec > 0:
+        return timedelta(seconds=total_sec)
+    return None
