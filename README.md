@@ -73,6 +73,7 @@ Shortcuts work only when sent by the user who runs userbot.
 - `:uwu:` — Sends a `🥺👉👈` emoji
   - `:uwu<number>:` — Sends a `👉👈` emoji with the specified number of finger pairs
 - `google://<query>/` — Sends a link to a Google search for the specified query
+- `:shrug:` — Sends a shrug kaomoji `¯\_(ツ)_/¯`
 
 ## Installation and running
 

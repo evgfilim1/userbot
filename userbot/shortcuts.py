@@ -73,3 +73,9 @@ async def google(match: re.Match[str]) -> str:
     """Sends a link to a Google search"""
     link = f"https://www.google.com/search?q={quote_plus(match[1])}"
     return f"<b>Google:</b> <a href='{link}'>{match[1]}</a>"
+
+
+@shortcuts.add(r":shrug:")
+async def shrug(_: re.Match[str]) -> str:
+    """Sends shrug kaomoji"""
+    return "¯\\_(ツ)_/¯"
