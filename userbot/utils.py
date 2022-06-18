@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import html
 import re
@@ -5,7 +7,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from io import BytesIO
 from pathlib import Path
-from typing import Protocol, TypeVar
+from typing import Any, ClassVar, Protocol, TypeVar
 
 import aiofiles
 import magic
@@ -185,3 +187,20 @@ def parse_delta(delta: str) -> timedelta | None:
     if total_sec > 0:
         return timedelta(seconds=total_sec)
     return None
+
+
+class Unset:
+    """A singleton to represent an unset value"""
+
+    _instance: ClassVar[Unset | None] = None
+
+    def __new__(cls, *args: Any, **kwargs: Any) -> Unset:
+        if cls._instance is None:
+            cls._instance = super().__new__(cls, *args, **kwargs)
+        return cls._instance
+
+    def __repr__(self) -> str:
+        return "<unset>"
+
+    def __str__(self) -> str:
+        return repr(self)

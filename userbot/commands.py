@@ -28,6 +28,7 @@ from .constants import LONGCAT, PACK_ALIASES
 from .modules import CommandsModule
 from .utils import (
     HTMLDiceStringifier,
+    Unset,
     create_filled_pic,
     downloader,
     edit_or_reply,
@@ -71,10 +72,11 @@ async def dump(_: Client, message: Message, args: str) -> str:
     """Dumps entire message or its specified attribute"""
     obj = message.reply_to_message or message
     attrs = args.split(".")
+    unset = Unset()
     for attr in attrs:
         if attr:
-            obj = getattr(obj, attr, None)
-    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{str(obj)}</pre>"
+            obj = getattr(obj, attr, unset)
+    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(str(obj))}</pre>"
 
 
 @commands.add("id", usage="<reply>")
