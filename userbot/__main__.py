@@ -1,4 +1,5 @@
 import logging
+import os
 from functools import partial
 from pathlib import Path
 
@@ -40,6 +41,7 @@ def main() -> None:
         data_dir.mkdir()
     if not data_dir.is_dir():
         raise NotADirectoryError("config.yaml: `data_location` must be a directory")
+    os.chdir(data_dir)
     client = Client(
         name=config["session"],
         api_id=config["api_id"],
