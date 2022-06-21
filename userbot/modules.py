@@ -12,7 +12,7 @@ from httpx import AsyncClient, HTTPError
 from pyrogram import Client
 from pyrogram import filters as flt
 from pyrogram.enums import ParseMode
-from pyrogram.errors import MessageTooLong, SlowmodeWait
+from pyrogram.errors import MessageNotModified, MessageTooLong, SlowmodeWait
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
@@ -164,6 +164,12 @@ class _CommandHandler:
                         parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True,
                     )
+            except MessageNotModified:
+                await message.edit(
+                    f"{result}\n\n⚠ <i><b>MessageNotModified</b> was raised, check that there is"
+                    f" only one userbot instance is running</i>",
+                    parse_mode=ParseMode.HTML,
+                )
             except Exception as e:
                 text = self._report_exception(message, e)
                 await message.edit(text, parse_mode=ParseMode.HTML)
