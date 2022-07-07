@@ -15,6 +15,7 @@ from pyrogram.enums import ParseMode
 from pyrogram.errors import MessageNotModified, MessageTooLong, SlowmodeWait
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
+from pyrogram.types.messages_and_media.message import Str
 
 from .storage import Storage
 
@@ -202,7 +203,10 @@ class _ShortcutHandler:
     handle_edits: bool
 
     async def __call__(self, client: Client, message: Message):
-        text = message.text.html
+        raw_text = message.text or message.caption
+        if raw_text is None:
+            return
+        text = raw_text.html
         while match := self.regex.search(text):
             if (result := await self.handler(match)) is not None:
                 text = f"{text[:match.start()]}{result}{text[match.end():]}"
