@@ -385,7 +385,8 @@ async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
     with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".mp4") as dst:
         await client.download_media(video.file_id, src.name)
         proc = await asyncio.subprocess.create_subprocess_exec(
-            "/usr/bin/ffmpeg",
+            "/usr/bin/env",
+            "ffmpeg",
             "-hide_banner",
             "-i",
             src.name,

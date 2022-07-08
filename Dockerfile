@@ -1,15 +1,22 @@
-FROM python:3.10-slim
+FROM jrottenberg/ffmpeg:5.0-ubuntu2004
 
 WORKDIR /app
 
-RUN useradd -Ud /app userbot
+RUN useradd -Ud /app userbot \
+    && apt update \
+    && apt install -y --no-install-recommends gpg dirmngr gpg-agent \
+    && echo 'deb https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu focal main' >>/etc/apt/sources.list \
+    && echo 'deb-src https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu focal main' >>/etc/apt/sources.list \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv F23C5A6CF475977595C89F51BA6932366A755776 \
+    && apt update \
+    && apt install -y --no-install-recommends python3.10 python3.10-distutils libmagic1 curl \
+    && { curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10; } \
+    && apt autoremove -y gpg dirmngr gpg-agent curl --purge \
+    && apt clean -y \
+    && rm -rf /var/lib/apt/* /root/.cache /var/log/* /var/cache/*
 
 COPY --chown=userbot:userbot requirements.txt ./
-# FIXME (2022-05-12): final image is too big because ffmpeg dependencies are too big
-RUN pip install --no-cache-dir -r requirements.txt \
-    && apt update \
-    && apt install -y --no-install-recommends ffmpeg libmagic1 \
-    && apt clean
+RUN python3.10 -m pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=userbot:userbot userbot ./userbot
 
@@ -17,4 +24,4 @@ RUN mkdir -pm700 /data && chown -R userbot:userbot /data
 VOLUME /data
 
 USER userbot:userbot
-ENTRYPOINT ["/usr/local/bin/python", "-m", "userbot"]
+ENTRYPOINT ["/usr/bin/env", "python3.10", "-m", "userbot"]
