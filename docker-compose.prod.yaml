@@ -3,6 +3,8 @@ services:
   main:
     image: "${REGISTRY}/${IMAGE_NAME}:latest"
     restart: unless-stopped
+    environment:
+      GITHUB_SHA: "${GITHUB_SHA:-}"
     volumes:
       - /home/github/userbot/config.yaml:/config.yaml:ro
       - /home/github/userbot/data:/data
