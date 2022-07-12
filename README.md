@@ -14,6 +14,7 @@ Commands work only when sent by the user who runs userbot. Command prefix is `.`
 ```
 List of commands available:
 
+about — Shows information about this userbot
 cal [month] [year] — Sends a calendar for a specified month and year
 calc <python-expr> — Evaluates Python expression
 caps <reply> — Toggles capslock on the message
@@ -84,7 +85,7 @@ Shortcuts work only when sent by the user who runs userbot.
     ```yaml
     session: evgfilim1 # Name for session file
     api_id: ""  # Insert your Telegram api_id here
-    api_hash: ""  # Insert your Telegram api_hash here 
+    api_hash: ""  # Insert your Telegram api_hash here
     kwargs:  # Optional, will be passed directly to `pyrogram.Client`, see docs for more info
       phone_number: "+1234567890"
       # ...
