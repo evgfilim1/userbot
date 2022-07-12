@@ -1,7 +1,7 @@
 version: "3"
 services:
   main:
-    image: "${REGISTRY}/${IMAGE_NAME}:latest"
+    image: "${REGISTRY:?}/${IMAGE_NAME:?}:${IMAGE_TAG:?}"
     restart: unless-stopped
     environment:
       GITHUB_SHA: "${GITHUB_SHA:-}"
