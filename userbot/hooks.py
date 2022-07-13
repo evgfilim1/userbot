@@ -4,7 +4,14 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .constants import BRA_MEME_PICTURE, MIBIB_FLT, MIBIB_STICKER, TAP_FLT, TAP_STICKER
+from .constants import (
+    BRA_MEME_PICTURE,
+    MIBIB_FLT,
+    MIBIB_STICKER,
+    TAP_FLT,
+    TAP_STICKER,
+    UWU_MEME_PICTURE,
+)
 from .modules import HooksModule
 from .storage import Storage
 from .utils import sticker
@@ -41,6 +48,11 @@ async def mibib(client: Client, message: Message) -> None:
 @hooks.add("bra", filters.regex(r"\b(?:бра|bra)\b", flags=re.I))
 async def on_bra(_: Client, message: Message) -> None:
     await message.reply_photo(BRA_MEME_PICTURE)
+
+
+@hooks.add("uwu", filters.regex(r"\b(?:uwu|owo|уву|ово)\b", flags=re.I))
+async def on_uwu(_: Client, message: Message) -> None:
+    await message.reply_photo(UWU_MEME_PICTURE)
 
 
 async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:

@@ -58,6 +58,8 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
   sticker itself
 - `bra`: Sends a picture from [this](https://www.reddit.com/r/anime_irl/comments/u4zxol/anime_irl/)
   Reddit post when someone sends "бра" or "bra"
+- `uwu`: Sends a [picture](https://imgur.com/a/bDzntL5) when someone sends "uwu", "owo", "уву"
+  or "ово"
 
 ### Shortcuts
 

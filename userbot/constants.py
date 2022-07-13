@@ -29,6 +29,8 @@ LONGCAT = dict(
 )
 # https://www.reddit.com/r/anime_irl/comments/u4zxol/anime_irl/
 BRA_MEME_PICTURE = "https://i.redd.it/4sm31aa1rwt81.jpg"
+# https://imgur.com/a/bDzntL5
+UWU_MEME_PICTURE = "https://i.imgur.com/VsuT9ry.jpeg"
 PACK_ALIASES = {
     "a": "Degrodpack",
     "aa": "TrialITA",
