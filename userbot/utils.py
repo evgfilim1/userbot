@@ -6,15 +6,12 @@ import re
 from dataclasses import dataclass
 from datetime import timedelta
 from io import BytesIO
-from pathlib import Path
 from typing import Any, ClassVar, Protocol, TypeVar
 
-import aiofiles
-import magic
 from d20 import SimpleStringifier
 from PIL import Image
-from pyrogram import Client, filters
-from pyrogram.enums import MessageMediaType, ParseMode
+from pyrogram import filters
+from pyrogram.enums import ParseMode
 from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")

@@ -15,7 +15,6 @@ from pyrogram.enums import ParseMode
 from pyrogram.errors import MessageNotModified, MessageTooLong, SlowmodeWait
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
-from pyrogram.types.messages_and_media.message import Str
 
 from .storage import Storage
 
