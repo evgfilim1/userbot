@@ -12,9 +12,18 @@ from .utils import sticker
 hooks = HooksModule()
 
 
-@hooks.add("duck", filters.regex(r"\b(?:дак|кря)\b", flags=re.I))
+@hooks.add("emojis", filters.regex(r"\b((?:дак\b|кря(?:к.?|\b))|блин)", flags=re.I))
 async def on_duck(_: Client, message: Message) -> None:
-    await message.reply("🦆" * len(message.matches))
+    t = ""
+    for m in message.matches:
+        match m[1].lower():
+            case "дак" | "кря":
+                t += "🦆"
+            case x if x.startswith("кряк"):
+                t += "🦆"
+            case "блин":
+                t += "🥞"
+    await message.reply(t)
 
 
 @hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | sticker(TAP_FLT)))

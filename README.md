@@ -47,8 +47,11 @@ help — Sends this message
 Triggers can be enabled by `.<hookname>here` and disabled by `.no<hookname>here`. They are disabled
 everywhere by default. To check if a hook is enabled or disabled, use `.hookshere`.
 
-- `duck`: Sends a duck emoji (🦆) when someone writes "дак" (pronounced as "duck") or "кря"
-  (pronounces as "krya", English equivalent is "quack")
+- `emojis`:
+  - Sends a duck emoji (🦆) when someone writes "дак" (pronounced as "duck") or "кря"
+    (pronounces as "krya", English equivalent is "quack")
+  - Sends a pancake emoji (🥞) when someone writes "блин" (English equivalent is "pancake", also
+    that's how Russian equivalent to the English "f*ck" is "censored")
 - `tap`: Sends a sticker with a finger touching a seal when someone writes "тык" or sends that
   sticker itself
 - `mibib`: Sends a sticker (with 20% chance) with an animated pixelated bear when someone sends that
