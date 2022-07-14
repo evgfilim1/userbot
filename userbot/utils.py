@@ -3,24 +3,14 @@ from __future__ import annotations
 import functools
 import html
 import re
-from dataclasses import dataclass
 from datetime import timedelta
-from io import BytesIO
 from typing import Any, ClassVar, Protocol, TypeVar
 
-from d20 import SimpleStringifier
-from PIL import Image
 from pyrogram import filters
 from pyrogram.enums import ParseMode
 from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")
-
-_kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
-_kb_ru = 'ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,'
-ru2en_tr = str.maketrans(_kb_ru, _kb_en)
-en2ru_tr = str.maketrans(_kb_en, _kb_ru)
-enru2ruen_tr = str.maketrans(_kb_ru + _kb_en, _kb_en + _kb_ru)
 
 
 class MessageMethod(Protocol):
@@ -41,16 +31,6 @@ def sticker(sticker_id: str, debug: bool = False) -> filters.Filter:
         return c.sticker and c.sticker.file_unique_id == sticker_id
 
     return sticker_filter
-
-
-def create_filled_pic(col: str, size: tuple[int, int] = (100, 100)) -> BytesIO:
-    tmp = BytesIO()
-    tmp.name = "foo.png"
-    im = Image.new("RGB", size, col)
-    im.save(tmp, "png")
-    im.close()
-    tmp.seek(0)
-    return tmp
 
 
 def get_text(message: Message, *, as_html: bool = False) -> str | None:
@@ -83,47 +63,6 @@ def edit_or_reply(message: Message) -> tuple[AnswerMethod, bool]:
             return send_helper(message.reply_to_message.edit_caption), True
         return send_helper(message.reply_to_message.edit), True
     return send_helper(message.edit, f"<b>Maybe you mean:</b>\n\n"), False
-
-
-class HTMLDiceStringifier(SimpleStringifier):
-    def __init__(self):
-        super().__init__()
-        self._in_dropped = False
-
-    def stringify(self, the_roll):
-        self._in_dropped = False
-        return super().stringify(the_roll)
-
-    def _stringify(self, node):
-        if not node.kept and not self._in_dropped:
-            self._in_dropped = True
-            inside = super()._stringify(node)
-            self._in_dropped = False
-            return f"<s>{inside}</s>"
-        return super()._stringify(node)
-
-    def _str_expression(self, node):
-        return f"{self._stringify(node.roll)} = <code>{int(node.total)}</code>"
-
-    def _str_die(self, node):
-        the_rolls = []
-        for val in node.values:
-            inside = self._stringify(val)
-            if val.number == 1 or val.number == node.size:
-                inside = f"<b>{inside}</b>"
-            the_rolls.append(inside)
-        return ", ".join(the_rolls)
-
-
-@dataclass()
-class GitHubMatch:
-    username: str
-    repo: str | None
-    issue: str | None
-    branch: str | None
-    path: str | None
-    line1: str | None
-    line2: str | None
 
 
 def parse_delta(delta: str) -> timedelta | None:

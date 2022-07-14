@@ -1,12 +1,23 @@
 import re
+from dataclasses import dataclass
 from urllib.parse import quote_plus
 
 from httpx import AsyncClient
 
 from .modules import ShortcutTransformersModule
-from .utils import GitHubMatch
 
 shortcuts = ShortcutTransformersModule()
+
+
+@dataclass()
+class GitHubMatch:
+    username: str
+    repo: str | None
+    issue: str | None
+    branch: str | None
+    path: str | None
+    line1: str | None
+    line2: str | None
 
 
 @shortcuts.add(r"yt:([a-zA-Z0-9_\-]{11})")
