@@ -3,6 +3,7 @@ __all__ = [
     "download",
 ]
 
+from ..modules import CommandsModule
 from .about import commands as about_commands
 from .chat_admin import commands as chat_admin_commands
 from .colors import commands as colors_commands
@@ -15,7 +16,6 @@ from .reminders import commands as reminders_commands
 from .stickers import commands as stickers_commands
 from .text_converters import commands as text_converters_commands
 from .tools import commands as tools_commands
-from ..modules import CommandsModule
 
 commands = CommandsModule()
 

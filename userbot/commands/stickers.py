@@ -8,8 +8,8 @@ from pyrogram import Client
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, Sticker
 
-from ..modules import CommandsModule
 from ..constants import LONGCAT, PACK_ALIASES
+from ..modules import CommandsModule
 
 commands = CommandsModule()
 

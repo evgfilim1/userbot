@@ -9,8 +9,8 @@ from pyrogram import Client
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
-from ..utils import parse_delta
 from ..modules import CommandsModule
+from ..utils import parse_delta
 
 commands = CommandsModule()
 
