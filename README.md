@@ -19,6 +19,7 @@ cal [month] [year] — Sends a calendar for a specified month and year
 calc <python-expr> — Evaluates Python expression
 caps <reply> — Toggles capslock on the message
 chatban <id> [time] [reason...] — Bans a user in a chat
+chatunban <id> — Unbans a user in a chat
 color <color-spec> — Sends a specified color sample
 delete|delet|del <reply> — Deletes replied message
 download|dl [reply] [filename] — Downloads a file or files

@@ -38,6 +38,15 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     return text
 
 
+@commands.add("chatunban", usage="<id>")
+async def chat_unban(client: Client, message: Message, args: str) -> str:
+    """Unbans a user in a chat"""
+    user_id = int(args)
+    await client.unban_chat_member(message.chat.id, user_id)
+    user = await client.get_chat(user_id)
+    return f"<a href='tg://user?id={user_id}'>{user.first_name}</a> <b>unbanned</b> in this chat"
+
+
 @commands.add("promote", usage="<admin-title>")
 async def promote(client: Client, message: Message, args: str) -> str:
     """Promotes a user to an admin without any rights but with title"""
