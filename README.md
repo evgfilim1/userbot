@@ -24,6 +24,7 @@ color <color-spec> — Sends a specified color sample
 delete|delet|del <reply> — Deletes replied message
 download|dl [reply] [filename] — Downloads a file or files
 dump [dot-separated-attrs] — Dumps entire message or its specified attribute
+help [command] — Sends help for all commands (this message) or for a specific one
 id <reply> — Sends replied user's ID as link
 longcat — Sends random longcat
 promote <admin-title> — Promotes a user to an admin without any rights but with title
@@ -41,7 +42,6 @@ tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or 
 tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
 usercolor <reply> — Sends a color sample of user's color as shown in clients
 userfirstmsg [reply] — Replies to user's very first message in the chat
-help — Sends this message
 ```
 
 ### Hooks (triggers)

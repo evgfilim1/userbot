@@ -212,11 +212,16 @@ class _ShortcutHandler:
         await message.edit(text, parse_mode=ParseMode.HTML)
 
 
-def _generate_auto_help_handler(text: str) -> CommandHandler:
-    async def _auto_help_handler(_: Client, __: Message, ___: str) -> str:
-        return text
-
-    return _auto_help_handler
+def _format_handler_usage(handler: _CommandHandler) -> str | None:
+    if handler.usage is None:
+        return None
+    if isinstance(handler.command, str):
+        commands = handler.command
+    else:
+        commands = "|".join(handler.command)
+    usage = f" {handler.usage}".rstrip()
+    description = f" — {handler.doc}" if handler.doc else ""
+    return f"{commands}{usage}{description}"
 
 
 def _command_handler_sort_key(handler: _CommandHandler) -> str:
@@ -285,26 +290,14 @@ class CommandsModule:
 
     def register(self, client: Client, *, with_help: bool = False) -> None:
         if with_help:
-            text = "<b>List of commands available:</b>\n\n"
-            for handler in sorted(self._handlers, key=_command_handler_sort_key):
-                if handler.usage is None:
-                    continue
-                if isinstance(handler.command, str):
-                    commands = handler.command
-                else:
-                    commands = "|".join(handler.command)
-                usage = f" {html.escape(handler.usage)}".rstrip()
-                description = f" — {html.escape(handler.doc)}" if handler.doc else ""
-                text += f"{commands}{usage}{description}\n"
-            text += f"help — Sends this message\n"
             self._handlers.append(
                 _CommandHandler(
                     command="help",
                     prefix=".",
-                    handler=_generate_auto_help_handler(text),
+                    handler=self._auto_help_handler,
                     handle_edits=True,
-                    usage="",
-                    doc="Sends this message",
+                    usage="[command]",
+                    doc="Sends help for all commands (this message) or for a specific one",
                     waiting_message=None,
                     kwargs={},
                 )
@@ -314,6 +307,21 @@ class CommandsModule:
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
+
+    async def _auto_help_handler(self, _: Client, __: Message, args: str) -> str:
+        logging.info(f"Sending help for {args}")
+        if args:
+            for h in self._handlers:
+                if isinstance(h.command, str) and h.command == args or args in h.command:
+                    return f"<b>Help for {args}:</b>\n{html.escape(_format_handler_usage(h))}"
+            else:
+                return f"<b>No help found for {args}</b>"
+        text = "<b>List of commands available:</b>\n\n"
+        for handler in sorted(self._handlers, key=_command_handler_sort_key):
+            if (usage := _format_handler_usage(handler)) is None:
+                continue
+            text += f"{html.escape(usage)}\n"
+        return text
 
 
 class HooksModule:
