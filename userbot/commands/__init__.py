@@ -6,6 +6,7 @@ __all__ = [
 from ..modules import CommandsModule
 from .about import commands as about_commands
 from .chat_admin import commands as chat_admin_commands
+from .chat_info import commands as chat_info_commands
 from .colors import commands as colors_commands
 from .content_converters import commands as content_converters_commands
 from .dice import commands as dice_commands
@@ -22,6 +23,7 @@ commands = CommandsModule()
 for submodule in (
     about_commands,
     chat_admin_commands,
+    chat_info_commands,
     colors_commands,
     content_converters_commands,
     dice_commands,
