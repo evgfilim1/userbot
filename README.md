@@ -18,7 +18,7 @@ about — Shows information about this userbot
 cal [month] [year] — Sends a calendar for a specified month and year
 calc <python-expr> — Evaluates Python expression
 caps <reply> — Toggles capslock on the message
-chatban <reply 'reply'|id> [time] [reason...] — Bans a user in a chat
+chatban <reply 'reply'|id> [time|'0'|'forever'] [reason...] — Bans a user in a chat
 chatunban <id> — Unbans a user in a chat
 color <color-spec> — Sends a specified color sample
 delete|delet|del <reply> — Deletes replied message

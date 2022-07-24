@@ -15,7 +15,7 @@ from ..utils import parse_delta
 commands = CommandsModule()
 
 
-@commands.add("chatban", usage="<reply 'reply'|id> [time] [reason...]")
+@commands.add("chatban", usage="<reply 'reply'|id> [time|'0'|'forever'] [reason...]")
 async def chat_ban(client: Client, message: Message, args: str) -> str:
     """Bans a user in a chat"""
     args_list = args.split(" ")
@@ -24,12 +24,12 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
     else:
         user_id = int(args_list[0])
     now = message.edit_date or message.date or datetime.now()
-    if len(args_list) > 1:
-        delta = parse_delta(args_list[1])
-        t = now + delta
-    else:
+    if len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever":
         delta = None
         t = datetime.fromtimestamp(0)
+    else:
+        delta = parse_delta(args_list[1])
+        t = now + delta
     reason = " ".join(args_list[2:])
     await client.ban_chat_member(message.chat.id, user_id, t)
     user = await client.get_chat(user_id)
