@@ -79,3 +79,10 @@ async def random_chat_info(client: Client, message: Message, args: str) -> str:
         text += f"📝 <b>New chat title was set!</b> <a href='{msg.link}'>Source</a>"
         await sleep(0.1)
     return text
+
+
+@commands.add("rndmsg", usage="")
+async def random_chat_message(client: Client, message: Message, _: str) -> str:
+    """Sends a random message from the chat"""
+    msg = await get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
+    return f"<a href='{msg.link}'>Random message (#{msg.id})</a>"

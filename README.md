@@ -32,6 +32,7 @@ r <reply> [emoji] — Reacts to a message with a specified emoji or removes any 
 remind [reply] <time> [message...] — Sets a reminder
 remindme [reply] <time> [message...] — Sets a reminder for myself
 rndinfo ['photo'|'title'] — Sets random chat photo and/or title
+rndmsg — Sends a random message from the chat
 rnds <pack-link|pack-alias> — Sends random sticker from specified pack
 roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
 rr <reply> — Reacts to a message with a random emoji
