@@ -15,11 +15,14 @@ from ..utils import parse_delta
 commands = CommandsModule()
 
 
-@commands.add("chatban", usage="<id> [time] [reason...]")
+@commands.add("chatban", usage="<reply 'reply'|id> [time] [reason...]")
 async def chat_ban(client: Client, message: Message, args: str) -> str:
     """Bans a user in a chat"""
     args_list = args.split(" ")
-    user_id = int(args_list[0])
+    if args_list[0] == "reply":
+        user_id = message.reply_to_message.from_user.id
+    else:
+        user_id = int(args_list[0])
     now = message.edit_date or message.date or datetime.now()
     if len(args_list) > 1:
         delta = parse_delta(args_list[1])
