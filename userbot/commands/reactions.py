@@ -29,60 +29,31 @@ async def put_reaction(_: Client, message: Message, args: str) -> str | None:
 @commands.add("rs", usage="<reply>")
 async def get_reactions(client: Client, message: Message, __: str) -> str:
     """Gets message reactions"""
-    peer = await client.resolve_peer(message.chat.id)
-    ids = [types.InputMessageID(id=message.reply_to_message.id)]
-    if not isinstance(peer, types.InputPeerChannel):
-        messages: types.messages.Messages = await client.invoke(
-            functions.messages.GetMessages(
-                id=ids,
-            )
-        )
-    else:
-        messages: types.messages.Messages = await client.invoke(
-            functions.channels.GetMessages(
-                channel=types.InputChannel(
-                    channel_id=peer.channel_id,
-                    access_hash=peer.access_hash,
-                ),
-                id=ids,
-            )
-        )
+    chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
-    if (
-        not isinstance(messages.messages[0], types.MessageEmpty)
-        and (reactions := messages.messages[0].reactions) is not None
-    ):
-        for r in reactions.results:
-            t += f"<code>{r.reaction}</code>: {r.count}\n"
-            for rr in reactions.recent_reactions or []:
-                if rr.reaction == r.reaction:
-                    peer = await client.get_chat(rr.peer_id.user_id)
-                    peer_name = f"{peer.first_name or 'Deleted Account'} (#{peer.id})"
-                    t += f"- <a href='tg://user?id={rr.peer_id.user_id}'>{peer_name}</a>\n"
-    else:
-        try:
-            messages: types.messages.MessageReactionsList = await client.invoke(
-                functions.messages.GetMessageReactionsList(
-                    peer=peer,
-                    id=message.reply_to_message.id,
-                    limit=100,
-                )
+    try:
+        messages: types.messages.MessageReactionsList = await client.invoke(
+            functions.messages.GetMessageReactionsList(
+                peer=chat_peer,
+                id=message.reply_to_message.id,
+                limit=100,
             )
-        except MsgIdInvalid:
-            return "<i>Message not found or has no reactions</i>"
-        reactions = {}
-        for r in messages.reactions:
-            reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
-        for reaction, peers in reactions.items():
-            t += f"<code>{reaction}</code>: {len(peers)}\n"
-            for peer_id in peers:
-                for user in messages.users:
-                    if user.id == peer_id:
-                        peer_name = f"{user.first_name or 'Deleted Account'} (#{user.id})"
-                        break
-                else:
-                    peer_name = peer_id
-                t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a>\n"
+        )
+    except MsgIdInvalid:
+        return "<i>Message not found or has no reactions</i>"
+    reactions = {}
+    for r in messages.reactions:
+        reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
+    for reaction, peers in reactions.items():
+        t += f"<code>{reaction}</code>: {len(peers)}\n"
+        for peer_id in peers:
+            for user in messages.users:
+                if user.id == peer_id:
+                    peer_name = user.first_name or "Deleted Account"
+                    break
+            else:
+                peer_name = "Unknown user"
+            t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a> (#<code>{peer_id}</code>)\n"
     return t or "<i>No reactions here</i>"
 
 
