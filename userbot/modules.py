@@ -333,7 +333,7 @@ class HooksModule:
         name: str,
         filters: flt.Filter,
         *,
-        handle_edits: bool = True,
+        handle_edits: bool = False,
     ) -> Callable[[Handler], Handler]:
         def _decorator(f: Handler) -> Handler:
             self.add_handler(
@@ -352,7 +352,7 @@ class HooksModule:
         name: str,
         filters: flt.Filter,
         *,
-        handle_edits: bool = True,
+        handle_edits: bool = False,
     ) -> None:
         self._handlers.append(
             _HookHandler(
