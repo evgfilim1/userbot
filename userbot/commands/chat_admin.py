@@ -1,5 +1,6 @@
 __all__ = [
     "commands",
+    "no_react2ban",
     "react2ban",
     "react2ban_raw_reaction_handler",
 ]
@@ -140,3 +141,14 @@ async def react2ban(client: Client, message: Message, _: str, *, storage: Storag
         return "❌ Cannot ban users in the chat"
     await storage.add_react2ban(message.chat.id, message.id)
     return _REACT2BAN_TEXT
+
+
+async def no_react2ban(_: Client, message: Message, __: str, *, storage: Storage) -> str:
+    """Stops react2ban on the message"""
+    # TODO (2022-08-04): handle the case when the message with react2ban is deleted
+    if message.chat.id > 0:
+        return "❌ Not a group chat"
+    reply = message.reply_to_message
+    await storage.remove_react2ban(message.chat.id, reply.id)
+    await reply.edit("✅ Reacting to the message to ban a user has been disabled on the message")
+    await message.delete()

@@ -10,7 +10,7 @@ from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
 from userbot.commands import commands
-from userbot.commands.chat_admin import react2ban, react2ban_raw_reaction_handler
+from userbot.commands.chat_admin import no_react2ban, react2ban, react2ban_raw_reaction_handler
 from userbot.commands.download import download
 from userbot.constants import GH_PATTERN
 from userbot.hooks import check_hooks, hooks
@@ -70,6 +70,12 @@ def main() -> None:
         "react2ban",
         handle_edits=False,
         usage="",
+        kwargs={"storage": storage},
+    )
+    commands.add_handler(
+        no_react2ban,
+        ["no_react2ban", "noreact2ban"],
+        usage="<reply>",
         kwargs={"storage": storage},
     )
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)

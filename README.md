@@ -27,6 +27,7 @@ dump [dot-separated-attrs] — Dumps entire message or its specified attribute
 help [command] — Sends help for all commands (this message) or for a specific one
 id <reply> — Sends replied user's ID as link
 longcat — Sends random longcat
+no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 promote <admin-title> — Promotes a user to an admin without any rights but with title
 r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
 react2ban — Bans a user whoever reacted to the message
