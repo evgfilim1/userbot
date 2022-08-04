@@ -29,6 +29,7 @@ id <reply> — Sends replied user's ID as link
 longcat — Sends random longcat
 promote <admin-title> — Promotes a user to an admin without any rights but with title
 r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
+react2ban — Bans a user whoever reacted to the message
 remind [reply] <time> [message...] — Sets a reminder
 remindme [reply] <time> [message...] — Sets a reminder for myself
 rndinfo ['photo'|'title'] — Sets random chat photo and/or title

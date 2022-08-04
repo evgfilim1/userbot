@@ -6,9 +6,12 @@ from pathlib import Path
 import yaml
 from httpx import AsyncClient
 from pyrogram import Client
+from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
-from userbot.commands import commands, download
+from userbot.commands import commands
+from userbot.commands.chat_admin import react2ban, react2ban_raw_reaction_handler
+from userbot.commands.download import download
 from userbot.constants import GH_PATTERN
 from userbot.hooks import check_hooks, hooks
 from userbot.shortcuts import github, shortcuts
@@ -62,7 +65,18 @@ def main() -> None:
         waiting_message="<i>Downloading file(s)...</i>",
         kwargs={"data_dir": data_dir},
     )
+    commands.add_handler(
+        react2ban,
+        "react2ban",
+        handle_edits=False,
+        usage="",
+        kwargs={"storage": storage},
+    )
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
+    client.add_handler(
+        RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
+        group=1,
+    )
 
     commands.register(client, with_help=True)
     hooks.register(client, storage)

@@ -36,6 +36,18 @@ class Storage(ABC):
     async def list_enabled_hooks(self, chat_id: int) -> list[str]:
         pass
 
+    @abstractmethod
+    async def is_react2ban_enabled(self, chat_id: int, message_id: int) -> bool:
+        pass
+
+    @abstractmethod
+    async def add_react2ban(self, chat_id: int, message_id: int) -> None:
+        _log.debug("react2ban is enabled in chat %d on message %d", chat_id, message_id)
+
+    @abstractmethod
+    async def remove_react2ban(self, chat_id: int, message_id: int) -> None:
+        _log.debug("react2ban is disabled in chat %d on message %d", chat_id, message_id)
+
     async def __aenter__(self: _T) -> _T:
         await self.connect()
         return self
@@ -85,3 +97,14 @@ class PickleStorage(Storage):
             if chat_id in chats:
                 res.append(name)
         return res
+
+    async def is_react2ban_enabled(self, chat_id: int, message_id: int) -> bool:
+        return message_id in self._data.setdefault("react2ban", {}).setdefault(chat_id, set())
+
+    async def add_react2ban(self, chat_id: int, message_id: int) -> None:
+        self._data.setdefault("react2ban", {}).setdefault(chat_id, set()).add(message_id)
+        await super().add_react2ban(chat_id, message_id)
+
+    async def remove_react2ban(self, chat_id: int, message_id: int) -> None:
+        self._data.setdefault("react2ban", {}).setdefault(chat_id, set()).discard(message_id)
+        await super().remove_react2ban(chat_id, message_id)
