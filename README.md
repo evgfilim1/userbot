@@ -116,15 +116,19 @@ Shortcuts work only when sent by the user who runs userbot.
 
 ## Installation and running
 
-1. Copy the following to `config.yaml` and modify for yourself:
-    ```yaml
-    session: evgfilim1 # Name for session file
-    api_id: ""  # Insert your Telegram api_id here
-    api_hash: ""  # Insert your Telegram api_hash here
-    kwargs:  # Optional, will be passed directly to `pyrogram.Client`, see docs for more info
-      phone_number: "+1234567890"
-      # ...
-    data_location: /data  # Data location
+1. Copy the following to `.env` and modify for yourself:
+    ```
+    # Name for the session file.
+    SESSION=evgfilim1
+    # Telegram api_id.
+    API_ID=123456
+    # Telegram api_hash.
+    API_HASH=0123456789abcdef0123456789abcdef
+    # (Optional) Data location, used for saving session file, data and downloads.
+    DATA_LOCATION=/data
+    # Variables starting with `PYROGRAM_` will be passed as kwargs directly to the `pyrogram.Client`
+    # constructor, see Pyrogram docs for more info.
+    PYROGRAM_PHONE_NUMBER=+1234567890
     ```
 2. Make sure docker is installed, then run `docker-compose build`.
 3. Go through interactive authentication (needed only once as `/data` is mounted as docker volume)

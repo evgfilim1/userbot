@@ -1,9 +1,7 @@
 import logging
 import os
 from functools import partial
-from pathlib import Path
 
-import yaml
 from httpx import AsyncClient
 from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
@@ -12,6 +10,7 @@ from pyrogram.methods.utilities.idle import idle
 from userbot.commands import commands
 from userbot.commands.chat_admin import no_react2ban, react2ban, react2ban_raw_reaction_handler
 from userbot.commands.download import download
+from userbot.config import Config
 from userbot.constants import GH_PATTERN
 from userbot.hooks import check_hooks, hooks
 from userbot.shortcuts import github, shortcuts
@@ -29,32 +28,23 @@ async def _main(client: Client, storage: Storage, github_client: AsyncClient) ->
 
 
 def main() -> None:
-    for file in ("config.yaml", "/data/config.yaml", "/config.yaml"):
-        try:
-            with open(file) as f:
-                config = yaml.safe_load(f)
-        except FileNotFoundError:
-            continue
-        else:
-            break
-    else:
-        raise FileNotFoundError("Config file not found!")
-    data_dir = Path(config.get("data_location", "data")).resolve()
-    if not data_dir.exists():
-        data_dir.mkdir()
-    if not data_dir.is_dir():
-        raise NotADirectoryError("config.yaml: `data_location` must be a directory")
-    os.chdir(data_dir)
+    config = Config.from_env()
+    if not config.data_location.exists():
+        config.data_location.mkdir()
+    if not config.data_location.is_dir():
+        raise NotADirectoryError(f"{config.data_location} must be a directory (`data_location`)")
+    os.chdir(config.data_location)
+    env_suffix = "-dev" if os.getenv("GITHUB_SHA", None) is None else ""
     client = Client(
-        name=config["session"],
-        api_id=config["api_id"],
-        api_hash=config["api_hash"],
-        app_version="evgfilim1/userbot 0.2.x",
+        name=config.session,
+        api_id=config.api_id,
+        api_hash=config.api_hash,
+        app_version=f"evgfilim1/userbot 0.3.x{env_suffix}",
         device_model="Linux",
-        workdir=str(data_dir),
-        **(config.get("kwargs") or {}),
+        workdir=str(config.data_location),
+        **config.kwargs,
     )
-    storage = PickleStorage(data_dir / f"{config['session']}.pkl")
+    storage = PickleStorage(config.data_location / f"{config.session}.pkl")
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
     commands.add_handler(
@@ -70,7 +60,7 @@ def main() -> None:
         usage="[reply] [filename]",
         waiting_message="<i>Downloading file(s)...</i>",
         category="Download",
-        kwargs={"data_dir": data_dir},
+        kwargs={"data_dir": config.data_location},
     )
     commands.add_handler(
         react2ban,

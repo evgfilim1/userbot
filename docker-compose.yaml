@@ -4,6 +4,6 @@ services:
     build: .
     image: evgfilim1/userbot:staging
     restart: unless-stopped
+    env_file: .env
     volumes:
-      - ./config.yaml:/config.yaml:ro
       - ./data:/data

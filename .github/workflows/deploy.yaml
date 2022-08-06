@@ -88,10 +88,12 @@ jobs:
           DOCKER_HOST: ssh://github@server.evgfilim1.me
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
         run: |
           set -eu
           mkdir ~/.ssh/
           echo "$SSH_PRIVATE_KEY" >~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
           echo "$SSH_PUBLIC_KEY" >~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+          echo "$ENV_FILE_CONTENT" >.env && chmod 400 .env
           docker-compose -f docker-compose.prod.yaml -p userbot pull
           docker-compose -f docker-compose.prod.yaml -p userbot up -d main

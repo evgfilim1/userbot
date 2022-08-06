@@ -143,6 +143,3 @@ cython_debug/
 
 # App data directory
 /data/
-
-# App config file
-config.yaml
