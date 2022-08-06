@@ -66,6 +66,7 @@ class _CommandHandler:
     usage: str | None
     doc: str | None
     waiting_message: str | None
+    category: str | None
     kwargs: dict[str, Any]
 
     def _report_exception(self, message: Message, e: Exception) -> str:
@@ -224,15 +225,17 @@ def _format_handler_usage(handler: _CommandHandler) -> str | None:
     return f"{commands}{usage}{description}"
 
 
-def _command_handler_sort_key(handler: _CommandHandler) -> str:
+def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
+    category = handler.category or ""
     if isinstance(handler.command, str):
-        return handler.command
-    return handler.command[0]
+        return category, handler.command
+    return category, handler.command[0]
 
 
 class CommandsModule:
-    def __init__(self):
+    def __init__(self, category: str | None = None):
         self._handlers: list[_CommandHandler] = []
+        self._category = category
 
     def add(
         self,
@@ -243,6 +246,7 @@ class CommandsModule:
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
+        category: str | None = None,
         kwargs: dict[str, Any] | None = None,
     ) -> Callable[[CommandHandler], CommandHandler]:
         def _decorator(f: CommandHandler) -> CommandHandler:
@@ -254,6 +258,7 @@ class CommandsModule:
                 usage=usage,
                 doc=doc,
                 waiting_message=waiting_message,
+                category=category,
                 kwargs=kwargs,
             )
             return f
@@ -270,6 +275,7 @@ class CommandsModule:
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
+        category: str | None = None,
         kwargs: dict[str, Any] | None = None,
     ) -> None:
         self._handlers.append(
@@ -281,6 +287,7 @@ class CommandsModule:
                 usage=usage,
                 doc=doc or getattr(handler, "__doc__", None),
                 waiting_message=waiting_message,
+                category=category or self._category,
                 kwargs=kwargs or {},
             )
         )
@@ -297,8 +304,9 @@ class CommandsModule:
                     handler=self._auto_help_handler,
                     handle_edits=True,
                     usage="[command]",
-                    doc="Sends help for all commands (this message) or for a specific one",
+                    doc="Sends help for all commands or for a specific one",
                     waiting_message=None,
+                    category="About",
                     kwargs={},
                 )
             )
@@ -316,11 +324,17 @@ class CommandsModule:
                     return f"<b>Help for {args}:</b>\n{html.escape(_format_handler_usage(h))}"
             else:
                 return f"<b>No help found for {args}</b>"
-        text = "<b>List of commands available:</b>\n\n"
+        text = "<b>List of userbot commands available:</b>\n\n"
+        prev_cat = ""
         for handler in sorted(self._handlers, key=_command_handler_sort_key):
             if (usage := _format_handler_usage(handler)) is None:
                 continue
-            text += f"{html.escape(usage)}\n"
+            if (handler.category or "") != prev_cat:
+                text += f"\n<i>{handler.category}:</i>\n"
+                prev_cat = handler.category
+            text += f"• {html.escape(usage)}\n"
+        # This will happen if there are no handlers without category
+        text = text.replace("\n\n\n", "\n\n")
         return text
 
 

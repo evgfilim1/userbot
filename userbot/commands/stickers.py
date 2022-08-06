@@ -11,7 +11,7 @@ from pyrogram.types import Message, Sticker
 from ..constants import LONGCAT, PACK_ALIASES
 from ..modules import CommandsModule
 
-commands = CommandsModule()
+commands = CommandsModule("Stickers")
 
 
 @commands.add("longcat", usage="")

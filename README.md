@@ -12,39 +12,64 @@ The userbot I use with some specific features written in Pyrogram.
 Commands work only when sent by the user who runs userbot. Command prefix is `.`.
 
 ```
-List of commands available:
+List of userbot commands available:
 
-about — Shows information about this userbot
-cal [month] [year] — Sends a calendar for a specified month and year
-calc <python-expr> — Evaluates Python expression
-caps <reply> — Toggles capslock on the message
-chatban <reply 'reply'|id> [time|'0'|'forever'] [reason...] — Bans a user in a chat
-chatunban <id> — Unbans a user in a chat
-color <color-spec> — Sends a specified color sample
-delete|delet|del <reply> — Deletes replied message
-download|dl [reply] [filename] — Downloads a file or files
-dump [dot-separated-attrs] — Dumps entire message or its specified attribute
-help [command] — Sends help for all commands (this message) or for a specific one
-id <reply> — Sends replied user's ID as link
-longcat — Sends random longcat
-no_react2ban|noreact2ban <reply> — Stops react2ban on the message
-promote <admin-title> — Promotes a user to an admin without any rights but with title
-r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
-react2ban — Bans a user whoever reacted to the message
-remind [reply] <time> [message...] — Sets a reminder
-remindme [reply] <time> [message...] — Sets a reminder for myself
-rndinfo ['photo'|'title'] — Sets random chat photo and/or title
-rndmsg — Sends a random message from the chat
-rnds <pack-link|pack-alias> — Sends random sticker from specified pack
-roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
-rr <reply> — Reacts to a message with a random emoji
-rs <reply> — Gets message reactions
-s <reply> <find-re>/<replace-re>/[flags] — sed-like replacement
-togif [reply] — Converts a video to a mpeg4 gif
-tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
-tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
-usercolor <reply> — Sends a color sample of user's color as shown in clients
-userfirstmsg [reply] — Replies to user's very first message in the chat
+About:
+• about — Shows information about this userbot
+• help [command] — Sends help for all commands or for a specific one
+
+Chat administration:
+• chatban <reply 'reply'|id> [time|'0'|'forever'] [reason...] — Bans a user in a chat
+• chatunban <id> — Unbans a user in a chat
+• no_react2ban|noreact2ban <reply> — Stops react2ban on the message
+• promote <admin-title> — Promotes a user to an admin without any rights but with title
+• react2ban — Bans a user whoever reacted to the message
+
+Chat info:
+• rndinfo ['photo'|'title'] — Sets random chat photo and/or title
+• rndmsg — Sends a random message from the chat
+
+Colors:
+• color <color-spec> — Sends a specified color sample
+• usercolor <reply> — Sends a color sample of user's color as shown in clients
+
+Content converters:
+• togif [reply] — Converts a video to a mpeg4 gif
+• tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
+
+Dice:
+• roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
+
+Download:
+• download|dl [reply] [filename] — Downloads a file or files
+
+Messages:
+• delete|delet|del <reply> — Deletes replied message
+• dump [dot-separated-attrs] — Dumps entire message or its specified attribute
+• userfirstmsg [reply] — Replies to user's very first message in the chat
+
+Reactions:
+• r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
+• rr <reply> — Reacts to a message with a random emoji
+• rs <reply> — Gets message reactions
+
+Reminders:
+• remind [reply] <time> [message...] — Sets a reminder
+• remindme [reply] <time> [message...] — Sets a reminder for myself
+
+Stickers:
+• longcat — Sends random longcat
+• rnds <pack-link|pack-alias> — Sends random sticker from specified pack
+
+Text converters:
+• caps <reply> — Toggles capslock on the message
+• s <reply> <find-re>/<replace-re>/[flags] — sed-like replacement
+• tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
+
+Tools:
+• cal [month] [year] — Sends a calendar for a specified month and year
+• calc <python-expr> — Evaluates Python expression
+• id <reply> — Sends replied user's ID as link
 ```
 
 ### Hooks (triggers)

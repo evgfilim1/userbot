@@ -17,7 +17,7 @@ _ru2en_tr = str.maketrans(_kb_ru, _kb_en)
 _en2ru_tr = str.maketrans(_kb_en, _kb_ru)
 _enru2ruen_tr = str.maketrans(_kb_ru + _kb_en, _kb_en + _kb_ru)
 
-commands = CommandsModule()
+commands = CommandsModule("Text converters")
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")

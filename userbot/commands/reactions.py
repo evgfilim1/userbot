@@ -11,7 +11,7 @@ from pyrogram.types import Message
 
 from ..modules import CommandsModule
 
-commands = CommandsModule()
+commands = CommandsModule("Reactions")
 
 
 @commands.add("r", usage="<reply> [emoji]")

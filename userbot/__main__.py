@@ -57,12 +57,19 @@ def main() -> None:
     storage = PickleStorage(data_dir / f"{config['session']}.pkl")
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
-    commands.add_handler(check_hooks, ["hookshere", "hooks_here"], kwargs={"storage": storage})
+    commands.add_handler(
+        check_hooks,
+        ["hookshere", "hooks_here"],
+        usage=None,
+        category="Hooks",
+        kwargs={"storage": storage},
+    )
     commands.add_handler(
         download,
         ["download", "dl"],
         usage="[reply] [filename]",
         waiting_message="<i>Downloading file(s)...</i>",
+        category="Download",
         kwargs={"data_dir": data_dir},
     )
     commands.add_handler(
@@ -70,12 +77,14 @@ def main() -> None:
         "react2ban",
         handle_edits=False,
         usage="",
+        category="Chat administration",
         kwargs={"storage": storage},
     )
     commands.add_handler(
         no_react2ban,
         ["no_react2ban", "noreact2ban"],
         usage="<reply>",
+        category="Chat administration",
         kwargs={"storage": storage},
     )
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)

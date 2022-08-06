@@ -13,7 +13,7 @@ from pyrogram.types import Message
 from ..modules import CommandsModule
 from ..utils import Unset
 
-commands = CommandsModule()
+commands = CommandsModule("Messages")
 
 
 @commands.add(["delete", "delet", "del"], usage="<reply>")

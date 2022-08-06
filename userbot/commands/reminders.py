@@ -12,7 +12,7 @@ from pyrogram.utils import get_channel_id
 from ..modules import CommandsModule
 from ..utils import parse_delta
 
-commands = CommandsModule()
+commands = CommandsModule("Reminders")
 
 
 def _remind_common(message: Message, args_list: list[str]) -> datetime:

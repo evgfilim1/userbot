@@ -30,7 +30,7 @@ _REACT2BAN_TEXT = (
     " <b>banned</b> in the chat for half a year.\n"
 )
 
-commands = CommandsModule()
+commands = CommandsModule("Chat administration")
 
 
 @commands.add("chatban", usage="<reply 'reply'|id> [time|'0'|'forever'] [reason...]")

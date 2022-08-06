@@ -10,7 +10,7 @@ from pyrogram.types import Message
 
 from ..modules import CommandsModule
 
-commands = CommandsModule()
+commands = CommandsModule("Colors")
 
 
 def _create_filled_pic(col: str, size: tuple[int, int] = (100, 100)) -> BytesIO:

@@ -56,5 +56,6 @@ async def on_uwu(_: Client, message: Message) -> None:
 
 
 async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
+    """List enabled hooks in the chat"""
     enabled = await storage.list_enabled_hooks(message.chat.id)
     return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"

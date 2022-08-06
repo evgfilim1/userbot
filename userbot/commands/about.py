@@ -9,7 +9,7 @@ from pyrogram.types import Message
 
 from ..modules import CommandsModule
 
-commands = CommandsModule()
+commands = CommandsModule("About")
 
 
 @commands.add("about", usage="")
