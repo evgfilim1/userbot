@@ -138,3 +138,6 @@ Shortcuts work only when sent by the user who runs userbot.
 4. Stop the script by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd> as soon as you see `Bot started` message
   in console.
 5. Run `docker-compose up -d` to run the userbot in the background.
+6. To run migrations, run
+   `docker-compose run --rm --entrypoint /usr/bin/env main python3.10 -m userbot.migrations`.
+   Userbot must be stopped before running any migrations to prevent conflicts.
