@@ -15,6 +15,7 @@ from userbot.constants import GH_PATTERN
 from userbot.hooks import check_hooks, hooks
 from userbot.shortcuts import github, shortcuts
 from userbot.storage import RedisStorage, Storage
+from userbot.utils import is_prod
 
 logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ def main() -> None:
     if not config.data_location.is_dir():
         raise NotADirectoryError(f"{config.data_location} must be a directory (`data_location`)")
     os.chdir(config.data_location)
-    env_suffix = "-dev" if os.getenv("GITHUB_SHA", None) is None else ""
+    env_suffix = "-dev" if not is_prod() else ""
     client = Client(
         name=config.session,
         api_id=config.api_id,

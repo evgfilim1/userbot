@@ -9,7 +9,9 @@ The userbot I use with some specific features written in Pyrogram.
 
 ### Commands
 
-Commands work only when sent by the user who runs userbot. Command prefix is `.`.
+Commands work only when sent by the user who runs userbot. Command prefix is `.`
+on production environment and `,` on development one. `GITHUB_SHA` environment variable is checked
+and, if non-empty, the environment is considered to be production.
 
 ```
 List of userbot commands available:

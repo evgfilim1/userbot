@@ -17,6 +17,7 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
 from .storage import Storage
+from .utils import is_prod
 
 if TYPE_CHECKING:
     from traceback import FrameSummary
@@ -232,6 +233,10 @@ def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
     return category, handler.command[0]
 
 
+def _default_prefix() -> str:
+    return "." if is_prod() else ","
+
+
 class CommandsModule:
     def __init__(self, category: str | None = None):
         self._handlers: list[_CommandHandler] = []
@@ -240,7 +245,7 @@ class CommandsModule:
     def add(
         self,
         command: str | list[str],
-        prefix: str = ".",
+        prefix: str = _default_prefix(),
         *,
         handle_edits: bool = True,
         usage: str | None = None,
@@ -269,7 +274,7 @@ class CommandsModule:
         self,
         handler: CommandHandler,
         command: str | list[str],
-        prefix: str = ".",
+        prefix: str = _default_prefix(),
         *,
         handle_edits: bool = True,
         usage: str | None = None,
@@ -300,7 +305,7 @@ class CommandsModule:
             self._handlers.append(
                 _CommandHandler(
                     command="help",
-                    prefix=".",
+                    prefix=_default_prefix(),
                     handler=self._auto_help_handler,
                     handle_edits=True,
                     usage="[command]",
@@ -394,10 +399,10 @@ class HooksModule:
     def register(self, client: Client, storage: Storage) -> None:
         for handler in self._handlers:
             f_reg = flt.me & flt.command(
-                [f"{handler.name}here", f"{handler.name}_here"], prefixes="."
+                [f"{handler.name}here", f"{handler.name}_here"], prefixes=_default_prefix()
             )
             f_unreg = flt.me & flt.command(
-                [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes="."
+                [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_default_prefix()
             )
             f = flt.incoming & handler.filters
             client.add_handler(

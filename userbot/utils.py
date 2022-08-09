@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import html
+import os
 import re
 from datetime import timedelta
 from typing import Any, ClassVar, Protocol, TypeVar
@@ -101,3 +102,7 @@ class Unset:
 
     def __str__(self) -> str:
         return repr(self)
+
+
+def is_prod() -> bool:
+    return bool(os.environ.get("GITHUB_SHA", ""))
