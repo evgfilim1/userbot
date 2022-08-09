@@ -3,7 +3,14 @@ services:
   main:
     build: .
     image: evgfilim1/userbot:staging
-    restart: unless-stopped
     env_file: .env
+    environment:
+      REDIS_HOST: "redis"
     volumes:
-      - ./data:/data
+      - ./.dockerdata/userbot:/data
+    depends_on:
+      - redis
+  redis:
+    image: redis:7.0-alpine
+    volumes:
+      - ./.dockerdata/redis:/data

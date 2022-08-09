@@ -138,3 +138,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Data directory (must be mounted as volume)
+/.dockerdata

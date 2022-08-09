@@ -1,0 +1,5 @@
+This directory should contain Docker data.
+
+Subdirectories:
+- `userbot` — contains userbot (this app) data
+- `redis` — contains Redis data

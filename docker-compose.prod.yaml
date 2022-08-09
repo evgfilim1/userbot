@@ -6,5 +6,11 @@ services:
     env_file: .env
     environment:
       GITHUB_SHA: "${GITHUB_SHA:-}"
+      REDIS_HOST: "redis"
     volumes:
       - /home/github/userbot/data:/data
+  redis:
+    image: redis:7.0-alpine
+    restart: unless-stopped
+    volumes:
+      - /home/github/userbot/redis:/data

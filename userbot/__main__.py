@@ -10,11 +10,11 @@ from pyrogram.methods.utilities.idle import idle
 from userbot.commands import commands
 from userbot.commands.chat_admin import no_react2ban, react2ban, react2ban_raw_reaction_handler
 from userbot.commands.download import download
-from userbot.config import Config
+from userbot.config import Config, RedisConfig
 from userbot.constants import GH_PATTERN
 from userbot.hooks import check_hooks, hooks
 from userbot.shortcuts import github, shortcuts
-from userbot.storage import PickleStorage, Storage
+from userbot.storage import RedisStorage, Storage
 
 logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
@@ -44,7 +44,8 @@ def main() -> None:
         workdir=str(config.data_location),
         **config.kwargs,
     )
-    storage = PickleStorage(config.data_location / f"{config.session}.pkl")
+    redis_config = RedisConfig.from_env()
+    storage = RedisStorage(redis_config.host, redis_config.port, redis_config.db)
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
     commands.add_handler(

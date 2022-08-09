@@ -137,9 +137,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
-# Pyrogram sessions
-*.session*
-
-# App data directory
-/data/

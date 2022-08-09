@@ -96,4 +96,4 @@ jobs:
           echo "$SSH_PUBLIC_KEY" >~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
           echo "$ENV_FILE_CONTENT" >.env && chmod 400 .env
           docker-compose -f docker-compose.prod.yaml -p userbot pull
-          docker-compose -f docker-compose.prod.yaml -p userbot up -d main
+          docker-compose -f docker-compose.prod.yaml -p userbot up -d
