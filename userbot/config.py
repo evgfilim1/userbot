@@ -39,6 +39,12 @@ class Config:
 
     @classmethod
     def from_yaml(cls, yaml_file: str) -> Config:
+        warnings.warn(
+            "`Config.from_yaml` is deprecated, use `Config.from_env` instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         try:
             # noinspection PyPackageRequirements
             from yaml import safe_load
