@@ -57,7 +57,7 @@ class Config:
             session=config["session"],
             api_id=int(config["api_id"]),
             api_hash=config["api_hash"],
-            data_location=Path(config.get("data_location", "data")).resolve(),
+            data_location=Path(config.get("data_location", ".dockerdata/userbot")).resolve(),
             kwargs=config.get("kwargs", {}),
         )
 
@@ -68,7 +68,7 @@ class Config:
             session=env["SESSION"],
             api_id=int(env["API_ID"]),
             api_hash=env["API_HASH"],
-            data_location=Path(env.get("DATA_LOCATION", "data")).resolve(),
+            data_location=Path(env.get("DATA_LOCATION", ".dockerdata/userbot")).resolve(),
             kwargs={
                 key.lower().removeprefix("pyrogram_"): value
                 for key, value in env.items()
