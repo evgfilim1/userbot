@@ -89,7 +89,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
-          COMPOSE_CMD: docker-compose -f docker-compose.prod.yaml -p userbot
+          COMPOSE_CMD: docker compose -f docker-compose.prod.yaml -p userbot
         run: |
           set -eu
           mkdir ~/.ssh/
