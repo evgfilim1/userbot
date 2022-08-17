@@ -4,14 +4,15 @@ __all__ = [
 
 import asyncio
 import html
+import json
 
+import jq
 from pyrogram import Client
 from pyrogram.errors import BadRequest
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..modules import CommandsModule
-from ..utils import Unset
 
 commands = CommandsModule("Messages")
 
@@ -26,16 +27,16 @@ async def delete_this(_: Client, message: Message, __: str) -> None:
     await message.delete()
 
 
-@commands.add("dump", usage="[dot-separated-attrs]")
+@commands.add("dump", usage="[jq-query]")
 async def dump(_: Client, message: Message, args: str) -> str:
-    """Dumps entire message or its specified attribute"""
+    """Dumps entire message or its attribute specified with jq syntax"""
     obj = message.reply_to_message or message
-    attrs = args.split(".")
-    unset = Unset()
-    for attr in attrs:
-        if attr:
-            obj = getattr(obj, attr, unset)
-    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(str(obj))}</pre>"
+    result = json.dumps(
+        jq.compile(f".{args}").input(text=str(obj)).all(),
+        indent=2,
+        ensure_ascii=False,
+    )
+    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(result)}</pre>"
 
 
 @commands.add(
