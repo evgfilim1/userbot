@@ -4,6 +4,7 @@ on:
   registry_package:
     types:
       - published
+      - updated
 
 permissions:
   contents: read
