@@ -2,6 +2,7 @@
 
 [![wakatime](https://wakatime.com/badge/github/evgfilim1/userbot.svg)](https://wakatime.com/badge/github/evgfilim1/userbot)
 [![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![deployment status](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml)
 
 The userbot I use with some specific features written in Pyrogram.
 
@@ -47,7 +48,7 @@ Download:
 
 Messages:
 • delete|delet|del <reply> — Deletes replied message
-• dump [dot-separated-attrs] — Dumps entire message or its specified attribute
+• dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
 • userfirstmsg [reply] — Replies to user's very first message in the chat
 
 Reactions:
