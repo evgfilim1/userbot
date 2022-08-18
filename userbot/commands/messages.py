@@ -31,12 +31,13 @@ async def delete_this(_: Client, message: Message, __: str) -> None:
 async def dump(_: Client, message: Message, args: str) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
     obj = message.reply_to_message or message
-    result = json.dumps(
-        jq.compile(f".{args}").input(text=str(obj)).all(),
+    result = jq.compile(f".{args}").input(text=str(obj)).all()
+    text = json.dumps(
+        result if len(result) > 1 else result[0],
         indent=2,
         ensure_ascii=False,
     )
-    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(result)}</pre>"
+    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(text)}</pre>"
 
 
 @commands.add(
