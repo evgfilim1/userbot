@@ -1,85 +1,17 @@
-name: Create, publish and deploy a Docker image
+name: Deploy a Docker container
 
 on:
-  push:
-    branches:
-      - master
+  registry_package:
+    types:
+      - published
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  IMAGE_TAG: latest
+permissions:
+  contents: read
 
 jobs:
-  check:
-    name: Check code style
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-          cache: pip
-
-      - name: Install packages
-        run: pip install -r dev-requirements.txt
-
-      - name: Check code style
-        run: |
-          isort --check --diff userbot
-          black --check --diff userbot
-
-  build:
-    name: Build Docker image
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker BuildX
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            ${{ env.IMAGE_TAG }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
   run:
-    name: Run newest version on server
+    name: Run latest version on server
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    needs:
-      - build
     environment:
       name: production
 
@@ -101,6 +33,9 @@ jobs:
           SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
           COMPOSE_CMD: docker compose -p userbot
+          REGISTRY: ghcr.io
+          IMAGE_NAME: ${{ github.repository }}
+          IMAGE_TAG: latest
         # Using `docker-compose` because it properly supports pulling from different registries.
         # More: https://github.com/docker/compose/issues/9448
         run: |
