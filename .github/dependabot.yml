@@ -1,0 +1,37 @@
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+      time: 10:37
+      timezone: Etc/UTC
+    assignees:
+      - evgfilim1
+    reviewers:
+      - evgfilim1
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+      time: 10:37
+      timezone: Etc/UTC
+    assignees:
+      - evgfilim1
+    reviewers:
+      - evgfilim1
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+      time: 10:37
+      timezone: Etc/UTC
+    assignees:
+      - evgfilim1
+    reviewers:
+      - evgfilim1
