@@ -4,5 +4,5 @@ httpx[http2]~=0.23.0
 jq~=1.2.2
 Pillow~=9.2.0
 Pyrogram~=2.0.26
-python-magic~=0.4.26
+python-magic~=0.4.27
 TgCrypto~=1.2.3
