@@ -1,4 +1,4 @@
-FROM jrottenberg/ffmpeg:5.0-ubuntu2004
+FROM jrottenberg/ffmpeg:5.1-ubuntu2004
 
 WORKDIR /app
 
