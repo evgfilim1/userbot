@@ -7,7 +7,7 @@ updates:
     schedule:
       interval: weekly
       day: friday
-      time: 10:37
+      time: "10:37"
       timezone: Etc/UTC
     assignees:
       - evgfilim1
@@ -18,7 +18,7 @@ updates:
     schedule:
       interval: weekly
       day: friday
-      time: 10:37
+      time: "10:37"
       timezone: Etc/UTC
     assignees:
       - evgfilim1
@@ -29,7 +29,7 @@ updates:
     schedule:
       interval: weekly
       day: friday
-      time: 10:37
+      time: "10:37"
       timezone: Etc/UTC
     assignees:
       - evgfilim1
