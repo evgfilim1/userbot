@@ -109,6 +109,8 @@ async def react2ban_raw_reaction_handler(
             chat_id = get_channel_id(peer_id)
         case types.PeerChat(chat_id=peer_id):
             chat_id = -peer_id
+        case types.PeerUser():
+            return
         case _:
             raise AssertionError(f"Unsupported peer type: {update.peer.__class__.__name__}")
     if not await storage.is_react2ban_enabled(chat_id, update.msg_id):
