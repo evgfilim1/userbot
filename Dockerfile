@@ -15,7 +15,7 @@ RUN useradd -Ud /app userbot \
     && { curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10; } \
     && apt autoremove -y gpg dirmngr gpg-agent curl --purge \
     && apt clean -y \
-    && rm -rf /var/lib/apt/* /root/.cache /var/log/* /var/cache/* \
+    && rm -rf /var/lib/apt/* /root/.cache /var/log/* /var/cache/*
 
 VOLUME /data
 
