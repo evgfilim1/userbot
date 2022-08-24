@@ -6,7 +6,7 @@ import random
 
 from pyrogram import Client
 from pyrogram.raw import functions, types
-from pyrogram.types import Message, Sticker
+from pyrogram.types import Message
 
 from ..constants import LONGCAT, PACK_ALIASES
 from ..modules import CommandsModule
@@ -42,16 +42,19 @@ async def random_sticker(client: Client, message: Message, args: str) -> None:
         ),
     )
     sticker_raw: types.Document = random.choice(stickerset.documents)
-    attributes = {type(i): i for i in sticker_raw.attributes}
-    s = await Sticker._parse(  # huh...
-        client,
-        sticker_raw,
-        attributes.get(types.DocumentAttributeImageSize, None),
-        attributes[types.DocumentAttributeSticker],
-        attributes[types.DocumentAttributeFilename],
+    await client.invoke(
+        functions.messages.SendMedia(
+            peer=await client.resolve_peer(message.chat.id),
+            media=types.InputMediaDocument(
+                id=types.InputDocument(
+                    id=sticker_raw.id,
+                    access_hash=sticker_raw.access_hash,
+                    file_reference=sticker_raw.file_reference,
+                ),
+            ),
+            message="",
+            random_id=sticker_raw.id,
+            reply_to_msg_id=message.reply_to_message_id,
+        )
     )
-    kw = {}
-    if message.reply_to_message is not None:
-        kw["reply_to_message_id"] = message.reply_to_message.id
-    await client.send_sticker(message.chat.id, s.file_id, **kw)
     await message.delete()
