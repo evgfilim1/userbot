@@ -1,17 +1,18 @@
 __all__ = [
-    "MemoryStorage",
-    "PickleStorage",
     "RedisStorage",
     "Storage",
 ]
 
 import logging
 import pickle
+import warnings
 from abc import ABC, abstractmethod
 from os import PathLike
 from pathlib import Path
 from types import TracebackType
 from typing import Any, Type, TypeVar
+
+from redis.asyncio import Redis
 
 _T = TypeVar("_T", bound="Storage")
 
@@ -71,6 +72,11 @@ class Storage(ABC):
 
 class MemoryStorage(Storage):
     def __init__(self) -> None:
+        warnings.warn(
+            "This storage is not maintained anymore and will be removed in the near future",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         self._data = {}
 
     async def connect(self) -> None:
@@ -111,6 +117,11 @@ class MemoryStorage(Storage):
 
 class PickleStorage(MemoryStorage):
     def __init__(self, filename: str | PathLike) -> None:
+        warnings.warn(
+            "This storage is not maintained anymore and will be removed in the near future",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         self._file = Path(filename)
         super().__init__()
 
@@ -130,12 +141,6 @@ class PickleStorage(MemoryStorage):
 
 class RedisStorage(Storage):
     def __init__(self, host: str, port: int, db: int) -> None:
-        try:
-            # noinspection PyPackageRequirements
-            from redis.asyncio import Redis
-        except ImportError:
-            raise ImportError("Install 'redis~=4.3.4' to use Redis storage") from None
-
         self._host = host
         self._port = port
         self._db = db

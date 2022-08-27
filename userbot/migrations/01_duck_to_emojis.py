@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 """Migrate from "duck" hook to "emojis" hook (commit 4edf500)"""
 
-import asyncio
 import logging
+import pickle
+from pathlib import Path
 
 from userbot.config import Config
-from userbot.storage import PickleStorage
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-async def _main(storage: PickleStorage) -> None:
-    async with storage:
-        hook: str
-        chats: set
-        # noinspection PyProtectedMember
-        for chats in storage._data.get("hooks", {}).get("duck", set()):
-            for chat_id in chats:
-                await storage.disable_hook("duck", chat_id)
-                await storage.enable_hook(hook, chat_id)
+def _main(storage_location: Path) -> None:
+    chats: set[int]
+    with storage_location.open("rb") as f:
+        data = pickle.load(f)
+    hooks = data.setdefault("hooks", {})
+    for chats in hooks.get("duck", set()):
+        for chat_id in chats:
+            hooks.setdefault("duck", set()).discard(chat_id)
+            hooks.setdefault("emojis", set()).add(chat_id)
+    with storage_location.open("wb") as f:
+        pickle.dump(data, f)
 
 
 def main():
     config = Config.from_env()
-    storage = PickleStorage(config.data_location / f"{config.session}.pkl")
-
-    asyncio.run(_main(storage))
+    _main(config.data_location / f"{config.session}.pkl")
