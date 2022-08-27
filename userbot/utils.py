@@ -4,11 +4,14 @@ import functools
 import html
 import os
 import re
+from base64 import b64encode
+from collections import defaultdict
 from datetime import timedelta
-from typing import Any, ClassVar, Protocol, TypeVar
+from typing import Any, ClassVar, Protocol, TypedDict, TypeVar
 
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.enums import ParseMode
+from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
 
 _T = TypeVar("_T")
@@ -106,3 +109,34 @@ class Unset:
 
 def is_prod() -> bool:
     return bool(os.environ.get("GITHUB_SHA", ""))
+
+
+# It's a dict because I want to serialize it easily to JSON
+class StickerInfo(TypedDict):
+    id: int
+    access_hash: int
+    file_reference_b64: str
+
+
+async def fetch_stickers(client: Client) -> dict[str, list[StickerInfo]]:
+    all_stickers: types.messages.AllStickers = await client.invoke(
+        functions.messages.GetAllStickers(hash=0)
+    )
+    res: defaultdict[str, list[StickerInfo]] = defaultdict(list)
+    for ss in all_stickers.sets:
+        stickers_by_id: dict[int, StickerInfo] = {}
+        full_set: types.messages.StickerSet = await client.invoke(
+            functions.messages.GetStickerSet(
+                stickerset=types.InputStickerSetID(id=ss.id, access_hash=ss.access_hash),
+                hash=0,
+            )
+        )
+        for doc in full_set.documents:
+            stickers_by_id[doc.id] = StickerInfo(
+                id=doc.id,
+                access_hash=doc.access_hash,
+                file_reference_b64=b64encode(doc.file_reference).decode("ascii"),
+            )
+        for doc in full_set.packs:
+            res[doc.emoticon].extend(stickers_by_id[doc_id] for doc_id in doc.documents)
+    return res

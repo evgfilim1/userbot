@@ -66,7 +66,7 @@ Reminders:
 
 Stickers:
 • longcat — Sends random longcat
-• rnds <pack-link|pack-alias> — Sends random sticker from specified pack
+• rnds <pack-shortlink|pack-alias|emoji> — Sends random sticker from specified pack or one matching specified emoji
 
 Text converters:
 • caps <reply> — Toggles capslock on the message
