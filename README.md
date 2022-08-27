@@ -136,6 +136,12 @@ Shortcuts work only when sent by the user who runs userbot.
     # Variables starting with `PYROGRAM_` will be passed as kwargs directly to the `pyrogram.Client`
     # constructor, see Pyrogram docs for more info.
     PYROGRAM_PHONE_NUMBER=+1234567890
+    # If you want to use other Redis server, you can specify it here. Don't forget to remove
+    #  the dependency and environment variables in `docker-compose.yaml` file.
+    # REDIS_HOST=redis
+    # REDIS_PORT=6379
+    # REDIS_DB=0
+    # REDIS_PASSWORD=secret
     ```
 2. Make sure docker is installed, then run `docker-compose build`.
 3. Go through interactive authentication (needed only once as `/data` is mounted as docker volume)
