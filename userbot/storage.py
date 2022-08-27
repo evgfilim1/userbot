@@ -4,11 +4,7 @@ __all__ = [
 ]
 
 import logging
-import pickle
-import warnings
 from abc import ABC, abstractmethod
-from os import PathLike
-from pathlib import Path
 from types import TracebackType
 from typing import Any, Type, TypeVar
 
@@ -68,75 +64,6 @@ class Storage(ABC):
     ) -> None:
         await self.close()
         return
-
-
-class MemoryStorage(Storage):
-    def __init__(self) -> None:
-        warnings.warn(
-            "This storage is not maintained anymore and will be removed in the near future",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        self._data = {}
-
-    async def connect(self) -> None:
-        await super().connect()
-
-    async def close(self) -> None:
-        await super().close()
-
-    async def enable_hook(self, name: str, chat_id: int) -> None:
-        self._data.setdefault("hooks", {}).setdefault(name, set()).add(chat_id)
-        await super().enable_hook(name, chat_id)
-
-    async def disable_hook(self, name: str, chat_id: int) -> None:
-        self._data.setdefault("hooks", {}).setdefault(name, set()).discard(chat_id)
-        await super().disable_hook(name, chat_id)
-
-    async def is_hook_enabled(self, name: str, chat_id: int) -> bool:
-        return chat_id in self._data.setdefault("hooks", {}).setdefault(name, set())
-
-    async def list_enabled_hooks(self, chat_id: int) -> list[str]:
-        res = []
-        for name, chats in self._data.setdefault("hooks", {}).items():
-            if chat_id in chats:
-                res.append(name)
-        return res
-
-    async def is_react2ban_enabled(self, chat_id: int, message_id: int) -> bool:
-        return message_id in self._data.setdefault("react2ban", {}).setdefault(chat_id, set())
-
-    async def add_react2ban(self, chat_id: int, message_id: int) -> None:
-        self._data.setdefault("react2ban", {}).setdefault(chat_id, set()).add(message_id)
-        await super().add_react2ban(chat_id, message_id)
-
-    async def remove_react2ban(self, chat_id: int, message_id: int) -> None:
-        self._data.setdefault("react2ban", {}).setdefault(chat_id, set()).discard(message_id)
-        await super().remove_react2ban(chat_id, message_id)
-
-
-class PickleStorage(MemoryStorage):
-    def __init__(self, filename: str | PathLike) -> None:
-        warnings.warn(
-            "This storage is not maintained anymore and will be removed in the near future",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        self._file = Path(filename)
-        super().__init__()
-
-    async def connect(self) -> None:
-        try:
-            with self._file.open("rb") as f:
-                self._data = pickle.load(f)
-        except FileNotFoundError:
-            pass
-        await super().connect()
-
-    async def close(self) -> None:
-        with self._file.open("wb") as f:
-            pickle.dump(self._data, f)
-        await super().close()
 
 
 class RedisStorage(Storage):

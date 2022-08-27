@@ -40,7 +40,7 @@ def main() -> None:
         name=config.session,
         api_id=config.api_id,
         api_hash=config.api_hash,
-        app_version=f"evgfilim1/userbot 0.3.x{env_suffix}",
+        app_version=f"evgfilim1/userbot 0.4.x{env_suffix}",
         device_model="Linux",
         workdir=str(config.data_location),
         **config.kwargs,
