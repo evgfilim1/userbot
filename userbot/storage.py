@@ -151,7 +151,7 @@ class RedisStorage(Storage):
         pubsub: PubSub
         async with self._pool.pubsub(ignore_subscribe_messages=True) as pubsub:
             await pubsub.subscribe(f"__keyspace@{self._db}__:{self._key('stickers')}")
-            async for message in await pubsub.listen():
+            async for message in pubsub.listen():
                 if message["data"] == "set":
                     return await self.get_sticker_cache()
 
@@ -167,7 +167,7 @@ class RedisStorage(Storage):
         await super().sticker_cache_job(provider, ttl)
         key = self._key("stickers")
         await self._pubsub.subscribe(f"__keyspace@{self._db}__:{key}")
-        async for message in await self._pubsub.listen():
+        async for message in self._pubsub.listen():
             if message["data"] != "expired":
                 continue
             _log.debug("Sticker cache expired, updating...")
