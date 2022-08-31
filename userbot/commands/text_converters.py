@@ -64,11 +64,19 @@ async def tr(_: Client, message: Message, args: str) -> None:
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
-async def sed(_: Client, message: Message, args: str) -> None:
+async def sed(_: Client, message: Message, args: str) -> str | None:
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)
-    find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
+    try:
+        find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
+    except ValueError as e:
+        if "not enough values to unpack" in str(e) and (args[-1] != "/" or args[-2:] == "\\/"):
+            return (
+                f"‼ Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
+                f"Possible fix: <code>{message.text}/</code>"
+            )
+        raise
     find_re = find_re.replace("\\/", "/")
     replace_re = replace_re.replace("\\/", "/")
     flags = 0
