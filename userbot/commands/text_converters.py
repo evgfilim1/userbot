@@ -5,8 +5,9 @@ __all__ = [
 import re
 
 from pyrogram import Client
+from pyrogram.enums import MessageEntityType, ParseMode
 from pyrogram.errors import MessageNotModified
-from pyrogram.types import Message
+from pyrogram.types import Message, MessageEntity
 
 from ..modules import CommandsModule
 from ..utils import edit_or_reply, get_text
@@ -18,6 +19,26 @@ _en2ru_tr = str.maketrans(_kb_en, _kb_ru)
 _enru2ruen_tr = str.maketrans(_kb_ru + _kb_en, _kb_en + _kb_ru)
 
 commands = CommandsModule("Text converters")
+
+
+class _ReplaceHelper:
+    def __init__(self, replace_template: str):
+        self.entities: list[MessageEntity] = []
+        self._template = replace_template
+        self._diff = 0
+
+    def __call__(self, match: re.Match[str]) -> str:
+        res = match.expand(self._template)
+        # FIXME (2022-08-30): emoji breaks proper offset calculation
+        self.entities.append(
+            MessageEntity(
+                type=MessageEntityType.UNDERLINE,
+                offset=match.start() + self._diff,
+                length=len(res),
+            )
+        )
+        self._diff += len(res) - (match.end() - match.start())
+        return res
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
@@ -53,8 +74,26 @@ async def sed(_: Client, message: Message, args: str) -> None:
     flags = 0
     for flag in flags_str:
         flags |= getattr(re, flag.upper())
-    text = re.sub(find_re, replace_re, text, flags=flags)
     answer, delete = edit_or_reply(message)
+    rh = _ReplaceHelper(replace_re)
+    text = re.sub(find_re, rh, text, flags=flags)
+    if not delete:
+        prefix = "Maybe you mean:\n\n"
+        for entity in rh.entities:
+            entity.offset += len(prefix)
+        await message.edit(
+            f"{prefix}{text}",
+            parse_mode=ParseMode.DISABLED,
+            entities=[
+                MessageEntity(
+                    type=MessageEntityType.BOLD,
+                    offset=0,
+                    length=len(prefix),
+                ),
+                *rh.entities,
+            ],
+        )
+        return
     try:
         await answer(text)
     except MessageNotModified:
