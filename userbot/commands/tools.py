@@ -2,9 +2,11 @@ __all__ = [
     "commands",
 ]
 
+import asyncio
 import html
 from calendar import TextCalendar
 from datetime import datetime
+from typing import NoReturn
 
 from pyrogram import Client
 from pyrogram.types import Message
@@ -48,8 +50,17 @@ async def calendar(_: Client, message: Message, args: str) -> str:
 
 
 @commands.add("testerror")
-async def test_error(_: Client, __: Message, ___: str) -> None:
+async def test_error(_: Client, __: Message, ___: str) -> NoReturn:
     """Always throws an error
 
     This is a test command to see if the error handler works."""
     raise RuntimeError("Test error")
+
+
+@commands.add("sleep")
+async def sleep(_: Client, __: Message, args: str) -> str:
+    """Sleeps for a specified amount of time
+
+    This is a test command to check the command waiting message."""
+    await asyncio.sleep(float(args))
+    return f"Done sleeping for {args} seconds"

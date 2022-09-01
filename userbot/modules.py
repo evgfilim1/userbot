@@ -1,3 +1,4 @@
+import asyncio
 import functools
 import html
 import inspect
@@ -126,6 +127,11 @@ class _CommandHandler:
             f"<i>More info can be found in logs.</i>"
         )
 
+    async def _waiting_task(self, message: Message) -> None:
+        await asyncio.sleep(0.75)
+        text = self.waiting_message or f"<i>Executing</i> <code>{html.escape(message.text)}</code>"
+        await message.edit(f"⌚ {text}")
+
     async def __call__(self, client: Client, message: Message):
         args = message.text.lstrip(self.prefix)
         if not isinstance(self.command, str):
@@ -134,17 +140,15 @@ class _CommandHandler:
         else:
             args = args.removeprefix(self.command)
         args = args.lstrip()
-        if self.waiting_message is not None:
-            if self.waiting_message == "":
-                await message.edit(f"<b>⌚ Executing</b> <code>{html.escape(message.text)}</code>")
-            else:
-                await message.edit(f"⌚ {self.waiting_message}")
+        waiting_task = asyncio.create_task(self._waiting_task(message))
         try:
             result = await self.handler(client, message, args)
         except Exception as e:
+            waiting_task.cancel()
             text = self._report_exception(message, e)
             await message.edit(text, parse_mode=ParseMode.HTML)
         else:
+            waiting_task.cancel()
             if result is None:
                 return
             try:
