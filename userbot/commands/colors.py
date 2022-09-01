@@ -25,7 +25,9 @@ def _create_filled_pic(col: str, size: tuple[int, int] = (100, 100)) -> BytesIO:
 
 @commands.add("color", usage="<color-spec>")
 async def color(client: Client, message: Message, args: str) -> None:
-    """Sends a specified color sample"""
+    """Sends a specified color sample
+
+    <color-spec> can be a hex color code prefixed by #, or a color name."""
     tmp = _create_filled_pic(args)
     reply = getattr(message.reply_to_message, "message_id", None)
     await client.send_photo(

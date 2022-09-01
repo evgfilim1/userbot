@@ -81,6 +81,9 @@ class _CommandHandler:
     waiting_message: str | None
     category: str | None
 
+    def __post_init__(self):
+        self.doc = re.sub(r"\n(\n?)\s+", r"\n\1", self.doc)  # Remove extra whitespaces
+
     def _report_exception(self, message: Message, e: Exception) -> str:
         """Logs an exception to the logger and returns a message to be sent to the user."""
         _log.exception(
@@ -223,7 +226,7 @@ class _ShortcutHandler:
         await message.edit(text, parse_mode=ParseMode.HTML)
 
 
-def _format_handler_usage(handler: _CommandHandler) -> str | None:
+def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str | None:
     if handler.usage is None:
         return None
     if isinstance(handler.command, str):
@@ -231,7 +234,10 @@ def _format_handler_usage(handler: _CommandHandler) -> str | None:
     else:
         commands = "|".join(handler.command)
     usage = f" {handler.usage}".rstrip()
-    description = f" — {handler.doc}" if handler.doc else ""
+    doc = handler.doc or ""
+    if not full:
+        doc = doc.strip().split("\n")[0].strip()
+    description = f" — {doc}" if handler.doc else ""
     return f"{commands}{usage}{description}"
 
 
@@ -339,8 +345,11 @@ class CommandsModule:
     async def _auto_help_handler(self, _: Client, __: Message, args: str) -> str:
         if args:
             for h in self._handlers:
-                if isinstance(h.command, str) and h.command == args or args in h.command:
-                    return f"<b>Help for {args}:</b>\n{html.escape(_format_handler_usage(h))}"
+                if (isinstance(h.command, str) and h.command == args) or (
+                    not isinstance(h.command, str) and args in h.command
+                ):
+                    usage = _format_handler_usage(h, full=True)
+                    return f"<b>Help for {args}:</b>\n{html.escape(usage)}"
             else:
                 return f"<b>No help found for {args}</b>"
         text = "<b>List of userbot commands available:</b>\n\n"

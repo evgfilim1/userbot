@@ -19,7 +19,7 @@ commands = CommandsModule("Messages")
 
 @commands.add(["delete", "delet", "del"], usage="<reply>")
 async def delete_this(_: Client, message: Message, __: str) -> None:
-    """Deletes replied message"""
+    """Deletes replied message for everyone"""
     try:
         await message.reply_to_message.delete()
     except BadRequest:

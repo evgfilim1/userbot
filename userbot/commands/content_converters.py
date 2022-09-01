@@ -56,7 +56,9 @@ async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
     waiting_message="<i>Converting to sticker...</i>",
 )
 async def photo_to_sticker(client: Client, message: Message, args: str) -> None:
-    """Converts a photo to a sticker-ready png or webp"""
+    """Converts a photo to a sticker-ready png or webp
+
+    'png' is assumed when no argument is specified."""
     msg = message.reply_to_message if message.reply_to_message else message
     output_io = await client.download_media(msg, in_memory=True)
     output_io.seek(0)

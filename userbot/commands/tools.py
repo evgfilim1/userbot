@@ -30,7 +30,9 @@ async def calc(_: Client, __: Message, args: str) -> str:
 
 @commands.add("cal", usage="[month] [year]")
 async def calendar(_: Client, message: Message, args: str) -> str:
-    """Sends a calendar for a specified month and year"""
+    """Sends a calendar for a specified month and year
+
+    If no arguments are given, the current month and year are used."""
     args_list = args.split()
     # It's more reliable to get current date/time from the message
     now = message.edit_date or message.date or datetime.now()
@@ -47,5 +49,7 @@ async def calendar(_: Client, message: Message, args: str) -> str:
 
 @commands.add("testerror")
 async def test_error(_: Client, __: Message, ___: str) -> None:
-    """Always throws an error"""
+    """Always throws an error
+
+    This is a test command to see if the error handler works."""
     raise RuntimeError("Test error")

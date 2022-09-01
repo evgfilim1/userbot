@@ -51,17 +51,17 @@ Download:
 • download|dl [reply] [filename] — Downloads a file or files
 
 Messages:
-• delete|delet|del <reply> — Deletes replied message
+• delete|delet|del <reply> — Deletes replied message for everyone
 • dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
 • userfirstmsg [reply] — Replies to user's very first message in the chat
 
 Reactions:
 • r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
-• rr <reply> — Reacts to a message with a random emoji
-• rs <reply> — Gets message reactions
+• rr <reply> — Reacts to a message with a random available emoji
+• rs <reply> — Gets message reactions with users who reacted to it
 
 Reminders:
-• remind [reply] <time> [message...] — Sets a reminder
+• remind [reply] <time> [message...] — Sets a reminder in the chat
 • remindme [reply] <time> [message...] — Sets a reminder for myself
 
 Stickers:

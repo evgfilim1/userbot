@@ -28,7 +28,7 @@ async def put_reaction(_: Client, message: Message, args: str) -> str | None:
 
 @commands.add("rs", usage="<reply>")
 async def get_reactions(client: Client, message: Message, __: str) -> str:
-    """Gets message reactions"""
+    """Gets message reactions with users who reacted to it"""
     chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
     try:
@@ -59,7 +59,7 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
 
 @commands.add("rr", usage="<reply>")
 async def put_random_reaction(client: Client, message: Message, _: str) -> None:
-    """Reacts to a message with a random emoji"""
+    """Reacts to a message with a random available emoji"""
     chat = await client.get_chat(message.chat.id)
     await message.reply_to_message.react(random.choice(chat.available_reactions))
     await message.delete()

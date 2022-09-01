@@ -43,7 +43,9 @@ class _ReplaceHelper:
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
 async def tr(_: Client, message: Message, args: str) -> None:
-    """Swaps keyboard layout from en to ru or vice versa"""
+    """Swaps keyboard layout from en to ru or vice versa
+
+    If no argument is provided, the layout will be switched between en and ru."""
     # TODO (2021-12-01): detect ambiguous replacements via previous char
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)

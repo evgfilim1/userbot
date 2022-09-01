@@ -68,7 +68,9 @@ async def set_random_chat_title(chat_id: int, client: Client) -> Message:
 
 @commands.add("rndinfo", usage="['photo'|'title']")
 async def random_chat_info(client: Client, message: Message, args: str) -> str:
-    """Sets random chat photo and/or title"""
+    """Sets random chat photo and/or title
+
+    Sets both if no argument is given."""
     text = ""
     if args == "photo" or args == "":
         msg = await set_random_chat_photo(message.chat.id, client)

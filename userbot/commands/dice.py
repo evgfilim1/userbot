@@ -44,5 +44,7 @@ class _HTMLDiceStringifier(SimpleStringifier):
 
 @commands.add(["roll", "dice"], usage="<dice-spec>")
 async def dice(_: Client, __: Message, args: str) -> str:
-    """Rolls dice according to d20.roll syntax"""
+    """Rolls dice according to d20.roll syntax
+
+    More: https://github.com/avrae/d20#dice-syntax."""
     return f"🎲 {d20.roll(args, stringifier=_HTMLDiceStringifier())}"
