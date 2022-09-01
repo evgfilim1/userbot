@@ -1,5 +1,6 @@
 import functools
 import html
+import inspect
 import logging
 import re
 from dataclasses import dataclass
@@ -25,6 +26,17 @@ if TYPE_CHECKING:
 
 SNIP = "<...snip...>"
 nekobin = AsyncClient(base_url="https://nekobin.com/")
+
+
+def _filter_kwargs(func: Callable[..., Any], kwargs: dict[str, Any]) -> dict[str, Any]:
+    suitable_kwargs = {}
+    sig = inspect.signature(func)
+    for name, param in sig.parameters.items():
+        if param.kind == inspect.Parameter.VAR_KEYWORD:
+            suitable_kwargs = kwargs  # pass all kwargs
+        if name in kwargs:
+            suitable_kwargs[name] = kwargs[name]
+    return suitable_kwargs
 
 
 class CommandHandler(Protocol):
@@ -68,7 +80,6 @@ class _CommandHandler:
     doc: str | None
     waiting_message: str | None
     category: str | None
-    kwargs: dict[str, Any]
 
     def _report_exception(self, message: Message, e: Exception) -> str:
         """Logs an exception to the logger and returns a message to be sent to the user."""
@@ -126,7 +137,7 @@ class _CommandHandler:
             else:
                 await message.edit(f"⌚ {self.waiting_message}")
         try:
-            result = await self.handler(client, message, args, **self.kwargs)
+            result = await self.handler(client, message, args)
         except Exception as e:
             text = self._report_exception(message, e)
             await message.edit(text, parse_mode=ParseMode.HTML)
@@ -250,7 +261,6 @@ class CommandsModule:
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
-        kwargs: dict[str, Any] | None = None,
     ) -> Callable[[CommandHandler], CommandHandler]:
         def _decorator(f: CommandHandler) -> CommandHandler:
             self.add_handler(
@@ -262,7 +272,6 @@ class CommandsModule:
                 doc=doc,
                 waiting_message=waiting_message,
                 category=category,
-                kwargs=kwargs,
             )
             return f
 
@@ -279,7 +288,6 @@ class CommandsModule:
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
-        kwargs: dict[str, Any] | None = None,
     ) -> None:
         self._handlers.append(
             _CommandHandler(
@@ -291,14 +299,21 @@ class CommandsModule:
                 doc=doc or getattr(handler, "__doc__", None),
                 waiting_message=waiting_message,
                 category=category or self._category,
-                kwargs=kwargs or {},
             )
         )
 
     def add_submodule(self, module: "CommandsModule") -> None:
         self._handlers.extend(module._handlers)
 
-    def register(self, client: Client, *, with_help: bool = False) -> None:
+    def register(
+        self,
+        client: Client,
+        *,
+        with_help: bool = False,
+        kwargs: dict[str, Any] | None = None,
+    ) -> None:
+        if kwargs is None:
+            kwargs = {}
         if with_help:
             self._handlers.append(
                 _CommandHandler(
@@ -310,17 +325,18 @@ class CommandsModule:
                     doc="Sends help for all commands or for a specific one",
                     waiting_message=None,
                     category="About",
-                    kwargs={},
                 )
             )
         for handler in self._handlers:
+            # Pass only suitable kwargs for the handler
+            handler_kwargs = _filter_kwargs(handler.handler, kwargs)
+            handler.handler = functools.partial(handler.handler, **handler_kwargs)
             f = flt.me & flt.command(handler.command, handler.prefix)
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
 
     async def _auto_help_handler(self, _: Client, __: Message, args: str) -> str:
-        logging.info(f"Sending help for {args}")
         if args:
             for h in self._handlers:
                 if isinstance(h.command, str) and h.command == args or args in h.command:

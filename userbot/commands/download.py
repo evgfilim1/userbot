@@ -1,5 +1,5 @@
 __all__ = [
-    "download",
+    "commands",
 ]
 
 from pathlib import Path
@@ -10,7 +10,11 @@ from pyrogram import Client
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import Message
 
+from ..modules import CommandsModule
+
 _CHUNK_SIZE = 1048576 * 4  # 4 MiB
+
+commands = CommandsModule("Download")
 
 
 async def _downloader(client: Client, message: Message, filename: str, data_dir: Path) -> str:
@@ -52,6 +56,11 @@ async def _downloader(client: Client, message: Message, filename: str, data_dir:
     return f"The file has been downloaded to <code>{output}</code>"
 
 
+@commands.add(
+    ["download", "dl"],
+    usage="[reply] [filename]",
+    waiting_message="<i>Downloading file(s)...</i>",
+)
 async def download(client: Client, message: Message, args: str, *, data_dir: Path) -> str:
     """Downloads a file or files"""
     msg = message.reply_to_message if message.reply_to_message else message

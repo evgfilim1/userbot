@@ -9,6 +9,7 @@ from .chat_info import commands as chat_info_commands
 from .colors import commands as colors_commands
 from .content_converters import commands as content_converters_commands
 from .dice import commands as dice_commands
+from .download import commands as download_commands
 from .messages import commands as messages_commands
 from .reactions import commands as reactions_commands
 from .reminders import commands as reminders_commands
@@ -25,6 +26,7 @@ for submodule in (
     colors_commands,
     content_converters_commands,
     dice_commands,
+    download_commands,
     messages_commands,
     reactions_commands,
     reminders_commands,

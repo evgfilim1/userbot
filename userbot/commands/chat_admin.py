@@ -1,7 +1,5 @@
 __all__ = [
     "commands",
-    "no_react2ban",
-    "react2ban",
     "react2ban_raw_reaction_handler",
 ]
 
@@ -134,6 +132,7 @@ async def react2ban_raw_reaction_handler(
         await client.edit_message_text(chat_id, message_id, t)
 
 
+@commands.add("react2ban", handle_edits=False, usage="")
 async def react2ban(client: Client, message: Message, _: str, *, storage: Storage) -> str:
     """Bans a user whoever reacted to the message"""
     if message.chat.id > 0:
@@ -145,6 +144,7 @@ async def react2ban(client: Client, message: Message, _: str, *, storage: Storag
     return _REACT2BAN_TEXT
 
 
+@commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
 async def no_react2ban(_: Client, message: Message, __: str, *, storage: Storage) -> str:
     """Stops react2ban on the message"""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted

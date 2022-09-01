@@ -8,12 +8,11 @@ from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
 from userbot.commands import commands
-from userbot.commands.chat_admin import no_react2ban, react2ban, react2ban_raw_reaction_handler
-from userbot.commands.download import download
-from userbot.commands.stickers import random_sticker
+from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.constants import GH_PATTERN
-from userbot.hooks import check_hooks, hooks
+from userbot.hooks import commands as hooks_commands
+from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
 from userbot.shortcuts import github, shortcuts
 from userbot.storage import RedisStorage, Storage
@@ -63,51 +62,21 @@ def main() -> None:
     github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
 
     _log.debug("Registering handlers...")
-    commands.add_handler(
-        check_hooks,
-        ["hookshere", "hooks_here"],
-        usage=None,
-        category="Hooks",
-        kwargs={"storage": storage},
-    )
-    commands.add_handler(
-        download,
-        ["download", "dl"],
-        usage="[reply] [filename]",
-        waiting_message="<i>Downloading file(s)...</i>",
-        category="Download",
-        kwargs={"data_dir": config.data_location},
-    )
-    commands.add_handler(
-        react2ban,
-        "react2ban",
-        handle_edits=False,
-        usage="",
-        category="Chat administration",
-        kwargs={"storage": storage},
-    )
-    commands.add_handler(
-        no_react2ban,
-        ["no_react2ban", "noreact2ban"],
-        usage="<reply>",
-        category="Chat administration",
-        kwargs={"storage": storage},
-    )
-    commands.add_handler(
-        random_sticker,
-        "rnds",
-        usage="<pack-shortlink|pack-alias|emoji>",
-        waiting_message="<i>Picking random sticker...</i>",
-        category="Stickers",
-        kwargs={"storage": storage},
-    )
+    commands.add_submodule(hooks_commands)
     shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,
     )
 
-    commands.register(client, with_help=True)
+    commands.register(
+        client,
+        with_help=True,
+        kwargs={
+            "storage": storage,
+            "data_dir": config.data_location,
+        },
+    )
     hooks.register(client, storage)
     shortcuts.register(client)
 

@@ -12,10 +12,11 @@ from .constants import (
     TAP_STICKER,
     UWU_MEME_PICTURE,
 )
-from .modules import HooksModule
+from .modules import CommandsModule, HooksModule
 from .storage import Storage
 from .utils import sticker
 
+commands = CommandsModule("Hooks")
 hooks = HooksModule()
 
 
@@ -55,6 +56,7 @@ async def on_uwu(_: Client, message: Message) -> None:
     await message.reply_photo(UWU_MEME_PICTURE)
 
 
+@commands.add(["hookshere", "hooks_here"])
 async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
     """List enabled hooks in the chat"""
     enabled = await storage.list_enabled_hooks(message.chat.id)

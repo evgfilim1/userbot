@@ -1,6 +1,5 @@
 __all__ = [
     "commands",
-    "random_sticker",
 ]
 
 import random
@@ -33,6 +32,11 @@ async def longcat(client: Client, message: Message, _: str) -> None:
         await client.send_sticker(message.chat.id, s)
 
 
+@commands.add(
+    "rnds",
+    usage="<pack-shortlink|pack-alias|emoji>",
+    waiting_message="<i>Picking random sticker...</i>",
+)
 async def random_sticker(client: Client, message: Message, args: str, *, storage: Storage) -> None:
     """Sends random sticker from specified pack or one matching specified emoji"""
     if not args.isalnum():
