@@ -25,7 +25,10 @@ if TYPE_CHECKING:
     from traceback import FrameSummary
 
 
-SNIP = "<...snip...>"
+_SNIP = "<...snip...>"
+_DEFAULT_TIMEOUT = 30
+_DEFAULT_PREFIX = "." if is_prod() else ","
+
 nekobin = AsyncClient(base_url="https://nekobin.com/")
 
 
@@ -81,6 +84,7 @@ class _CommandHandler:
     doc: str | None
     waiting_message: str | None
     category: str | None
+    timeout: int | None
 
     def __post_init__(self):
         self.doc = re.sub(r"\n(\n?)\s+", r"\n\1", self.doc)  # Remove extra whitespaces
@@ -106,7 +110,7 @@ class _CommandHandler:
                 last_own_frame.lineno,
                 last_own_frame.name,
                 last_own_frame.line.strip(),
-                snip=SNIP,
+                snip=_SNIP,
             )
             if last_frame is not last_own_frame:
                 tb += '  {snip}\n  File "{}", line {}, in {}\n    {}\n'.format(
@@ -114,7 +118,7 @@ class _CommandHandler:
                     last_frame.lineno,
                     last_frame.name,
                     last_frame.line.strip(),
-                    snip=SNIP,
+                    snip=_SNIP,
                 )
         tb += type(e).__qualname__
         if exc_value := str(e):
@@ -142,7 +146,18 @@ class _CommandHandler:
         args = args.lstrip()
         waiting_task = asyncio.create_task(self._waiting_task(message))
         try:
-            result = await self.handler(client, message, args)
+            result: str | None = await asyncio.wait_for(
+                self.handler(client, message, args),
+                timeout=self.timeout,
+            )
+        except asyncio.TimeoutError as e:
+            self._report_exception(message, e)  # just log the exception
+            await message.edit(
+                f"<b>[‼] Command timed out after {self.timeout} seconds.</b>\n\n"
+                f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n\n"
+                f"<i>More info can be found in logs.</i>",
+                parse_mode=ParseMode.HTML,
+            )
         except Exception as e:
             waiting_task.cancel()
             text = self._report_exception(message, e)
@@ -252,10 +267,6 @@ def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
     return category, handler.command[0]
 
 
-def _default_prefix() -> str:
-    return "." if is_prod() else ","
-
-
 class CommandsModule:
     def __init__(self, category: str | None = None):
         self._handlers: list[_CommandHandler] = []
@@ -264,13 +275,14 @@ class CommandsModule:
     def add(
         self,
         command: str | list[str],
-        prefix: str = _default_prefix(),
+        prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
+        timeout: int | None = _DEFAULT_TIMEOUT,
     ) -> Callable[[CommandHandler], CommandHandler]:
         def _decorator(f: CommandHandler) -> CommandHandler:
             self.add_handler(
@@ -282,6 +294,7 @@ class CommandsModule:
                 doc=doc,
                 waiting_message=waiting_message,
                 category=category,
+                timeout=timeout,
             )
             return f
 
@@ -291,13 +304,14 @@ class CommandsModule:
         self,
         handler: CommandHandler,
         command: str | list[str],
-        prefix: str = _default_prefix(),
+        prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
         usage: str | None = None,
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
+        timeout: int | None = _DEFAULT_TIMEOUT,
     ) -> None:
         self._handlers.append(
             _CommandHandler(
@@ -309,6 +323,7 @@ class CommandsModule:
                 doc=doc or getattr(handler, "__doc__", None),
                 waiting_message=waiting_message,
                 category=category or self._category,
+                timeout=timeout,
             )
         )
 
@@ -325,17 +340,12 @@ class CommandsModule:
         if kwargs is None:
             kwargs = {}
         if with_help:
-            self._handlers.append(
-                _CommandHandler(
-                    command="help",
-                    prefix=_default_prefix(),
-                    handler=self._auto_help_handler,
-                    handle_edits=True,
-                    usage="[command]",
-                    doc="Sends help for all commands or for a specific one",
-                    waiting_message=None,
-                    category="About",
-                )
+            self.add_handler(
+                self._auto_help_handler,
+                command="help",
+                usage="[command]",
+                doc="Sends help for all commands or for a specific one",
+                category="About",
             )
         for handler in self._handlers:
             # Pass only suitable kwargs for the handler
@@ -426,10 +436,10 @@ class HooksModule:
     def register(self, client: Client, storage: Storage) -> None:
         for handler in self._handlers:
             f_reg = flt.me & flt.command(
-                [f"{handler.name}here", f"{handler.name}_here"], prefixes=_default_prefix()
+                [f"{handler.name}here", f"{handler.name}_here"], prefixes=_DEFAULT_PREFIX
             )
             f_unreg = flt.me & flt.command(
-                [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_default_prefix()
+                [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_DEFAULT_PREFIX
             )
             f = flt.incoming & handler.filters
             client.add_handler(

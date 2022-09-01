@@ -107,6 +107,7 @@ class Unset:
         return repr(self)
 
 
+@functools.lru_cache()
 def is_prod() -> bool:
     return bool(os.environ.get("GITHUB_SHA", ""))
 

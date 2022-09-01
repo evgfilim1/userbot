@@ -61,6 +61,6 @@ async def test_error(_: Client, __: Message, ___: str) -> NoReturn:
 async def sleep(_: Client, __: Message, args: str) -> str:
     """Sleeps for a specified amount of time
 
-    This is a test command to check the command waiting message."""
+    This is a test command to check the command waiting message and timeout."""
     await asyncio.sleep(float(args))
     return f"Done sleeping for {args} seconds"
