@@ -77,12 +77,11 @@ class _CommandHandler:
             message.text,
             extra={"command": self.command},
         )
-        last_own_frame = None
-        last_frame = None
+        last_own_frame: FrameSummary | None = None
+        last_frame: FrameSummary | None = None
         own_package_name = Path(__file__).parent
-        for i, frame in enumerate(extract_tb(e.__traceback__)):
-            frame: FrameSummary
-            if frame.filename is not None and Path(frame.filename).parent == own_package_name:
+        for frame in extract_tb(e.__traceback__):
+            if frame.filename is not None and own_package_name in Path(frame.filename).parents:
                 last_own_frame = frame
             last_frame = frame
         tb = ""
@@ -103,8 +102,7 @@ class _CommandHandler:
                     snip=SNIP,
                 )
         tb += type(e).__qualname__
-        exc_value = str(e)
-        if exc_value:
+        if exc_value := str(e):
             tb += f": {exc_value}"
         tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
         return (
