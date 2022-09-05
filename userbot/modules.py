@@ -351,7 +351,7 @@ class CommandsModule:
             # Pass only suitable kwargs for the handler
             handler_kwargs = _filter_kwargs(handler.handler, kwargs)
             handler.handler = functools.partial(handler.handler, **handler_kwargs)
-            f = flt.me & flt.command(handler.command, handler.prefix)
+            f = flt.me & ~flt.scheduled & flt.command(handler.command, handler.prefix)
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
@@ -435,11 +435,19 @@ class HooksModule:
 
     def register(self, client: Client, storage: Storage) -> None:
         for handler in self._handlers:
-            f_reg = flt.me & flt.command(
-                [f"{handler.name}here", f"{handler.name}_here"], prefixes=_DEFAULT_PREFIX
+            f_reg = (
+                flt.me
+                & ~flt.scheduled
+                & flt.command(
+                    [f"{handler.name}here", f"{handler.name}_here"], prefixes=_DEFAULT_PREFIX
+                )
             )
-            f_unreg = flt.me & flt.command(
-                [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_DEFAULT_PREFIX
+            f_unreg = (
+                flt.me
+                & ~flt.scheduled
+                & flt.command(
+                    [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_DEFAULT_PREFIX
+                )
             )
             f = flt.incoming & handler.filters
             client.add_handler(
@@ -513,7 +521,7 @@ class ShortcutTransformersModule:
 
     def register(self, client: Client) -> None:
         for handler in self._handlers:
-            f = flt.outgoing & flt.regex(handler.regex)
+            f = flt.outgoing & ~flt.scheduled & flt.regex(handler.regex)
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
