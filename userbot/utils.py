@@ -15,6 +15,7 @@ from pyrogram import Client, filters
 from pyrogram.enums import ParseMode
 from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
+from typing_extensions import Self
 
 _T = TypeVar("_T")
 
@@ -150,7 +151,7 @@ class GitHubClient:
         client.base_url = "https://api.github.com"
         self._client = client
 
-    async def __aenter__(self) -> GitHubClient:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(

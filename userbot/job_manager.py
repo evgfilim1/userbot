@@ -6,6 +6,8 @@ from asyncio import Task, create_task
 from types import TracebackType
 from typing import Any, Coroutine, Type
 
+from typing_extensions import Self
+
 
 class AsyncJobManager:
     def __init__(self) -> None:
@@ -21,7 +23,7 @@ class AsyncJobManager:
             job.cancel()
         self._jobs.clear()
 
-    async def __aenter__(self) -> AsyncJobManager:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(

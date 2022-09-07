@@ -11,6 +11,7 @@ from typing import Any, Awaitable, Callable, NoReturn, Type, TypeAlias, TypeVar
 
 from redis.asyncio import Redis
 from redis.asyncio.client import PubSub
+from typing_extensions import Self
 
 from .utils import StickerInfo
 
@@ -78,15 +79,15 @@ class Storage(ABC):
     ) -> NoReturn:
         _log.debug("Sticker cache job started, ttl=%d", ttl)
 
-    async def __aenter__(self: _T) -> _T:
+    async def __aenter__(self) -> Self:
         await self.connect()
         return self
 
     async def __aexit__(
         self,
-        exc_type: Type[Exception],
-        exc_val: Exception,
-        exc_tb: TracebackType,
+        exc_type: Type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         await self.close()
         return

@@ -7,3 +7,4 @@ Pyrogram~=2.0.26
 python-magic~=0.4.27
 redis~=4.3.4
 TgCrypto~=1.2.3
+typing-extensions~=4.3.0
