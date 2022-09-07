@@ -16,7 +16,7 @@ from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
 from userbot.shortcuts import github, shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import fetch_stickers, is_prod
+from userbot.utils import GitHubClient, fetch_stickers, is_prod
 
 logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ _log.setLevel(logging.INFO if is_prod() else logging.DEBUG)
 async def _main(
     client: Client,
     storage: Storage,
-    github_client: AsyncClient,
+    github_client: GitHubClient,
     job_manager: AsyncJobManager,
 ) -> None:
     async with client, storage, github_client, job_manager:
@@ -59,11 +59,11 @@ def main() -> None:
     )
     redis_config = RedisConfig.from_env()
     storage = RedisStorage(redis_config.host, redis_config.port, redis_config.db)
-    github_client = AsyncClient(base_url="https://api.github.com/", http2=True)
+    github_client = GitHubClient(AsyncClient(http2=True))
 
     _log.debug("Registering handlers...")
     commands.add_submodule(hooks_commands)
-    shortcuts.add_handler(partial(github, client=github_client), GH_PATTERN)
+    shortcuts.add_handler(partial(github, github_client=github_client), GH_PATTERN)
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,

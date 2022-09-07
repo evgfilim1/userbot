@@ -7,8 +7,10 @@ import re
 from base64 import b64encode
 from collections import defaultdict
 from datetime import timedelta
-from typing import Any, ClassVar, Protocol, TypedDict, TypeVar
+from types import TracebackType
+from typing import Any, ClassVar, Protocol, Type, TypedDict, TypeVar
 
+from httpx import AsyncClient
 from pyrogram import Client, filters
 from pyrogram.enums import ParseMode
 from pyrogram.raw import functions, types
@@ -141,3 +143,23 @@ async def fetch_stickers(client: Client) -> dict[str, list[StickerInfo]]:
         for doc in full_set.packs:
             res[doc.emoticon].extend(stickers_by_id[doc_id] for doc_id in doc.documents)
     return res
+
+
+class GitHubClient:
+    def __init__(self, client: AsyncClient) -> None:
+        client.base_url = "https://api.github.com"
+        self._client = client
+
+    async def __aenter__(self) -> GitHubClient:
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: Type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        await self._client.aclose()
+
+    async def get_default_branch(self, owner: str, repo: str) -> str:
+        return (await self._client.get(f"/repos/{owner}/{repo}")).json()["default_branch"]

@@ -2,9 +2,8 @@ import re
 from dataclasses import dataclass
 from urllib.parse import quote_plus
 
-from httpx import AsyncClient
-
 from .modules import ShortcutTransformersModule
+from .utils import GitHubClient
 
 shortcuts = ShortcutTransformersModule()
 
@@ -32,7 +31,7 @@ async def mention(match: re.Match[str]) -> str:
     return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
 
 
-async def github(match: re.Match[str], *, client: AsyncClient) -> str:
+async def github(match: re.Match[str], *, github_client: GitHubClient) -> str:
     """Sends a link to a GitHub repository"""
     m = GitHubMatch(**match.groupdict())
     url = f"https://github.com/{m.username}"
@@ -44,7 +43,7 @@ async def github(match: re.Match[str], *, client: AsyncClient) -> str:
     url += f"/{m.repo}"
     text += f"/{m.repo}"
     if not m.branch and m.path:
-        m.branch = (await client.get(f"/repos/{m.username}/{m.repo}")).json()["default_branch"]
+        m.branch = await github_client.get_default_branch(m.username, m.repo)
         url += f"/tree/{m.branch}/{m.path}"
         text += f":/{m.path}"
     elif m.branch:
