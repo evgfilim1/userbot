@@ -132,7 +132,7 @@ async def react2ban_raw_reaction_handler(
         await client.edit_message_text(chat_id, message_id, t)
 
 
-@commands.add("react2ban", handle_edits=False, usage="")
+@commands.add("react2ban", handle_edits=False)
 async def react2ban(client: Client, message: Message, _: str, *, storage: Storage) -> str:
     """Bans a user whoever reacted to the message"""
     if message.chat.id > 0:

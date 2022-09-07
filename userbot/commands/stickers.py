@@ -17,7 +17,7 @@ from ..utils import StickerInfo
 commands = CommandsModule("Stickers")
 
 
-@commands.add("longcat", usage="")
+@commands.add("longcat")
 async def longcat(client: Client, message: Message, _: str) -> None:
     """Sends random longcat"""
     key = "black" if random.random() >= 0.5 else "white"

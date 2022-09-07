@@ -80,10 +80,11 @@ class _CommandHandler:
     prefix: str
     handler: CommandHandler
     handle_edits: bool
-    usage: str | None
+    usage: str
     doc: str | None
     waiting_message: str | None
     category: str | None
+    hidden: bool
     timeout: int | None
 
     def __post_init__(self):
@@ -245,9 +246,7 @@ class _ShortcutHandler:
         await message.edit(text, parse_mode=ParseMode.HTML)
 
 
-def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str | None:
-    if handler.usage is None:
-        return None
+def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str:
     if isinstance(handler.command, str):
         commands = handler.command
     else:
@@ -278,10 +277,11 @@ class CommandsModule:
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
-        usage: str | None = None,
+        usage: str = "",
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
+        hidden: bool = False,
         timeout: int | None = _DEFAULT_TIMEOUT,
     ) -> Callable[[CommandHandler], CommandHandler]:
         def _decorator(f: CommandHandler) -> CommandHandler:
@@ -294,6 +294,7 @@ class CommandsModule:
                 doc=doc,
                 waiting_message=waiting_message,
                 category=category,
+                hidden=hidden,
                 timeout=timeout,
             )
             return f
@@ -307,10 +308,11 @@ class CommandsModule:
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
-        usage: str | None = None,
+        usage: str = "",
         doc: str | None = None,
         waiting_message: str | None = None,
         category: str | None = None,
+        hidden: bool = False,
         timeout: int | None = _DEFAULT_TIMEOUT,
     ) -> None:
         self._handlers.append(
@@ -323,6 +325,7 @@ class CommandsModule:
                 doc=doc or getattr(handler, "__doc__", None),
                 waiting_message=waiting_message,
                 category=category or self._category,
+                hidden=hidden,
                 timeout=timeout,
             )
         )
@@ -369,8 +372,9 @@ class CommandsModule:
         text = "<b>List of userbot commands available:</b>\n\n"
         prev_cat = ""
         for handler in sorted(self._handlers, key=_command_handler_sort_key):
-            if (usage := _format_handler_usage(handler)) is None:
+            if handler.hidden:
                 continue
+            usage = _format_handler_usage(handler)
             if (handler.category or "") != prev_cat:
                 text += f"\n<i>{handler.category}:</i>\n"
                 prev_cat = handler.category

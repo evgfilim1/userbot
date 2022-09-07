@@ -12,7 +12,7 @@ from ..modules import CommandsModule
 commands = CommandsModule("About")
 
 
-@commands.add("about", usage="")
+@commands.add("about")
 async def about(_: Client, __: Message, ___: str) -> str:
     """Shows information about this userbot"""
     base_url = "https://github.com/evgfilim1/userbot"

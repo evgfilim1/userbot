@@ -83,7 +83,7 @@ async def random_chat_info(client: Client, message: Message, args: str) -> str:
     return text
 
 
-@commands.add("rndmsg", usage="")
+@commands.add("rndmsg")
 async def random_chat_message(client: Client, message: Message, _: str) -> str:
     """Sends a random message from the chat"""
     msg = await get_random_message(message.chat.id, MessagesFilter.EMPTY, client)

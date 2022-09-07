@@ -49,7 +49,7 @@ async def calendar(_: Client, message: Message, args: str) -> str:
     return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
 
 
-@commands.add("testerror")
+@commands.add("testerror", hidden=True)
 async def test_error(_: Client, __: Message, ___: str) -> NoReturn:
     """Always throws an error
 
@@ -57,7 +57,7 @@ async def test_error(_: Client, __: Message, ___: str) -> NoReturn:
     raise RuntimeError("Test error")
 
 
-@commands.add("sleep")
+@commands.add("sleep", usage="<seconds>", hidden=True)
 async def sleep(_: Client, __: Message, args: str) -> str:
     """Sleeps for a specified amount of time
 

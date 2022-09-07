@@ -50,6 +50,9 @@ Dice:
 Download:
 • download|dl [reply] [filename] — Downloads a file or files
 
+Hooks:
+• hookshere|hooks_here — List enabled hooks in the chat
+
 Messages:
 • delete|delet|del <reply> — Deletes replied message for everyone
 • dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
