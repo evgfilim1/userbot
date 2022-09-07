@@ -16,7 +16,7 @@ commands = CommandsModule("Reminders")
 
 
 def _remind_common(message: Message, args_list: list[str]) -> datetime:
-    """Common code for `remind` and `remind_me`"""
+    """Common code for `remind` and `remindme`"""
     now = message.edit_date or message.date or datetime.now()
     if (delta := parse_delta(args_list[0])) is not None:
         t = now + delta
@@ -49,7 +49,8 @@ async def remind(client: Client, message: Message, args: str) -> str:
         reply_to_message_id=message.reply_to_message_id,
         schedule_date=t,
     )
-    return f"⏰ Reminder was set for <i>{t.time()}</i>"
+    t = t.astimezone()
+    return f"⏰ Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
 
 @commands.add("remindme", usage="[reply] <time> [message...]")
@@ -73,4 +74,5 @@ async def remind_me(client: Client, message: Message, args: str) -> str:
         parse_mode=ParseMode.HTML,
         schedule_date=t,
     )
-    return f"⏰ Reminder was set for <i>{t.time()}</i>"
+    t = t.astimezone()
+    return f"⏰ Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
