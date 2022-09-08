@@ -19,10 +19,10 @@ RUN useradd -Ud /app userbot \
 
 VOLUME /data
 
-COPY --chown=userbot:userbot requirements.txt ./
+COPY requirements.txt ./
 RUN python3.10 -m pip install --no-cache-dir -r requirements.txt
 
-COPY --chown=userbot:userbot userbot ./userbot
+COPY userbot ./userbot
 
 USER userbot:userbot
 ENTRYPOINT ["/usr/bin/env", "python3.10", "-m", "userbot"]
