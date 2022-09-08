@@ -198,12 +198,14 @@ class _CommandHandler:
                         parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True,
                     )
-            except MessageNotModified:
-                await message.edit(
-                    f"{result}\n\n⚠ <i><b>MessageNotModified</b> was raised, check that there is"
-                    f" only one userbot instance is running</i>",
-                    parse_mode=ParseMode.HTML,
-                )
+            except MessageNotModified as e:
+                self._report_exception(message, e)
+                if not is_prod():
+                    await message.edit(
+                        f"{result}\n\n⚠ <i><b>MessageNotModified</b> was raised, check that there"
+                        f" is only one userbot instance is running</i>",
+                        parse_mode=ParseMode.HTML,
+                    )
             except Exception as e:
                 text = self._report_exception(message, e)
                 await message.edit(text, parse_mode=ParseMode.HTML)
