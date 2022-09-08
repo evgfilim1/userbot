@@ -11,6 +11,7 @@ from .content_converters import commands as content_converters_commands
 from .dice import commands as dice_commands
 from .download import commands as download_commands
 from .messages import commands as messages_commands
+from .notes import commands as notes_commands
 from .reactions import commands as reactions_commands
 from .reminders import commands as reminders_commands
 from .stickers import commands as stickers_commands
@@ -28,6 +29,7 @@ for submodule in (
     dice_commands,
     download_commands,
     messages_commands,
+    notes_commands,
     reactions_commands,
     reminders_commands,
     stickers_commands,

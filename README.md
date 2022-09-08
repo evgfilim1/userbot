@@ -58,6 +58,12 @@ Messages:
 • dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
 • userfirstmsg [reply] — Replies to user's very first message in the chat
 
+Notes:
+• get|note|n <name> — Sends saved message
+• note_del|ndel <name> — Deletes saved message
+• save|note_add|nadd <reply> <name> — Saves replied message for later use
+• saved|notes|ns — Shows all saved messages
+
 Reactions:
 • r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
 • rr <reply> — Reacts to a message with a random available emoji

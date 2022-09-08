@@ -7,7 +7,7 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Any, Awaitable, Callable, NoReturn, Type, TypeAlias, TypeVar
+from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Type, TypeAlias, TypeVar
 
 from redis.asyncio import Redis
 from redis.asyncio.client import PubSub
@@ -30,6 +30,19 @@ class Storage(ABC):
     @abstractmethod
     async def close(self) -> None:
         _log.debug("Storage %r disconnected", self.__class__.__name__)
+
+    async def __aenter__(self) -> Self:
+        await self.connect()
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: Type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        await self.close()
+        return
 
     @abstractmethod
     async def enable_hook(self, name: str, chat_id: int) -> None:
@@ -79,18 +92,21 @@ class Storage(ABC):
     ) -> NoReturn:
         _log.debug("Sticker cache job started, ttl=%d", ttl)
 
-    async def __aenter__(self) -> Self:
-        await self.connect()
-        return self
+    @abstractmethod
+    async def get_message(self, key: str) -> tuple[str, str] | None:
+        pass
 
-    async def __aexit__(
-        self,
-        exc_type: Type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        await self.close()
-        return
+    @abstractmethod
+    async def save_message(self, key: str, content: str, message_type: str) -> None:
+        _log.debug("%r %s message saved", key, message_type)
+
+    @abstractmethod
+    async def saved_messages(self) -> AsyncIterable[str]:
+        pass
+
+    @abstractmethod
+    async def delete_message(self, key: str) -> None:
+        _log.debug("%r message deleted", key)
 
 
 class RedisStorage(Storage):
@@ -178,3 +194,24 @@ class RedisStorage(Storage):
                 continue
             _log.debug("Sticker cache expired, updating...")
             await self.put_sticker_cache(await provider(), ttl)
+
+    async def get_message(self, key: str) -> tuple[str, str] | None:
+        data = await self._pool.hgetall(self._key("messages", key))
+        if not data:
+            return None
+        return data["content"], data["type"]
+
+    async def save_message(self, key: str, content: str, message_type: str) -> None:
+        await self._pool.hset(
+            self._key("messages", key),
+            mapping={"content": content, "type": message_type},
+        )
+        await super().save_message(key, content, message_type)
+
+    async def saved_messages(self) -> AsyncIterable[str]:
+        async for key in self._pool.scan_iter(match=self._key("messages", "*"), _type="hash"):
+            yield key.rsplit(":", 1)[-1]
+
+    async def delete_message(self, key: str) -> None:
+        await self._pool.delete(self._key("messages", key))
+        await super().delete_message(key)

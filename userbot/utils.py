@@ -164,3 +164,19 @@ class GitHubClient:
 
     async def get_default_branch(self, owner: str, repo: str) -> str:
         return (await self._client.get(f"/repos/{owner}/{repo}")).json()["default_branch"]
+
+
+def get_message_content(message: Message) -> tuple[dict[str, str], str]:
+    if (text := message.text) is not None:
+        # TODO (2022-09-08): `disable_web_page_preview`
+        return {"text": text.html}, "message"
+    if message.media is not None:
+        media_type = message.media.value
+        try:
+            res = {media_type: getattr(message, media_type).file_id}
+        except AttributeError as e:
+            raise ValueError(f"Unknown media type {media_type}") from e
+        if (caption := message.caption) is not None:
+            res["caption"] = caption.html
+        return res, media_type
+    raise ValueError("Unsupported message type")
