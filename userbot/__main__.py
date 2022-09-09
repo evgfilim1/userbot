@@ -11,7 +11,6 @@ from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.constants import GH_PATTERN
-from userbot.hooks import commands as hooks_commands
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
 from userbot.shortcuts import github, shortcuts
@@ -62,13 +61,14 @@ def main() -> None:
     github_client = GitHubClient(AsyncClient(http2=True))
 
     _log.debug("Registering handlers...")
-    commands.add_submodule(hooks_commands)
     shortcuts.add_handler(partial(github, github_client=github_client), GH_PATTERN)
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,
     )
 
+    # `HooksModule` must be registered before `CommandsModule` because it adds some commands
+    hooks.register(client, storage, commands)
     commands.register(
         client,
         with_help=True,
@@ -77,7 +77,6 @@ def main() -> None:
             "data_dir": config.data_location,
         },
     )
-    hooks.register(client, storage)
     shortcuts.register(client)
 
     job_manager = AsyncJobManager()

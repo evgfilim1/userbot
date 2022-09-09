@@ -51,6 +51,7 @@ Download:
 • download|dl [reply] [filename] — Downloads a file or files
 
 Hooks:
+• hooklist|hook_list — List all available hooks
 • hookshere|hooks_here — List enabled hooks in the chat
 
 Messages:

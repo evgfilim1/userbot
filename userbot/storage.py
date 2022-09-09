@@ -57,7 +57,7 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    async def list_enabled_hooks(self, chat_id: int) -> list[str]:
+    async def list_enabled_hooks(self, chat_id: int) -> AsyncIterable[str]:
         pass
 
     @abstractmethod
@@ -144,13 +144,11 @@ class RedisStorage(Storage):
     async def is_hook_enabled(self, name: str, chat_id: int) -> bool:
         return await self._pool.sismember(self._key("hooks", name), chat_id)
 
-    async def list_enabled_hooks(self, chat_id: int) -> list[str]:
-        hooks = []
+    async def list_enabled_hooks(self, chat_id: int) -> AsyncIterable[str]:
         async for hook in self._pool.scan_iter(match=self._key("hooks", "*"), _type="set"):
             hook_name = hook.rsplit(":", 1)[-1]
             if await self.is_hook_enabled(hook_name, chat_id):
-                hooks.append(hook_name)
-        return hooks
+                yield hook_name
 
     async def is_react2ban_enabled(self, chat_id: int, message_id: int) -> bool:
         return await self._pool.sismember(self._key("react2ban", chat_id), message_id)

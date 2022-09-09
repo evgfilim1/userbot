@@ -218,15 +218,15 @@ class _HookHandler:
     handler: Handler
     handle_edits: bool
 
-    async def add_handler(self, _: Client, message: Message, storage: Storage):
+    async def add_handler(self, _: Client, message: Message, __: str, *, storage: Storage) -> None:
         await storage.enable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def del_handler(self, _: Client, message: Message, storage: Storage):
+    async def del_handler(self, _: Client, message: Message, __: str, *, storage: Storage) -> None:
         await storage.disable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def __call__(self, client: Client, message: Message, storage: Storage):
+    async def __call__(self, client: Client, message: Message, storage: Storage) -> None:
         if await storage.is_hook_enabled(self.name, message.chat.id):
             await self.handler(client, message)
 
@@ -439,50 +439,49 @@ class HooksModule:
 
         return wrapper
 
-    def register(self, client: Client, storage: Storage) -> None:
+    def register(self, client: Client, storage: Storage, commands: CommandsModule) -> None:
+        cmds = CommandsModule("Hooks")
         for handler in self._handlers:
-            f_reg = (
-                flt.me
-                & ~flt.scheduled
-                & flt.command(
-                    [f"{handler.name}here", f"{handler.name}_here"], prefixes=_DEFAULT_PREFIX
-                )
+            cmds.add_handler(
+                handler.add_handler,
+                [f"{handler.name}here", f"{handler.name}_here"],
+                doc=f"Enable {handler.name} hook for this chat",
+                hidden=True,
             )
-            f_unreg = (
-                flt.me
-                & ~flt.scheduled
-                & flt.command(
-                    [f"no{handler.name}here", f"no_{handler.name}_here"], prefixes=_DEFAULT_PREFIX
-                )
+            cmds.add_handler(
+                handler.del_handler,
+                [f"no{handler.name}here", f"no_{handler.name}_here"],
+                doc=f"Disable {handler.name} hook for this chat",
+                hidden=True,
             )
             f = flt.incoming & handler.filters
-            client.add_handler(
-                MessageHandler(
-                    self._wrapper(handler.add_handler, storage=storage),
-                    f_reg,
-                )
-            )
-            client.add_handler(
-                MessageHandler(
-                    self._wrapper(handler.del_handler, storage=storage),
-                    f_unreg,
-                )
-            )
             client.add_handler(MessageHandler(self._wrapper(handler, storage=storage), f))
             if handler.handle_edits:
-                client.add_handler(
-                    EditedMessageHandler(
-                        self._wrapper(handler.add_handler, storage=storage),
-                        f_reg,
-                    )
-                )
-                client.add_handler(
-                    EditedMessageHandler(
-                        self._wrapper(handler.del_handler, storage=storage),
-                        f_unreg,
-                    )
-                )
                 client.add_handler(EditedMessageHandler(self._wrapper(handler, storage=storage), f))
+        cmds.add_handler(
+            self._check_hooks,
+            ["hookshere", "hooks_here"],
+        )
+        cmds.add_handler(
+            self._list_hooks,
+            ["hooklist", "hook_list"],
+        )
+        commands.add_submodule(cmds)
+
+    @staticmethod
+    async def _check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
+        """List enabled hooks in the chat"""
+        hooks = ""
+        async for hook in storage.list_enabled_hooks(message.chat.id):
+            hooks += f"• <code>{hook}</code>\n"
+        return f"Hooks in this chat:\n{hooks}"
+
+    async def _list_hooks(self, _: Client, __: Message, ___: str) -> str:
+        """List all available hooks"""
+        hooks = ""
+        for handler in self._handlers:
+            hooks += f"• <code>{handler.name}</code>\n"
+        return f"Available hooks:\n{hooks}"
 
 
 class ShortcutTransformersModule:

@@ -12,11 +12,9 @@ from .constants import (
     TAP_STICKER,
     UWU_MEME_PICTURE,
 )
-from .modules import CommandsModule, HooksModule
-from .storage import Storage
+from .modules import HooksModule
 from .utils import sticker
 
-commands = CommandsModule("Hooks")
 hooks = HooksModule()
 
 
@@ -54,10 +52,3 @@ async def on_bra(_: Client, message: Message) -> None:
 @hooks.add("uwu", filters.regex(r"\b(?:uwu|owo|уву|ово)\b", flags=re.I))
 async def on_uwu(_: Client, message: Message) -> None:
     await message.reply_photo(UWU_MEME_PICTURE)
-
-
-@commands.add(["hookshere", "hooks_here"])
-async def check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
-    """List enabled hooks in the chat"""
-    enabled = await storage.list_enabled_hooks(message.chat.id)
-    return "Hooks in this chat: <code>" + "</code>, <code>".join(enabled) + "</code>"
