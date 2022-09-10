@@ -9,13 +9,13 @@ from PIL import Image
 from pyrogram import Client
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Content converters")
 
 
 @commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
-async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
+async def video_to_gif(client: Client, message: Message, __: CommandObject) -> str | None:
     """Converts a video to a mpeg4 gif"""
     msg = message.reply_to_message if message.reply_to_message else message
     video = msg.video
@@ -55,7 +55,7 @@ async def video_to_gif(client: Client, message: Message, __: str) -> str | None:
     usage="[reply] ['png'|'webp']",
     waiting_message="<i>Converting to sticker...</i>",
 )
-async def photo_to_sticker(client: Client, message: Message, args: str) -> None:
+async def photo_to_sticker(client: Client, message: Message, command: CommandObject) -> None:
     """Converts a photo to a sticker-ready png or webp
 
     'png' is assumed when no argument is specified."""
@@ -65,10 +65,10 @@ async def photo_to_sticker(client: Client, message: Message, args: str) -> None:
     im: Image.Image = Image.open(output_io)
     im.thumbnail((512, 512))
     output_io.seek(0)
-    fmt = args.lower() if args else "png"
+    fmt = command.args.lower() if command.args else "png"
     if fmt not in ("png", "webp"):
         raise ValueError(f"Unsupported format: {fmt}")
-    im.save(output_io, args or "png")
+    im.save(output_io, fmt)
     output_io.seek(0)
     output_io.name = f"sticker.{fmt}"
     match fmt:

@@ -12,13 +12,13 @@ from pyrogram.errors import BadRequest
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Messages")
 
 
 @commands.add(["delete", "delet", "del"], usage="<reply>")
-async def delete_this(_: Client, message: Message, __: str) -> None:
+async def delete_this(_: Client, message: Message, __: CommandObject) -> None:
     """Deletes replied message for everyone"""
     try:
         await message.reply_to_message.delete()
@@ -28,16 +28,17 @@ async def delete_this(_: Client, message: Message, __: str) -> None:
 
 
 @commands.add("dump", usage="[jq-query]")
-async def dump(_: Client, message: Message, args: str) -> str:
+async def dump(_: Client, message: Message, command: CommandObject) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
     obj = message.reply_to_message or message
-    result = jq.compile(f".{args}").input(text=str(obj)).all()
+    attr = command.args
+    result = jq.compile(f".{attr}").input(text=str(obj)).all()
     text = json.dumps(
         result if len(result) > 1 else result[0],
         indent=2,
         ensure_ascii=False,
     )
-    return f"<b>Attribute</b> <code>{args}</code>\n\n<pre>{html.escape(text)}</pre>"
+    return f"<b>Attribute</b> <code>{attr}</code>\n\n<pre>{html.escape(text)}</pre>"
 
 
 @commands.add(
@@ -45,7 +46,7 @@ async def dump(_: Client, message: Message, args: str) -> str:
     usage="[reply]",
     waiting_message="<i>Searching for user's first message...</i>",
 )
-async def user_first_message(client: Client, message: Message, _: str) -> str | None:
+async def user_first_message(client: Client, message: Message, _: CommandObject) -> str | None:
     """Replies to user's very first message in the chat"""
     if (user := (message.reply_to_message or message).from_user) is None:
         return "Cannot search for first message from channel"

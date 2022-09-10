@@ -7,7 +7,7 @@ from d20 import SimpleStringifier
 from pyrogram import Client
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Dice")
 
@@ -43,8 +43,8 @@ class _HTMLDiceStringifier(SimpleStringifier):
 
 
 @commands.add(["roll", "dice"], usage="<dice-spec>")
-async def dice(_: Client, __: Message, args: str) -> str:
+async def dice(_: Client, __: Message, command: CommandObject) -> str:
     """Rolls dice according to d20.roll syntax
 
     More: https://github.com/avrae/d20#dice-syntax."""
-    return f"🎲 {d20.roll(args, stringifier=_HTMLDiceStringifier())}"
+    return f"🎲 {d20.roll(command.args, stringifier=_HTMLDiceStringifier())}"

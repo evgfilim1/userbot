@@ -14,7 +14,7 @@ from pyrogram.raw import base, functions, types
 from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
 from ..utils import parse_delta
 
@@ -32,9 +32,9 @@ commands = CommandsModule("Chat administration")
 
 
 @commands.add("chatban", usage="<reply 'reply'|id> [time|'0'|'forever'] [reason...]")
-async def chat_ban(client: Client, message: Message, args: str) -> str:
+async def chat_ban(client: Client, message: Message, command: CommandObject) -> str:
     """Bans a user in a chat"""
-    args_list = args.split(" ")
+    args_list = command.args.split(" ")
     if args_list[0] == "reply":
         user_id = message.reply_to_message.from_user.id
     else:
@@ -58,17 +58,18 @@ async def chat_ban(client: Client, message: Message, args: str) -> str:
 
 
 @commands.add("chatunban", usage="<id>")
-async def chat_unban(client: Client, message: Message, args: str) -> str:
+async def chat_unban(client: Client, message: Message, command: CommandObject) -> str:
     """Unbans a user in a chat"""
-    user_id = int(args)
+    user_id = int(command.args)
     await client.unban_chat_member(message.chat.id, user_id)
     user = await client.get_chat(user_id)
     return f"<a href='tg://user?id={user_id}'>{user.first_name}</a> <b>unbanned</b> in this chat"
 
 
 @commands.add("promote", usage="<admin-title>")
-async def promote(client: Client, message: Message, args: str) -> str:
+async def promote(client: Client, message: Message, command: CommandObject) -> str:
     """Promotes a user to an admin without any rights but with title"""
+    title = command.args
     await client.invoke(
         functions.channels.EditAdmin(
             channel=await client.resolve_peer(message.chat.id),
@@ -84,10 +85,10 @@ async def promote(client: Client, message: Message, args: str) -> str:
                 manage_call=False,
                 other=True,
             ),
-            rank=args,
+            rank=title,
         )
     )
-    return f"Должность в чате установлена на <i>{html.escape(args)}</i>"
+    return f"Должность в чате установлена на <i>{html.escape(title)}</i>"
 
 
 async def react2ban_raw_reaction_handler(
@@ -133,7 +134,7 @@ async def react2ban_raw_reaction_handler(
 
 
 @commands.add("react2ban", handle_edits=False)
-async def react2ban(client: Client, message: Message, _: str, *, storage: Storage) -> str:
+async def react2ban(client: Client, message: Message, _: CommandObject, *, storage: Storage) -> str:
     """Bans a user whoever reacted to the message"""
     if message.chat.id > 0:
         return "❌ Not a group chat"
@@ -145,7 +146,7 @@ async def react2ban(client: Client, message: Message, _: str, *, storage: Storag
 
 
 @commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
-async def no_react2ban(_: Client, message: Message, __: str, *, storage: Storage) -> str:
+async def no_react2ban(_: Client, message: Message, __: CommandObject, *, storage: Storage) -> str:
     """Stops react2ban on the message"""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
     if message.chat.id > 0:

@@ -8,7 +8,7 @@ from PIL import Image
 from pyrogram import Client
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Colors")
 
@@ -24,16 +24,17 @@ def _create_filled_pic(col: str, size: tuple[int, int] = (100, 100)) -> BytesIO:
 
 
 @commands.add("color", usage="<color-spec>")
-async def color(client: Client, message: Message, args: str) -> None:
+async def color(client: Client, message: Message, command: CommandObject) -> None:
     """Sends a specified color sample
 
     <color-spec> can be a hex color code prefixed by #, or a color name."""
-    tmp = _create_filled_pic(args)
+    color_spec = command.args
+    tmp = _create_filled_pic(color_spec)
     reply = getattr(message.reply_to_message, "message_id", None)
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"Color {args}",
+        caption=f"Color {color_spec}",
         reply_to_message_id=reply,
         disable_notification=True,
     )
@@ -41,7 +42,7 @@ async def color(client: Client, message: Message, args: str) -> None:
 
 
 @commands.add("usercolor", usage="<reply>")
-async def user_color(client: Client, message: Message, _: str) -> None:
+async def user_color(client: Client, message: Message, _: CommandObject) -> None:
     """Sends a color sample of user's color as shown in clients"""
     colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
     c = f"#{colors[message.reply_to_message.from_user.id % 7]}"

@@ -9,7 +9,7 @@ from pyrogram.enums import MessageEntityType, ParseMode
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 from ..utils import edit_or_reply, get_text
 
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
@@ -42,19 +42,23 @@ class _ReplaceHelper:
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
-async def tr(_: Client, message: Message, args: str) -> None:
+async def tr(_: Client, message: Message, command: CommandObject) -> None:
     """Swaps keyboard layout from en to ru or vice versa
 
     If no argument is provided, the layout will be switched between en and ru."""
     # TODO (2021-12-01): detect ambiguous replacements via previous char
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)
-    if args == "en":
-        tr_abc = _ru2en_tr
-    elif args == "ru":
-        tr_abc = _en2ru_tr
-    else:
-        tr_abc = _enru2ruen_tr
+    target_layout = command.args
+    match target_layout:
+        case "en":
+            tr_abc = _ru2en_tr
+        case "ru":
+            tr_abc = _en2ru_tr
+        case "":
+            tr_abc = _enru2ruen_tr
+        case _:
+            raise ValueError(f"Unknown {target_layout=}")
     translated = text.translate(tr_abc)
     answer, delete = edit_or_reply(message)
     try:
@@ -66,10 +70,11 @@ async def tr(_: Client, message: Message, args: str) -> None:
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
-async def sed(_: Client, message: Message, args: str) -> str | None:
+async def sed(_: Client, message: Message, command: CommandObject) -> str | None:
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)
+    args = command.args
     try:
         find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
     except ValueError as e:
@@ -113,7 +118,7 @@ async def sed(_: Client, message: Message, args: str) -> str | None:
 
 
 @commands.add("caps", usage="<reply>")
-async def caps(_: Client, message: Message, __: str) -> None:
+async def caps(_: Client, message: Message, __: CommandObject) -> None:
     """Toggles capslock on the message"""
     text = get_text(message.reply_to_message)
     answer, delete = edit_or_reply(message)

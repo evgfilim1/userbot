@@ -9,25 +9,26 @@ from pyrogram.errors import MsgIdInvalid, ReactionEmpty, ReactionInvalid
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Reactions")
 
 
 @commands.add("r", usage="<reply> [emoji]")
-async def put_reaction(_: Client, message: Message, args: str) -> str | None:
+async def put_reaction(_: Client, message: Message, command: CommandObject) -> str | None:
     """Reacts to a message with a specified emoji or removes any reaction"""
+    reaction = command.args
     try:
-        await message.reply_to_message.react(args)
+        await message.reply_to_message.react(reaction)
     except ReactionInvalid:
-        return args
+        return reaction
     except ReactionEmpty:
         pass  # ignore
     await message.delete()
 
 
 @commands.add("rs", usage="<reply>")
-async def get_reactions(client: Client, message: Message, __: str) -> str:
+async def get_reactions(client: Client, message: Message, __: CommandObject) -> str:
     """Gets message reactions with users who reacted to it"""
     chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
@@ -58,7 +59,7 @@ async def get_reactions(client: Client, message: Message, __: str) -> str:
 
 
 @commands.add("rr", usage="<reply>")
-async def put_random_reaction(client: Client, message: Message, _: str) -> None:
+async def put_random_reaction(client: Client, message: Message, _: CommandObject) -> None:
     """Reacts to a message with a random available emoji"""
     chat = await client.get_chat(message.chat.id)
     await message.reply_to_message.react(random.choice(chat.available_reactions))

@@ -10,7 +10,7 @@ from pyrogram import Client
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 _CHUNK_SIZE = 1048576 * 4  # 4 MiB
 
@@ -61,7 +61,13 @@ async def _downloader(client: Client, message: Message, filename: str, data_dir:
     usage="[reply] [filename]",
     waiting_message="<i>Downloading file(s)...</i>",
 )
-async def download(client: Client, message: Message, args: str, *, data_dir: Path) -> str:
+async def download(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    *,
+    data_dir: Path,
+) -> str:
     """Downloads a file or files"""
     msg = message.reply_to_message if message.reply_to_message else message
     if msg.media_group_id:
@@ -72,7 +78,12 @@ async def download(client: Client, message: Message, args: str, *, data_dir: Pat
     t = ""
     for m in all_messages:
         try:
-            t += await _downloader(client, m, args if len(all_messages) == 1 else "", data_dir)
+            t += await _downloader(
+                client,
+                m,
+                command.args if len(all_messages) == 1 else "",
+                data_dir,
+            )
         except Exception as e:
             t += f"⚠ <code>{type(e).__name__}: {e}</code>"
         finally:

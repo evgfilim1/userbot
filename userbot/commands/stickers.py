@@ -10,7 +10,7 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import LONGCAT, PACK_ALIASES
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
 from ..utils import StickerInfo
 
@@ -18,7 +18,7 @@ commands = CommandsModule("Stickers")
 
 
 @commands.add("longcat")
-async def longcat(client: Client, message: Message, _: str) -> None:
+async def longcat(client: Client, message: Message, _: CommandObject) -> None:
     """Sends random longcat"""
     key = "black" if random.random() >= 0.5 else "white"
     head, body, tail = (
@@ -37,8 +37,15 @@ async def longcat(client: Client, message: Message, _: str) -> None:
     usage="<pack-shortlink|pack-alias|emoji>",
     waiting_message="<i>Picking random sticker...</i>",
 )
-async def random_sticker(client: Client, message: Message, args: str, *, storage: Storage) -> None:
+async def random_sticker(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    *,
+    storage: Storage,
+) -> None:
     """Sends random sticker from specified pack or one matching specified emoji"""
+    args = command.args
     if not args.isalnum():
         # assume it's an emoji
         cache = await storage.get_sticker_cache()

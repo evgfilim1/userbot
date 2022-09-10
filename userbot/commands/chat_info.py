@@ -10,7 +10,7 @@ from pyrogram.enums import MessagesFilter
 from pyrogram.errors import BadRequest, PhotoCropSizeSmall
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Chat info")
 
@@ -67,11 +67,12 @@ async def set_random_chat_title(chat_id: int, client: Client) -> Message:
 
 
 @commands.add("rndinfo", usage="['photo'|'title']")
-async def random_chat_info(client: Client, message: Message, args: str) -> str:
+async def random_chat_info(client: Client, message: Message, command: CommandObject) -> str:
     """Sets random chat photo and/or title
 
     Sets both if no argument is given."""
     text = ""
+    args = command.args
     if args == "photo" or args == "":
         msg = await set_random_chat_photo(message.chat.id, client)
         text += f"🖼 <b>New chat avatar was set!</b> <a href='{msg.link}'>Source</a>\n\n"
@@ -84,7 +85,7 @@ async def random_chat_info(client: Client, message: Message, args: str) -> str:
 
 
 @commands.add("rndmsg")
-async def random_chat_message(client: Client, message: Message, _: str) -> str:
+async def random_chat_message(client: Client, message: Message, _: CommandObject) -> str:
     """Sends a random message from the chat"""
     msg = await get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
     return f"<a href='{msg.link}'>Random message (#{msg.id})</a>"

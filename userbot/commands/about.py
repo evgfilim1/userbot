@@ -7,13 +7,13 @@ from os import getenv
 from pyrogram import Client
 from pyrogram.types import Message
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("About")
 
 
 @commands.add("about")
-async def about(_: Client, __: Message, ___: str) -> str:
+async def about(_: Client, __: Message, ___: CommandObject) -> str:
     """Shows information about this userbot"""
     base_url = "https://github.com/evgfilim1/userbot"
     commit = getenv("GITHUB_SHA", None)

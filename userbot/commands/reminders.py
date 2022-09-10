@@ -9,7 +9,7 @@ from pyrogram.enums import ChatType, ParseMode
 from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
 
-from ..modules import CommandsModule
+from ..modules import CommandObject, CommandsModule
 from ..utils import parse_delta
 
 commands = CommandsModule("Reminders")
@@ -31,12 +31,12 @@ def _remind_common(message: Message, args_list: list[str]) -> datetime:
 
 
 @commands.add("remind", usage="[reply] <time> [message...]")
-async def remind(client: Client, message: Message, args: str) -> str:
+async def remind(client: Client, message: Message, command: CommandObject) -> str:
     """Sets a reminder in the chat
 
     `time` can be a time delta (e.g. "1y2w3d4h5m6s") or a time string (e.g. "12:30").
     Message will be scheduled via Telegram's message scheduling system."""
-    args_list = args.split(" ")
+    args_list = command.args.split(" ")
     if len(args_list) >= 2:
         text = " ".join(args_list[1:])
     else:
@@ -54,12 +54,12 @@ async def remind(client: Client, message: Message, args: str) -> str:
 
 
 @commands.add("remindme", usage="[reply] <time> [message...]")
-async def remind_me(client: Client, message: Message, args: str) -> str:
+async def remind_me(client: Client, message: Message, command: CommandObject) -> str:
     """Sets a reminder for myself
 
     `time` can be a time delta (e.g. "1y2w3d4h5m6s") or a time string (e.g. "12:30").
     Message will be scheduled via Telegram's message scheduling system."""
-    args_list = args.split(" ")
+    args_list = command.args.split(" ")
     if len(args_list) >= 2:
         text = " ".join(args_list[1:])
     else:

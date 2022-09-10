@@ -32,6 +32,17 @@ _DEFAULT_PREFIX = "." if is_prod() else ","
 nekobin = AsyncClient(base_url="https://nekobin.com/")
 
 
+@dataclass()
+class CommandObject:
+    prefix: str
+    command: str
+    args: str
+    match: re.Match[str] | None
+
+    def __str__(self) -> str:
+        return f"{self.prefix}{self.command} {self.args}"
+
+
 def _filter_kwargs(func: Callable[..., Any], kwargs: dict[str, Any]) -> dict[str, Any]:
     suitable_kwargs = {}
     sig = inspect.signature(func)
@@ -48,7 +59,7 @@ class CommandHandler(Protocol):
         self,
         client: Client,
         message: Message,
-        args: str,
+        command: CommandObject,
         **kwargs: Any,
     ) -> str | None:
         pass
@@ -71,12 +82,14 @@ class TransformHandler(Protocol):
         pass
 
 
+_CommandT = str | list[str] | re.Pattern[str]
+
 _log = logging.getLogger(__name__)
 
 
 @dataclass()
 class _CommandHandler:
-    command: str | list[str]
+    command: _CommandT
     prefix: str
     handler: CommandHandler
     handle_edits: bool
@@ -138,20 +151,21 @@ class _CommandHandler:
         await message.edit(f"⌚ {text}")
 
     async def __call__(self, client: Client, message: Message):
-        args = message.text.lstrip(self.prefix)
-        if not isinstance(self.command, str):
-            for cmd in self.command:
-                args = args.removeprefix(cmd)
+        command, _, args = message.text.partition(" ")
+        prefix, command = command[0], command[1:]
+        if isinstance(self.command, re.Pattern):
+            m = self.command.match(command)
         else:
-            args = args.removeprefix(self.command)
-        args = args.lstrip()
+            m = None
+        command_obj = CommandObject(prefix=prefix, command=command, args=args, match=m)
         waiting_task = asyncio.create_task(self._waiting_task(message))
         try:
             result: str | None = await asyncio.wait_for(
-                self.handler(client, message, args),
+                self.handler(client, message, command_obj),
                 timeout=self.timeout,
             )
         except asyncio.TimeoutError as e:
+            waiting_task.cancel()
             self._report_exception(message, e)  # just log the exception
             await message.edit(
                 f"<b>[‼] Command timed out after {self.timeout} seconds.</b>\n\n"
@@ -218,11 +232,25 @@ class _HookHandler:
     handler: Handler
     handle_edits: bool
 
-    async def add_handler(self, _: Client, message: Message, __: str, *, storage: Storage) -> None:
+    async def add_handler(
+        self,
+        _: Client,
+        message: Message,
+        __: CommandObject,
+        *,
+        storage: Storage,
+    ) -> None:
         await storage.enable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def del_handler(self, _: Client, message: Message, __: str, *, storage: Storage) -> None:
+    async def del_handler(
+        self,
+        _: Client,
+        message: Message,
+        __: CommandObject,
+        *,
+        storage: Storage,
+    ) -> None:
         await storage.disable_hook(self.name, message.chat.id)
         await message.delete()
 
@@ -275,7 +303,7 @@ class CommandsModule:
 
     def add(
         self,
-        command: str | list[str],
+        command: _CommandT,
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
@@ -306,7 +334,7 @@ class CommandsModule:
     def add_handler(
         self,
         handler: CommandHandler,
-        command: str | list[str],
+        command: _CommandT,
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
@@ -356,13 +384,21 @@ class CommandsModule:
             # Pass only suitable kwargs for the handler
             handler_kwargs = _filter_kwargs(handler.handler, kwargs)
             handler.handler = functools.partial(handler.handler, **handler_kwargs)
-            f = flt.me & ~flt.scheduled & flt.command(handler.command, handler.prefix)
+            if isinstance(handler.command, re.Pattern):
+                command_re = re.compile(
+                    f"^[{re.escape(handler.prefix)}]{handler.command.pattern}",
+                    flags=handler.command.flags,
+                )
+                f = flt.regex(command_re)
+            else:
+                f = flt.command(handler.command, prefixes=handler.prefix)
+            f &= flt.me & ~flt.scheduled
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
 
-    async def _auto_help_handler(self, _: Client, __: Message, args: str) -> str:
-        if args:
+    async def _auto_help_handler(self, _: Client, __: Message, command: CommandObject) -> str:
+        if args := command.args:
             for h in self._handlers:
                 if (isinstance(h.command, str) and h.command == args) or (
                     not isinstance(h.command, str) and args in h.command
@@ -469,14 +505,20 @@ class HooksModule:
         commands.add_submodule(cmds)
 
     @staticmethod
-    async def _check_hooks(_: Client, message: Message, __: str, *, storage: Storage) -> str:
+    async def _check_hooks(
+        _: Client,
+        message: Message,
+        __: CommandObject,
+        *,
+        storage: Storage,
+    ) -> str:
         """List enabled hooks in the chat"""
         hooks = ""
         async for hook in storage.list_enabled_hooks(message.chat.id):
             hooks += f"• <code>{hook}</code>\n"
         return f"Hooks in this chat:\n{hooks}"
 
-    async def _list_hooks(self, _: Client, __: Message, ___: str) -> str:
+    async def _list_hooks(self, _: Client, __: Message, ___: CommandObject) -> str:
         """List all available hooks"""
         hooks = ""
         for handler in self._handlers:
