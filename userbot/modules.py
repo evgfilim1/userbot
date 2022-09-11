@@ -277,10 +277,15 @@ class _ShortcutHandler:
 
 
 def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str:
-    if isinstance(handler.command, str):
-        commands = handler.command
-    else:
-        commands = "|".join(handler.command)
+    match handler.command:
+        case re.Pattern(pattern=pattern):
+            commands = pattern
+        case str(command):
+            commands = command
+        case list(commands):
+            commands = "|".join(commands)
+        case _:
+            raise AssertionError(f"Unexpected command type: {type(handler.command)}")
     usage = f" {handler.usage}".rstrip()
     doc = handler.doc or ""
     if not full:
@@ -291,9 +296,16 @@ def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str:
 
 def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
     category = handler.category or ""
-    if isinstance(handler.command, str):
-        return category, handler.command
-    return category, handler.command[0]
+    match handler.command:
+        case re.Pattern(pattern=pattern):
+            cmd = pattern
+        case str(command):
+            cmd = command
+        case list(commands):
+            cmd = commands[0]
+        case _:
+            raise AssertionError(f"Unexpected command type: {type(handler.command)}")
+    return category, cmd
 
 
 class CommandsModule:
@@ -400,9 +412,16 @@ class CommandsModule:
     async def _auto_help_handler(self, _: Client, __: Message, command: CommandObject) -> str:
         if args := command.args:
             for h in self._handlers:
-                if (isinstance(h.command, str) and h.command == args) or (
-                    not isinstance(h.command, str) and args in h.command
-                ):
+                match h.command:
+                    case re.Pattern() as pattern:
+                        matches = pattern.fullmatch(args) is not None
+                    case str(cmd):
+                        matches = cmd == args
+                    case list(cmds):
+                        matches = args in cmds
+                    case _:
+                        raise AssertionError(f"Unexpected command type: {type(h.command)}")
+                if matches:
                     usage = _format_handler_usage(h, full=True)
                     return f"<b>Help for {args}:</b>\n{html.escape(usage)}"
             else:
