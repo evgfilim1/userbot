@@ -6,7 +6,6 @@ __all__ = [
 ]
 
 import os
-import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -36,30 +35,6 @@ class Config:
     api_hash: str
     data_location: Path
     kwargs: dict[str, str]
-
-    @classmethod
-    def from_yaml(cls, yaml_file: str) -> Config:
-        warnings.warn(
-            "`Config.from_yaml` is deprecated, use `Config.from_env` instead",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-
-        try:
-            # noinspection PyPackageRequirements
-            from yaml import safe_load
-        except ImportError:
-            raise ImportError("Install 'PyYAML~=6.0.0' to load config from YAML file") from None
-
-        with open(yaml_file) as f:
-            config = safe_load(f)
-        return cls(
-            session=config["session"],
-            api_id=int(config["api_id"]),
-            api_hash=config["api_hash"],
-            data_location=Path(config.get("data_location", ".dockerdata/userbot")).resolve(),
-            kwargs=config.get("kwargs", {}),
-        )
 
     @classmethod
     def from_env(cls) -> Config:
