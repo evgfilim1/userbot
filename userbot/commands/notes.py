@@ -4,6 +4,7 @@ from pyrogram import Client
 from pyrogram.enums import ParseMode
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
 from ..utils import get_message_content
@@ -20,11 +21,12 @@ async def get_message(
     storage: Storage,
 ) -> str | None:
     """Sends saved message"""
+    warning_icon = Icons.WARNING.get_icon(client.me.is_premium)
     if not (key := command.args):
-        return "❗ No name specified"
+        return f"{warning_icon} No name specified"
     data = await storage.get_message(key)
     if data is None:
-        return f"❓ Message with key={key!r} not found"
+        return f"{warning_icon} Message with key={key!r} not found"
     content, type_ = json.loads(data[0]), data[1]
     if "caption" in content or "text" in content:
         content["parse_mode"] = ParseMode.HTML
@@ -38,7 +40,7 @@ async def get_message(
 
 @commands.add(["save", "note_add", "nadd"], usage="<reply> <name>")
 async def save_message(
-    _: Client,
+    client: Client,
     message: Message,
     command: CommandObject,
     *,
@@ -46,25 +48,26 @@ async def save_message(
 ) -> str:
     """Saves replied message for later use"""
     if not (key := command.args):
-        return f"❓ Please specify message key\n\nPossible fix: <code>{message.text} key</code>"
+        icon = Icons.QUESTION.get_icon(client.me.is_premium)
+        return f"{icon} Please specify message key\n\nPossible fix: <code>{message.text} key</code>"
     content, type_ = get_message_content(message.reply_to_message)
     await storage.save_message(key, json.dumps(content), type_)
-    return f"💾 Message <code>{key}</code> saved"
+    return f"{Icons.BOOKMARK.get_icon(client.me.is_premium)} Message <code>{key}</code> saved"
 
 
 @commands.add(["saved", "notes", "ns"])
-async def saved_messages(_: Client, __: Message, ___: CommandObject, *, storage: Storage) -> str:
+async def saved_messages(client: Client, _: Message, __: CommandObject, *, storage: Storage) -> str:
     """Shows all saved messages"""
     t = ""
     async for key in storage.saved_messages():
         _, type_ = await storage.get_message(key)
         t += f"• <code>{key}</code> ({type_})\n"
-    return f"<b>Saved messages:</b>\n{t}"
+    return f"{Icons.BOOKMARK.get_icon(client.me.is_premium)} <b>Saved messages:</b>\n{t}"
 
 
 @commands.add(["note_del", "ndel"], usage="<name>")
 async def delete_message(
-    _: Client,
+    client: Client,
     message: Message,
     command: CommandObject,
     *,
@@ -72,6 +75,7 @@ async def delete_message(
 ) -> str:
     """Deletes saved message"""
     if not (key := command.args):
-        return f"❓ Please specify message key\n\nPossible fix: <code>{message.text} key</code>"
+        icon = Icons.QUESTION.get_icon(client.me.is_premium)
+        return f"{icon} Please specify message key\n\nPossible fix: <code>{message.text} key</code>"
     await storage.delete_message(key)
-    return f"🗑 Message <code>{key}</code> deleted"
+    return f"{Icons.TRASH.get_icon(client.me.is_premium)} Message <code>{key}</code> deleted"

@@ -10,6 +10,7 @@ from pyrogram import Client
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 _CHUNK_SIZE = 1048576 * 4  # 4 MiB
@@ -53,7 +54,8 @@ async def _downloader(client: Client, message: Message, filename: str, data_dir:
     async with aiofiles.open(output, "wb") as f:
         while chunk := output_io.read(_CHUNK_SIZE):
             await f.write(chunk)
-    return f"The file has been downloaded to <code>{output}</code>"
+    icon = Icons.DOWNLOAD.get_icon(client.me.is_premium)
+    return f"{icon} The file has been downloaded to <code>{output}</code>"
 
 
 @commands.add(
@@ -85,7 +87,8 @@ async def download(
                 data_dir,
             )
         except Exception as e:
-            t += f"⚠ <code>{type(e).__name__}: {e}</code>"
+            icon = Icons.WARNING.get_icon(client.me.is_premium)
+            t += f"{icon} <code>{type(e).__name__}: {e}</code>"
         finally:
             t += "\n"
     return t

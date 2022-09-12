@@ -11,6 +11,7 @@ from typing import NoReturn
 from pyrogram import Client
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Tools")
@@ -58,10 +59,10 @@ async def test_error(_: Client, __: Message, ___: CommandObject) -> NoReturn:
 
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
-async def sleep(_: Client, __: Message, command: CommandObject) -> str:
+async def sleep(client: Client, _: Message, command: CommandObject) -> str:
     """Sleeps for a specified amount of time
 
     This is a test command to check the command waiting message and timeout."""
     sec = float(command.args)
     await asyncio.sleep(sec)
-    return f"Done sleeping for {sec} seconds"
+    return f"{Icons.WATCH.get_icon(client.me.is_premium)} Done sleeping for {sec} seconds"

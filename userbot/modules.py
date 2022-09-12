@@ -18,6 +18,7 @@ from pyrogram.errors import MessageNotModified, MessageTooLong, SlowmodeWait
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
+from .constants import Icons
 from .storage import Storage
 from .utils import is_prod
 
@@ -103,7 +104,7 @@ class _CommandHandler:
     def __post_init__(self):
         self.doc = re.sub(r"\n(\n?)\s+", r"\n\1", self.doc)  # Remove extra whitespaces
 
-    def _report_exception(self, message: Message, e: Exception) -> str:
+    def _report_exception(self, client: Client, message: Message, e: Exception) -> str:
         """Logs an exception to the logger and returns a message to be sent to the user."""
         _log.exception(
             "An error occurred during executing %r",
@@ -138,17 +139,18 @@ class _CommandHandler:
         if exc_value := str(e):
             tb += f": {exc_value}"
         tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
+        icon = Icons.STOP.get_icon(client.me.is_premium)
         return (
-            f"<b>[‼] An error occurred during executing command.</b>\n\n"
+            f"{icon} <b>An error occurred during executing command.</b>\n\n"
             f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
             f"<b>Traceback:</b>\n{tb}\n\n"
             f"<i>More info can be found in logs.</i>"
         )
 
-    async def _waiting_task(self, message: Message) -> None:
+    async def _waiting_task(self, client: Client, message: Message) -> None:
         await asyncio.sleep(0.75)
         text = self.waiting_message or f"<i>Executing</i> <code>{html.escape(message.text)}</code>"
-        await message.edit(f"⌚ {text}")
+        await message.edit(f"{Icons.WATCH.get_icon(client.me.is_premium)} {text}")
 
     async def __call__(self, client: Client, message: Message):
         command, _, args = message.text.partition(" ")
@@ -158,7 +160,7 @@ class _CommandHandler:
         else:
             m = None
         command_obj = CommandObject(prefix=prefix, command=command, args=args, match=m)
-        waiting_task = asyncio.create_task(self._waiting_task(message))
+        waiting_task = asyncio.create_task(self._waiting_task(client, message))
         try:
             result: str | None = await asyncio.wait_for(
                 self.handler(client, message, command_obj),
@@ -166,16 +168,17 @@ class _CommandHandler:
             )
         except asyncio.TimeoutError as e:
             waiting_task.cancel()
-            self._report_exception(message, e)  # just log the exception
+            self._report_exception(client, message, e)  # just log the exception
+            icon = Icons.STOP.get_icon(client.me.is_premium)
             await message.edit(
-                f"<b>[‼] Command timed out after {self.timeout} seconds.</b>\n\n"
+                f"{icon} <b>Command timed out after {self.timeout} seconds.</b>\n\n"
                 f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n\n"
                 f"<i>More info can be found in logs.</i>",
                 parse_mode=ParseMode.HTML,
             )
         except Exception as e:
             waiting_task.cancel()
-            text = self._report_exception(message, e)
+            text = self._report_exception(client, message, e)
             await message.edit(text, parse_mode=ParseMode.HTML)
         else:
             waiting_task.cancel()
@@ -184,8 +187,9 @@ class _CommandHandler:
             try:
                 await message.edit(result, parse_mode=ParseMode.HTML)
             except MessageTooLong as e:
+                icon = Icons.INFO.get_icon(client.me.is_premium)
                 text = (
-                    f"<b>[✅] Successfully executed.</b>\n\n"
+                    f"{icon} <b>Successfully executed.</b>\n\n"
                     f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
                     f"<b>Result:</b>"
                 )
@@ -202,7 +206,7 @@ class _CommandHandler:
                     except SlowmodeWait:
                         # Cannot send file, report `MessageTooLong` exception.
                         # It's ok to log entire exception chain here
-                        text = self._report_exception(message, e)
+                        text = self._report_exception(client, message, e)
                         await message.edit(text, parse_mode=ParseMode.HTML)
                     else:
                         await message.edit(f"{text} <i>See reply</i>", parse_mode=ParseMode.HTML)
@@ -213,15 +217,16 @@ class _CommandHandler:
                         disable_web_page_preview=True,
                     )
             except MessageNotModified as e:
-                self._report_exception(message, e)
+                self._report_exception(client, message, e)
                 if not is_prod():
+                    icon = Icons.WARNING.get_icon(client.me.is_premium)
                     await message.edit(
-                        f"{result}\n\n⚠ <i><b>MessageNotModified</b> was raised, check that there"
-                        f" is only one userbot instance is running</i>",
+                        f"{result}\n\n{icon} <i><b>MessageNotModified</b> was raised, check that"
+                        f" there is only one userbot instance is running</i>",
                         parse_mode=ParseMode.HTML,
                     )
             except Exception as e:
-                text = self._report_exception(message, e)
+                text = self._report_exception(client, message, e)
                 await message.edit(text, parse_mode=ParseMode.HTML)
 
 

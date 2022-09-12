@@ -8,6 +8,7 @@ from PIL import Image
 from pyrogram import Client
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Colors")
@@ -34,7 +35,7 @@ async def color(client: Client, message: Message, command: CommandObject) -> Non
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"Color {color_spec}",
+        caption=f"{Icons.COLOR.get_icon(client.me.is_premium)} Color {color_spec}",
         reply_to_message_id=reply,
         disable_notification=True,
     )
@@ -50,7 +51,7 @@ async def user_color(client: Client, message: Message, _: CommandObject) -> None
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"Your color is {c}",
+        caption=f"{Icons.COLOR.get_icon(client.me.is_premium)} Your color is {c}",
         reply_to_message_id=message.reply_to_message.id,
         disable_notification=True,
     )

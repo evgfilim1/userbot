@@ -9,6 +9,7 @@ from pyrogram.errors import MsgIdInvalid, ReactionEmpty, ReactionInvalid
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Reactions")
@@ -41,7 +42,8 @@ async def get_reactions(client: Client, message: Message, __: CommandObject) -> 
             )
         )
     except MsgIdInvalid:
-        return "<i>Message not found or has no reactions</i>"
+        icon = Icons.WARNING.get_icon(client.me.is_premium)
+        return f"{icon} <i>Message not found or has no reactions</i>"
     reactions = {}
     for r in messages.reactions:
         reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
@@ -55,7 +57,7 @@ async def get_reactions(client: Client, message: Message, __: CommandObject) -> 
             else:
                 peer_name = "Unknown user"
             t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a> (#<code>{peer_id}</code>)\n"
-    return t or "<i>No reactions here</i>"
+    return t or f"{Icons.WARNING.get_icon(client.me.is_premium)} <i>No reactions here</i>"
 
 
 @commands.add("rr", usage="<reply>")

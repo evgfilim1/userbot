@@ -1,4 +1,5 @@
 import re
+from enum import Enum
 
 TAP_STICKER = "CAADAgADVDIAAulVBRivj7VIBrE0GRYE"
 TAP_FLT = "AgADVDIAAulVBRg"
@@ -45,3 +46,40 @@ GH_PATTERN = re.compile(  # https://regex101.com/r/bvjYVf/1
     r"(?:#(?P<issue>\d+)|(?:@(?P<branch>[a-zA-Z0-9.\-_/]+))?(?::/(?:(?P<path>[a-zA-Z0-9.\-_/]+)"
     r"(?:#L?(?P<line1>\d+)(?:-L?(?P<line2>\d+))?)?)?)?)?)?"
 )
+
+
+class Icons(Enum):
+    # https://t.me/addemoji/IconsInTg
+    TRASH = (6050677771154231040, "🗑")
+    INFO = (6050744746874244036, "ℹ")
+    CROSS = (6041914500272098262, "🚫")
+    STOP = (5798760304108113223, "🚫")
+    PERSON_BLOCK = (6037623961087380601, "🚫")
+    PERSON_TICK = (5801094618833489205, "✅")
+    PICTURE = (6048727692793089927, "🖼")
+    PENCIL = (6039884277821213379, "✏")
+    COLOR = (6048474766463996499, "🎨")
+    BOOKMARK = (6041768050477239766, "⭐")
+    WARNING = (6037615384037690578, "❗")
+    QUESTION = (6037389971269094179, "❓")
+    DOWNLOAD = (6050713964843633615, "⬇")
+    WATCH = (5798396069406576367, "🕒")
+    NOTIFICATION = (6039513858366773821, "🔔")
+    # https://t.me/addemoji/uxtools
+    GITHUB = (6318902906900711458, "🌐")
+    # https://t.me/addemoji/MaterialIconsAlpha
+    GIT = (5469770984670108755, "💩")
+
+    def get_icon(self, is_premium: bool) -> str:
+        if is_premium:
+            return self.premium_icon
+        return self.icon
+
+    @property
+    def premium_icon(self) -> str:
+        custom_emoji_id, emoji = self.value[:2]
+        return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"
+
+    @property
+    def icon(self) -> str:
+        return self.value[1]
