@@ -2,6 +2,7 @@ __all__ = [
     "commands",
 ]
 
+import logging
 import random
 
 from pyrogram import Client
@@ -13,6 +14,7 @@ from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Reactions")
+_log = logging.getLogger(__name__)
 
 
 @commands.add("r", usage="<reply> [emoji]")
@@ -44,11 +46,29 @@ async def get_reactions(client: Client, message: Message, __: CommandObject) -> 
     except MsgIdInvalid:
         icon = Icons.WARNING.get_icon(client.me.is_premium)
         return f"{icon} <i>Message not found or has no reactions</i>"
-    reactions = {}
+    reactions: dict[int | str, set[int]] = {}
     for r in messages.reactions:
-        reactions.setdefault(r.reaction, set()).add(r.peer_id.user_id)
+        if isinstance(r.reaction, types.ReactionCustomEmoji):
+            reaction = r.reaction.document_id
+        elif isinstance(r.reaction, types.ReactionEmoji):
+            reaction = r.reaction.emoticon
+        else:
+            _log.warning(
+                "Empty reaction found! (msg_id=%r, chat_id=%r)",
+                message.reply_to_message.id,
+                message.chat.id,
+            )
+            continue
+        reactions.setdefault(reaction, set()).add(r.peer_id.user_id)
     for reaction, peers in reactions.items():
-        t += f"<code>{reaction}</code>: {len(peers)}\n"
+        if isinstance(reaction, int):
+            if client.me.is_premium:
+                reaction_str = f"<emoji id={reaction}>⁉</emoji>"
+            else:
+                reaction_str = f"Custom reaction #<code>{reaction}</code>"
+        else:
+            reaction_str = reaction
+        t += f"{reaction_str}: {len(peers)}\n"
         for peer_id in peers:
             for user in messages.users:
                 if user.id == peer_id:
