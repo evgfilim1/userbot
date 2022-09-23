@@ -83,14 +83,14 @@ class TransformHandler(Protocol):
         pass
 
 
-_CommandT = str | list[str] | re.Pattern[str]
+_CommandT = list[str] | re.Pattern[str]
 
 _log = logging.getLogger(__name__)
 
 
 @dataclass()
 class _CommandHandler:
-    command: _CommandT
+    commands: _CommandT
     prefix: str
     handler: CommandHandler
     handle_edits: bool
@@ -109,7 +109,7 @@ class _CommandHandler:
         _log.exception(
             "An error occurred during executing %r",
             message.text,
-            extra={"command": self.command},
+            extra={"command": self.commands},
         )
         last_own_frame: FrameSummary | None = None
         last_frame: FrameSummary | None = None
@@ -155,8 +155,8 @@ class _CommandHandler:
     async def __call__(self, client: Client, message: Message):
         command, _, args = message.text.partition(" ")
         prefix, command = command[0], command[1:]
-        if isinstance(self.command, re.Pattern):
-            m = self.command.match(command)
+        if isinstance(self.commands, re.Pattern):
+            m = self.commands.match(command)
         else:
             m = None
         command_obj = CommandObject(prefix=prefix, command=command, args=args, match=m)
@@ -282,15 +282,13 @@ class _ShortcutHandler:
 
 
 def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str:
-    match handler.command:
+    match handler.commands:
         case re.Pattern(pattern=pattern):
             commands = pattern
-        case str(command):
-            commands = command
         case list(commands):
             commands = "|".join(commands)
         case _:
-            raise AssertionError(f"Unexpected command type: {type(handler.command)}")
+            raise AssertionError(f"Unexpected command type: {type(handler.commands)}")
     usage = f" {handler.usage}".rstrip()
     doc = handler.doc or ""
     if not full:
@@ -301,15 +299,13 @@ def _format_handler_usage(handler: _CommandHandler, full: bool = False) -> str:
 
 def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
     category = handler.category or ""
-    match handler.command:
+    match handler.commands:
         case re.Pattern(pattern=pattern):
             cmd = pattern
-        case str(command):
-            cmd = command
         case list(commands):
             cmd = commands[0]
         case _:
-            raise AssertionError(f"Unexpected command type: {type(handler.command)}")
+            raise AssertionError(f"Unexpected command type: {type(handler.commands)}")
     return category, cmd
 
 
@@ -320,7 +316,7 @@ class CommandsModule:
 
     def add(
         self,
-        command: _CommandT,
+        command: str | _CommandT,
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
@@ -351,7 +347,7 @@ class CommandsModule:
     def add_handler(
         self,
         handler: CommandHandler,
-        command: _CommandT,
+        command: str | _CommandT,
         prefix: str = _DEFAULT_PREFIX,
         *,
         handle_edits: bool = True,
@@ -362,9 +358,11 @@ class CommandsModule:
         hidden: bool = False,
         timeout: int | None = _DEFAULT_TIMEOUT,
     ) -> None:
+        if isinstance(command, str):
+            command = [command]
         self._handlers.append(
             _CommandHandler(
-                command=command,
+                commands=command,
                 prefix=prefix,
                 handler=handler,
                 handle_edits=handle_edits,
@@ -401,14 +399,16 @@ class CommandsModule:
             # Pass only suitable kwargs for the handler
             handler_kwargs = _filter_kwargs(handler.handler, kwargs)
             handler.handler = functools.partial(handler.handler, **handler_kwargs)
-            if isinstance(handler.command, re.Pattern):
+            if isinstance(handler.commands, re.Pattern):
                 command_re = re.compile(
-                    f"^[{re.escape(handler.prefix)}]{handler.command.pattern}",
-                    flags=handler.command.flags,
+                    f"^[{re.escape(handler.prefix)}]{handler.commands.pattern}",
+                    flags=handler.commands.flags,
                 )
                 f = flt.regex(command_re)
+            elif isinstance(handler.commands, list):
+                f = flt.command(handler.commands, prefixes=handler.prefix)
             else:
-                f = flt.command(handler.command, prefixes=handler.prefix)
+                raise AssertionError(f"Unexpected command type: {type(handler.commands)}")
             f &= flt.me & ~flt.scheduled
             client.add_handler(MessageHandler(handler.__call__, f))
             if handler.handle_edits:
@@ -417,15 +417,13 @@ class CommandsModule:
     async def _auto_help_handler(self, _: Client, __: Message, command: CommandObject) -> str:
         if args := command.args:
             for h in self._handlers:
-                match h.command:
+                match h.commands:
                     case re.Pattern() as pattern:
                         matches = pattern.fullmatch(args) is not None
-                    case str(cmd):
-                        matches = cmd == args
                     case list(cmds):
                         matches = args in cmds
                     case _:
-                        raise AssertionError(f"Unexpected command type: {type(h.command)}")
+                        raise AssertionError(f"Unexpected command type: {type(h.commands)}")
                 if matches:
                     usage = _format_handler_usage(h, full=True)
                     return f"<b>Help for {args}:</b>\n{html.escape(usage)}"
