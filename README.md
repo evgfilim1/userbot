@@ -113,8 +113,8 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
 Shortcuts work only when sent by the user who runs userbot.
 
 - `yt:<id>` — Sends a YouTube video with the specified ID
-- `@<id>` — Mentions a user with the specified ID
-  - `@<id>:Some name@` — Mentions a user with the specified ID with a custom name
+- `@:<id>` — Mentions a user with the specified ID
+  - `@:<id>:<name>@` — Mentions a user with the specified ID with a custom name
 - `github:<username>` or `gh:<username>` — Sends a GitHub link to the specified user's profile
   - `github:<username>/<repo>` — ... to the specified repo, `<repo>` can be "`@`" which means "same
     as `<username>`"

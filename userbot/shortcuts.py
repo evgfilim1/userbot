@@ -27,7 +27,7 @@ async def youtube(match: re.Match[str]) -> str:
     return f"https://youtu.be/{match[1]}"
 
 
-@shortcuts.add(r"@(\d+)(?::(.+)@)?")
+@shortcuts.add(r"@:(\d+)(?::(.+)@)?")
 async def mention(match: re.Match[str]) -> str:
     """Mentions a user by ID"""
     return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
