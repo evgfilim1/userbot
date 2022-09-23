@@ -12,6 +12,7 @@ from pyrogram.errors import BadRequest
 from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Messages")
@@ -28,11 +29,20 @@ async def delete_this(_: Client, message: Message, __: CommandObject) -> None:
 
 
 @commands.add("dump", usage="[jq-query]")
-async def dump(_: Client, message: Message, command: CommandObject) -> str:
+async def dump(client: Client, message: Message, command: CommandObject) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
     obj = message.reply_to_message or message
     attr = command.args
-    result = jq.compile(f".{attr}").input(text=str(obj)).all()
+    try:
+        prog = jq.compile(attr)
+    except ValueError as e:
+        warning_icon = Icons.WARNING.get_icon(client.me.is_premium)
+        return (
+            f"{warning_icon} <b>Invalid jq query:</b> <code>{html.escape(attr)}</code>\n"
+            f"<b>Details:</b>\n<pre>{html.escape(str(e))}</pre>\n\n"
+            f"<b>Possible fix:</b> <code>{command.full_command} .{html.escape(attr)}</code>"
+        )
+    result = prog.input(text=str(obj)).all()
     text = json.dumps(
         result if len(result) > 1 else result[0],
         indent=2,

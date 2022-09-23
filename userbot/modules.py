@@ -40,7 +40,13 @@ class CommandObject:
     args: str
     match: re.Match[str] | None
 
+    @property
+    def full_command(self) -> str:
+        """Returns the full command without args"""
+        return f"{self.prefix}{self.command}"
+
     def __str__(self) -> str:
+        """Returns the full command with args"""
         return f"{self.prefix}{self.command} {self.args}"
 
 
