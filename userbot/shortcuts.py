@@ -102,3 +102,16 @@ async def get_note(match: re.Match[str], *, storage: Storage) -> str:
     if type_ == "text":
         return json.loads(content)["text"]
     return ""
+
+
+@shortcuts.add(r"xkcd:(\d+)")
+async def xkcd(match: re.Match[str]) -> str:
+    """Sends a link to XKCD comic"""
+    return f"<a href='https://xkcd.com/{match[1]}/'>xkcd #{match[1]}</a>"
+
+
+@shortcuts.add(r"pypi://(.+)/")
+async def pypi(match: re.Match[str]) -> str:
+    """Sends a link to a PyPI package"""
+    link = f"https://pypi.org/project/{match[1]}/"
+    return f"<b>PyPI:</b> <a href='{link}'>{match[1]}</a>"

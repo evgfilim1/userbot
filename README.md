@@ -131,6 +131,8 @@ Shortcuts work only when sent by the user who runs userbot.
 - `google://<query>/` — Sends a link to a Google search for the specified query
 - `:shrug:` — Sends a shrug kaomoji `¯\_(ツ)_/¯`
 - `n://<key>/` — Sends a saved note with the specified key
+- `xkcd:<number>` — Sends a link to XKCD comic with the specified number
+- `pypi://<package>/` — Sends a link to PyPI page of the specified package
 
 ## Installation and running
 
