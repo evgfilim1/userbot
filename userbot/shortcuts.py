@@ -1,8 +1,10 @@
+import json
 import re
 from dataclasses import dataclass
 from urllib.parse import quote_plus
 
 from .modules import ShortcutTransformersModule
+from .storage import Storage
 from .utils import GitHubClient
 
 shortcuts = ShortcutTransformersModule()
@@ -89,3 +91,14 @@ async def google(match: re.Match[str]) -> str:
 async def shrug(_: re.Match[str]) -> str:
     """Sends shrug kaomoji"""
     return "¯\\_(ツ)_/¯"
+
+
+async def get_note(match: re.Match[str], *, storage: Storage) -> str:
+    """Sends a saved note"""
+    note = await storage.get_message(match[1])
+    if note is None:
+        return ""
+    content, type_ = note
+    if type_ == "text":
+        return json.loads(content)["text"]
+    return ""
