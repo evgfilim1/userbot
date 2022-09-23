@@ -42,16 +42,17 @@ async def color(client: Client, message: Message, command: CommandObject) -> Non
     await message.delete()
 
 
-@commands.add("usercolor", usage="<reply>")
-async def user_color(client: Client, message: Message, _: CommandObject) -> None:
+@commands.add("usercolor", usage="<reply|id>")
+async def user_color(client: Client, message: Message, command: CommandObject) -> None:
     """Sends a color sample of user's color as shown in clients"""
+    user_id = int(command.args) if command.args else message.reply_to_message.from_user.id
     colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
-    c = f"#{colors[message.reply_to_message.from_user.id % 7]}"
+    c = f"#{colors[user_id % 7]}"
     tmp = _create_filled_pic(c)
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"{Icons.COLOR.get_icon(client.me.is_premium)} Your color is {c}",
+        caption=f"{Icons.COLOR.get_icon(client.me.is_premium)} Color of the user is {c}",
         reply_to_message_id=message.reply_to_message.id,
         disable_notification=True,
     )

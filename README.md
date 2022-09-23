@@ -38,7 +38,7 @@ Chat info:
 
 Colors:
 • color <color-spec> — Sends a specified color sample
-• usercolor <reply> — Sends a color sample of user's color as shown in clients
+• usercolor <reply|id> — Sends a color sample of user's color as shown in clients
 
 Content converters:
 • togif [reply] — Converts a video to a mpeg4 gif
