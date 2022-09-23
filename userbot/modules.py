@@ -395,6 +395,7 @@ class CommandsModule:
                 doc="Sends help for all commands or for a specific one",
                 category="About",
             )
+        all_commands = set()
         for handler in self._handlers:
             # Pass only suitable kwargs for the handler
             handler_kwargs = _filter_kwargs(handler.handler, kwargs)
@@ -406,6 +407,10 @@ class CommandsModule:
                 )
                 f = flt.regex(command_re)
             elif isinstance(handler.commands, list):
+                for c in (commands := handler.commands):
+                    if c in all_commands:
+                        raise ValueError(f"Duplicate command detected: {c}")
+                all_commands.update(commands)
                 f = flt.command(handler.commands, prefixes=handler.prefix)
             else:
                 raise AssertionError(f"Unexpected command type: {type(handler.commands)}")
