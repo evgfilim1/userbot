@@ -17,7 +17,7 @@ async def _main(storage: RedisStorage) -> None:
             if type_ == "message":
                 _log.debug("Migrating note %r", note)
                 await storage.save_message(note, content, "text")
-            elif type != "sticker":
+            elif type_ != "sticker":
                 _log.warning(
                     "File reference for note %r is probably expired, re-save the note again",
                     note,
