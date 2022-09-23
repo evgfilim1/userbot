@@ -4,7 +4,7 @@ import os
 from importlib import import_module
 from pathlib import Path
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 _log = logging.getLogger(__name__)
 
 
