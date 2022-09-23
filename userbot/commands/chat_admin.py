@@ -34,7 +34,11 @@ commands = CommandsModule("Chat administration")
 
 @commands.add("chatban", usage="<reply 'reply'|id> [time|'0'|'forever'] [reason...]")
 async def chat_ban(client: Client, message: Message, command: CommandObject) -> str:
-    """Bans a user in a chat"""
+    """Bans a user in a chat
+
+    First argument must be a user ID to be banned or literal "reply" to ban the replied user.
+    `time` can be a time delta (e.g. "1d3h"), "0" or "forever".
+    If no time is specified, the user will be banned forever."""
     args_list = command.args.split(" ")
     if args_list[0] == "reply":
         user_id = message.reply_to_message.from_user.id
