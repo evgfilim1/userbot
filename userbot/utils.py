@@ -12,7 +12,7 @@ from typing import Any, ClassVar, Protocol, Type, TypedDict, TypeVar
 
 from httpx import AsyncClient
 from pyrogram import Client, filters
-from pyrogram.enums import ParseMode
+from pyrogram.enums import MessageMediaType, ParseMode
 from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
 from typing_extensions import Self
@@ -166,17 +166,16 @@ class GitHubClient:
         return (await self._client.get(f"/repos/{owner}/{repo}")).json()["default_branch"]
 
 
-def get_message_content(message: Message) -> tuple[dict[str, str], str]:
+def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
     if (text := message.text) is not None:
         # TODO (2022-09-08): `disable_web_page_preview`
-        return {"text": text.html}, "message"
-    if message.media is not None:
-        media_type = message.media.value
-        try:
-            res = {media_type: getattr(message, media_type).file_id}
-        except AttributeError as e:
-            raise ValueError(f"Unknown media type {media_type}") from e
-        if (caption := message.caption) is not None:
-            res["caption"] = caption.html
-        return res, media_type
+        return {"text": text.html}, "text"
+    if (media := message.media) is not None:
+        # noinspection PyTypeChecker, PydanticTypeChecker
+        # https://youtrack.jetbrains.com/issue/PY-54503
+        media_type: str = media.value
+        if media == MessageMediaType.STICKER:
+            # `file_id` for stickers doesn't expire, so we can use it directly
+            return {media_type: message.sticker.file_id}, media_type
+        return {"from_chat_id": message.chat.id, "message_id": message.id}, media_type
     raise ValueError("Unsupported message type")

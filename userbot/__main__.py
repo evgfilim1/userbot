@@ -75,6 +75,7 @@ def main() -> None:
         kwargs={
             "storage": storage,
             "data_dir": config.data_location,
+            "notes_chat": config.media_notes_chat,
         },
     )
     shortcuts.register(client)

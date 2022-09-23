@@ -34,6 +34,7 @@ class Config:
     api_id: int
     api_hash: str
     data_location: Path
+    media_notes_chat: int | str
     kwargs: dict[str, str]
 
     @classmethod
@@ -44,6 +45,7 @@ class Config:
             api_id=int(env["API_ID"]),
             api_hash=env["API_HASH"],
             data_location=Path(env.get("DATA_LOCATION", ".dockerdata/userbot")).resolve(),
+            media_notes_chat=env.get("MEDIA_NOTES_CHAT", "self"),
             kwargs={
                 key.lower().removeprefix("pyrogram_"): value
                 for key, value in env.items()

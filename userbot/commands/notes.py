@@ -1,7 +1,8 @@
 import json
 
 from pyrogram import Client
-from pyrogram.enums import ParseMode
+from pyrogram.enums import MessageMediaType, ParseMode
+from pyrogram.errors import FileReferenceExpired
 from pyrogram.types import Message
 
 from ..constants import Icons
@@ -30,11 +31,27 @@ async def get_message(
     content, type_ = json.loads(data[0]), data[1]
     if "caption" in content or "text" in content:
         content["parse_mode"] = ParseMode.HTML
-    await getattr(client, f"send_{type_}")(
-        message.chat.id,
-        **content,
-        reply_to_message_id=message.reply_to_message_id,
-    )
+    if type_ == "text":
+        return content["text"]
+    if "message_id" not in content:
+        # Backwards compatibility + support for stickers
+        try:
+            await getattr(client, f"send_{type_}")(
+                message.chat.id,
+                **content,
+                reply_to_message_id=message.reply_to_message_id,
+            )
+        except FileReferenceExpired:
+            return (
+                f"{warning_icon} <b>File reference expired, please save the note again.</b>\n"
+                f"<i>Note key:</i> <code>{key}</code>"
+            )
+    else:
+        await client.copy_message(
+            message.chat.id,
+            **content,
+            reply_to_message_id=message.reply_to_message_id,
+        )
     await message.delete()
 
 
@@ -45,12 +62,18 @@ async def save_message(
     command: CommandObject,
     *,
     storage: Storage,
+    notes_chat: int | str,
 ) -> str:
     """Saves replied message for later use"""
     if not (key := command.args):
         icon = Icons.QUESTION.get_icon(client.me.is_premium)
         return f"{icon} Please specify message key\n\nPossible fix: <code>{message.text} key</code>"
-    content, type_ = get_message_content(message.reply_to_message)
+    target = message.reply_to_message
+    if target.media not in (MessageMediaType.STICKER, None):
+        # Stickers and text messages can be saved without problems, other media types should be
+        # saved in a chat to be able to send them later even when the original message is deleted.
+        target = await target.copy(notes_chat)
+    content, type_ = get_message_content(target)
     await storage.save_message(key, json.dumps(content), type_)
     return f"{Icons.BOOKMARK.get_icon(client.me.is_premium)} Message <code>{key}</code> saved"
 
