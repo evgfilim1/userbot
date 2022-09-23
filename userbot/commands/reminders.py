@@ -20,22 +20,29 @@ def _remind_common(message: Message, args_list: list[str]) -> datetime:
     """Common code for `remind` and `remindme`"""
     now = message.edit_date or message.date or datetime.now()
     if (delta := parse_delta(args_list[0])) is not None:
-        t = now + delta
+        result = now + delta
     else:
-        h, m = map(int, args_list[0].split(":", maxsplit=1))
-        parsed_time = time(h, m)
-        if parsed_time < now.time():
-            t = datetime.combine(now + timedelta(days=1), parsed_time)
+        dt = args_list[0].split("_", maxsplit=1)
+        if len(dt) == 2:
+            date = datetime.strptime(dt[0], "%Y-%m-%d").date()
+            time_string = dt[1]
         else:
-            t = datetime.combine(now, parsed_time)
-    return t
+            date = now.date()
+            time_string = dt[0]
+        h, m = map(int, time_string.split(":", maxsplit=1))
+        parsed_time = time(h, m)
+        if parsed_time < now.time() and len(dt) == 1:
+            result = datetime.combine(now + timedelta(days=1), parsed_time)
+        else:
+            result = datetime.combine(date, parsed_time)
+    return result
 
 
 @commands.add("remind", usage="[reply] <time> [message...]")
 async def remind(client: Client, message: Message, command: CommandObject) -> str:
     """Sets a reminder in the chat
 
-    `time` can be a time delta (e.g. "1y2w3d4h5m6s") or a time string (e.g. "12:30").
+    `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
     Message will be scheduled via Telegram's message scheduling system."""
     args_list = command.args.split(" ")
     reminder_icon = Icons.NOTIFICATION.get_icon(client.me.is_premium)
@@ -59,7 +66,7 @@ async def remind(client: Client, message: Message, command: CommandObject) -> st
 async def remind_me(client: Client, message: Message, command: CommandObject) -> str:
     """Sets a reminder for myself
 
-    `time` can be a time delta (e.g. "1y2w3d4h5m6s") or a time string (e.g. "12:30").
+    `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
     Message will be scheduled via Telegram's message scheduling system."""
     args_list = command.args.split(" ")
     reminder_icon = Icons.NOTIFICATION.get_icon(client.me.is_premium)
