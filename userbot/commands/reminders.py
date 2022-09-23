@@ -78,4 +78,4 @@ async def remind_me(client: Client, message: Message, command: CommandObject) ->
         schedule_date=t,
     )
     t = t.astimezone()
-    return f"{reminder_icon} Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+    return f"{reminder_icon} Reminder for myself was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
