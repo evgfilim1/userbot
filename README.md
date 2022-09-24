@@ -26,7 +26,7 @@ About:
 • help [command] — Sends help for all commands or for a specific one
 
 Chat administration:
-• chatban <reply 'reply'|id> [time|'0'|'forever'] [reason...] — Bans a user in a chat
+• chatban <reply 'reply'|id> [timespec] [reason...] — Bans a user in a chat
 • chatunban <id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 • promote <admin-title> — Promotes a user to an admin without any rights but with title

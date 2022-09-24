@@ -17,7 +17,7 @@ from pyrogram.utils import get_channel_id
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..utils import parse_delta
+from ..utils import parse_timespec
 
 _REACT2BAN_TEXT = (
     "<b>⚠⚠⚠ ЭТО НЕ ШУТКА ⚠⚠⚠</b>\n"
@@ -32,12 +32,13 @@ _REACT2BAN_TEXT = (
 commands = CommandsModule("Chat administration")
 
 
-@commands.add("chatban", usage="<reply 'reply'|id> [time|'0'|'forever'] [reason...]")
+@commands.add("chatban", usage="<reply 'reply'|id> [timespec] [reason...]")
 async def chat_ban(client: Client, message: Message, command: CommandObject) -> str:
     """Bans a user in a chat
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user.
-    `time` can be a time delta (e.g. "1d3h"), "0" or "forever".
+    `timespec` can be a time delta (e.g. "1d3h"), a time string like "12:30" or "2022-12-31_23:59"),
+    literal "0" or literal "forever" (for a permanent ban).
     If no time is specified, the user will be banned forever."""
     args_list = command.args.split(" ")
     if args_list[0] == "reply":
@@ -46,11 +47,9 @@ async def chat_ban(client: Client, message: Message, command: CommandObject) -> 
         user_id = int(args_list[0])
     now = message.edit_date or message.date or datetime.now()
     if len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever":
-        delta = None
-        t = datetime.fromtimestamp(0)
+        t = None
     else:
-        delta = parse_delta(args_list[1])
-        t = now + delta
+        t = parse_timespec(now, args_list[1])
     reason = " ".join(args_list[2:])
     await client.ban_chat_member(message.chat.id, user_id, t)
     user = await client.get_chat(user_id)
@@ -58,8 +57,9 @@ async def chat_ban(client: Client, message: Message, command: CommandObject) -> 
     icon = Icons.PERSON_BLOCK.get_icon(client.me.is_premium)
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
     text = f"{icon} {user_link} <b>banned</b> in this chat"
-    if delta:
-        text += f" for <i>{args_list[1]}</i>."
+    if t:
+        text += f" until <i>{t.astimezone():%Y-%m-%d %H:%M:%S %Z}</i>"
+    text += "."
     if reason:
         text += f"\n<b>Reason:</b> {reason}"
     return text
