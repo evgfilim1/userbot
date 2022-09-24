@@ -20,10 +20,6 @@ from ..storage import Storage
 from ..utils import parse_timespec
 
 _REACT2BAN_TEXT = (
-    "<b>⚠⚠⚠ ЭТО НЕ ШУТКА ⚠⚠⚠</b>\n"
-    "На этом сообщении включена защита от реакций. Любой, кто поставит сюда реакцию, будет"
-    " <b>забанен</b> в чате на полгода.\n"
-    "\n"
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
     "This message is protected from reactions. Anyone who puts a reaction here will be"
     " <b>banned</b> in the chat for half a year.\n"
@@ -100,7 +96,7 @@ async def promote(client: Client, message: Message, command: CommandObject) -> s
         )
     )
     icon = Icons.PENCIL.get_icon(client.me.is_premium)
-    return f"{icon} Должность в чате установлена на <i>{html.escape(title)}</i>"
+    return f"{icon} Chat title was set to <i>{html.escape(title)}</i>"
 
 
 async def react2ban_raw_reaction_handler(
