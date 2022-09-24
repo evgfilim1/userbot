@@ -1,12 +1,25 @@
 from __future__ import annotations
 
+__all__ = [
+    "edit_or_reply",
+    "fetch_stickers",
+    "get_message_content",
+    "get_text",
+    "GitHubClient",
+    "is_prod",
+    "parse_timespec",
+    "sticker",
+    "StickerInfo",
+    "Unset",
+]
+
 import functools
 import html
 import os
 import re
 from base64 import b64encode
 from collections import defaultdict
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from types import TracebackType
 from typing import Any, ClassVar, Protocol, Type, TypedDict, TypeVar
 
@@ -91,6 +104,31 @@ def parse_delta(delta: str) -> timedelta | None:
     if total_sec > 0:
         return timedelta(seconds=total_sec)
     return None
+
+
+def parse_timespec(now: datetime, timespec: str) -> datetime:
+    """Parse a time specification and return target datetime.
+
+    The time specification is a string of the form:
+    – HH:MM
+    – YYYY-MM-DD_HH:MM
+    – N[smhdwy]
+    – N[smhdwy]N[smhdwy]...
+    """
+    if (delta := parse_delta(timespec)) is not None:
+        return now + delta
+    dt = timespec.split("_", maxsplit=1)
+    if len(dt) == 2:  # date and time
+        date = datetime.strptime(dt[0], "%Y-%m-%d").date()
+        time_string = dt[1]
+    else:  # only time
+        date = now.date()
+        time_string = dt[0]
+    h, m = map(int, time_string.split(":", maxsplit=1))
+    parsed_time = time(h, m)
+    if parsed_time < now.time() and len(dt) == 1:
+        return datetime.combine(now + timedelta(days=1), parsed_time)
+    return datetime.combine(date, parsed_time)
 
 
 class Unset:

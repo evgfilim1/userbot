@@ -2,7 +2,7 @@ __all__ = [
     "commands",
 ]
 
-from datetime import datetime, time, timedelta
+from datetime import datetime
 
 from pyrogram import Client
 from pyrogram.enums import ChatType, ParseMode
@@ -11,31 +11,9 @@ from pyrogram.utils import get_channel_id
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
-from ..utils import parse_delta
+from ..utils import parse_timespec
 
 commands = CommandsModule("Reminders")
-
-
-def _remind_common(message: Message, args_list: list[str]) -> datetime:
-    """Common code for `remind` and `remindme`"""
-    now = message.edit_date or message.date or datetime.now()
-    if (delta := parse_delta(args_list[0])) is not None:
-        result = now + delta
-    else:
-        dt = args_list[0].split("_", maxsplit=1)
-        if len(dt) == 2:
-            date = datetime.strptime(dt[0], "%Y-%m-%d").date()
-            time_string = dt[1]
-        else:
-            date = now.date()
-            time_string = dt[0]
-        h, m = map(int, time_string.split(":", maxsplit=1))
-        parsed_time = time(h, m)
-        if parsed_time < now.time() and len(dt) == 1:
-            result = datetime.combine(now + timedelta(days=1), parsed_time)
-        else:
-            result = datetime.combine(date, parsed_time)
-    return result
 
 
 @commands.add("remind", usage="[reply] <time> [message...]")
@@ -50,7 +28,8 @@ async def remind(client: Client, message: Message, command: CommandObject) -> st
         text = " ".join(args_list[1:])
     else:
         text = f"{reminder_icon} <b>Reminder!</b>"
-    t = _remind_common(message, args_list)
+    now = message.edit_date or message.date or datetime.now()
+    t = parse_timespec(now, args_list[0])
     await client.send_message(
         message.chat.id,
         text,
@@ -77,7 +56,8 @@ async def remind_me(client: Client, message: Message, command: CommandObject) ->
     if message.reply_to_message_id is not None and message.chat.type == ChatType.SUPERGROUP:
         chat_id = get_channel_id(message.chat.id)
         text += f"\n\nhttps://t.me/c/{chat_id}/{message.reply_to_message_id}"
-    t = _remind_common(message, args_list)
+    now = message.edit_date or message.date or datetime.now()
+    t = parse_timespec(now, args_list[0])
     await client.send_message(
         "me",
         text,
