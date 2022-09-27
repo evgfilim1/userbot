@@ -26,7 +26,12 @@ async def _main(storage: RedisStorage) -> None:
 
 def main():
     redis_config = RedisConfig.from_env()
-    storage = RedisStorage(redis_config.host, redis_config.port, redis_config.db)
+    storage = RedisStorage(
+        redis_config.host,
+        redis_config.port,
+        redis_config.db,
+        redis_config.password,
+    )
 
     asyncio.run(_main(storage))
 

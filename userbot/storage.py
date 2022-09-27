@@ -110,11 +110,18 @@ class Storage(ABC):
 
 
 class RedisStorage(Storage):
-    def __init__(self, host: str, port: int, db: int) -> None:
+    def __init__(self, host: str, port: int, db: int, password: str | None = None) -> None:
         self._host = host
         self._port = port
         self._db = db
-        self._pool: Redis = Redis(host=host, port=port, db=db, decode_responses=True)
+        self._password = password
+        self._pool: Redis = Redis(
+            host=host,
+            port=port,
+            db=db,
+            password=password,
+            decode_responses=True,
+        )
         self._pubsub = self._pool.pubsub(ignore_subscribe_messages=True)
         super().__init__()
 

@@ -35,7 +35,12 @@ def main():
         _log.debug("Loading pickle storage from %s", pickle_path)
         old_storage_raw = pickle.load(f)
     redis_config = RedisConfig.from_env()
-    new_storage = RedisStorage(redis_config.host, redis_config.port, redis_config.db)
+    new_storage = RedisStorage(
+        redis_config.host,
+        redis_config.port,
+        redis_config.db,
+        redis_config.password,
+    )
 
     asyncio.run(_main(old_storage_raw, new_storage))
 

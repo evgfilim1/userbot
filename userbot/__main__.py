@@ -57,7 +57,12 @@ def main() -> None:
         **config.kwargs,
     )
     redis_config = RedisConfig.from_env()
-    storage = RedisStorage(redis_config.host, redis_config.port, redis_config.db)
+    storage = RedisStorage(
+        redis_config.host,
+        redis_config.port,
+        redis_config.db,
+        redis_config.password,
+    )
     github_client = GitHubClient(AsyncClient(http2=True))
 
     _log.debug("Registering handlers...")
