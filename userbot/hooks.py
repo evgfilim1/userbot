@@ -19,16 +19,14 @@ hooks = HooksModule()
 
 
 @hooks.add("emojis", filters.regex(r"\b((?:дак\b|кря(?:к.?|\b))|блин)", flags=re.I))
-async def on_duck(_: Client, message: Message) -> None:
+async def on_emojis(_: Client, message: Message) -> None:
     t = ""
-    for m in message.matches:
-        match m[1].lower():
-            case "дак" | "кря":
-                t += "🦆"
-            case x if x.startswith("кряк"):
-                t += "🦆"
-            case "блин":
-                t += "🥞"
+    for match in message.matches:
+        m = match[1].lower()
+        if m == "дак" or m.startswith("кря"):
+            t += "🦆"
+        elif m == "блин":
+            t += "🥞"
     await message.reply(t)
 
 
