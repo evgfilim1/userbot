@@ -77,6 +77,14 @@ _CommandT = list[str] | re.Pattern[str]
 _log = logging.getLogger(__name__)
 
 
+def _get_icon(icon: Icons, is_premium: bool) -> str:
+    from .constants import _default_str, _premium_str
+
+    if is_premium:
+        return _premium_str(icon)
+    return _default_str(icon)
+
+
 @dataclass()
 class _CommandHandler:
     commands: _CommandT
@@ -128,7 +136,7 @@ class _CommandHandler:
         if exc_value := str(e):
             tb += f": {exc_value}"
         tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
-        icon = Icons.STOP.get_icon(client.me.is_premium)
+        icon = _get_icon(Icons.STOP, client.me.is_premium)
         return (
             f"{icon} <b>An error occurred during executing command.</b>\n\n"
             f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
@@ -139,7 +147,7 @@ class _CommandHandler:
     async def _waiting_task(self, client: Client, message: Message) -> None:
         await asyncio.sleep(0.75)
         text = self.waiting_message or f"<i>Executing</i> <code>{html.escape(message.text)}</code>"
-        await message.edit(f"{Icons.WATCH.get_icon(client.me.is_premium)} {text}")
+        await message.edit(f"{_get_icon(Icons.WATCH, client.me.is_premium)} {text}")
 
     async def __call__(self, client: Client, message: Message):
         command, _, args = message.text.partition(" ")
@@ -160,7 +168,7 @@ class _CommandHandler:
         except asyncio.TimeoutError as e:
             waiting_task.cancel()
             self._report_exception(client, message, e)  # just log the exception
-            icon = Icons.STOP.get_icon(client.me.is_premium)
+            icon = _get_icon(Icons.STOP, client.me.is_premium)
             await message.edit(
                 f"{icon} <b>Command timed out after {self.timeout} seconds.</b>\n\n"
                 f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n\n"
@@ -178,7 +186,7 @@ class _CommandHandler:
             try:
                 await message.edit(result, parse_mode=ParseMode.HTML)
             except MessageTooLong as e:
-                icon = Icons.INFO.get_icon(client.me.is_premium)
+                icon = _get_icon(Icons.INFO, client.me.is_premium)
                 text = (
                     f"{icon} <b>Successfully executed.</b>\n\n"
                     f"<b>Command:</b> <code>{html.escape(message.text)}</code>\n"
@@ -210,7 +218,7 @@ class _CommandHandler:
             except MessageNotModified as e:
                 self._report_exception(client, message, e)
                 if not is_prod():
-                    icon = Icons.WARNING.get_icon(client.me.is_premium)
+                    icon = _get_icon(Icons.WARNING, client.me.is_premium)
                     await message.edit(
                         f"{result}\n\n{icon} <i><b>MessageNotModified</b> was raised, check that"
                         f" there is only one userbot instance is running</i>",
