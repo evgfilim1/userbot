@@ -58,7 +58,7 @@ class Storage(ABC):
 
     @abstractmethod
     async def list_enabled_hooks(self, chat_id: int) -> AsyncIterable[str]:
-        pass
+        yield
 
     @abstractmethod
     async def is_react2ban_enabled(self, chat_id: int, message_id: int) -> bool:
@@ -102,7 +102,7 @@ class Storage(ABC):
 
     @abstractmethod
     async def saved_messages(self) -> AsyncIterable[str]:
-        pass
+        yield
 
     @abstractmethod
     async def delete_message(self, key: str) -> None:
