@@ -108,6 +108,14 @@ class Storage(ABC):
     async def delete_message(self, key: str) -> None:
         _log.debug("%r message deleted", key)
 
+    @abstractmethod
+    async def get_chat_language(self, chat_id: int) -> str | None:
+        pass
+
+    @abstractmethod
+    async def set_chat_language(self, chat_id: int, language: str) -> None:
+        _log.debug("Language %r set for chat %d", language, chat_id)
+
 
 class RedisStorage(Storage):
     def __init__(self, host: str, port: int, db: int, password: str | None = None) -> None:
@@ -220,3 +228,10 @@ class RedisStorage(Storage):
     async def delete_message(self, key: str) -> None:
         await self._pool.delete(self._key("messages", key))
         await super().delete_message(key)
+
+    async def get_chat_language(self, chat_id: int) -> str | None:
+        return await self._pool.get(self._key("language", chat_id))
+
+    async def set_chat_language(self, chat_id: int, language: str) -> None:
+        await self._pool.set(self._key("language", chat_id), language)
+        await super().set_chat_language(chat_id, language)

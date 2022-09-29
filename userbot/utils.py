@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__ = [
+    "_",
     "edit_or_reply",
     "fetch_stickers",
     "get_message_content",
@@ -29,6 +30,8 @@ from pyrogram.enums import MessageMediaType, ParseMode
 from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
 from typing_extensions import Self
+
+from userbot.translation import Translation
 
 _T = TypeVar("_T")
 
@@ -75,14 +78,15 @@ def send_helper(fn: MessageMethod, prefix: str = "") -> AnswerMethod:
     return wrapper
 
 
-def edit_or_reply(message: Message) -> tuple[AnswerMethod, bool]:
+def edit_or_reply(message: Message, tr: Translation) -> tuple[AnswerMethod, bool]:
+    _ = tr.gettext
     reply_sender = get_sender(message.reply_to_message)
     sender = get_sender(message)
     if reply_sender.id == sender.id:  # it's me!
         if message.reply_to_message.caption is not None:
             return send_helper(message.reply_to_message.edit_caption), True
         return send_helper(message.reply_to_message.edit), True
-    return send_helper(message.edit, f"<b>Maybe you mean:</b>\n\n"), False
+    return send_helper(message.edit, _("<b>Maybe you mean:</b>\n\n")), False
 
 
 def parse_delta(delta: str) -> timedelta | None:
@@ -217,3 +221,8 @@ def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
             return {media_type: message.sticker.file_id}, media_type
         return {"from_chat_id": message.chat.id, "message_id": message.id}, media_type
     raise ValueError("Unsupported message type")
+
+
+def _(s: str) -> str:
+    """A no-op function that marks strings for translation."""
+    return s

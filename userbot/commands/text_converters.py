@@ -3,12 +3,15 @@ __all__ = [
 ]
 
 import re
+from typing import Type
 
 from pyrogram.enums import MessageEntityType, ParseMode
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 from ..utils import edit_or_reply, get_text
 
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
@@ -41,7 +44,7 @@ class _ReplaceHelper:
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
-async def tr(message: Message, command: CommandObject) -> None:
+async def sw(message: Message, command: CommandObject) -> None:
     """Swaps keyboard layout from en to ru or vice versa
 
     If no argument is provided, the layout will be switched between en and ru."""
@@ -69,19 +72,25 @@ async def tr(message: Message, command: CommandObject) -> None:
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
-async def sed(message: Message, command: CommandObject) -> str | None:
+async def sed(
+    message: Message,
+    command: CommandObject,
+    icons: Type[Icons],
+    tr: Translation,
+) -> str | None:
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
+    _ = tr.gettext
     text = get_text(message.reply_to_message)
     args = command.args
     try:
         find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
     except ValueError as e:
         if "not enough values to unpack" in str(e) and (args[-1] != "/" or args[-2:] == "\\/"):
-            return (
-                f"‼ Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
-                f"Possible fix: <code>{message.text}/</code>"
-            )
+            return _(
+                "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n"
+                "\nPossible fix: <code>{message_text}/</code>"
+            ).format(icon=icons.WARNING, message_text=message.text)
         raise
     find_re = find_re.replace("\\/", "/")
     replace_re = replace_re.replace("\\/", "/")
@@ -92,7 +101,7 @@ async def sed(message: Message, command: CommandObject) -> str | None:
     rh = _ReplaceHelper(replace_re)
     text = re.sub(find_re, rh, text, flags=flags)
     if not delete:
-        prefix = "Maybe you mean:\n\n"
+        prefix = _("Maybe you mean:\n\n")
         for entity in rh.entities:
             entity.offset += len(prefix)
         await message.edit(

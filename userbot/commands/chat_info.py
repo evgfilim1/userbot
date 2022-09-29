@@ -13,6 +13,7 @@ from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 commands = CommandsModule("Chat info")
 
@@ -74,25 +75,32 @@ async def random_chat_info(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Sets random chat photo and/or title
 
     Sets both if no argument is given."""
+    _ = tr.gettext
     text = ""
     args = command.args
     if args == "photo" or args == "":
         msg = await set_random_chat_photo(message.chat.id, client)
-        text += f"{icons.PICTURE} <b>New chat avatar was set!</b> <a href='{msg.link}'>Source</a>\n"
+        text += _(
+            "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
+        ).format(icon=icons.PICTURE, msg_link=msg.link)
         await sleep(0.1)
     if args == "title" or args == "":
         msg = await set_random_chat_title(message.chat.id, client)
-        text += f"{icons.PENCIL} <b>New chat title was set!</b> <a href='{msg.link}'>Source</a>"
+        text += _("{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>").format(
+            icon=icons.PENCIL, msg_link=msg.link
+        )
         await sleep(0.1)
     return text
 
 
 @commands.add("rndmsg")
-async def random_chat_message(client: Client, message: Message) -> str:
+async def random_chat_message(client: Client, message: Message, tr: Translation) -> str:
     """Sends a random message from the chat"""
+    _ = tr.gettext
     msg = await get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
-    return f"<a href='{msg.link}'>Random message (#{msg.id})</a>"
+    return _("<a href='{msg.link}'>Random message (#{msg.id})</a>").format(msg=msg)

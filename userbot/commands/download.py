@@ -13,6 +13,7 @@ from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 _CHUNK_SIZE = 1048576 * 4  # 4 MiB
 
@@ -25,7 +26,9 @@ async def _downloader(
     filename: str,
     data_dir: Path,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
+    _ = tr.gettext
     if message.media in (
         None,
         MessageMediaType.CONTACT,
@@ -36,7 +39,7 @@ async def _downloader(
         MessageMediaType.DICE,
         MessageMediaType.GAME,
     ):
-        return f"{icons.STOP} <b>No downloadable media found</b>"
+        return _("{icon} No downloadable media found").format(icon=icons.STOP)
     media_type = message.media.value
     media_dir = data_dir
     if not filename:
@@ -61,7 +64,10 @@ async def _downloader(
     async with aiofiles.open(output, "wb") as f:
         while chunk := output_io.read(_CHUNK_SIZE):
             await f.write(chunk)
-    return f"{icons.DOWNLOAD} The file has been downloaded to <code>{output}</code>"
+    return _("{icon} The file has been downloaded to <code>{output}</code>").format(
+        icon=icons.DOWNLOAD,
+        output=output,
+    )
 
 
 @commands.add(
@@ -75,6 +81,7 @@ async def download(
     command: CommandObject,
     data_dir: Path,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Downloads a file or files"""
     msg = message.reply_to_message if message.reply_to_message else message
@@ -92,6 +99,7 @@ async def download(
                 command.args if len(all_messages) == 1 else "",
                 data_dir,
                 icons,
+                tr,
             )
         except Exception as e:
             t += f"{icons.WARNING} <code>{type(e).__name__}: {e}</code>"

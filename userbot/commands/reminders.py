@@ -12,6 +12,7 @@ from pyrogram.utils import get_channel_id
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 from ..utils import parse_timespec
 
 commands = CommandsModule("Reminders")
@@ -23,16 +24,18 @@ async def remind(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Sets a reminder in the chat
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
     Message will be scheduled via Telegram's message scheduling system."""
+    _ = tr.gettext
     args_list = command.args.split(" ")
     if len(args_list) >= 2:
         text = " ".join(args_list[1:])
     else:
-        text = f"{icons.NOTIFICATION} <b>Reminder!</b>"
+        text = _("{icon} <b>Reminder!</b>").format(icon=icons.NOTIFICATION)
     now = message.edit_date or message.date or datetime.now()
     t = parse_timespec(now, args_list[0])
     await client.send_message(
@@ -43,7 +46,10 @@ async def remind(
         schedule_date=t,
     )
     t = t.astimezone()
-    return f"{icons.NOTIFICATION} Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+    return _("{icon} Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(
+        icon=icons.NOTIFICATION,
+        t=t,
+    )
 
 
 @commands.add("remindme", usage="[reply] <time> [message...]")
@@ -52,16 +58,18 @@ async def remind_me(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Sets a reminder for myself
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
     Message will be scheduled via Telegram's message scheduling system."""
+    _ = tr.gettext
     args_list = command.args.split(" ")
     if len(args_list) >= 2:
         text = " ".join(args_list[1:])
     else:
-        text = f"{icons.NOTIFICATION} <b>Reminder!</b>"
+        text = _("{icon} <b>Reminder!</b>").format(icon=icons.NOTIFICATION)
     if message.reply_to_message_id is not None and message.chat.type == ChatType.SUPERGROUP:
         chat_id = get_channel_id(message.chat.id)
         text += f"\n\nhttps://t.me/c/{chat_id}/{message.reply_to_message_id}"
@@ -74,4 +82,7 @@ async def remind_me(
         schedule_date=t,
     )
     t = t.astimezone()
-    return f"{icons.NOTIFICATION} Reminder for myself was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+    return _("{icon} Reminder for myself was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(
+        icon=icons.NOTIFICATION,
+        t=t,
+    )

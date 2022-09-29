@@ -13,6 +13,7 @@ from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 commands = CommandsModule("Reactions")
 _log = logging.getLogger(__name__)
@@ -32,8 +33,14 @@ async def put_reaction(message: Message, command: CommandObject) -> str | None:
 
 
 @commands.add("rs", usage="<reply>")
-async def get_reactions(client: Client, message: Message, icons: Type[Icons]) -> str:
+async def get_reactions(
+    client: Client,
+    message: Message,
+    icons: Type[Icons],
+    tr: Translation,
+) -> str:
     """Gets message reactions with users who reacted to it"""
+    _ = tr.gettext
     chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
     try:
@@ -45,7 +52,7 @@ async def get_reactions(client: Client, message: Message, icons: Type[Icons]) ->
             )
         )
     except MsgIdInvalid:
-        return f"{icons.WARNING} <i>Message not found or has no reactions</i>"
+        return _("{icon} <i>Message not found or has no reactions</i>").format(icon=icons.WARNING)
     reactions: dict[int | str, set[int]] = {}
     for r in messages.reactions:
         if isinstance(r.reaction, types.ReactionCustomEmoji):
@@ -65,19 +72,19 @@ async def get_reactions(client: Client, message: Message, icons: Type[Icons]) ->
             if client.me.is_premium:
                 reaction_str = f"<emoji id={reaction}>⁉</emoji>"
             else:
-                reaction_str = f"Custom reaction #<code>{reaction}</code>"
+                reaction_str = _("Custom reaction #<code>{r}</code>").format(r=reaction)
         else:
             reaction_str = reaction
         t += f"{reaction_str}: {len(peers)}\n"
         for peer_id in peers:
             for user in messages.users:
                 if user.id == peer_id:
-                    peer_name = user.first_name or "Deleted Account"
+                    peer_name = user.first_name or _("Deleted Account")
                     break
             else:
-                peer_name = "Unknown user"
+                peer_name = _("Unknown user")
             t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a> (#<code>{peer_id}</code>)\n"
-    return t or f"{icons.WARNING} <i>No reactions here</i>"
+    return t or _("{icon} <i>No reactions here</i>").format(icon=icons.WARNING)
 
 
 @commands.add("rr", usage="<reply>")

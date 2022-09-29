@@ -169,3 +169,7 @@ Shortcuts work only when sent by the user who runs userbot.
 6. To run migrations, run
    `docker-compose run --rm --entrypoint /usr/bin/env main python3.10 -m userbot.migrations`.
    Userbot must be stopped before running any migrations to prevent conflicts.
+
+## Contributing
+
+_TODO_

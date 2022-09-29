@@ -10,6 +10,7 @@ from .colors import commands as colors_commands
 from .content_converters import commands as content_converters_commands
 from .dice import commands as dice_commands
 from .download import commands as download_commands
+from .language import commands as language_commands
 from .messages import commands as messages_commands
 from .notes import commands as notes_commands
 from .reactions import commands as reactions_commands
@@ -28,6 +29,7 @@ for submodule in (
     content_converters_commands,
     dice_commands,
     download_commands,
+    language_commands,
     messages_commands,
     notes_commands,
     reactions_commands,

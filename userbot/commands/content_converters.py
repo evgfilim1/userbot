@@ -13,17 +13,24 @@ from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 commands = CommandsModule("Content converters")
 
 
 @commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
-async def video_to_gif(client: Client, message: Message, icons: Type[Icons]) -> str | None:
+async def video_to_gif(
+    client: Client,
+    message: Message,
+    icons: Type[Icons],
+    tr: Translation,
+) -> str | None:
     """Converts a video to a mpeg4 gif"""
+    _ = tr.gettext
     msg = message.reply_to_message if message.reply_to_message else message
     video = msg.video
     if not video:
-        return f"{icons.STOP} No video found"
+        return _("{icon} No video found").format(icon=icons.STOP)
     with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".mp4") as dst:
         await client.download_media(video.file_id, src.name)
         proc = await asyncio.subprocess.create_subprocess_exec(
@@ -43,7 +50,7 @@ async def video_to_gif(client: Client, message: Message, icons: Type[Icons]) -> 
             stdout=asyncio.subprocess.DEVNULL,
             stderr=asyncio.subprocess.PIPE,
         )
-        _, stderr = await proc.communicate()
+        __, stderr = await proc.communicate()
         if proc.returncode != 0:
             raise RuntimeError(
                 f"Process finished with error code {proc.returncode}\n{stderr.decode()}"

@@ -11,6 +11,7 @@ from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 commands = CommandsModule("Colors")
 
@@ -31,17 +32,19 @@ async def color(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> None:
     """Sends a specified color sample
 
     <color-spec> can be a hex color code prefixed by #, or a color name."""
+    _ = tr.gettext
     color_spec = command.args
     tmp = _create_filled_pic(color_spec)
     reply = getattr(message.reply_to_message, "message_id", None)
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"{icons.COLOR} Color {color_spec}",
+        caption=_("{icon} Color {color_spec}").format(icon=icons.COLOR, color_spec=color_spec),
         reply_to_message_id=reply,
         disable_notification=True,
     )
@@ -54,8 +57,10 @@ async def user_color(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> None:
     """Sends a color sample of user's color as shown in clients"""
+    _ = tr.gettext
     user_id = int(command.args) if command.args else message.reply_to_message.from_user.id
     colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
     c = f"#{colors[user_id % 7]}"
@@ -63,7 +68,7 @@ async def user_color(
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=f"{icons.COLOR} Color of the user is {c}",
+        caption=_("{icon} Color of the user is {c}").format(icon=icons.COLOR, c=c),
         reply_to_message_id=message.reply_to_message.id,
         disable_notification=True,
     )

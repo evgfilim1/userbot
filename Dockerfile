@@ -22,6 +22,7 @@ VOLUME /data
 COPY requirements.txt ./
 RUN python3.10 -m pip install --no-cache-dir -r requirements.txt
 
+COPY locales ./locales
 COPY userbot ./userbot
 
 USER userbot:userbot

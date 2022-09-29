@@ -6,12 +6,13 @@ import asyncio
 import html
 from calendar import TextCalendar
 from datetime import datetime
-from typing import NoReturn, Type
+from typing import Any, NoReturn, Type
 
 from pyrogram.types import Message
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
+from ..translation import Translation
 
 commands = CommandsModule("Tools")
 
@@ -24,8 +25,9 @@ async def mention_with_id(message: Message) -> str:
 
 
 @commands.add("calc", usage="<python-expr>")
-async def calc(command: CommandObject) -> str:
+async def calc(**kwargs: Any) -> str:
     """Evaluates Python expression"""
+    command: CommandObject = kwargs["command"]
     expr = command.args
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
 
@@ -58,10 +60,11 @@ async def test_error() -> NoReturn:
 
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
-async def sleep(command: CommandObject, icons: Type[Icons]) -> str:
+async def sleep(command: CommandObject, icons: Type[Icons], tr: Translation) -> str:
     """Sleeps for a specified amount of time
 
     This is a test command to check the command waiting message and timeout."""
+    _ = tr.gettext
     sec = float(command.args)
     await asyncio.sleep(sec)
-    return f"{icons.WATCH} Done sleeping for {sec} seconds"
+    return _("{icon} Done sleeping for {sec} seconds").format(icon=icons.WATCH, sec=sec)

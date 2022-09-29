@@ -18,9 +18,10 @@ from pyrogram.utils import get_channel_id
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..utils import parse_timespec
+from ..translation import Translation
+from ..utils import _, parse_timespec
 
-_REACT2BAN_TEXT = (
+_REACT2BAN_TEXT = _(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
     "This message is protected from reactions. Anyone who puts a reaction here will be"
     " <b>banned</b> in the chat for half a year.\n"
@@ -35,6 +36,7 @@ async def chat_ban(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Bans a user in a chat
 
@@ -42,6 +44,7 @@ async def chat_ban(
     `timespec` can be a time delta (e.g. "1d3h"), a time string like "12:30" or "2022-12-31_23:59"),
     literal "0" or literal "forever" (for a permanent ban).
     If no time is specified, the user will be banned forever."""
+    _ = tr.gettext
     args_list = command.args.split(" ")
     if args_list[0] == "reply":
         user_id = message.reply_to_message.from_user.id
@@ -57,12 +60,15 @@ async def chat_ban(
     user = await client.get_chat(user_id)
 
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    text = f"{icons.PERSON_BLOCK} {user_link} <b>banned</b> in this chat"
+    text = _("{icon} {user_link} <b>banned</b> in this chat").format(
+        icon=icons.PERSON_BLOCK,
+        user_link=user_link,
+    )
     if t:
-        text += f" until <i>{t.astimezone():%Y-%m-%d %H:%M:%S %Z}</i>"
+        text += _(" until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(t=t.astimezone())
     text += "."
     if reason:
-        text += f"\n<b>Reason:</b> {reason}"
+        text += _("\n<b>Reason:</b> {reason}").format(reason=html.escape(reason))
     return text
 
 
@@ -72,14 +78,19 @@ async def chat_unban(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Unbans a user in a chat"""
+    _ = tr.gettext
     user_id = int(command.args)
     await client.unban_chat_member(message.chat.id, user_id)
     user = await client.get_chat(user_id)
 
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    return f"{icons.PERSON_TICK} {user_link} <b>unbanned</b> in this chat"
+    return _("{icon} {user_link} <b>unbanned</b> in this chat").format(
+        icon=icons.PERSON_TICK,
+        user_link=user_link,
+    )
 
 
 @commands.add("promote", usage="<admin-title>")
@@ -88,8 +99,10 @@ async def promote(
     message: Message,
     command: CommandObject,
     icons: Type[Icons],
+    tr: Translation,
 ) -> str:
     """Promotes a user to an admin without any rights but with title"""
+    _ = tr.gettext
     title = command.args
     await client.invoke(
         functions.channels.EditAdmin(
@@ -109,7 +122,10 @@ async def promote(
             rank=title,
         )
     )
-    return f"{icons.PENCIL} Chat title was set to <i>{html.escape(title)}</i>"
+    return _("{icon} Chat title for the person was set to <i>{title}</i>").format(
+        icon=icons.PENCIL,
+        title=html.escape(title),
+    )
 
 
 async def react2ban_raw_reaction_handler(
@@ -155,26 +171,41 @@ async def react2ban_raw_reaction_handler(
 
 
 @commands.add("react2ban", handle_edits=False)
-async def react2ban(client: Client, message: Message, storage: Storage, icons: Type[Icons]) -> str:
+async def react2ban(
+    client: Client,
+    message: Message,
+    storage: Storage,
+    icons: Type[Icons],
+    tr: Translation,
+) -> str:
     """Bans a user whoever reacted to the message"""
+    _ = tr.gettext
     if message.chat.id > 0:
-        return f"{icons.STOP} Not a group chat"
+        return _("{icon} Not a group chat").format(icon=icons.STOP)
     self = await client.get_chat_member(message.chat.id, message.from_user.id)
     if self.privileges is None or not self.privileges.can_restrict_members:
-        return f"{icons.STOP} Cannot ban users in the chat"
+        return _("{icon} Cannot ban users in the chat").format(icon=icons.STOP)
     await storage.add_react2ban(message.chat.id, message.id)
-    return _REACT2BAN_TEXT
+    return _(_REACT2BAN_TEXT)
 
 
 @commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
-async def no_react2ban(message: Message, storage: Storage, icons: Type[Icons]) -> str:
+async def no_react2ban(
+    message: Message,
+    storage: Storage,
+    icons: Type[Icons],
+    tr: Translation,
+) -> str:
     """Stops react2ban on the message"""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
+    _ = tr.gettext
     if message.chat.id > 0:
-        return f"{icons.STOP} Not a group chat"
+        return _("{icon} Not a group chat").format(icon=icons.STOP)
     reply = message.reply_to_message
     await storage.remove_react2ban(message.chat.id, reply.id)
     await reply.edit(
-        f"{icons.INFO} Reacting to the message to ban a user has been disabled on the message"
+        _("{icon} Reacting to the message to ban a user has been disabled on the message").format(
+            icon=icons.INFO
+        )
     )
     await message.delete()
