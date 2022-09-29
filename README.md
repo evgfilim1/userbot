@@ -133,6 +133,8 @@ Shortcuts work only when sent by the user who runs userbot.
 - `n://<key>/` — Sends a saved note with the specified key
 - `xkcd:<number>` — Sends a link to XKCD comic with the specified number
 - `pypi://<package>/` — Sends a link to PyPI page of the specified package
+- `tg:<username>/<message-id>` or `tg:<username>#<message-id>` — Sends a link to the specified
+  message in the specified chat
 
 ## Installation and running
 

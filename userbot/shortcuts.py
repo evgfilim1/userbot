@@ -115,3 +115,9 @@ async def pypi(match: re.Match[str]) -> str:
     """Sends a link to a PyPI package"""
     link = f"https://pypi.org/project/{match[1]}/"
     return f"<b>PyPI:</b> <a href='{link}'>{match[1]}</a>"
+
+
+@shortcuts.add(r"tg:(\w{5,32})[/#](\d+)")
+async def telegram(match: re.Match[str]) -> str:
+    """Sends a link to a Telegram message"""
+    return f"https://t.me/{match[1]}/{match[2]}"
