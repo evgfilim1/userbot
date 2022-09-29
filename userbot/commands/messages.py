@@ -19,7 +19,7 @@ commands = CommandsModule("Messages")
 
 
 @commands.add(["delete", "delet", "del"], usage="<reply>")
-async def delete_this(_: Client, message: Message, __: CommandObject) -> None:
+async def delete_this(message: Message) -> None:
     """Deletes replied message for everyone"""
     try:
         await message.reply_to_message.delete()
@@ -56,7 +56,7 @@ async def dump(client: Client, message: Message, command: CommandObject) -> str:
     usage="[reply]",
     waiting_message="<i>Searching for user's first message...</i>",
 )
-async def user_first_message(client: Client, message: Message, _: CommandObject) -> str | None:
+async def user_first_message(client: Client, message: Message) -> str | None:
     """Replies to user's very first message in the chat"""
     if (user := (message.reply_to_message or message).from_user) is None:
         return "Cannot search for first message from channel"

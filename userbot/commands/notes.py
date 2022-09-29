@@ -79,7 +79,7 @@ async def save_message(
 
 
 @commands.add(["saved", "notes", "ns"])
-async def saved_messages(client: Client, _: Message, __: CommandObject, *, storage: Storage) -> str:
+async def saved_messages(client: Client, storage: Storage) -> str:
     """Shows all saved messages"""
     t = ""
     async for key in storage.saved_messages():

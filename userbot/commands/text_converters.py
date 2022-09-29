@@ -4,7 +4,6 @@ __all__ = [
 
 import re
 
-from pyrogram import Client
 from pyrogram.enums import MessageEntityType, ParseMode
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
@@ -42,7 +41,7 @@ class _ReplaceHelper:
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
-async def tr(_: Client, message: Message, command: CommandObject) -> None:
+async def tr(message: Message, command: CommandObject) -> None:
     """Swaps keyboard layout from en to ru or vice versa
 
     If no argument is provided, the layout will be switched between en and ru."""
@@ -70,7 +69,7 @@ async def tr(_: Client, message: Message, command: CommandObject) -> None:
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
-async def sed(_: Client, message: Message, command: CommandObject) -> str | None:
+async def sed(message: Message, command: CommandObject) -> str | None:
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
     text = get_text(message.reply_to_message)
@@ -118,7 +117,7 @@ async def sed(_: Client, message: Message, command: CommandObject) -> str | None
 
 
 @commands.add("caps", usage="<reply>")
-async def caps(_: Client, message: Message, __: CommandObject) -> None:
+async def caps(message: Message) -> None:
     """Toggles capslock on the message"""
     text = get_text(message.reply_to_message)
     answer, delete = edit_or_reply(message)

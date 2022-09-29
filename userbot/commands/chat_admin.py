@@ -142,7 +142,7 @@ async def react2ban_raw_reaction_handler(
 
 
 @commands.add("react2ban", handle_edits=False)
-async def react2ban(client: Client, message: Message, _: CommandObject, *, storage: Storage) -> str:
+async def react2ban(client: Client, message: Message, storage: Storage) -> str:
     """Bans a user whoever reacted to the message"""
     if message.chat.id > 0:
         return f"{Icons.STOP.get_icon(client.me.is_premium)} Not a group chat"
@@ -154,13 +154,7 @@ async def react2ban(client: Client, message: Message, _: CommandObject, *, stora
 
 
 @commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
-async def no_react2ban(
-    client: Client,
-    message: Message,
-    __: CommandObject,
-    *,
-    storage: Storage,
-) -> str:
+async def no_react2ban(client: Client, message: Message, storage: Storage) -> str:
     """Stops react2ban on the message"""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
     if message.chat.id > 0:

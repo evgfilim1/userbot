@@ -18,7 +18,7 @@ commands = CommandsModule("Stickers")
 
 
 @commands.add("longcat")
-async def longcat(client: Client, message: Message, _: CommandObject) -> None:
+async def longcat(client: Client, message: Message) -> None:
     """Sends random longcat"""
     key = "black" if random.random() >= 0.5 else "white"
     head, body, tail = (

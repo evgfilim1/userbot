@@ -5,16 +5,15 @@ __all__ = [
 from os import getenv
 
 from pyrogram import Client
-from pyrogram.types import Message
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
+from ..modules import CommandsModule
 
 commands = CommandsModule("About")
 
 
 @commands.add("about")
-async def about(client: Client, __: Message, ___: CommandObject) -> str:
+async def about(client: Client) -> str:
     """Shows information about this userbot"""
     base_url = "https://github.com/evgfilim1/userbot"
     commit = getenv("GITHUB_SHA", None)

@@ -18,21 +18,21 @@ commands = CommandsModule("Tools")
 
 
 @commands.add("id", usage="<reply>")
-async def mention_with_id(_: Client, message: Message, __: CommandObject) -> str:
+async def mention_with_id(message: Message) -> str:
     """Sends replied user's ID as link"""
     user = message.reply_to_message.from_user
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
 @commands.add("calc", usage="<python-expr>")
-async def calc(_: Client, __: Message, command: CommandObject) -> str:
+async def calc(command: CommandObject) -> str:
     """Evaluates Python expression"""
     expr = command.args
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
 
 
 @commands.add("cal", usage="[month] [year]")
-async def calendar(_: Client, message: Message, command: CommandObject) -> str:
+async def calendar(message: Message, command: CommandObject) -> str:
     """Sends a calendar for a specified month and year
 
     If no arguments are given, the current month and year are used."""
@@ -51,7 +51,7 @@ async def calendar(_: Client, message: Message, command: CommandObject) -> str:
 
 
 @commands.add("testerror", hidden=True)
-async def test_error(_: Client, __: Message, ___: CommandObject) -> NoReturn:
+async def test_error() -> NoReturn:
     """Always throws an error
 
     This is a test command to see if the error handler works."""
@@ -59,7 +59,7 @@ async def test_error(_: Client, __: Message, ___: CommandObject) -> NoReturn:
 
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
-async def sleep(client: Client, _: Message, command: CommandObject) -> str:
+async def sleep(client: Client, command: CommandObject) -> str:
     """Sleeps for a specified amount of time
 
     This is a test command to check the command waiting message and timeout."""

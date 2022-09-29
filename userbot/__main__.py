@@ -13,6 +13,7 @@ from userbot.config import Config, RedisConfig
 from userbot.constants import GH_PATTERN
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
+from userbot.middlewares import KwargsMiddleware
 from userbot.shortcuts import get_note, github, shortcuts
 from userbot.storage import RedisStorage, Storage
 from userbot.utils import GitHubClient, fetch_stickers, is_prod
@@ -72,18 +73,19 @@ def main() -> None:
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,
     )
+    commands.add_middleware(
+        KwargsMiddleware(
+            {
+                "storage": storage,
+                "data_dir": config.data_location,
+                "notes_chat": config.media_notes_chat,
+            }
+        )
+    )
 
     # `HooksModule` must be registered before `CommandsModule` because it adds some commands
     hooks.register(client, storage, commands)
-    commands.register(
-        client,
-        with_help=True,
-        kwargs={
-            "storage": storage,
-            "data_dir": config.data_location,
-            "notes_chat": config.media_notes_chat,
-        },
-    )
+    commands.register(client, with_help=True)
     shortcuts.register(client)
 
     job_manager = AsyncJobManager()

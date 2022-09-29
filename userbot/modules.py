@@ -19,6 +19,8 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
 from .constants import Icons
+from .middleware_manager import Handler as MiddlewareHandler
+from .middleware_manager import Middleware, MiddlewareManager
 from .storage import Storage
 from .utils import is_prod
 
@@ -50,26 +52,7 @@ class CommandObject:
         return f"{self.prefix}{self.command} {self.args}"
 
 
-def _filter_kwargs(func: Callable[..., Any], kwargs: dict[str, Any]) -> dict[str, Any]:
-    suitable_kwargs = {}
-    sig = inspect.signature(func)
-    for name, param in sig.parameters.items():
-        if param.kind == inspect.Parameter.VAR_KEYWORD:
-            suitable_kwargs = kwargs  # pass all kwargs
-        if name in kwargs:
-            suitable_kwargs[name] = kwargs[name]
-    return suitable_kwargs
-
-
-class CommandHandler(Protocol):
-    async def __call__(
-        self,
-        client: Client,
-        message: Message,
-        command: CommandObject,
-        **kwargs: Any,
-    ) -> str | None:
-        pass
+CommandHandler = Callable[..., Awaitable[str | None]]
 
 
 class Handler(Protocol):
@@ -98,7 +81,7 @@ _log = logging.getLogger(__name__)
 class _CommandHandler:
     commands: _CommandT
     prefix: str
-    handler: CommandHandler
+    handler: MiddlewareHandler[str | None]
     handle_edits: bool
     usage: str
     doc: str | None
@@ -166,12 +149,14 @@ class _CommandHandler:
         else:
             m = None
         command_obj = CommandObject(prefix=prefix, command=command, args=args, match=m)
+        data = {
+            "client": client,
+            "message": message,
+            "command": command_obj,
+        }
         waiting_task = asyncio.create_task(self._waiting_task(client, message))
         try:
-            result: str | None = await asyncio.wait_for(
-                self.handler(client, message, command_obj),
-                timeout=self.timeout,
-            )
+            result: str | None = await asyncio.wait_for(self.handler(data), timeout=self.timeout)
         except asyncio.TimeoutError as e:
             waiting_task.cancel()
             self._report_exception(client, message, e)  # just log the exception
@@ -243,25 +228,11 @@ class _HookHandler:
     handler: Handler
     handle_edits: bool
 
-    async def add_handler(
-        self,
-        _: Client,
-        message: Message,
-        __: CommandObject,
-        *,
-        storage: Storage,
-    ) -> None:
+    async def add_handler(self, message: Message, storage: Storage) -> None:
         await storage.enable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def del_handler(
-        self,
-        _: Client,
-        message: Message,
-        __: CommandObject,
-        *,
-        storage: Storage,
-    ) -> None:
+    async def del_handler(self, message: Message, storage: Storage) -> None:
         await storage.disable_hook(self.name, message.chat.id)
         await message.delete()
 
@@ -315,10 +286,29 @@ def _command_handler_sort_key(handler: _CommandHandler) -> tuple[str, str]:
     return category, cmd
 
 
+def _filter_kwargs(sig: inspect.Signature, kwargs: dict[str, Any]) -> dict[str, Any]:
+    suitable_kwargs = {}
+    for name, param in sig.parameters.items():
+        if param.kind == inspect.Parameter.VAR_KEYWORD:
+            suitable_kwargs = kwargs  # pass all kwargs
+        if name in kwargs:
+            suitable_kwargs[name] = kwargs[name]
+    return suitable_kwargs
+
+
+async def _command_handler(
+    handler: CommandHandler,
+    signature: inspect.Signature,
+    data: dict[str, Any],
+) -> str | None:
+    return await handler(**_filter_kwargs(signature, data))
+
+
 class CommandsModule:
     def __init__(self, category: str | None = None):
         self._handlers: list[_CommandHandler] = []
         self._category = category
+        self._middleware = MiddlewareManager()
 
     def add(
         self,
@@ -381,18 +371,20 @@ class CommandsModule:
             )
         )
 
+    def add_middleware(self, middleware: Middleware) -> None:
+        self._middleware.register(middleware)
+
     def add_submodule(self, module: "CommandsModule") -> None:
         self._handlers.extend(module._handlers)
+        if module._middleware.has_handlers:
+            raise ValueError("Submodule has middleware handlers, which are not supported")
 
     def register(
         self,
         client: Client,
         *,
         with_help: bool = False,
-        kwargs: dict[str, Any] | None = None,
     ) -> None:
-        if kwargs is None:
-            kwargs = {}
         if with_help:
             self.add_handler(
                 self._auto_help_handler,
@@ -403,9 +395,13 @@ class CommandsModule:
             )
         all_commands = set()
         for handler in self._handlers:
-            # Pass only suitable kwargs for the handler
-            handler_kwargs = _filter_kwargs(handler.handler, kwargs)
-            handler.handler = functools.partial(handler.handler, **handler_kwargs)
+            handler.handler = self._middleware.chain(
+                functools.partial(
+                    _command_handler,
+                    handler.handler,
+                    inspect.signature(handler.handler),
+                )
+            )
             if isinstance(handler.commands, re.Pattern):
                 command_re = re.compile(
                     f"^[{re.escape(handler.prefix)}]{handler.commands.pattern}",
@@ -425,7 +421,7 @@ class CommandsModule:
             if handler.handle_edits:
                 client.add_handler(EditedMessageHandler(handler.__call__, f))
 
-    async def _auto_help_handler(self, _: Client, __: Message, command: CommandObject) -> str:
+    async def _auto_help_handler(self, command: CommandObject) -> str:
         if args := command.args:
             for h in self._handlers:
                 match h.commands:
@@ -538,20 +534,14 @@ class HooksModule:
         commands.add_submodule(cmds)
 
     @staticmethod
-    async def _check_hooks(
-        _: Client,
-        message: Message,
-        __: CommandObject,
-        *,
-        storage: Storage,
-    ) -> str:
+    async def _check_hooks(message: Message, storage: Storage) -> str:
         """List enabled hooks in the chat"""
         hooks = ""
         async for hook in storage.list_enabled_hooks(message.chat.id):
             hooks += f"• <code>{hook}</code>\n"
         return f"Hooks in this chat:\n{hooks}"
 
-    async def _list_hooks(self, _: Client, __: Message, ___: CommandObject) -> str:
+    async def _list_hooks(self) -> str:
         """List all available hooks"""
         hooks = ""
         for handler in self._handlers:

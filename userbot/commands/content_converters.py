@@ -17,7 +17,7 @@ commands = CommandsModule("Content converters")
 
 
 @commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
-async def video_to_gif(client: Client, message: Message, __: CommandObject) -> str | None:
+async def video_to_gif(client: Client, message: Message) -> str | None:
     """Converts a video to a mpeg4 gif"""
     msg = message.reply_to_message if message.reply_to_message else message
     video = msg.video
