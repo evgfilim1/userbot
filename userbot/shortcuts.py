@@ -110,7 +110,7 @@ async def xkcd(match: re.Match[str]) -> str:
     return f"<a href='https://xkcd.com/{match[1]}/'>xkcd #{match[1]}</a>"
 
 
-@shortcuts.add(r"pypi://(.+)/")
+@shortcuts.add(r"(pypi|pip)://(.+)/")
 async def pypi(match: re.Match[str]) -> str:
     """Sends a link to a PyPI package"""
     link = f"https://pypi.org/project/{match[1]}/"
