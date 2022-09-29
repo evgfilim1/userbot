@@ -3,6 +3,7 @@ __all__ = [
 ]
 
 from pathlib import Path
+from typing import Type
 
 import aiofiles
 import magic
@@ -18,7 +19,13 @@ _CHUNK_SIZE = 1048576 * 4  # 4 MiB
 commands = CommandsModule("Download")
 
 
-async def _downloader(client: Client, message: Message, filename: str, data_dir: Path) -> str:
+async def _downloader(
+    client: Client,
+    message: Message,
+    filename: str,
+    data_dir: Path,
+    icons: Type[Icons],
+) -> str:
     if message.media in (
         None,
         MessageMediaType.CONTACT,
@@ -29,7 +36,7 @@ async def _downloader(client: Client, message: Message, filename: str, data_dir:
         MessageMediaType.DICE,
         MessageMediaType.GAME,
     ):
-        return "⚠ <b>No downloadable media found</b>"
+        return f"{icons.STOP} <b>No downloadable media found</b>"
     media_type = message.media.value
     media_dir = data_dir
     if not filename:
@@ -54,8 +61,7 @@ async def _downloader(client: Client, message: Message, filename: str, data_dir:
     async with aiofiles.open(output, "wb") as f:
         while chunk := output_io.read(_CHUNK_SIZE):
             await f.write(chunk)
-    icon = Icons.DOWNLOAD.get_icon(client.me.is_premium)
-    return f"{icon} The file has been downloaded to <code>{output}</code>"
+    return f"{icons.DOWNLOAD} The file has been downloaded to <code>{output}</code>"
 
 
 @commands.add(
@@ -67,8 +73,8 @@ async def download(
     client: Client,
     message: Message,
     command: CommandObject,
-    *,
     data_dir: Path,
+    icons: Type[Icons],
 ) -> str:
     """Downloads a file or files"""
     msg = message.reply_to_message if message.reply_to_message else message
@@ -85,10 +91,10 @@ async def download(
                 m,
                 command.args if len(all_messages) == 1 else "",
                 data_dir,
+                icons,
             )
         except Exception as e:
-            icon = Icons.WARNING.get_icon(client.me.is_premium)
-            t += f"{icon} <code>{type(e).__name__}: {e}</code>"
+            t += f"{icons.WARNING} <code>{type(e).__name__}: {e}</code>"
         finally:
             t += "\n"
     return t

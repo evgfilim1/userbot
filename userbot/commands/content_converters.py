@@ -5,24 +5,25 @@ __all__ = [
 import asyncio
 from io import BytesIO
 from tempfile import NamedTemporaryFile
-from typing import BinaryIO
+from typing import BinaryIO, Type
 
 from PIL import Image
 from pyrogram import Client
 from pyrogram.types import Message
 
+from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 
 commands = CommandsModule("Content converters")
 
 
 @commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
-async def video_to_gif(client: Client, message: Message) -> str | None:
+async def video_to_gif(client: Client, message: Message, icons: Type[Icons]) -> str | None:
     """Converts a video to a mpeg4 gif"""
     msg = message.reply_to_message if message.reply_to_message else message
     video = msg.video
     if not video:
-        return "⚠ No video found"
+        return f"{icons.STOP} No video found"
     with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".mp4") as dst:
         await client.download_media(video.file_id, src.name)
         proc = await asyncio.subprocess.create_subprocess_exec(

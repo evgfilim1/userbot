@@ -4,6 +4,7 @@ __all__ = [
 
 from asyncio import sleep
 from random import randint
+from typing import Type
 
 from pyrogram import Client
 from pyrogram.enums import MessagesFilter
@@ -68,7 +69,12 @@ async def set_random_chat_title(chat_id: int, client: Client) -> Message:
 
 
 @commands.add("rndinfo", usage="['photo'|'title']")
-async def random_chat_info(client: Client, message: Message, command: CommandObject) -> str:
+async def random_chat_info(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    icons: Type[Icons],
+) -> str:
     """Sets random chat photo and/or title
 
     Sets both if no argument is given."""
@@ -76,13 +82,11 @@ async def random_chat_info(client: Client, message: Message, command: CommandObj
     args = command.args
     if args == "photo" or args == "":
         msg = await set_random_chat_photo(message.chat.id, client)
-        icon = Icons.PICTURE.get_icon(client.me.is_premium)
-        text += f"{icon} <b>New chat avatar was set!</b> <a href='{msg.link}'>Source</a>\n\n"
+        text += f"{icons.PICTURE} <b>New chat avatar was set!</b> <a href='{msg.link}'>Source</a>\n"
         await sleep(0.1)
     if args == "title" or args == "":
         msg = await set_random_chat_title(message.chat.id, client)
-        icon = Icons.PENCIL.get_icon(client.me.is_premium)
-        text += f"{icon} <b>New chat title was set!</b> <a href='{msg.link}'>Source</a>"
+        text += f"{icons.PENCIL} <b>New chat title was set!</b> <a href='{msg.link}'>Source</a>"
         await sleep(0.1)
     return text
 

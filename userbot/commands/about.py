@@ -6,7 +6,7 @@ from os import getenv
 
 from pyrogram import Client
 
-from ..constants import Icons
+from ..constants import DefaultIcons, PremiumIcons
 from ..modules import CommandsModule
 
 commands = CommandsModule("About")
@@ -16,14 +16,14 @@ commands = CommandsModule("About")
 async def about(client: Client) -> str:
     """Shows information about this userbot"""
     base_url = "https://github.com/evgfilim1/userbot"
+    # TODO (2022-07-13): get this from the git repo also
     commit = getenv("GITHUB_SHA", None)
-    # Maybe get this from the git repo, but there's no need for it now
     if client.me.is_premium:
-        header_icon = Icons.INFO.premium_icon
-        github_icon = Icons.GITHUB.premium_icon
-        commit_icon = Icons.GIT.premium_icon
+        header_icon = PremiumIcons.INFO
+        github_icon = PremiumIcons.GITHUB
+        commit_icon = PremiumIcons.GIT
     else:
-        header_icon = Icons.INFO.icon
+        header_icon = DefaultIcons.INFO
         github_icon = "<i>Repo:</i>"
         commit_icon = "<i>Commit:</i>"
     t = (

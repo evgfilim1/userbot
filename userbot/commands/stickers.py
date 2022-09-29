@@ -41,7 +41,6 @@ async def random_sticker(
     client: Client,
     message: Message,
     command: CommandObject,
-    *,
     storage: Storage,
 ) -> None:
     """Sends random sticker from specified pack or one matching specified emoji"""

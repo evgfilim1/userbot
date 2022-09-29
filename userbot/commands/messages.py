@@ -5,6 +5,7 @@ __all__ = [
 import asyncio
 import html
 import json
+from typing import Type
 
 import jq
 from pyrogram import Client
@@ -29,16 +30,15 @@ async def delete_this(message: Message) -> None:
 
 
 @commands.add("dump", usage="[jq-query]")
-async def dump(client: Client, message: Message, command: CommandObject) -> str:
+async def dump(message: Message, command: CommandObject, icons: Type[Icons]) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
     obj = message.reply_to_message or message
     attr = command.args
     try:
         prog = jq.compile(attr)
     except ValueError as e:
-        warning_icon = Icons.WARNING.get_icon(client.me.is_premium)
         return (
-            f"{warning_icon} <b>Invalid jq query:</b> <code>{html.escape(attr)}</code>\n"
+            f"{icons.WARNING} <b>Invalid jq query:</b> <code>{html.escape(attr)}</code>\n"
             f"<b>Details:</b>\n<pre>{html.escape(str(e))}</pre>\n\n"
             f"<b>Possible fix:</b> <code>{command.full_command} .{html.escape(attr)}</code>"
         )

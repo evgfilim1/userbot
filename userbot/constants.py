@@ -70,16 +70,20 @@ class Icons(Enum):
     # https://t.me/addemoji/MaterialIconsAlpha
     GIT = (5469770984670108755, "💩")
 
-    def get_icon(self, is_premium: bool) -> str:
-        if is_premium:
-            return self.premium_icon
-        return self.icon
 
-    @property
-    def premium_icon(self) -> str:
-        custom_emoji_id, emoji = self.value[:2]
-        return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"
+def _default_str(self: Icons) -> str:
+    return self.value[1]
 
-    @property
-    def icon(self) -> str:
-        return self.value[1]
+
+def _premium_str(self: Icons) -> str:
+    custom_emoji_id, emoji = self.value[:2]
+    return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"
+
+
+# Enums cannot be inherited, but I don't want to repeat myself, so I'm creating a class dynamically
+# with all the icons from the Icons enum and override the __str__ method to return needed icon.
+_all_icons = {icon.name: icon.value for icon in Icons}
+DefaultIcons = Enum("DefaultIcons", _all_icons)
+DefaultIcons.__str__ = _default_str
+PremiumIcons = Enum("PremiumIcons", _all_icons)
+PremiumIcons.__str__ = _premium_str

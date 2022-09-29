@@ -6,6 +6,7 @@ __all__ = [
 import html
 from asyncio import sleep
 from datetime import datetime, timedelta
+from typing import Type
 
 from pyrogram import Client, ContinuePropagation
 from pyrogram.enums import ChatMemberStatus
@@ -29,7 +30,12 @@ commands = CommandsModule("Chat administration")
 
 
 @commands.add("chatban", usage="<reply 'reply'|id> [timespec] [reason...]")
-async def chat_ban(client: Client, message: Message, command: CommandObject) -> str:
+async def chat_ban(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    icons: Type[Icons],
+) -> str:
     """Bans a user in a chat
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user.
@@ -50,9 +56,8 @@ async def chat_ban(client: Client, message: Message, command: CommandObject) -> 
     await client.ban_chat_member(message.chat.id, user_id, t)
     user = await client.get_chat(user_id)
 
-    icon = Icons.PERSON_BLOCK.get_icon(client.me.is_premium)
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    text = f"{icon} {user_link} <b>banned</b> in this chat"
+    text = f"{icons.PERSON_BLOCK} {user_link} <b>banned</b> in this chat"
     if t:
         text += f" until <i>{t.astimezone():%Y-%m-%d %H:%M:%S %Z}</i>"
     text += "."
@@ -62,19 +67,28 @@ async def chat_ban(client: Client, message: Message, command: CommandObject) -> 
 
 
 @commands.add("chatunban", usage="<id>")
-async def chat_unban(client: Client, message: Message, command: CommandObject) -> str:
+async def chat_unban(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    icons: Type[Icons],
+) -> str:
     """Unbans a user in a chat"""
     user_id = int(command.args)
     await client.unban_chat_member(message.chat.id, user_id)
     user = await client.get_chat(user_id)
 
-    icon = Icons.PERSON_TICK.get_icon(client.me.is_premium)
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    return f"{icon} {user_link} <b>unbanned</b> in this chat"
+    return f"{icons.PERSON_TICK} {user_link} <b>unbanned</b> in this chat"
 
 
 @commands.add("promote", usage="<admin-title>")
-async def promote(client: Client, message: Message, command: CommandObject) -> str:
+async def promote(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    icons: Type[Icons],
+) -> str:
     """Promotes a user to an admin without any rights but with title"""
     title = command.args
     await client.invoke(
@@ -95,8 +109,7 @@ async def promote(client: Client, message: Message, command: CommandObject) -> s
             rank=title,
         )
     )
-    icon = Icons.PENCIL.get_icon(client.me.is_premium)
-    return f"{icon} Chat title was set to <i>{html.escape(title)}</i>"
+    return f"{icons.PENCIL} Chat title was set to <i>{html.escape(title)}</i>"
 
 
 async def react2ban_raw_reaction_handler(
@@ -142,27 +155,26 @@ async def react2ban_raw_reaction_handler(
 
 
 @commands.add("react2ban", handle_edits=False)
-async def react2ban(client: Client, message: Message, storage: Storage) -> str:
+async def react2ban(client: Client, message: Message, storage: Storage, icons: Type[Icons]) -> str:
     """Bans a user whoever reacted to the message"""
     if message.chat.id > 0:
-        return f"{Icons.STOP.get_icon(client.me.is_premium)} Not a group chat"
+        return f"{icons.STOP} Not a group chat"
     self = await client.get_chat_member(message.chat.id, message.from_user.id)
     if self.privileges is None or not self.privileges.can_restrict_members:
-        return f"{Icons.STOP.get_icon(client.me.is_premium)} Cannot ban users in the chat"
+        return f"{icons.STOP} Cannot ban users in the chat"
     await storage.add_react2ban(message.chat.id, message.id)
     return _REACT2BAN_TEXT
 
 
 @commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
-async def no_react2ban(client: Client, message: Message, storage: Storage) -> str:
+async def no_react2ban(message: Message, storage: Storage, icons: Type[Icons]) -> str:
     """Stops react2ban on the message"""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
     if message.chat.id > 0:
-        return f"{Icons.STOP.get_icon(client.me.is_premium)} Not a group chat"
+        return f"{icons.STOP} Not a group chat"
     reply = message.reply_to_message
     await storage.remove_react2ban(message.chat.id, reply.id)
-    icon = Icons.INFO.get_icon(client.me.is_premium)
     await reply.edit(
-        f"{icon} Reacting to the message to ban a user has been disabled on the message"
+        f"{icons.INFO} Reacting to the message to ban a user has been disabled on the message"
     )
     await message.delete()

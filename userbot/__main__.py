@@ -13,7 +13,7 @@ from userbot.config import Config, RedisConfig
 from userbot.constants import GH_PATTERN
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
-from userbot.middlewares import KwargsMiddleware
+from userbot.middlewares import KwargsMiddleware, icon_middleware
 from userbot.shortcuts import get_note, github, shortcuts
 from userbot.storage import RedisStorage, Storage
 from userbot.utils import GitHubClient, fetch_stickers, is_prod
@@ -82,6 +82,7 @@ def main() -> None:
             }
         )
     )
+    commands.add_middleware(icon_middleware)
 
     # `HooksModule` must be registered before `CommandsModule` because it adds some commands
     hooks.register(client, storage, commands)

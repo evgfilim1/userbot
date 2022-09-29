@@ -4,6 +4,7 @@ __all__ = [
 
 import logging
 import random
+from typing import Type
 
 from pyrogram import Client
 from pyrogram.errors import MsgIdInvalid, ReactionEmpty, ReactionInvalid
@@ -18,7 +19,7 @@ _log = logging.getLogger(__name__)
 
 
 @commands.add("r", usage="<reply> [emoji]")
-async def put_reaction(_: Client, message: Message, command: CommandObject) -> str | None:
+async def put_reaction(message: Message, command: CommandObject) -> str | None:
     """Reacts to a message with a specified emoji or removes any reaction"""
     reaction = command.args
     try:
@@ -31,7 +32,7 @@ async def put_reaction(_: Client, message: Message, command: CommandObject) -> s
 
 
 @commands.add("rs", usage="<reply>")
-async def get_reactions(client: Client, message: Message, __: CommandObject) -> str:
+async def get_reactions(client: Client, message: Message, icons: Type[Icons]) -> str:
     """Gets message reactions with users who reacted to it"""
     chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
@@ -44,8 +45,7 @@ async def get_reactions(client: Client, message: Message, __: CommandObject) -> 
             )
         )
     except MsgIdInvalid:
-        icon = Icons.WARNING.get_icon(client.me.is_premium)
-        return f"{icon} <i>Message not found or has no reactions</i>"
+        return f"{icons.WARNING} <i>Message not found or has no reactions</i>"
     reactions: dict[int | str, set[int]] = {}
     for r in messages.reactions:
         if isinstance(r.reaction, types.ReactionCustomEmoji):
@@ -77,11 +77,11 @@ async def get_reactions(client: Client, message: Message, __: CommandObject) -> 
             else:
                 peer_name = "Unknown user"
             t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a> (#<code>{peer_id}</code>)\n"
-    return t or f"{Icons.WARNING.get_icon(client.me.is_premium)} <i>No reactions here</i>"
+    return t or f"{icons.WARNING} <i>No reactions here</i>"
 
 
 @commands.add("rr", usage="<reply>")
-async def put_random_reaction(client: Client, message: Message, _: CommandObject) -> None:
+async def put_random_reaction(client: Client, message: Message) -> None:
     """Reacts to a message with a random available emoji"""
     chat = await client.get_chat(message.chat.id)
     await message.reply_to_message.react(random.choice(chat.available_reactions))
