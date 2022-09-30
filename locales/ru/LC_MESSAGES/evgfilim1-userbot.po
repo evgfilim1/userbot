@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-09-30 21:12+0500\n"
-"PO-Revision-Date: 2022-09-30 16:15\n"
+"PO-Revision-Date: 2022-09-30 16:23\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "<b>Возможно, вы имеете в виду</b>\n\n"
 
 #: userbot/commands/about.py:24
 msgid "staging"
-msgstr ""
+msgstr "в разработке"
 
 #: userbot/commands/about.py:29
 msgid "<i>Repo:</i>"
@@ -36,7 +36,7 @@ msgstr "<i>Коммит:</i>"
 
 #: userbot/commands/about.py:31
 msgid "{icon} <b>About userbot</b>\n"
-msgstr ""
+msgstr "{icon} <b>О пользовательском боте</b>\n"
 
 #: userbot/commands/about.py:37
 msgid " (<a href='{base_url}/deployments'>deployments</a>)"
@@ -45,7 +45,8 @@ msgstr " (<a href='{base_url}/deployments'>развёртывания</a>)"
 #: userbot/commands/about.py:40
 msgid "\n"
 "{icon} <a href='{url}'>Contribute userbot translations</a>"
-msgstr ""
+msgstr "\n"
+"{icon} <a href='{url}'>Внести вклад в перевод пользовательского бота</a>"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -214,20 +215,22 @@ msgstr "{icon} <b>Ссылка на файл истекла, пожалуйст�
 #: userbot/commands/notes.py:77 userbot/commands/notes.py:112
 msgid "{icon} Please specify note key\n\n"
 "Possible fix: <code>{message_text} key</code>"
-msgstr ""
+msgstr "{icon} Пожалуйста, укажите ключ заметки\n\n"
+"Возможное исправление: <code>{message_text} ключ</code>"
 
 #: userbot/commands/notes.py:87
 msgid "{icon} Note <code>{key}</code> saved"
-msgstr ""
+msgstr "{icon} Заметка <code>{key}</code> сохранена"
 
 #: userbot/commands/notes.py:98
 msgid "{icon} <b>Saved notes:</b>\n"
 "{t}"
-msgstr ""
+msgstr "{icon} <b>Сохранённые заметки:</b>\n"
+"{t}"
 
 #: userbot/commands/notes.py:116
 msgid "{icon} Note <code>{key}</code> deleted"
-msgstr ""
+msgstr "{icon} Заметка <code>{key}</code> удалена"
 
 #: userbot/commands/reactions.py:55
 msgid "{icon} <i>Message not found or has no reactions</i>"
@@ -283,7 +286,7 @@ msgstr "{icon} Сон в течение {sec} секунд окончен"
 
 #: userbot/commands/tools.py:81
 msgid "{icon} <b>Stopping userbot...</b>"
-msgstr ""
+msgstr "{icon} <b>Остановка пользовательского бота...</b>"
 
 #: userbot/modules/commands.py:117
 msgid "{icon} <b>An error occurred during executing command.</b>\n\n"
