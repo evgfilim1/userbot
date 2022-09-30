@@ -36,6 +36,9 @@ async def translate_middleware(
     storage: Storage = data["storage"]
     message: Message = data["message"]
     lang = await storage.get_chat_language(message.chat.id)
-    data["lang"] = lang
-    data["tr"] = Translation(lang)
+    if lang is None:
+        lang = message.from_user.language_code
+    tr = Translation(lang)
+    data["lang"] = tr.tr.info().get("language", "en")
+    data["tr"] = tr
     return await handler(data)

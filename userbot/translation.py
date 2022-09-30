@@ -8,7 +8,7 @@ class Translation:
     _LOCALE_DIR = Path.cwd() / "locales"
 
     @classmethod
-    def _get_translation(cls, language: str) -> NullTranslations:
+    def _get_translation(cls, language: str | None) -> NullTranslations:
         return translation(
             cls.DOMAIN,
             localedir=cls._LOCALE_DIR,
@@ -19,7 +19,7 @@ class Translation:
     def __init__(self, language: str | None):
         self.tr = self._get_translation(language)
 
-    def change_language(self, language: str) -> None:
+    def change_language(self, language: str | None) -> None:
         self.tr = self._get_translation(language)
 
     def gettext(self, message: str) -> str:
@@ -30,6 +30,7 @@ class Translation:
 
     @classmethod
     def get_available_languages(cls) -> Iterable[str]:
+        yield "en"  # English is always available as fallback because source code is in English
         for lang in cls._LOCALE_DIR.iterdir():
             if (lang / "LC_MESSAGES" / f"{cls.DOMAIN}.mo").is_file():
                 yield lang.name
