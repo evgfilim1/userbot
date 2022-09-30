@@ -27,7 +27,10 @@ def _main(storage_location: Path) -> None:
 
 def main():
     config = Config.from_env()
-    _main(config.data_location / f"{config.session}.pkl")
+    try:
+        _main(config.data_location / f"{config.session}.pkl")
+    except FileNotFoundError as e:
+        _log.warning("Pickle storage not found, skipping migration", exc_info=e)
 
 
 if __name__ == "__main__":

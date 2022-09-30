@@ -31,9 +31,13 @@ async def _main(old_storage_raw: dict[str, Any], new_storage: RedisStorage) -> N
 def main():
     config = Config.from_env()
     pickle_path = config.data_location / f"{config.session}.pkl"
-    with open(pickle_path, "rb") as f:
-        _log.debug("Loading pickle storage from %s", pickle_path)
-        old_storage_raw = pickle.load(f)
+    try:
+        with open(pickle_path, "rb") as f:
+            _log.debug("Loading pickle storage from %s", pickle_path)
+            old_storage_raw = pickle.load(f)
+    except FileNotFoundError as e:
+        _log.warning("Pickle storage not found, skipping migration", exc_info=e)
+        return
     redis_config = RedisConfig.from_env()
     new_storage = RedisStorage(
         redis_config.host,
