@@ -22,7 +22,7 @@ jobs:
     name: Run latest version on server
     if: >
       github.event_name == 'push'
-      || github.event.package.package_version.metadata.container.tags.* == 'latest'
+      || github.event.registry_package.package_version.container_metadata.tag.name == 'latest'
     runs-on: ubuntu-latest
     environment:
       name: production
