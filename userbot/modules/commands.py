@@ -352,7 +352,7 @@ class CommandsModule:
                 prefix=prefix,
                 handler=handler,
                 usage=usage,
-                doc=doc,
+                doc=doc or inspect.unwrap(handler).__doc__,
                 category=category or self._category,
                 hidden=hidden,
                 handle_edits=handle_edits,

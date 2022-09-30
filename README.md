@@ -55,6 +55,9 @@ Hooks:
 • hooklist|hook_list — List all available hooks
 • hookshere|hooks_here — List enabled hooks in the chat
 
+Language:
+• lang [language-code] — Get or change the language of the bot for the current chat
+
 Messages:
 • delete|delet|del <reply> — Deletes replied message for everyone
 • dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
