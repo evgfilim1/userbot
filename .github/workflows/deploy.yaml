@@ -5,6 +5,11 @@ on:
     types:
       - published
       - updated
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/deploy.yaml"
 
 env:
   IMAGE_TAG: latest
@@ -15,7 +20,9 @@ permissions:
 jobs:
   run:
     name: Run latest version on server
-    if: github.event.package.package_version.metadata.container.tags.* == env.IMAGE_TAG
+    if: >
+      github.event_name == 'push'
+      || github.event.package.package_version.metadata.container.tags.* == "latest"
     runs-on: ubuntu-latest
     environment:
       name: production
