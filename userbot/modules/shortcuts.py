@@ -26,6 +26,7 @@ class _ShortcutHandler:
             if (result := await self.handler(match)) is not None:
                 text = f"{text[:match.start()]}{result}{text[match.end():]}"
         await message.edit(text, parse_mode=ParseMode.HTML)
+        message.continue_propagation()  # allow other shortcut handlers to run
 
 
 class ShortcutTransformersModule:
