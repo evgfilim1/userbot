@@ -2,6 +2,7 @@ __all__ = [
     "commands",
 ]
 
+import logging
 from asyncio import sleep
 from random import randint
 from typing import Type
@@ -16,6 +17,8 @@ from ..modules import CommandObject, CommandsModule
 from ..translation import Translation
 
 commands = CommandsModule("Chat info")
+
+_log = logging.getLogger(__name__)
 
 
 async def get_random_message(
@@ -59,7 +62,11 @@ async def set_random_chat_title(chat_id: int, client: Client) -> Message:
             stripped_text = message.text[: 128 - len(title_prefix) - 3]
             await client.set_chat_title(chat_id, f"{title_prefix} — {stripped_text}")
         except BadRequest as e:
-            print(f"An exception occurred: {e}")
+            _log.warning(
+                "An error occurred while setting the chat title in %d",
+                chat_id,
+                exc_info=e,
+            )
             continue
         else:
             return message
