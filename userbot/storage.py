@@ -93,20 +93,20 @@ class Storage(ABC):
         _log.debug("Sticker cache job started, ttl=%d", ttl)
 
     @abstractmethod
-    async def get_message(self, key: str) -> tuple[str, str] | None:
+    async def get_note(self, key: str) -> tuple[str, str] | None:
         pass
 
     @abstractmethod
-    async def save_message(self, key: str, content: str, message_type: str) -> None:
-        _log.debug("%r %s message saved", key, message_type)
+    async def save_note(self, key: str, content: str, message_type: str) -> None:
+        _log.debug("%r %s note saved", key, message_type)
 
     @abstractmethod
-    async def saved_messages(self) -> AsyncIterable[str]:
+    async def saved_notes(self) -> AsyncIterable[str]:
         yield
 
     @abstractmethod
-    async def delete_message(self, key: str) -> None:
-        _log.debug("%r message deleted", key)
+    async def delete_note(self, key: str) -> None:
+        _log.debug("%r note deleted", key)
 
     @abstractmethod
     async def get_chat_language(self, chat_id: int) -> str | None:
@@ -208,26 +208,26 @@ class RedisStorage(Storage):
             _log.debug("Sticker cache expired, updating...")
             await self.put_sticker_cache(await provider(), ttl)
 
-    async def get_message(self, key: str) -> tuple[str, str] | None:
+    async def get_note(self, key: str) -> tuple[str, str] | None:
         data = await self._pool.hgetall(self._key("messages", key))
         if not data:
             return None
         return data["content"], data["type"]
 
-    async def save_message(self, key: str, content: str, message_type: str) -> None:
+    async def save_note(self, key: str, content: str, message_type: str) -> None:
         await self._pool.hset(
             self._key("messages", key),
             mapping={"content": content, "type": message_type},
         )
-        await super().save_message(key, content, message_type)
+        await super().save_note(key, content, message_type)
 
-    async def saved_messages(self) -> AsyncIterable[str]:
+    async def saved_notes(self) -> AsyncIterable[str]:
         async for key in self._pool.scan_iter(match=self._key("messages", "*"), _type="hash"):
             yield key.rsplit(":", 1)[-1]
 
-    async def delete_message(self, key: str) -> None:
+    async def delete_note(self, key: str) -> None:
         await self._pool.delete(self._key("messages", key))
-        await super().delete_message(key)
+        await super().delete_note(key)
 
     async def get_chat_language(self, chat_id: int) -> str | None:
         return await self._pool.get(self._key("language", chat_id))

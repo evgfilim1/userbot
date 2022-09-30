@@ -16,7 +16,7 @@ commands = CommandsModule("Notes")
 
 
 @commands.add(["get", "note", "n"], usage="<name>")
-async def get_message(
+async def get_note(
     client: Client,
     message: Message,
     command: CommandObject,
@@ -24,11 +24,11 @@ async def get_message(
     icons: Type[Icons],
     tr: Translation,
 ) -> str | None:
-    """Sends saved message"""
+    """Sends saved note"""
     _ = tr.gettext
     if not (key := command.args):
         return _("{icon} No name specified").format(icon=icons.WARNING)
-    data = await storage.get_message(key)
+    data = await storage.get_note(key)
     if data is None:
         return _("{icon} Message with key={key!r} not found").format(icon=icons.WARNING, key=key)
     content, type_ = json.loads(data[0]), data[1]
@@ -59,7 +59,7 @@ async def get_message(
 
 
 @commands.add(["save", "note_add", "nadd"], usage="<reply> <name>")
-async def save_message(
+async def save_note(
     message: Message,
     command: CommandObject,
     storage: Storage,
@@ -67,11 +67,11 @@ async def save_message(
     icons: Type[Icons],
     tr: Translation,
 ) -> str:
-    """Saves replied message for later use"""
+    """Saves replied message as note for later use"""
     _ = tr.gettext
     if not (key := command.args):
         return _(
-            "{icon} Please specify message key\n\n" "Possible fix: <code>{message_text} key</code>"
+            "{icon} Please specify note key\n\n" "Possible fix: <code>{message_text} key</code>"
         ).format(icon=icons.QUESTION, message_text=message.text)
     target = message.reply_to_message
     if target.media not in (MessageMediaType.STICKER, None):
@@ -79,34 +79,34 @@ async def save_message(
         # saved in a chat to be able to send them later even when the original message is deleted.
         target = await target.copy(notes_chat)
     content, type_ = get_message_content(target)
-    await storage.save_message(key, json.dumps(content), type_)
-    return _("{icon} Message <code>{key}</code> saved").format(icon=icons.BOOKMARK, key=key)
+    await storage.save_note(key, json.dumps(content), type_)
+    return _("{icon} Note <code>{key}</code> saved").format(icon=icons.BOOKMARK, key=key)
 
 
-@commands.add(["saved", "notes", "ns"])
-async def saved_messages(storage: Storage, icons: Type[Icons], tr: Translation) -> str:
-    """Shows all saved messages"""
+@commands.add(["notes", "ns"])
+async def saved_notes(storage: Storage, icons: Type[Icons], tr: Translation) -> str:
+    """Shows all saved notes"""
     _ = tr.gettext
     t = ""
-    async for key in storage.saved_messages():
-        __, type_ = await storage.get_message(key)
+    async for key in storage.saved_notes():
+        __, type_ = await storage.get_note(key)
         t += f"• <code>{key}</code> ({type_})\n"
-    return _("{icon} <b>Saved messages:</b>\n{t}").format(icon=icons.BOOKMARK, t=t)
+    return _("{icon} <b>Saved notes:</b>\n{t}").format(icon=icons.BOOKMARK, t=t)
 
 
 @commands.add(["note_del", "ndel"], usage="<name>")
-async def delete_message(
+async def delete_note(
     message: Message,
     command: CommandObject,
     storage: Storage,
     icons: Type[Icons],
     tr: Translation,
 ) -> str:
-    """Deletes saved message"""
+    """Deletes saved note"""
     _ = tr.gettext
     if not (key := command.args):
         return _(
-            "{icon} Please specify message key\n\n" "Possible fix: <code>{message_text} key</code>"
+            "{icon} Please specify note key\n\n" "Possible fix: <code>{message_text} key</code>"
         ).format(icon=icons.QUESTION, message_text=message.text)
-    await storage.delete_message(key)
-    return _("{icon} Message <code>{key}</code> deleted").format(icon=icons.TRASH, key=key)
+    await storage.delete_note(key)
+    return _("{icon} Note <code>{key}</code> deleted").format(icon=icons.TRASH, key=key)

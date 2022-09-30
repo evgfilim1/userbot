@@ -95,7 +95,7 @@ async def shrug(_: re.Match[str]) -> str:
 
 async def get_note(match: re.Match[str], *, storage: Storage) -> str:
     """Sends a saved note"""
-    note = await storage.get_message(match[1])
+    note = await storage.get_note(match[1])
     if note is None:
         return ""
     content, type_ = note
