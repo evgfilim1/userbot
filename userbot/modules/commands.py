@@ -20,7 +20,7 @@ from pyrogram.errors import MessageNotModified, MessageTooLong
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
-from ..constants import Icons
+from ..constants import DefaultIcons, Icons, PremiumIcons
 from ..middleware_manager import Middleware, MiddlewareManager
 from ..translation import Translation
 from ..utils import async_partial, is_prod
@@ -35,18 +35,6 @@ _CommandHandlerT: TypeAlias = Callable[_PS, Awaitable[str | None]]
 
 _log = logging.getLogger(__name__)
 _nekobin = AsyncClient(base_url="https://nekobin.com/")
-
-
-def _filter_kwargs(signature: inspect.Signature, data: dict[str, Any]) -> dict[str, Any]:
-    """Filter the kwargs to only contain the ones that are in the signature."""
-    suitable_kwargs = {}
-    for name, param in signature.parameters.items():
-        if param.kind == inspect.Parameter.VAR_KEYWORD:
-            suitable_kwargs = data  # pass all kwargs
-            break
-        if name in data:
-            suitable_kwargs[name] = data[name]
-    return suitable_kwargs
 
 
 def _extract_frames(traceback: TracebackType) -> tuple[FrameSummary, FrameSummary]:
@@ -101,6 +89,68 @@ async def _post_to_nekobin(text: str) -> str:
     return f"{_nekobin.base_url.join(res.json()['result']['key'])}.html"
 
 
+def _handle_command_exception(e: Exception, data: dict[str, Any]) -> str:
+    """Handles the exception raised by the command."""
+    client: Client = data["client"]
+    message: Message = data["message"]
+    command: CommandObject = data["command"]
+    # In case one of the middlewares failed, we need to fill in the missing data with the fallback
+    # values
+    icons_default = PremiumIcons if client.me.is_premium else DefaultIcons
+    icons: Type[Icons] = data.setdefault("icons", icons_default)
+    tr: Translation = data.setdefault("tr", Translation(None))
+    _ = tr.gettext
+    message_text = message.text
+    _log.exception(
+        "An error occurred during executing %r",
+        message_text,
+        extra={"command": command},
+    )
+    tb = _format_frames(*_extract_frames(e.__traceback__))
+    tb += _format_exception(e)
+    tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
+    return _(
+        "{icon} <b>An error occurred during executing command.</b>\n\n"
+        "<b>Command:</b> <code>{message_text}</code>\n"
+        "<b>Traceback:</b>\n{tb}\n\n"
+        "<i>More info can be found in logs.</i>"
+    ).format(
+        icon=icons.STOP,
+        message_text=html.escape(message_text),
+        tb=tb,
+    )
+
+
+async def _handle_message_too_long(result: str, data: dict[str, Any]) -> None:
+    """Handles the case when the result is too long to be sent."""
+    message: Message = data["message"]
+    icons: Type[Icons] = data["icons"]
+    tr: Translation = data["tr"]
+    _ = tr.gettext
+    text = _(
+        "{icon} <b>Successfully executed.</b>\n\n"
+        "<b>Command:</b> <code>{message_text}</code>\n\n"
+        "<b>Result:</b>"
+    ).format(icon=icons.INFO, message_text=html.escape(message.text))
+    try:
+        url = await _post_to_nekobin(result)
+    except HTTPError:
+        await message.edit(
+            _("{text} <i>See reply.</i>").format(text=text),
+            parse_mode=ParseMode.HTML,
+        )
+        await message.reply_document(
+            BytesIO(result.encode("utf-8")),
+            file_name="result.html",
+        )
+    else:
+        await message.edit(
+            f"{text} {url}",
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+        )
+
+
 @dataclass()
 class CommandObject:
     prefix: str
@@ -137,6 +187,7 @@ class _CommandHandler:
         self._signature = inspect.signature(self.handler)
 
     def _parse_command(self, text: str) -> CommandObject:
+        """Parses the command from the text."""
         command, _, args = text.partition(" ")
         prefix, command = command[0], command[1:]
         if isinstance(self.commands, re.Pattern):
@@ -146,29 +197,15 @@ class _CommandHandler:
         return CommandObject(prefix=prefix, command=command, args=args, match=m)
 
     async def _call_handler(self, data: dict[str, Any]) -> str | None:
-        """Filter data and call the handler. Errors and timeouts are handled here."""
-        tr: Translation = data["tr"]
-        icons: Type[Icons] = data["icons"]
-        _ = tr.gettext
-        try:
-            return await self.handler(**_filter_kwargs(self._signature, data))
-        except Exception as e:
-            message: Message = data["message"]
-            command: CommandObject = data["command"]
-            _log.exception(
-                "An error occurred during executing %r",
-                message.text,
-                extra={"command": command},
-            )
-            tb = _format_frames(*_extract_frames(e.__traceback__))
-            tb += _format_exception(e)
-            tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
-            return _(
-                "{icon} <b>An error occurred during executing command.</b>\n\n"
-                "<b>Command:</b> <code>{message_text}</code>\n"
-                "<b>Traceback:</b>\n{tb}\n\n"
-                "<i>More info can be found in logs.</i>"
-            ).format(icon=icons.STOP, message_text=html.escape(message.text), tb=tb)
+        """Filter data and call the handler."""
+        suitable_kwargs = {}
+        for name, param in self._signature.parameters.items():
+            if param.kind == inspect.Parameter.VAR_KEYWORD:
+                suitable_kwargs = data  # pass all kwargs
+                break
+            if name in data:
+                suitable_kwargs[name] = data[name]
+        return await self.handler(**suitable_kwargs)
 
     async def _call_with_timeout(self, data: dict[str, Any]) -> str | None:
         """Call the handler with a timeout."""
@@ -222,45 +259,23 @@ class _CommandHandler:
         *,
         middleware: MiddlewareManager[str | None],
     ) -> None:
-        """Entry point for the command handler. Edits are handled here."""
+        """Entry point for the command handler. Edits and errors are handled here."""
         command = self._parse_command(message.text)
         data = {
             "client": client,
             "message": message,
             "command": command,
         }
-        result = await middleware(self._call_with_timeout, data)
-        if result is None:
+        try:
+            result = await middleware(self._call_with_timeout, data)
+        except Exception as e:
+            result = _handle_command_exception(e, data)
+        if not result:  # empty string or None
             return  # no reply
-        # data was modified along the way, so we can access attributes from middlewares
-        icons: Type[Icons] = data["icons"]
-        tr: Translation = data["tr"]
-        _ = tr.gettext
         try:
             await message.edit(result, parse_mode=ParseMode.HTML)
         except MessageTooLong:
-            text = _(
-                "{icon} <b>Successfully executed.</b>\n\n"
-                "<b>Command:</b> <code>{message_text}</code>\n\n"
-                "<b>Result:</b>"
-            ).format(icon=icons.INFO, message_text=html.escape(message.text))
-            try:
-                url = await _post_to_nekobin(result)
-            except HTTPError:
-                await message.edit(
-                    _("{text} <i>See reply.</i>").format(text=text),
-                    parse_mode=ParseMode.HTML,
-                )
-                await message.reply_document(
-                    BytesIO(result.encode("utf-8")),
-                    file_name="result.html",
-                )
-            else:
-                await message.edit(
-                    f"{text} {url}",
-                    parse_mode=ParseMode.HTML,
-                    disable_web_page_preview=True,
-                )
+            await _handle_message_too_long(result, data)
         except MessageNotModified as e:
             _log.warning(
                 "Message was not modified while executing %r",
@@ -269,6 +284,10 @@ class _CommandHandler:
                 extra={"command": command},
             )
             if not is_prod():
+                # data was modified along the way, so we can access attributes from middlewares
+                icons: Type[Icons] = data["icons"]
+                tr: Translation = data["tr"]
+                _ = tr.gettext
                 await message.edit(
                     _(
                         "{result}\n\n"
