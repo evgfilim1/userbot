@@ -6,6 +6,8 @@ import asyncio
 import html
 from calendar import TextCalendar
 from datetime import datetime
+from os import getpid, kill
+from signal import SIGINT
 from typing import Any, NoReturn, Type
 
 from pyrogram.types import Message
@@ -68,3 +70,13 @@ async def sleep(command: CommandObject, icons: Type[Icons], tr: Translation) -> 
     sec = float(command.args)
     await asyncio.sleep(sec)
     return _("{icon} Done sleeping for {sec} seconds").format(icon=icons.WATCH, sec=sec)
+
+
+@commands.add("stopself", hidden=True)
+async def stop_self(message: Message, icons: Type[Icons], tr: Translation) -> None:
+    """Stops the bot
+
+    If it's running in a production Docker container, it will be restarted automatically."""
+    _ = tr.gettext
+    await message.edit(_("{icon} <b>Stopping userbot...</b>").format(icon=icons.WARNING))
+    kill(getpid(), SIGINT)  # Emulate pressing Ctrl-C
