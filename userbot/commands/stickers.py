@@ -12,7 +12,7 @@ from pyrogram.types import Message
 from ..constants import LONGCAT, PACK_ALIASES
 from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..utils import StickerInfo
+from ..utils import StickerInfo, _
 
 commands = CommandsModule("Stickers")
 
@@ -35,7 +35,7 @@ async def longcat(client: Client, message: Message) -> None:
 @commands.add(
     "rnds",
     usage="<pack-shortlink|pack-alias|emoji>",
-    waiting_message="<i>Picking random sticker...</i>",
+    waiting_message=_("<i>Picking random sticker...</i>"),
 )
 async def random_sticker(
     client: Client,

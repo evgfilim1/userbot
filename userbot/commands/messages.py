@@ -16,6 +16,7 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..translation import Translation
+from ..utils import _
 
 commands = CommandsModule("Messages")
 
@@ -69,7 +70,7 @@ async def dump(
 @commands.add(
     "userfirstmsg",
     usage="[reply]",
-    waiting_message="<i>Searching for user's first message...</i>",
+    waiting_message=_("<i>Searching for user's first message...</i>"),
 )
 async def user_first_message(
     client: Client,

@@ -14,6 +14,7 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..translation import Translation
+from ..utils import _
 
 _CHUNK_SIZE = 1048576 * 4  # 4 MiB
 
@@ -73,7 +74,7 @@ async def _downloader(
 @commands.add(
     ["download", "dl"],
     usage="[reply] [filename]",
-    waiting_message="<i>Downloading file(s)...</i>",
+    waiting_message=_("<i>Downloading file(s)...</i>"),
 )
 async def download(
     client: Client,

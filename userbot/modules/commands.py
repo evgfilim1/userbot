@@ -207,7 +207,8 @@ class _CommandHandler:
         tr: Translation = data["tr"]
         _ = tr.gettext
         if self.waiting_message is not None:
-            text = self.waiting_message.strip()
+            # Waiting messages are marked for translation, so we need to translate them here.
+            text = _(self.waiting_message).strip()
         else:
             text = _("<i>Executing</i> <code>{command}</code>...").format(
                 command=html.escape(message.text),

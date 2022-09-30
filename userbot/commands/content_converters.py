@@ -14,11 +14,12 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
 from ..translation import Translation
+from ..utils import _
 
 commands = CommandsModule("Content converters")
 
 
-@commands.add("togif", usage="[reply]", waiting_message="<i>Converting...</i>")
+@commands.add("togif", usage="[reply]", waiting_message=_("<i>Converting...</i>"))
 async def video_to_gif(
     client: Client,
     message: Message,
@@ -73,7 +74,7 @@ def _convert_to_sticker(photo: BinaryIO, fmt: str) -> BytesIO:
 @commands.add(
     "tosticker",
     usage="[reply] ['png'|'webp']",
-    waiting_message="<i>Converting to sticker...</i>",
+    waiting_message=_("<i>Converting to sticker...</i>"),
 )
 async def photo_to_sticker(client: Client, message: Message, command: CommandObject) -> None:
     """Converts a photo to a sticker-ready png or webp
