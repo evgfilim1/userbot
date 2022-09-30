@@ -1,3 +1,11 @@
+FROM python:3.10-alpine AS i18n-build
+
+COPY dev-requirements.txt /tmp/dev-requirements.txt
+RUN pip install --no-cache-dir -r /tmp/dev-requirements.txt
+
+COPY locales /tmp/locales
+RUN pybabel compile -D evgfilim1-userbot -d /tmp/locales
+
 FROM jrottenberg/ffmpeg:5.1-ubuntu2004
 
 WORKDIR /app
@@ -22,7 +30,7 @@ VOLUME /data
 COPY requirements.txt ./
 RUN python3.10 -m pip install --no-cache-dir -r requirements.txt
 
-COPY locales ./locales
+COPY --from=i18n-build /tmp/locales ./locales
 COPY userbot ./userbot
 
 USER userbot:userbot
