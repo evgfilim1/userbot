@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.4.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-09-30 13:09+0500\n"
+"POT-Creation-Date: 2022-09-30 18:32+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,7 +127,7 @@ msgstr ""
 
 #. i18n: flag must be country flag for the language
 #: userbot/commands/language.py:28
-msgid "🏳"
+msgid "🇺🇸"
 msgstr ""
 
 #: userbot/commands/language.py:35
@@ -140,10 +140,14 @@ msgid ""
 msgstr ""
 
 #: userbot/commands/language.py:48
-msgid "{icon} Invalid language code"
+msgid ""
+"{icon} Invalid language code {lang!r}\n"
+"\n"
+"Available languages:\n"
+"{languages}"
 msgstr ""
 
-#: userbot/commands/language.py:52
+#: userbot/commands/language.py:58
 msgid "{icon} Language changed to {flag} {lang}"
 msgstr ""
 
@@ -271,7 +275,7 @@ msgstr ""
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr ""
 
-#: userbot/modules/commands.py:166
+#: userbot/modules/commands.py:112
 msgid ""
 "{icon} <b>An error occurred during executing command.</b>\n"
 "\n"
@@ -282,20 +286,7 @@ msgid ""
 "<i>More info can be found in logs.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:190
-msgid ""
-"{icon} <b>Command timed out after {timeout} seconds.</b>\n"
-"\n"
-"<b>Command:</b> <code>{message_text}</code>\n"
-"\n"
-"<i>More info can be found in logs.</i>"
-msgstr ""
-
-#: userbot/modules/commands.py:213
-msgid "<i>Executing</i> <code>{command}</code>..."
-msgstr ""
-
-#: userbot/modules/commands.py:242
+#: userbot/modules/commands.py:130
 msgid ""
 "{icon} <b>Successfully executed.</b>\n"
 "\n"
@@ -304,11 +295,24 @@ msgid ""
 "<b>Result:</b>"
 msgstr ""
 
-#: userbot/modules/commands.py:251
+#: userbot/modules/commands.py:139
 msgid "{text} <i>See reply.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:273
+#: userbot/modules/commands.py:227
+msgid ""
+"{icon} <b>Command timed out after {timeout} seconds.</b>\n"
+"\n"
+"<b>Command:</b> <code>{message_text}</code>\n"
+"\n"
+"<i>More info can be found in logs.</i>"
+msgstr ""
+
+#: userbot/modules/commands.py:250
+msgid "<i>Executing</i> <code>{command}</code>..."
+msgstr ""
+
+#: userbot/modules/commands.py:292
 msgid ""
 "{result}\n"
 "\n"
@@ -316,13 +320,13 @@ msgid ""
 "is running.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:432
+#: userbot/modules/commands.py:451
 msgid ""
 "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/modules/commands.py:438
+#: userbot/modules/commands.py:457
 msgid ""
 "<b>List of userbot commands available:</b>\n"
 "\n"
