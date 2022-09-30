@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = [
     "_",
+    "async_partial",
     "edit_or_reply",
     "fetch_stickers",
     "get_message_content",
@@ -22,7 +23,7 @@ from base64 import b64encode
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 from types import TracebackType
-from typing import Any, ClassVar, Protocol, Type, TypedDict, TypeVar
+from typing import Any, Awaitable, Callable, ClassVar, Protocol, Type, TypedDict, TypeVar
 
 from httpx import AsyncClient
 from pyrogram import Client, filters
@@ -31,7 +32,7 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
 from typing_extensions import Self
 
-from userbot.translation import Translation
+from .translation import Translation
 
 _T = TypeVar("_T")
 
@@ -226,3 +227,17 @@ def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
 def _(s: str) -> str:
     """A no-op function that marks strings for translation."""
     return s
+
+
+def async_partial(
+    func: Callable[..., Awaitable[_T]],
+    *args: Any,
+    **kwargs: Any,
+) -> Callable[..., Awaitable[_T]]:
+    """Create a partial function that is awaitable."""
+
+    @functools.wraps(func)
+    async def wrapper(*args_: Any, **kwargs_: Any) -> _T:
+        return await func(*args, *args_, **kwargs, **kwargs_)
+
+    return wrapper
