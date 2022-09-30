@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.4.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-09-30 19:08+0500\n"
+"POT-Creation-Date: 2022-09-30 21:12+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,10 @@ msgid ""
 "\n"
 msgstr ""
 
+#: userbot/commands/about.py:24
+msgid "staging"
+msgstr ""
+
 #: userbot/commands/about.py:29
 msgid "<i>Repo:</i>"
 msgstr ""
@@ -32,11 +36,17 @@ msgid "<i>Commit:</i>"
 msgstr ""
 
 #: userbot/commands/about.py:31
-msgid "{header_icon} <b>About userbot</b>\n"
+msgid "{icon} <b>About userbot</b>\n"
 msgstr ""
 
 #: userbot/commands/about.py:37
 msgid " (<a href='{base_url}/deployments'>deployments</a>)"
+msgstr ""
+
+#: userbot/commands/about.py:40
+msgid ""
+"\n"
+"{icon} <a href='{url}'>Contribute userbot translations</a>"
 msgstr ""
 
 #: userbot/commands/chat_admin.py:24
@@ -130,11 +140,11 @@ msgid "<i>Downloading file(s)...</i>"
 msgstr ""
 
 #. i18n: flag must be country flag for the language
-#: userbot/commands/language.py:28
+#: userbot/commands/language.py:30
 msgid "🇺🇸"
 msgstr ""
 
-#: userbot/commands/language.py:35
+#: userbot/commands/language.py:37
 msgid ""
 "{icon} Current chat language: {flag} {lang}\n"
 "\n"
@@ -143,7 +153,7 @@ msgid ""
 "{languages}"
 msgstr ""
 
-#: userbot/commands/language.py:48
+#: userbot/commands/language.py:50
 msgid ""
 "{icon} Invalid language code {lang!r}\n"
 "\n"
@@ -151,7 +161,7 @@ msgid ""
 "{languages}"
 msgstr ""
 
-#: userbot/commands/language.py:58
+#: userbot/commands/language.py:60
 msgid "{icon} Language changed to {flag} {lang}"
 msgstr ""
 
@@ -189,39 +199,39 @@ msgid ""
 "Permalink: https://t.me/c/{channel_id}/{msg_id}"
 msgstr ""
 
-#: userbot/commands/notes.py:30
+#: userbot/commands/notes.py:34
 msgid "{icon} No name specified"
 msgstr ""
 
-#: userbot/commands/notes.py:33
+#: userbot/commands/notes.py:37
 msgid "{icon} Message with key={key!r} not found"
 msgstr ""
 
-#: userbot/commands/notes.py:48
+#: userbot/commands/notes.py:52
 msgid ""
 "{icon} <b>File reference expired, please save the note again.</b>\n"
 "<i>Note key:</i> <code>{key}</code>"
 msgstr ""
 
-#: userbot/commands/notes.py:73 userbot/commands/notes.py:108
+#: userbot/commands/notes.py:77 userbot/commands/notes.py:112
 msgid ""
-"{icon} Please specify message key\n"
+"{icon} Please specify note key\n"
 "\n"
 "Possible fix: <code>{message_text} key</code>"
 msgstr ""
 
-#: userbot/commands/notes.py:83
-msgid "{icon} Message <code>{key}</code> saved"
+#: userbot/commands/notes.py:87
+msgid "{icon} Note <code>{key}</code> saved"
 msgstr ""
 
-#: userbot/commands/notes.py:94
+#: userbot/commands/notes.py:98
 msgid ""
-"{icon} <b>Saved messages:</b>\n"
+"{icon} <b>Saved notes:</b>\n"
 "{t}"
 msgstr ""
 
-#: userbot/commands/notes.py:112
-msgid "{icon} Message <code>{key}</code> deleted"
+#: userbot/commands/notes.py:116
+msgid "{icon} Note <code>{key}</code> deleted"
 msgstr ""
 
 #: userbot/commands/reactions.py:55
@@ -275,11 +285,15 @@ msgid ""
 "\n"
 msgstr ""
 
-#: userbot/commands/tools.py:70
+#: userbot/commands/tools.py:72
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr ""
 
-#: userbot/modules/commands.py:112
+#: userbot/commands/tools.py:81
+msgid "{icon} <b>Stopping userbot...</b>"
+msgstr ""
+
+#: userbot/modules/commands.py:117
 msgid ""
 "{icon} <b>An error occurred during executing command.</b>\n"
 "\n"
@@ -290,7 +304,7 @@ msgid ""
 "<i>More info can be found in logs.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:130
+#: userbot/modules/commands.py:135
 msgid ""
 "{icon} <b>Successfully executed.</b>\n"
 "\n"
@@ -299,11 +313,11 @@ msgid ""
 "<b>Result:</b>"
 msgstr ""
 
-#: userbot/modules/commands.py:139
+#: userbot/modules/commands.py:144
 msgid "{text} <i>See reply.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:227
+#: userbot/modules/commands.py:232
 msgid ""
 "{icon} <b>Command timed out after {timeout} seconds.</b>\n"
 "\n"
@@ -312,11 +326,11 @@ msgid ""
 "<i>More info can be found in logs.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:250
+#: userbot/modules/commands.py:255
 msgid "<i>Executing</i> <code>{command}</code>..."
 msgstr ""
 
-#: userbot/modules/commands.py:292
+#: userbot/modules/commands.py:297
 msgid ""
 "{result}\n"
 "\n"
@@ -324,25 +338,25 @@ msgid ""
 "is running.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:451
+#: userbot/modules/commands.py:456
 msgid ""
 "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/modules/commands.py:457
+#: userbot/modules/commands.py:462
 msgid ""
 "<b>List of userbot commands available:</b>\n"
 "\n"
 msgstr ""
 
-#: userbot/modules/hooks.py:23
+#: userbot/modules/hooks.py:27
 msgid ""
 "Hooks in this chat:\n"
 "{hooks}"
 msgstr ""
 
-#: userbot/modules/hooks.py:124
+#: userbot/modules/hooks.py:128
 msgid ""
 "Available hooks:\n"
 "{hooks}"
