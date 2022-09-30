@@ -44,7 +44,7 @@ class _ReplaceHelper:
 
 
 @commands.add("tr", usage="<reply> ['en'|'ru']")
-async def sw(message: Message, command: CommandObject) -> None:
+async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
     """Swaps keyboard layout from en to ru or vice versa
 
     If no argument is provided, the layout will be switched between en and ru."""
@@ -62,7 +62,7 @@ async def sw(message: Message, command: CommandObject) -> None:
         case _:
             raise ValueError(f"Unknown {target_layout=}")
     translated = text.translate(tr_abc)
-    answer, delete = edit_or_reply(message)
+    answer, delete = edit_or_reply(message, tr)
     try:
         await answer(translated)
     except MessageNotModified:
@@ -97,7 +97,7 @@ async def sed(
     flags = 0
     for flag in flags_str:
         flags |= getattr(re, flag.upper())
-    answer, delete = edit_or_reply(message)
+    answer, delete = edit_or_reply(message, tr)
     rh = _ReplaceHelper(replace_re)
     text = re.sub(find_re, rh, text, flags=flags)
     if not delete:
@@ -126,10 +126,10 @@ async def sed(
 
 
 @commands.add("caps", usage="<reply>")
-async def caps(message: Message) -> None:
+async def caps(message: Message, tr: Translation) -> None:
     """Toggles capslock on the message"""
     text = get_text(message.reply_to_message)
-    answer, delete = edit_or_reply(message)
+    answer, delete = edit_or_reply(message, tr)
     try:
         await answer(text.swapcase())
     except MessageNotModified:
