@@ -1,6 +1,7 @@
 # userbot
 
 [![wakatime](https://wakatime.com/badge/github/evgfilim1/userbot.svg)](https://wakatime.com/badge/github/evgfilim1/userbot)
+[![Crowdin](https://badges.crowdin.net/evgfilim1-userbot/localized.svg)](https://crowdin.com/project/evgfilim1-userbot)
 [![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [![build status](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml)
