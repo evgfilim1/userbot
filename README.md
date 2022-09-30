@@ -42,6 +42,7 @@ Colors:
 • usercolor <reply|id> — Sends a color sample of user's color as shown in clients
 
 Content converters:
+• toaudio [reply] — Extracts audio from video
 • togif [reply] — Converts a video to a mpeg4 gif
 • tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
 

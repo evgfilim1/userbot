@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.4.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-09-30 18:32+0500\n"
+"POT-Creation-Date: 2022-09-30 19:08+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,16 +101,20 @@ msgstr ""
 msgid "{icon} Color of the user is {c}"
 msgstr ""
 
-#: userbot/commands/content_converters.py:22
-msgid "<i>Converting...</i>"
+#: userbot/commands/content_converters.py:57
+msgid "<i>Converting to mpeg4gif...</i>"
 msgstr ""
 
-#: userbot/commands/content_converters.py:34
+#: userbot/commands/content_converters.py:68 userbot/commands/content_converters.py:120
 msgid "{icon} No video found"
 msgstr ""
 
-#: userbot/commands/content_converters.py:77
+#: userbot/commands/content_converters.py:80
 msgid "<i>Converting to sticker...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:109
+msgid "<i>Extracting audio...</i>"
 msgstr ""
 
 #: userbot/commands/download.py:43
