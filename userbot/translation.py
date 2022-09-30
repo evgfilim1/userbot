@@ -1,3 +1,7 @@
+__all__ = [
+    "Translation",
+]
+
 from gettext import NullTranslations, translation
 from pathlib import Path
 from typing import Final, Iterable

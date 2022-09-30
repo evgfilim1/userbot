@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Migrate from "duck" hook to "emojis" hook (commit 4edf500)."""
 
+__all__ = []
+
 import logging
 import pickle
 from pathlib import Path

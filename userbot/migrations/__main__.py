@@ -1,4 +1,7 @@
 """This script runs all needed migrations in order"""
+
+__all__ = []
+
 import logging
 import os
 from importlib import import_module

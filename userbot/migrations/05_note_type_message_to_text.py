@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Migrate from note type "message" to "text" (commit 99b9af6)."""
 
+__all__ = []
+
 import asyncio
 import logging
 

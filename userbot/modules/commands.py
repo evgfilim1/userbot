@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+__all__ = [
+    "CommandObject",
+    "CommandsModule",
+]
+
 import asyncio
 import html
 import inspect

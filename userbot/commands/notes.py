@@ -1,3 +1,7 @@
+__all__ = [
+    "commands",
+]
+
 import json
 from typing import Type
 

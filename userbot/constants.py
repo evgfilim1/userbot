@@ -1,3 +1,18 @@
+__all__ = [
+    "TAP_STICKER",
+    "TAP_FLT",
+    "MIBIB_STICKER",
+    "MIBIB_FLT",
+    "LONGCAT",
+    "BRA_MEME_PICTURE",
+    "UWU_MEME_PICTURE",
+    "PACK_ALIASES",
+    "GH_PATTERN",
+    "Icons",
+    "DefaultIcons",
+    "PremiumIcons",
+]
+
 import re
 from enum import Enum
 

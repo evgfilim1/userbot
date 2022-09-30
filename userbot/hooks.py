@@ -1,3 +1,7 @@
+__all__ = [
+    "hooks",
+]
+
 import random
 import re
 

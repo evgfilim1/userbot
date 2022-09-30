@@ -1,3 +1,7 @@
+__all__ = [
+    "ShortcutTransformersModule",
+]
+
 import re
 from dataclasses import dataclass
 from typing import Awaitable, Callable

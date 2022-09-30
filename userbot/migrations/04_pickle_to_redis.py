@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Migrate from pickle storage backend to redis one (commit 214bd57)."""
 
+__all__ = []
+
 import asyncio
 import logging
 import pickle

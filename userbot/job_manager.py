@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-__all__ = ["AsyncJobManager"]
+__all__ = [
+    "AsyncJobManager",
+]
 
 from asyncio import Task, create_task
 from types import TracebackType
