@@ -1,4 +1,4 @@
-from gettext import translation
+from gettext import NullTranslations, translation
 from pathlib import Path
 from typing import Final, Iterable
 
@@ -7,13 +7,20 @@ class Translation:
     DOMAIN: Final[str] = "evgfilim1-userbot"
     _LOCALE_DIR = Path.cwd() / "locales"
 
-    def __init__(self, language: str | None):
-        self.tr = translation(
-            self.DOMAIN,
-            localedir=self._LOCALE_DIR,
+    @classmethod
+    def _get_translation(cls, language: str) -> NullTranslations:
+        return translation(
+            cls.DOMAIN,
+            localedir=cls._LOCALE_DIR,
             languages=(language,) if language else None,
             fallback=True,
         )
+
+    def __init__(self, language: str | None):
+        self.tr = self._get_translation(language)
+
+    def change_language(self, language: str) -> None:
+        self.tr = self._get_translation(language)
 
     def gettext(self, message: str) -> str:
         return self.tr.gettext(message)

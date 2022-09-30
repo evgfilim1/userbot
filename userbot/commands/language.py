@@ -22,6 +22,11 @@ async def chat_language(
     lang: str | None,
 ) -> str:
     """Get or change the language of the bot for the current chat"""
+    # Mark the flag as translatable string but don't translate it here yet
+    _ = lambda x: x
+    # i18n: flag must be country flag for the language
+    flag = _("🏳")
+
     _ = tr.gettext
     if not command.args:
         languages = ""
@@ -33,8 +38,7 @@ async def chat_language(
             "Available languages:\n{languages}"
         ).format(
             icon=icons.GLOBE,
-            # i18n: flag must be country flag for the language
-            flag=_("🏳"),
+            flag=_(flag),
             lang=lang,
             message_text=message.text,
             languages=languages,
@@ -43,7 +47,10 @@ async def chat_language(
     if new_lang not in tr.get_available_languages:
         return _("{icon} Invalid language code").format(icon=icons.WARNING)
     await storage.set_chat_language(message.chat.id, new_lang)
-    return _("{icon} Language changed to {lang}").format(
+    # Change the language on-the-fly for middlewares and current handler
+    tr.change_language(new_lang)
+    return _("{icon} Language changed to {flag} {lang}").format(
         icon=icons.GLOBE,
+        flag=_(flag),
         lang=new_lang,
     )
