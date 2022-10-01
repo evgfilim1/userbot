@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-09-30 21:12+0500\n"
-"PO-Revision-Date: 2022-09-30 19:11\n"
+"PO-Revision-Date: 2022-10-01 11:25\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -20,32 +20,33 @@ msgstr ""
 
 #: userbot/utils.py:90
 msgid "<b>Maybe you mean:</b>\n\n"
-msgstr ""
+msgstr "Ehtimol siz aytmoqchisizki:\n\n"
 
 #: userbot/commands/about.py:24
 msgid "staging"
-msgstr ""
+msgstr "sahnalashtirish"
 
 #: userbot/commands/about.py:29
 msgid "<i>Repo:</i>"
-msgstr ""
+msgstr "Repo:"
 
 #: userbot/commands/about.py:30
 msgid "<i>Commit:</i>"
-msgstr ""
+msgstr "Commit:"
 
 #: userbot/commands/about.py:31
 msgid "{icon} <b>About userbot</b>\n"
-msgstr ""
+msgstr "Userbot haqida\n"
 
 #: userbot/commands/about.py:37
 msgid " (<a href='{base_url}/deployments'>deployments</a>)"
-msgstr ""
+msgstr " (<a href='{base_url}/deployments'>joylashtirishlar</a>)"
 
 #: userbot/commands/about.py:40
 msgid "\n"
 "{icon} <a href='{url}'>Contribute userbot translations</a>"
-msgstr ""
+msgstr "\n"
+"{icon}<a href='{url}'>Userbot tarjimalariga hissa qo'shing</a>"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
