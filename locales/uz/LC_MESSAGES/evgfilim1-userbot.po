@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-09-30 21:12+0500\n"
-"PO-Revision-Date: 2022-10-01 11:25\n"
+"PO-Revision-Date: 2022-10-01 12:26\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -51,94 +51,95 @@ msgstr "\n"
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year.\n"
-msgstr ""
+msgstr "<b>⚠⚠⚠   BU HAZIL EMAS  ⚠⚠⚠</b>\n"
+"Ushbu xabar reaktsiyalardan himoyalangan. Kim bu yerda reaksiya bildirsa chatda yarim yilga <b>ban bo'ladi</b>\n"
 
 #: userbot/commands/chat_admin.py:63
 msgid "{icon} {user_link} <b>banned</b> in this chat"
-msgstr ""
+msgstr "{icon}{user_link} bu chatda <b>ban</b> olgan"
 
 #: userbot/commands/chat_admin.py:68
 #, python-format
 msgid " until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr ""
+msgstr " qadar<i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
 #: userbot/commands/chat_admin.py:71
 msgid "\n"
 "<b>Reason:</b> {reason}"
-msgstr ""
+msgstr "<b>Sabab:</b> {reason}"
 
 #: userbot/commands/chat_admin.py:90
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
-msgstr ""
+msgstr "{icon}{user_link}<b>bu chatda <b>ban</b> dan chiqdi"
 
 #: userbot/commands/chat_admin.py:125
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
-msgstr ""
+msgstr "{icon} Shaxs uchun chat nomi oʻrnatildi <i>{title}</i>"
 
 #: userbot/commands/chat_admin.py:184 userbot/commands/chat_admin.py:203
 msgid "{icon} Not a group chat"
-msgstr ""
+msgstr "{icon} guruh chati emas"
 
 #: userbot/commands/chat_admin.py:187
 msgid "{icon} Cannot ban users in the chat"
-msgstr ""
+msgstr "{icon} Chatdagi foydalanuvchilarni ban qilish mumkin emas"
 
 #: userbot/commands/chat_admin.py:207
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
-msgstr ""
+msgstr "{icon} Xabarda foydalanuvchini taqiqlash haqidagi xabarga reaktsiya bildirish o‘chirib qo‘yilgan"
 
 #: userbot/commands/chat_info.py:95
 msgid "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
-msgstr ""
+msgstr "{icon} <b>Yangi chat avatari o'rnatildi!</b> <a href='{msg_link}'>manba</a>\n"
 
 #: userbot/commands/chat_info.py:101
 msgid "{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>"
-msgstr ""
+msgstr "{icon} <b>Yangi chat sarlavhasi belgilandi!</b> <a href='{msg_link}'>Manba</a>"
 
 #: userbot/commands/chat_info.py:113
 msgid "<a href='{msg.link}'>Random message (#{msg.id})</a>"
-msgstr ""
+msgstr "<a href='{msg.link}'>Random habar (#{msg.id})</a>"
 
 #: userbot/commands/colors.py:47
 msgid "{icon} Color {color_spec}"
-msgstr ""
+msgstr "{icon} Rang {color_spec}"
 
 #: userbot/commands/colors.py:71
 msgid "{icon} Color of the user is {c}"
-msgstr ""
+msgstr "{icon} Foydalanuvchi rangi bu {c}"
 
 #: userbot/commands/content_converters.py:57
 msgid "<i>Converting to mpeg4gif...</i>"
-msgstr ""
+msgstr "<i>Konvertatsiya mpeg4gif...</i>"
 
 #: userbot/commands/content_converters.py:68 userbot/commands/content_converters.py:120
 msgid "{icon} No video found"
-msgstr ""
+msgstr "{icon} Video topilmadi"
 
 #: userbot/commands/content_converters.py:80
 msgid "<i>Converting to sticker...</i>"
-msgstr ""
+msgstr "<i>Stickerga konvertatsiya qilish...</i>"
 
 #: userbot/commands/content_converters.py:109
 msgid "<i>Extracting audio...</i>"
-msgstr ""
+msgstr "<i>Audioni chiqarib olmoq...</i>"
 
 #: userbot/commands/download.py:43
 msgid "{icon} No downloadable media found"
-msgstr ""
+msgstr "{icon} Yuklash mumkin bo'lgan media topilmadi"
 
 #: userbot/commands/download.py:68
 msgid "{icon} The file has been downloaded to <code>{output}</code>"
-msgstr ""
+msgstr "{icon} Fayl <code>{output}</code> shunchadan so'ng yuklab bo'linadi"
 
 #: userbot/commands/download.py:77
 msgid "<i>Downloading file(s)...</i>"
-msgstr ""
+msgstr "<i>Fayl(lar) yuklanmoqda...</i>"
 
 #. i18n: flag must be country flag for the language
 #: userbot/commands/language.py:30
 msgid "🇺🇸"
-msgstr ""
+msgstr "🇺🇿"
 
 #: userbot/commands/language.py:37
 msgid "{icon} Current chat language: {flag} {lang}\n\n"
