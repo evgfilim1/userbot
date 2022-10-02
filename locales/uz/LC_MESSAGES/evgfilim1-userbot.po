@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-09-30 21:12+0500\n"
-"PO-Revision-Date: 2022-10-01 12:26\n"
+"PO-Revision-Date: 2022-10-02 07:18\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: userbot/utils.py:90
 msgid "<b>Maybe you mean:</b>\n\n"
-msgstr "Ehtimol siz aytmoqchisizki:\n\n"
+msgstr "<b>Ehtimol siz aytmoqchisizki:</b>\n\n"
 
 #: userbot/commands/about.py:24
 msgid "staging"
@@ -28,15 +28,15 @@ msgstr "sahnalashtirish"
 
 #: userbot/commands/about.py:29
 msgid "<i>Repo:</i>"
-msgstr "Repo:"
+msgstr "<i>Repo:</i>"
 
 #: userbot/commands/about.py:30
 msgid "<i>Commit:</i>"
-msgstr "Commit:"
+msgstr "<i>Commit:</i>"
 
 #: userbot/commands/about.py:31
 msgid "{icon} <b>About userbot</b>\n"
-msgstr "Userbot haqida\n"
+msgstr "{icon} <b>Userbot haqida</b>\n"
 
 #: userbot/commands/about.py:37
 msgid " (<a href='{base_url}/deployments'>deployments</a>)"
@@ -51,8 +51,8 @@ msgstr "\n"
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year.\n"
-msgstr "<b>⚠⚠⚠   BU HAZIL EMAS  ⚠⚠⚠</b>\n"
-"Ushbu xabar reaktsiyalardan himoyalangan. Kim bu yerda reaksiya bildirsa chatda yarim yilga <b>ban bo'ladi</b>\n"
+msgstr "<b>⚠⚠⚠ BU HAZIL EMAS ⚠⚠⚠</b>\n"
+"Ushbu xabar reaktsiyalardan himoyalangan. Kim bu yerda reaksiya bildirsa chatda yarim yilga <b>ban bo'ladi</b>.\n"
 
 #: userbot/commands/chat_admin.py:63
 msgid "{icon} {user_link} <b>banned</b> in this chat"
@@ -66,7 +66,8 @@ msgstr " qadar<i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 #: userbot/commands/chat_admin.py:71
 msgid "\n"
 "<b>Reason:</b> {reason}"
-msgstr "<b>Sabab:</b> {reason}"
+msgstr "\n"
+"<b>Sabab:</b> {reason}"
 
 #: userbot/commands/chat_admin.py:90
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
