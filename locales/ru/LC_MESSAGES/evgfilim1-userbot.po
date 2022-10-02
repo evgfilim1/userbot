@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-09-30 21:12+0500\n"
-"PO-Revision-Date: 2022-09-30 16:23\n"
+"PO-Revision-Date: 2022-10-02 07:18\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -242,7 +242,7 @@ msgstr "Пользовательская реакция #<code>{r}</code>"
 
 #: userbot/commands/reactions.py:82
 msgid "Deleted Account"
-msgstr "Удалённый аккаунт"
+msgstr "Удалённый Аккаунт"
 
 #: userbot/commands/reactions.py:85
 msgid "Unknown user"
@@ -316,7 +316,7 @@ msgstr "{text} <i>См. ответ.</i>"
 msgid "{icon} <b>Command timed out after {timeout} seconds.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in logs.</i>"
-msgstr "{icon} <b>Выполнение команды завершено после {timeout} секунд.</b>\n\n"
+msgstr "{icon} <b>Выполнение команды прекращено после {timeout} секунд.</b>\n\n"
 "<b>Команда:</b> <code>{message_text}</code>\n\n"
 "<i>Больше информации можно найти в журналах.</i>"
 
