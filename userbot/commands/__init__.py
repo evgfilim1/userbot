@@ -19,6 +19,12 @@ from .stickers import commands as stickers_commands
 from .text_converters import commands as text_converters_commands
 from .tools import commands as tools_commands
 
+try:
+    # Automatically register commands from test submodule to allow manual testing of features
+    from .test import commands as test_commands
+except ImportError:
+    test_commands = None
+
 commands = CommandsModule()
 
 for submodule in (
@@ -39,3 +45,6 @@ for submodule in (
     tools_commands,
 ):
     commands.add_submodule(submodule)
+
+if test_commands is not None:
+    commands.add_submodule(test_commands)
