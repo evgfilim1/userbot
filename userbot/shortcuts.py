@@ -33,7 +33,7 @@ async def youtube(match: re.Match[str]) -> str:
     return f"https://youtu.be/{match[1]}"
 
 
-@shortcuts.add(r"@:(\d+)(?::(.+)@)?")
+@shortcuts.add(r"@:(\d+)(?::(.+)@)?\b")
 async def mention(match: re.Match[str]) -> str:
     """Mentions a user by ID"""
     return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
@@ -86,7 +86,7 @@ async def uwu(match: re.Match[str]) -> str:
     return "👉" * count + "👈" * count
 
 
-@shortcuts.add(r"google://(.+)/")
+@shortcuts.add(r"google://(.+?)/")
 async def google(match: re.Match[str]) -> str:
     """Sends a link to a Google search"""
     link = f"https://www.google.com/search?q={quote_plus(match[1])}"
@@ -110,20 +110,20 @@ async def get_note(match: re.Match[str], *, storage: Storage) -> str:
     return ""
 
 
-@shortcuts.add(r"xkcd:(\d+)")
+@shortcuts.add(r"xkcd:(\d+)\b")
 async def xkcd(match: re.Match[str]) -> str:
     """Sends a link to XKCD comic"""
     return f"<a href='https://xkcd.com/{match[1]}/'>xkcd #{match[1]}</a>"
 
 
-@shortcuts.add(r"(pypi|pip)://(.+)/")
+@shortcuts.add(r"(?:pypi|pip)://(.+?)/")
 async def pypi(match: re.Match[str]) -> str:
     """Sends a link to a PyPI package"""
     link = f"https://pypi.org/project/{match[1]}/"
     return f"<b>PyPI:</b> <a href='{link}'>{match[1]}</a>"
 
 
-@shortcuts.add(r"tg:(\w{5,32})[/#](\d+)")
+@shortcuts.add(r"tg:(\w{5,32})[/#](\d+)\b")
 async def telegram(match: re.Match[str]) -> str:
     """Sends a link to a Telegram message"""
     return f"https://t.me/{match[1]}/{match[2]}"

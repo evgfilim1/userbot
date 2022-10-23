@@ -70,7 +70,7 @@ def main() -> None:
 
     _log.debug("Registering handlers...")
     shortcuts.add_handler(partial(github, github_client=github_client), GH_PATTERN)
-    shortcuts.add_handler(partial(get_note, storage=storage), r"n://(.+)/")
+    shortcuts.add_handler(partial(get_note, storage=storage), r"n://(.+?)/")
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,
