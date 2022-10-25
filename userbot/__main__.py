@@ -9,6 +9,7 @@ from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
+from userbot import __is_prod__, __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
@@ -18,11 +19,11 @@ from userbot.job_manager import AsyncJobManager
 from userbot.middlewares import KwargsMiddleware, icon_middleware, translate_middleware
 from userbot.shortcuts import get_note, github, shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import GitHubClient, fetch_stickers, is_prod
+from userbot.utils import GitHubClient, fetch_stickers
 
 logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
-_log.setLevel(logging.INFO if is_prod() else logging.DEBUG)
+_log.setLevel(logging.INFO if __is_prod__ else logging.DEBUG)
 
 
 async def _main(
@@ -49,12 +50,11 @@ def main() -> None:
     if not config.data_location.is_dir():
         raise NotADirectoryError(f"{config.data_location} must be a directory (`data_location`)")
     os.chdir(config.data_location)
-    env_suffix = "-dev" if not is_prod() else ""
     client = Client(
         name=config.session,
         api_id=config.api_id,
         api_hash=config.api_hash,
-        app_version=f"evgfilim1/userbot 0.4.x{env_suffix}",
+        app_version=f"evgfilim1/userbot {__version__}",
         device_model="Linux",
         workdir=str(config.data_location),
         **config.kwargs,

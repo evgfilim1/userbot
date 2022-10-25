@@ -25,12 +25,13 @@ from pyrogram.errors import MessageNotModified, MessageTooLong
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.types import Message
 
+from .. import __is_prod__
 from ..constants import DefaultIcons, Icons, PremiumIcons
 from ..middleware_manager import Middleware, MiddlewareManager
 from ..translation import Translation
-from ..utils import async_partial, is_prod
+from ..utils import async_partial
 
-_DEFAULT_PREFIX = "." if is_prod() else ","
+_DEFAULT_PREFIX = "." if __is_prod__ else ","
 _DEFAULT_TIMEOUT = 30
 
 _PS = ParamSpec("_PS")
@@ -288,7 +289,7 @@ class _CommandHandler:
                 exc_info=e,
                 extra={"command": command},
             )
-            if not is_prod():
+            if not __is_prod__:
                 # data was modified along the way, so we can access attributes from middlewares
                 icons: Type[Icons] = data["icons"]
                 tr: Translation = data["tr"]

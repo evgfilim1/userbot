@@ -7,10 +7,10 @@ from typing import Type
 
 from pyrogram import Client
 
+from .. import __is_prod__
 from ..constants import Icons, PremiumIcons
 from ..modules import CommandsModule
 from ..translation import Translation
-from ..utils import is_prod
 
 commands = CommandsModule("About")
 
@@ -33,7 +33,7 @@ async def about(client: Client, icons: Type[Icons], tr: Translation) -> str:
         f"{github_icon} <a href='{base_url}'>evgfilim1/userbot</a>\n"
         f"{commit_icon} <code>{commit}</code>"
     )
-    if is_prod():
+    if __is_prod__:
         t += _(" (<a href='{base_url}/deployments'>deployments</a>)").format(
             base_url=base_url,
         )

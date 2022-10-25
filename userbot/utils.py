@@ -8,7 +8,6 @@ __all__ = [
     "get_message_content",
     "get_text",
     "GitHubClient",
-    "is_prod",
     "parse_timespec",
     "sticker",
     "StickerInfo",
@@ -17,7 +16,6 @@ __all__ = [
 
 import functools
 import html
-import os
 import re
 from base64 import b64encode
 from collections import defaultdict
@@ -151,11 +149,6 @@ class Unset:
 
     def __str__(self) -> str:
         return repr(self)
-
-
-@functools.lru_cache()
-def is_prod() -> bool:
-    return bool(os.environ.get("GITHUB_SHA", ""))
 
 
 # It's a dict because I want to serialize it easily to JSON
