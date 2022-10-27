@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-10-27 11:36+0500\n"
-"PO-Revision-Date: 2022-10-27 06:53\n"
+"PO-Revision-Date: 2022-10-27 14:04\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -359,14 +359,16 @@ msgstr "{text} <i>Siehe Antwort.</i>"
 msgid "{icon} <b>Command timed out after {timeout}.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in logs.</i>"
-msgstr ""
+msgstr "{icon} <b>Befehl Timeout nach {timeout}.</b>\n\n"
+"<b>Befehl:</b> <code>{message_text}</code>\n\n"
+"<i>Weitere Informationen finden Sie in den Logs.</i>"
 
 #: userbot/modules/commands.py:240
 #, python-brace-format
 msgid "{timeout} second"
 msgid_plural "{timeout} seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{timeout} Sekunde"
+msgstr[1] "{timeout} Sekunden"
 
 #: userbot/modules/commands.py:259
 #, python-brace-format
