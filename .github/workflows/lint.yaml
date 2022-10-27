@@ -8,6 +8,7 @@ on:
       - ".github/workflows/lint.yaml"
       - "userbot/**"
       - "dev-requirements.txt"
+      - "potctl.py"
       - "pyproject.toml"
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
       - ".github/workflows/lint.yaml"
       - "userbot/**"
       - "dev-requirements.txt"
+      - "potctl.py"
       - "pyproject.toml"
 
 permissions:
@@ -43,3 +45,4 @@ jobs:
         run: |
           isort --check --diff userbot
           black --check --diff userbot
+          python potctl.py --diff
