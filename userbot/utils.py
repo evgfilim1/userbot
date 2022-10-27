@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = [
     "_",
+    "__",
     "async_partial",
     "edit_or_reply",
     "fetch_stickers",
@@ -218,8 +219,13 @@ def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
 
 
 def _(s: str) -> str:
-    """A no-op function that marks strings for translation."""
+    """A dummy function that marks strings for translation."""
     return s
+
+
+def __(one: str, many: str, n: int) -> str:
+    """A dummy function that marks plural strings for translation."""
+    return one if n == 1 else many
 
 
 def async_partial(
