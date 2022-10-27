@@ -218,6 +218,7 @@ class _CommandHandler:
         icons: Type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
+        __ = tr.ngettext
         waiting_task = asyncio.create_task(self._send_waiting_message(data))
         try:
             return await asyncio.wait_for(self._call_handler(data), timeout=self.timeout)
@@ -231,12 +232,14 @@ class _CommandHandler:
                 extra={"command": command},
             )
             return _(
-                "{icon} <b>Command timed out after {timeout} seconds.</b>\n\n"
+                "{icon} <b>Command timed out after {timeout}.</b>\n\n"
                 "<b>Command:</b> <code>{message_text}</code>\n\n"
                 "<i>More info can be found in logs.</i>"
             ).format(
                 icon=icons.STOP,
-                timeout=self.timeout,
+                timeout=__("{timeout} second", "{timeout} seconds", self.timeout).format(
+                    timeout=self.timeout,  # cannot be None as TimeoutError is raised
+                ),
                 message_text=html.escape(message.text),
             )
         finally:
