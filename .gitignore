@@ -137,3 +137,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Prevent from accidentally committing test commands file
+# This name is reserved for manual testing new commands and features
+userbot/commands/test.py
