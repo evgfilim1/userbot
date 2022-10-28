@@ -6,9 +6,7 @@ __all__ = [
 
 from asyncio import Task, create_task
 from types import TracebackType
-from typing import Any, Coroutine, Type
-
-from typing_extensions import Self
+from typing import Any, Coroutine, Self, Type
 
 
 class AsyncJobManager:

@@ -7,11 +7,10 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Type, TypeAlias, TypeVar
+from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Self, Type, TypeAlias, TypeVar
 
 from redis.asyncio import Redis
 from redis.asyncio.client import PubSub
-from typing_extensions import Self
 
 from .utils import StickerInfo
 

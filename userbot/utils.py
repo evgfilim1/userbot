@@ -23,14 +23,13 @@ from base64 import b64encode
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 from types import TracebackType
-from typing import Any, Awaitable, Callable, ClassVar, Protocol, Type, TypedDict, TypeVar
+from typing import Any, Awaitable, Callable, ClassVar, Protocol, Self, Type, TypeVar, TypedDict
 
 from httpx import AsyncClient
 from pyrogram import Client, filters
 from pyrogram.enums import MessageMediaType, ParseMode
 from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
-from typing_extensions import Self
 
 from .translation import Translation
 
