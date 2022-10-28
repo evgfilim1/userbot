@@ -2,7 +2,7 @@ version: "3"
 services:
   main:
     build: .
-    image: evgfilim1/userbot:staging
+    image: ghcr.io/evgfilim1/userbot:staging
     env_file: .env
     environment:
       REDIS_HOST: "redis"
