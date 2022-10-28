@@ -17,6 +17,7 @@ __all__ = [
 
 import functools
 import html
+import logging
 import re
 from base64 import b64encode
 from collections import defaultdict
@@ -34,6 +35,7 @@ from typing_extensions import Self
 from .translation import Translation
 
 _T = TypeVar("_T")
+_log = logging.getLogger(__name__)
 
 
 class MessageMethod(Protocol):
@@ -160,6 +162,7 @@ class StickerInfo(TypedDict):
 
 
 async def fetch_stickers(client: Client) -> dict[str, list[StickerInfo]]:
+    _log.debug("Fetching stickers...")
     all_stickers: types.messages.AllStickers = await client.invoke(
         functions.messages.GetAllStickers(hash=0)
     )

@@ -94,6 +94,7 @@ def main() -> None:
 
     job_manager = AsyncJobManager()
 
+    _log.debug("Starting bot...")
     client.run(_main(client, storage, github_client, job_manager))
 
 
