@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-10-28 22:56+0500\n"
-"PO-Revision-Date: 2022-10-28 18:22\n"
+"POT-Creation-Date: 2022-10-28 23:38+0500\n"
+"PO-Revision-Date: 2022-10-28 23:07\n"
 "Last-Translator: \n"
 "Language-Team: Belarusian\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: be_BY\n"
 
-#: userbot/utils.py:91
+#: userbot/utils.py:90
 msgid "<b>Maybe you mean:</b>\n\n"
 msgstr ""
 
