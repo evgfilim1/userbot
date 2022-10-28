@@ -57,5 +57,5 @@ jobs:
           echo "$ENV_FILE_CONTENT" >.env && chmod 400 .env
           docker-compose pull
           eval $COMPOSE_CMD stop main
-          eval $COMPOSE_CMD run --rm --entrypoint /usr/bin/env main python3.10 -m userbot.migrations
+          eval $COMPOSE_CMD run --rm --entrypoint /usr/bin/env main python3.11 -m userbot.migrations
           eval $COMPOSE_CMD up -d main

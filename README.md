@@ -185,7 +185,7 @@ Shortcuts work only when sent by the user who runs userbot.
   in console.
 5. Run `docker-compose up -d` to run the userbot in the background.
 6. To run migrations, run
-   `docker-compose run --rm --entrypoint /usr/bin/env main python3.10 -m userbot.migrations`.
+   `docker-compose run --rm --entrypoint /usr/bin/env main python3.11 -m userbot.migrations`.
    Userbot must be stopped before running any migrations to prevent conflicts.
 
 ## Contributing
