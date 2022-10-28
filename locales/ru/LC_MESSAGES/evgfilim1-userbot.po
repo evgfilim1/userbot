@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-10-28 22:56+0500\n"
-"PO-Revision-Date: 2022-10-28 18:22\n"
+"PO-Revision-Date: 2022-10-28 18:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -295,11 +295,11 @@ msgstr "{icon} <b>Напоминание!</b>"
 #: userbot/commands/reminders.py:55
 #, python-brace-format
 msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr ""
+msgstr "{icon} Напоминание {maybe_for_self}было установлено на <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
 #: userbot/commands/reminders.py:60
 msgid "for myself "
-msgstr ""
+msgstr "для меня "
 
 #: userbot/commands/stickers.py:38
 msgid "<i>Picking random sticker...</i>"
