@@ -60,6 +60,7 @@ Language:
 • lang [language-code] — Get or change the language of the bot for the current chat
 
 Messages:
+• copyhere|cphere|cph <reply> — Copies replied message to current chat
 • delete|delet|del <reply> — Deletes replied message for everyone
 • dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
 • userfirstmsg [reply] — Replies to user's very first message in the chat

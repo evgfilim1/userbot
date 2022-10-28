@@ -126,3 +126,12 @@ async def user_first_message(
         disable_notification=True,
     )
     await message.delete()
+
+
+@commands.add(["copyhere", "cphere", "cph"], usage="<reply>")
+async def copy_here(message: Message) -> None:
+    """Copies replied message to current chat"""
+    await message.reply_to_message.copy(message.chat.id)
+    if message.reply_to_message.from_user.id == message.from_user.id:
+        await message.reply_to_message.delete()
+    await message.delete()
