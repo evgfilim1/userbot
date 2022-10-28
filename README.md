@@ -82,6 +82,8 @@ Reactions:
 Reminders:
 • remind [reply] <time> [message...] — Sets a reminder in the chat
 • remindme [reply] <time> [message...] — Sets a reminder for myself
+• sremind [reply] <time> [message...] — Sets a silent reminder in the chat (no confirmation about scheduled message)
+• sremindme [reply] <time> [message...] — Sets a silent reminder for myself (no confirmation about scheduled message)
 
 Stickers:
 • longcat — Sends random longcat
