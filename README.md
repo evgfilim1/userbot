@@ -5,7 +5,6 @@
 [![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [![build status](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml)
-[![codeql status](https://github.com/evgfilim1/userbot/actions/workflows/codeql.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/codeql.yaml)
 [![code quality](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml)
 [![deployment status](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml)
 
