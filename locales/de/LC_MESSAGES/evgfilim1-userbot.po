@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-10-27 11:36+0500\n"
-"PO-Revision-Date: 2022-10-27 14:04\n"
+"POT-Creation-Date: 2022-10-28 22:56+0500\n"
+"PO-Revision-Date: 2022-10-28 18:22\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: de_DE\n"
 
-#: userbot/utils.py:89
+#: userbot/utils.py:91
 msgid "<b>Maybe you mean:</b>\n\n"
 msgstr "<b>Vielleicht meintest du:</b>\n\n"
 
@@ -287,20 +287,19 @@ msgstr "Unbekannter Nutzer"
 msgid "{icon} <i>No reactions here</i>"
 msgstr "{icon} <i> Keine Reaktionen</i>"
 
-#: userbot/commands/reminders.py:38 userbot/commands/reminders.py:72
+#: userbot/commands/reminders.py:44
 #, python-brace-format
 msgid "{icon} <b>Reminder!</b>"
 msgstr "{icon} <b>Erinnerung!</b>"
 
-#: userbot/commands/reminders.py:49
+#: userbot/commands/reminders.py:55
 #, python-brace-format
-msgid "{icon} Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr "{icon} Erinnerung gesetzt für <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgstr ""
 
-#: userbot/commands/reminders.py:85
-#, python-brace-format
-msgid "{icon} Reminder for myself was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr "{icon} Eigene Erinnerung wurde gesetzt für den <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+#: userbot/commands/reminders.py:60
+msgid "for myself "
+msgstr ""
 
 #: userbot/commands/stickers.py:38
 msgid "<i>Picking random sticker...</i>"
