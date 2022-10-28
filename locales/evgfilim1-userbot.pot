@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.4.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-10-28 22:04+0500\n"
+"POT-Creation-Date: 2022-10-28 22:34+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -289,19 +289,18 @@ msgstr ""
 msgid "{icon} <i>No reactions here</i>"
 msgstr ""
 
-#: userbot/commands/reminders.py:38 userbot/commands/reminders.py:72
+#: userbot/commands/reminders.py:43
 #, python-brace-format
 msgid "{icon} <b>Reminder!</b>"
 msgstr ""
 
-#: userbot/commands/reminders.py:49
+#: userbot/commands/reminders.py:53
 #, python-brace-format
-msgid "{icon} Reminder was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr ""
 
-#: userbot/commands/reminders.py:85
-#, python-brace-format
-msgid "{icon} Reminder for myself was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+#: userbot/commands/reminders.py:58
+msgid "for myself "
 msgstr ""
 
 #: userbot/commands/stickers.py:38
