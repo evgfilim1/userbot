@@ -23,7 +23,7 @@ from base64 import b64encode
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 from types import TracebackType
-from typing import Any, Awaitable, Callable, ClassVar, Protocol, Self, Type, TypeVar, TypedDict
+from typing import Any, Awaitable, Callable, ClassVar, Protocol, Self, Type, TypedDict, TypeVar
 
 from httpx import AsyncClient
 from pyrogram import Client, filters
