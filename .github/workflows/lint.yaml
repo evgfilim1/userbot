@@ -45,4 +45,6 @@ jobs:
         run: |
           isort --check --diff userbot
           black --check --diff userbot
-          python potctl.py --diff
+
+      - name: Check message catalog template is up-to-date
+        run: python potctl.py --diff
