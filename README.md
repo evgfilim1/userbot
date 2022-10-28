@@ -19,6 +19,9 @@ Commands work only when sent by the user who runs userbot. Command prefix is `.`
 on production environment and `,` on development one. `GITHUB_SHA` environment variable is checked
 and, if non-empty, the environment is considered to be production.
 
+<details>
+<summary>Click to expand full command list</summary>
+
 ```
 List of userbot commands available:
 
@@ -95,6 +98,8 @@ Tools:
 • id <reply> — Sends replied user's ID as link
 ```
 
+</details>
+
 ### Hooks (triggers)
 
 Triggers can be enabled by `.<hookname>here` and disabled by `.no<hookname>here`. They are disabled
@@ -117,6 +122,9 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
 ### Shortcuts
 
 Shortcuts work only when sent by the user who runs userbot.
+
+<details>
+<summary>Click to expand full shortcut list</summary>
 
 - `yt:<id>` — Sends a YouTube video with the specified ID
 - `@:<id>` — Mentions a user with the specified ID
@@ -141,6 +149,8 @@ Shortcuts work only when sent by the user who runs userbot.
 - `pypi://<package>/` or `pip://<package>/` — Sends a link to PyPI page of the specified package
 - `tg:<username>/<message-id>` or `tg:<username>#<message-id>` — Sends a link to the specified
   message in the specified chat
+
+</details>
 
 ## Installation and running
 
