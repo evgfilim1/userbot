@@ -27,7 +27,7 @@ from typing import Any, Awaitable, Callable, ClassVar, Protocol, Self, Type, Typ
 
 from httpx import AsyncClient
 from pyrogram import Client, filters
-from pyrogram.enums import MessageMediaType, ParseMode
+from pyrogram.enums import MessageEntityType, MessageMediaType, ParseMode
 from pyrogram.raw import functions, types
 from pyrogram.types import Chat, Message, User
 
@@ -207,8 +207,18 @@ class GitHubClient:
 
 def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
     if (text := message.text) is not None:
-        # TODO (2022-09-08): `disable_web_page_preview`
-        return {"text": text.html}, "text"
+        data = {"text": text.html}
+        if (
+            message.media != MessageMediaType.WEB_PAGE
+            and message.entities is not None
+            and any(
+                entity.type in (MessageEntityType.TEXT_LINK, MessageEntityType.URL)
+                for entity in message.entities
+            )
+        ):
+            # Link exists but no preview
+            data["disable_web_page_preview"] = True
+        return data, "text"
     if (media := message.media) is not None:
         # noinspection PyTypeChecker, PydanticTypeChecker
         # https://youtrack.jetbrains.com/issue/PY-54503

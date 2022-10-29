@@ -39,7 +39,8 @@ async def get_note(
     if "caption" in content or "text" in content:
         content["parse_mode"] = ParseMode.HTML
     if type_ == "text":
-        return content["text"]
+        await message.edit_text(**content)
+        return
     if "message_id" not in content:
         # Backwards compatibility + support for stickers
         try:
@@ -78,7 +79,7 @@ async def save_note(
             "{icon} Please specify note key\n\n" "Possible fix: <code>{message_text} key</code>"
         ).format(icon=icons.QUESTION, message_text=message.text)
     target = message.reply_to_message
-    if target.media not in (MessageMediaType.STICKER, None):
+    if target.media not in (MessageMediaType.STICKER, MessageMediaType.WEB_PAGE, None):
         # Stickers and text messages can be saved without problems, other media types should be
         # saved in a chat to be able to send them later even when the original message is deleted.
         target = await target.copy(notes_chat)
