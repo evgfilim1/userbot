@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-10-28 23:38+0500\n"
-"PO-Revision-Date: 2022-10-28 23:07\n"
+"PO-Revision-Date: 2022-10-29 00:03\n"
 "Last-Translator: \n"
 "Language-Team: English (upside down)\n"
 "MIME-Version: 1.0\n"
@@ -20,19 +20,19 @@ msgstr ""
 
 #: userbot/utils.py:90
 msgid "<b>Maybe you mean:</b>\n\n"
-msgstr ""
+msgstr "<b>:uɐǝɯ noʎ ǝqʎɐW</b>\n\n"
 
 #: userbot/commands/about.py:24
 msgid "staging"
-msgstr ""
+msgstr "ƃuᴉƃɐʇs"
 
 #: userbot/commands/about.py:29
 msgid "<i>Repo:</i>"
-msgstr ""
+msgstr "<i>:odǝɹ</i>"
 
 #: userbot/commands/about.py:30
 msgid "<i>Commit:</i>"
-msgstr ""
+msgstr "<i>:ʇᴉɯɯoƆ</i>"
 
 #: userbot/commands/about.py:31
 #, python-brace-format
