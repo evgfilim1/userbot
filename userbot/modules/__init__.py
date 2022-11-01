@@ -2,9 +2,9 @@ __all__ = [
     "CommandObject",
     "CommandsModule",
     "HooksModule",
-    "ShortcutTransformersModule",
+    "ShortcutsModule",
 ]
 
 from .commands import CommandObject, CommandsModule
 from .hooks import HooksModule
-from .shortcuts import ShortcutTransformersModule
+from .shortcuts import ShortcutsModule

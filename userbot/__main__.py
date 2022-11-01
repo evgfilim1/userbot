@@ -9,21 +9,21 @@ from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
-from userbot import __is_prod__, __version__
+from userbot import __version__, is_prod
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
-from userbot.constants import GH_PATTERN
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
 from userbot.middlewares import KwargsMiddleware, icon_middleware, translate_middleware
-from userbot.shortcuts import get_note, github, shortcuts
+from userbot.modules import HooksModule
+from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
 from userbot.utils import GitHubClient, fetch_stickers
 
 logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
-_log.setLevel(logging.INFO if __is_prod__ else logging.DEBUG)
+_log.setLevel(logging.INFO if is_prod else logging.DEBUG)
 
 
 async def _main(
@@ -69,27 +69,35 @@ def main() -> None:
     github_client = GitHubClient(AsyncClient(http2=True))
 
     _log.debug("Registering handlers...")
-    shortcuts.add_handler(partial(github, github_client=github_client), GH_PATTERN)
-    shortcuts.add_handler(partial(get_note, storage=storage), r"n://(.+?)/")
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
         group=1,
     )
-    commands.add_middleware(
-        KwargsMiddleware(
-            {
-                "storage": storage,
-                "data_dir": config.data_location,
-                "notes_chat": config.media_notes_chat,
-            }
-        )
+
+    root_hooks = HooksModule(commands=commands, storage=storage)
+    root_hooks.add_submodule(hooks)
+
+    kwargs_middleware = KwargsMiddleware(
+        {
+            "storage": storage,
+            "data_dir": config.data_location,
+            "notes_chat": config.media_notes_chat,
+            "github_client": github_client,
+        }
     )
-    commands.add_middleware(icon_middleware)
+    commands.add_middleware(kwargs_middleware)
     commands.add_middleware(translate_middleware)
+    commands.add_middleware(icon_middleware)
+    root_hooks.add_middleware(kwargs_middleware)
+    root_hooks.add_middleware(translate_middleware)
+    root_hooks.add_middleware(icon_middleware)
+    shortcuts.add_middleware(kwargs_middleware)
+    shortcuts.add_middleware(translate_middleware)
+    shortcuts.add_middleware(icon_middleware)
 
     # `HooksModule` must be registered before `CommandsModule` because it adds some commands
-    hooks.register(client, storage, commands)
-    commands.register(client, with_help=True)
+    root_hooks.register(client)
+    commands.register(client)
     shortcuts.register(client)
 
     job_manager = AsyncJobManager()

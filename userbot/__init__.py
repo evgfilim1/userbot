@@ -1,10 +1,10 @@
 __all__ = [
-    "__is_prod__",
+    "is_prod",
     "__version__",
 ]
 
 from os import environ
 from typing import Final
 
-__is_prod__: Final[bool] = bool(environ.get("GITHUB_SHA", ""))
-__version__: Final[str] = "0.4.x" + ("-dev" if not __is_prod__ else "")
+is_prod: Final[bool] = bool(environ.get("GITHUB_SHA", ""))
+__version__: Final[str] = "0.5.x" + ("-dev" if not is_prod else "")

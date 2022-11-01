@@ -49,3 +49,6 @@ class MiddlewareManager(Middleware[_ReturnT]):
     @property
     def has_handlers(self) -> bool:
         return len(self._middlewares) > 0
+
+    def __contains__(self, item: Middleware[_ReturnT]) -> bool:
+        return item in self._middlewares

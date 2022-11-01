@@ -23,7 +23,7 @@ hooks = HooksModule()
 
 
 @hooks.add("emojis", filters.regex(r"\b((?:дак\b|кря(?:к.?|\b))|блин)", flags=re.I))
-async def on_emojis(_: Client, message: Message) -> None:
+async def on_emojis(message: Message) -> str:
     t = ""
     for match in message.matches:
         m = match[1].lower()
@@ -31,11 +31,11 @@ async def on_emojis(_: Client, message: Message) -> None:
             t += "🦆"
         elif m == "блин":
             t += "🥞"
-    await message.reply(t)
+    return t
 
 
 @hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | sticker(TAP_FLT)))
-async def on_tap(_: Client, message: Message) -> None:
+async def on_tap(message: Message) -> None:
     await message.reply_sticker(TAP_STICKER)
 
 
@@ -47,10 +47,10 @@ async def mibib(client: Client, message: Message) -> None:
 
 
 @hooks.add("bra", filters.regex(r"\b(?:бра|bra)\b", flags=re.I))
-async def on_bra(_: Client, message: Message) -> None:
+async def on_bra(message: Message) -> None:
     await message.reply_photo(BRA_MEME_PICTURE)
 
 
 @hooks.add("uwu", filters.regex(r"\b(?:uwu|owo|уву|ово)\b", flags=re.I))
-async def on_uwu(_: Client, message: Message) -> None:
+async def on_uwu(message: Message) -> None:
     await message.reply_photo(UWU_MEME_PICTURE)

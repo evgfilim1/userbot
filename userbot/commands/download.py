@@ -72,7 +72,8 @@ async def _downloader(
 
 
 @commands.add(
-    ["download", "dl"],
+    "download",
+    "dl",
     usage="[reply] [filename]",
     waiting_message=_("<i>Downloading file(s)...</i>"),
 )

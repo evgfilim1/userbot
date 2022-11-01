@@ -21,7 +21,7 @@ from ..utils import _
 commands = CommandsModule("Messages")
 
 
-@commands.add(["delete", "delet", "del"], usage="<reply>")
+@commands.add("delete", "delet", "del", usage="<reply>")
 async def delete_this(message: Message) -> None:
     """Deletes replied message for everyone"""
     try:
@@ -128,7 +128,7 @@ async def user_first_message(
     await message.delete()
 
 
-@commands.add(["copyhere", "cphere", "cph"], usage="<reply>")
+@commands.add("copyhere", "cphere", "cph", usage="<reply>")
 async def copy_here(message: Message) -> None:
     """Copies replied message to current chat"""
     await message.reply_to_message.copy(message.chat.id)

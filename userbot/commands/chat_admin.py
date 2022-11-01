@@ -189,7 +189,7 @@ async def react2ban(
     return _(_REACT2BAN_TEXT)
 
 
-@commands.add(["no_react2ban", "noreact2ban"], usage="<reply>")
+@commands.add("no_react2ban", "noreact2ban", usage="<reply>")
 async def no_react2ban(
     message: Message,
     storage: Storage,

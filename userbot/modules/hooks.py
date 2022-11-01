@@ -2,20 +2,27 @@ __all__ = [
     "HooksModule",
 ]
 
-from dataclasses import dataclass
-from typing import Awaitable, Callable
+from typing import Any, Callable, Type, overload
 
 from pyrogram import Client
-from pyrogram import filters as flt
+from pyrogram import filters as pyrogram_filters
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
+from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
 from ..storage import Storage
 from ..translation import Translation
-from ..utils import async_partial
-from .commands import CommandsModule
+from . import CommandsModule
+from .base import BaseHandler, BaseModule, HandlerT
 
-_HandlerT = Callable[[Client, Message], Awaitable[None]]
+
+class _HookEnabledFilter(pyrogram_filters.Filter):
+    def __init__(self, hook_name: str, storage: Storage) -> None:
+        self.storage = storage
+        self.hook_name = hook_name
+
+    async def __call__(self, client: Client, message: Message) -> bool:
+        return await self.storage.is_hook_enabled(self.hook_name, message.chat.id)
 
 
 async def _list_enabled_hooks(message: Message, storage: Storage, tr: Translation) -> str:
@@ -27,97 +34,175 @@ async def _list_enabled_hooks(message: Message, storage: Storage, tr: Translatio
     return _("Hooks in this chat:\n{hooks}").format(hooks=hooks)
 
 
-@dataclass()
-class _HookHandler:
-    name: str
-    filters: flt.Filter
-    handler: _HandlerT
-    handle_edits: bool
+class HooksHandler(BaseHandler):
+    def __init__(
+        self,
+        *,
+        name: str,
+        filters: pyrogram_filters.Filter,
+        handler: HandlerT,
+        handle_edits: bool,
+    ) -> None:
+        super().__init__(
+            handler=handler,
+            handle_edits=handle_edits,
+            waiting_message=None,
+            timeout=None,
+        )
+        self.name = name
+        self.filters = filters
+
+    def __repr__(self) -> str:
+        name = self.name
+        handle_edits = self.handle_edits
+        return f"<{self.__class__.__name__} {name=} {handle_edits=}>"
 
     async def add_handler(self, message: Message, storage: Storage) -> None:
         await storage.enable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def del_handler(self, message: Message, storage: Storage) -> None:
+    async def remove_handler(self, message: Message, storage: Storage) -> None:
         await storage.disable_hook(self.name, message.chat.id)
         await message.delete()
 
-    async def __call__(self, client: Client, message: Message, storage: Storage) -> None:
-        if await storage.is_hook_enabled(self.name, message.chat.id):
-            await self.handler(client, message)
+    async def _send_waiting_message(self, data: dict[str, Any]) -> None:
+        return
 
 
-class HooksModule:
-    def __init__(self):
-        self._handlers: list[_HookHandler] = []
+class HooksModule(BaseModule):
+    def __init__(
+        self,
+        commands: CommandsModule | None = None,
+        storage: Storage | None = None,
+    ) -> None:
+        super().__init__()
+        self.commands = commands
+        self.storage = storage
 
+    @overload
     def add(
         self,
         name: str,
-        filters: flt.Filter,
+        filters_: pyrogram_filters.Filter,
+        none: None = None,
+        /,
         *,
         handle_edits: bool = False,
-    ) -> Callable[[_HandlerT], _HandlerT]:
-        def _decorator(f: _HandlerT) -> _HandlerT:
-            self.add_handler(
-                handler=f,
-                name=name,
-                filters=filters,
-                handle_edits=handle_edits,
-            )
-            return f
+    ) -> Callable[[HandlerT], HandlerT]:
+        # usage as a decorator
+        pass
 
-        return _decorator
-
-    def add_handler(
+    @overload
+    def add(
         self,
-        handler: _HandlerT,
+        callable_: HandlerT,
         name: str,
-        filters: flt.Filter,
+        filters_: pyrogram_filters.Filter,
+        /,
         *,
         handle_edits: bool = False,
     ) -> None:
-        self._handlers.append(
-            _HookHandler(
-                name=name,
-                filters=filters,
-                handler=handler,
-                handle_edits=handle_edits,
+        # usage as a function
+        pass
+
+    def add(
+        self,
+        callable_or_name: HandlerT | str,
+        name_or_filters: str | pyrogram_filters.Filter,
+        filters_: pyrogram_filters.Filter | None = None,
+        /,
+        *,
+        handle_edits: bool = False,
+    ) -> Callable[[HandlerT], HandlerT] | None:
+        """Registers a hook handler. Can be used as a decorator or as a registration function.
+
+        Example:
+            Example usage as a decorator::
+
+                hooks = HooksModule()
+                @hooks.add("hello", filters.regex(r"(hello|hi)"))
+                async def hello_hook(message: Message, command: CommandObject) -> str:
+                    return "Hello!"
+
+            Example usage as a function::
+
+                hooks = HooksModule()
+                def hello_hook(message: Message, command: CommandObject) -> str:
+                    return "Hello!"
+                hooks.add(hello_hook, "hello", filters.regex(r"(hello|hi)"))
+
+        Returns:
+            The original handler function if used as a decorator, otherwise `None`.
+        """
+
+        def decorator(handler: HandlerT) -> HandlerT:
+            self.add_handler(
+                HooksHandler(
+                    name=name_or_filters,
+                    filters=filters_,
+                    handler=handler,
+                    handle_edits=handle_edits,
+                )
             )
+            return handler
+
+        if callable(callable_or_name):
+            if filters_ is None:
+                raise TypeError("No filters specified")
+            decorator(callable_or_name)
+            return
+
+        filters_ = name_or_filters
+        name_or_filters = callable_or_name
+        return decorator
+
+    def _create_handlers_filters(
+        self,
+        handler: HooksHandler,
+    ) -> tuple[list[Type[Handler]], pyrogram_filters.Filter]:
+        h: list[Type[Handler]] = [MessageHandler]
+        if handler.handle_edits:
+            h.append(EditedMessageHandler)
+        return (
+            h,
+            pyrogram_filters.incoming
+            & _HookEnabledFilter(handler.name, self.storage)
+            & handler.filters,
         )
 
-    def add_submodule(self, module: "HooksModule") -> None:
-        self._handlers.extend(module._handlers)
-
-    def register(self, client: Client, storage: Storage, commands: CommandsModule) -> None:
-        cmds = CommandsModule("Hooks")
+    def register(self, client: Client) -> None:
+        if self.commands is None:
+            raise RuntimeError("Please set commands attribute before registering hooks module")
+        if self.storage is None:
+            raise RuntimeError("Please set storage attribute before registering hooks module")
+        commands = CommandsModule("Hooks")
+        commands.add(
+            _list_enabled_hooks,
+            "hookshere",
+            "hooks_here",
+        )
+        commands.add(
+            self._list_hooks,
+            "hooklist",
+            "hook_list",
+        )
         for handler in self._handlers:
-            cmds.add_handler(
+            commands.add(
                 handler.add_handler,
-                [f"{handler.name}here", f"{handler.name}_here"],
+                f"{handler.name}here",
+                f"{handler.name}_here",
                 doc=f"Enable {handler.name} hook for this chat",
                 hidden=True,
             )
-            cmds.add_handler(
-                handler.del_handler,
-                [f"no{handler.name}here", f"no_{handler.name}_here"],
+            commands.add(
+                handler.remove_handler,
+                f"no{handler.name}here",
+                f"no_{handler.name}_here",
                 doc=f"Disable {handler.name} hook for this chat",
                 hidden=True,
             )
-            f = flt.incoming & handler.filters
-            callback = async_partial(handler, storage=storage)
-            client.add_handler(MessageHandler(callback, f))
-            if handler.handle_edits:
-                client.add_handler(EditedMessageHandler(callback, f))
-        cmds.add_handler(
-            _list_enabled_hooks,
-            ["hookshere", "hooks_here"],
-        )
-        cmds.add_handler(
-            self._list_hooks,
-            ["hooklist", "hook_list"],
-        )
-        commands.add_submodule(cmds)
+        super().register(client)
+        self.commands.add_submodule(commands)
 
     async def _list_hooks(self, tr: Translation) -> str:
         """List all available hooks"""

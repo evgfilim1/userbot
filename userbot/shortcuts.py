@@ -1,6 +1,4 @@
 __all__ = [
-    "get_note",
-    "github",
     "shortcuts",
 ]
 
@@ -9,11 +7,12 @@ import re
 from dataclasses import dataclass
 from urllib.parse import quote_plus
 
-from .modules import ShortcutTransformersModule
+from .constants import GH_PATTERN
+from .modules import ShortcutsModule
 from .storage import Storage
 from .utils import GitHubClient
 
-shortcuts = ShortcutTransformersModule()
+shortcuts = ShortcutsModule()
 
 
 @dataclass()
@@ -39,7 +38,8 @@ async def mention(match: re.Match[str]) -> str:
     return f"<a href='tg://user?id={match[1]}'>{match[2] or match[1]}</a>"
 
 
-async def github(match: re.Match[str], *, github_client: GitHubClient) -> str:
+@shortcuts.add(GH_PATTERN)
+async def github(match: re.Match[str], github_client: GitHubClient) -> str:
     """Sends a link to a GitHub repository"""
     m = GitHubMatch(**match.groupdict())
     url = f"https://github.com/{m.username}"
@@ -99,6 +99,7 @@ async def shrug(_: re.Match[str]) -> str:
     return "¯\\_(ツ)_/¯"
 
 
+@shortcuts.add(r"n://(.+?)/")
 async def get_note(match: re.Match[str], *, storage: Storage) -> str:
     """Sends a saved note"""
     note = await storage.get_note(match[1])

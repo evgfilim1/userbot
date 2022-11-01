@@ -19,7 +19,7 @@ from ..utils import get_message_content
 commands = CommandsModule("Notes")
 
 
-@commands.add(["get", "note", "n"], usage="<name>")
+@commands.add("get", "note", "n", usage="<name>")
 async def get_note(
     client: Client,
     message: Message,
@@ -63,7 +63,7 @@ async def get_note(
     await message.delete()
 
 
-@commands.add(["save", "note_add", "nadd"], usage="<reply> <name>")
+@commands.add("save", "note_add", "nadd", usage="<reply> <name>")
 async def save_note(
     message: Message,
     command: CommandObject,
@@ -88,7 +88,7 @@ async def save_note(
     return _("{icon} Note <code>{key}</code> saved").format(icon=icons.BOOKMARK, key=key)
 
 
-@commands.add(["notes", "ns"])
+@commands.add("notes", "ns")
 async def saved_notes(storage: Storage, icons: Type[Icons], tr: Translation) -> str:
     """Shows all saved notes"""
     _ = tr.gettext
@@ -99,7 +99,7 @@ async def saved_notes(storage: Storage, icons: Type[Icons], tr: Translation) -> 
     return _("{icon} <b>Saved notes:</b>\n{t}").format(icon=icons.BOOKMARK, t=t)
 
 
-@commands.add(["note_del", "ndel"], usage="<name>")
+@commands.add("note_del", "ndel", usage="<name>")
 async def delete_note(
     message: Message,
     command: CommandObject,
