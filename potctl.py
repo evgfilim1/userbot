@@ -64,27 +64,29 @@ def write_message_template_catalog(
         write_po(f, catalog, width=100)
 
 
-def is_pot_creation_date_line(line: bytes) -> bool:
-    return line.startswith(b'"POT-Creation-Date')
-
-
 def diff_message_templates(
     old_filename: str = DEFAULT_POT_NAME,
 ) -> bytes | None:
     if old_filename is None:
         old_filename = DEFAULT_POT_NAME
     with open(old_filename, "rb") as f:
-        old_catalog_lines = f.readlines()
-        f.seek(0)
         old_catalog = read_po(f)
     new_catalog = extract_message_template_catalog()
+
     new_catalog.creation_date = old_catalog.creation_date  # don't diff it
+    for msg in old_catalog:
+        msg.flags.discard("python-format")  # auto-inserted, we don't use this
+
+    old_catalog_file = BytesIO()
+    write_po(old_catalog_file, old_catalog, width=100)
+    old_catalog_file.seek(0)
     new_catalog_file = BytesIO()
     write_po(new_catalog_file, new_catalog, width=100)
     new_catalog_file.seek(0)
+
     gen = difflib.diff_bytes(
         difflib.unified_diff,
-        old_catalog_lines,
+        old_catalog_file.readlines(),
         new_catalog_file.readlines(),
         fromfile=old_filename.encode(),
         tofile=f"{DEFAULT_POT_NAME}.gen".encode(),
