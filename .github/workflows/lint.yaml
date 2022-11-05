@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - ".github/workflows/lint.yaml"
+      - "locales/*.pot"
       - "userbot/**"
       - "dev-requirements.txt"
       - "potctl.py"
@@ -15,6 +16,7 @@ on:
       - master
     paths:
       - ".github/workflows/lint.yaml"
+      - "locales/*.pot"
       - "userbot/**"
       - "dev-requirements.txt"
       - "potctl.py"
