@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-05 22:03+0500\n"
-"PO-Revision-Date: 2022-11-05 17:13\n"
+"POT-Creation-Date: 2022-11-05 22:13+0500\n"
+"PO-Revision-Date: 2022-11-05 19:47\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -316,37 +316,40 @@ msgstr "{icon} Недостаточно значений для распаков
 msgid "Maybe you mean:\n\n"
 msgstr "Возможно, вы имеете в виду:\n\n"
 
-#: userbot/commands/tools.py:82
+#: userbot/commands/tools.py:83
 #, python-brace-format
 msgid "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
-msgstr ""
+msgstr "<b>Код:</b>\n"
+"<pre><code class='language-python'>{code}</code></pre>"
 
-#: userbot/commands/tools.py:85
+#: userbot/commands/tools.py:86
 #, python-brace-format
 msgid "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
-msgstr ""
+msgstr "<b>Результат:</b>\n"
+"<pre><code class='language-python'>{result}</code></pre>"
 
-#: userbot/commands/tools.py:126
+#: userbot/commands/tools.py:127
 #, python-brace-format
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr "{icon} Сон в течение {sec} секунд окончен"
 
-#: userbot/commands/tools.py:135
+#: userbot/commands/tools.py:136
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr "{icon} <b>Остановка пользовательского бота...</b>"
 
 #: userbot/modules/base.py:103
 msgid "<i>Userbot is processing the message...</i>"
-msgstr ""
+msgstr "<i>Пользовательский бот обрабатывает сообщение...</i>"
 
 #: userbot/modules/base.py:122
 #, python-brace-format
 msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
 "<i>More info can be found in logs.</i>"
-msgstr ""
+msgstr "{icon} <b>Обработка сообщения прервана по тайм-ауту {timeout}.</b>\n"
+"<i>Больше информации можно найти в журналах.</i>"
 
 #: userbot/modules/base.py:127
 #, python-brace-format
