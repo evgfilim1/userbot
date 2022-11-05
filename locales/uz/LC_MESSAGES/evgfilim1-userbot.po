@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-05 22:03+0500\n"
-"PO-Revision-Date: 2022-11-05 17:13\n"
+"POT-Creation-Date: 2022-11-05 22:13+0500\n"
+"PO-Revision-Date: 2022-11-05 19:47\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -302,24 +302,24 @@ msgstr ""
 msgid "Maybe you mean:\n\n"
 msgstr ""
 
-#: userbot/commands/tools.py:82
+#: userbot/commands/tools.py:83
 #, python-brace-format
 msgid "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:85
+#: userbot/commands/tools.py:86
 #, python-brace-format
 msgid "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:126
+#: userbot/commands/tools.py:127
 #, python-brace-format
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr ""
 
-#: userbot/commands/tools.py:135
+#: userbot/commands/tools.py:136
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr ""
