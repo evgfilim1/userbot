@@ -2,6 +2,7 @@ __all__ = [
     "commands",
 ]
 
+import ast
 import asyncio
 import html
 from calendar import TextCalendar
@@ -26,12 +27,66 @@ async def mention_with_id(message: Message) -> str:
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
-@commands.add("calc", usage="<python-expr>")
+@commands.add("calc", "eval", usage="<python-expr>")
 async def calc(**kwargs: Any) -> str:
     """Evaluates Python expression"""
     command: CommandObject = kwargs["command"]
     expr = command.args
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
+
+
+@commands.add("exec", usage="<python-expr>")
+async def python_exec(**kwargs: Any) -> str:
+    """Executes Python expression"""
+    command: CommandObject = kwargs["command"]
+    tr: Translation = kwargs["tr"]
+    _ = tr.gettext
+    expr = command.args or "pass"
+    ns = {"__builtins__": __builtins__}
+    # Manually building AST to ignore boilerplate lines in line count while formatting an exception
+    code_tree = ast.Module(
+        body=[
+            ast.ImportFrom(
+                module="__future__",
+                names=[ast.alias(name="annotations", asname=None, lineno=0, col_offset=0)],
+                level=0,
+                lineno=0,
+                col_offset=0,
+            ),
+            ast.AsyncFunctionDef(
+                name="runner",
+                args=ast.arguments(
+                    posonlyargs=[],
+                    args=[ast.arg(arg="kwargs", annotation=None, lineno=0, col_offset=0)],
+                    vararg=None,
+                    kwonlyargs=[],
+                    kw_defaults=[],
+                    kwarg=None,
+                    defaults=[],
+                ),
+                body=ast.parse(expr).body,
+                decorator_list=[],
+                returns=None,
+                type_comment=None,
+                lineno=0,
+                col_offset=0,
+            ),
+        ],
+        type_ignores=[],
+    )
+    code = compile(
+        code_tree,
+        filename="<input>",
+        mode="exec",
+    )
+    exec(code, ns)
+    answer = _("<b>Code:</b>\n<pre><code class='language-python'>{code}</code></pre>").format(
+        code=html.escape(expr, quote=False)
+    )
+    result = _("<b>Result:</b>\n<pre><code class='language-python'>{result}</code></pre>").format(
+        result=html.escape(repr(await ns["runner"](kwargs)), quote=False)
+    )
+    return f"{answer}\n\n{result}"
 
 
 @commands.add("cal", usage="[month] [year]")
@@ -50,7 +105,7 @@ async def calendar(message: Message, command: CommandObject) -> str:
         year = int(args_list[1])
     else:
         year = now.year
-    return f"<code>{TextCalendar().formatmonth(year, month)}</code>"
+    return f"<pre><code>{TextCalendar().formatmonth(year, month)}</code></pre>"
 
 
 @commands.add("testerror", hidden=True)

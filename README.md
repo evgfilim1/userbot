@@ -95,7 +95,8 @@ Text converters:
 
 Tools:
 • cal [month] [year] — Sends a calendar for a specified month and year
-• calc <python-expr> — Evaluates Python expression
+• calc|eval <python-expr> — Evaluates Python expression
+• exec <python-expr> — Executes Python expression
 • id <reply> — Sends replied user's ID as link
 ```
 
