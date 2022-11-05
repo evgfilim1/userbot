@@ -94,7 +94,7 @@ async def google(match: re.Match[str]) -> str:
 
 
 @shortcuts.add(r":shrug:")
-async def shrug(_: re.Match[str]) -> str:
+async def shrug() -> str:
     """Sends shrug kaomoji"""
     return "¯\\_(ツ)_/¯"
 
