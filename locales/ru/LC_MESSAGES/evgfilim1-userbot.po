@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-06 21:54+0500\n"
-"PO-Revision-Date: 2022-11-06 16:56\n"
+"PO-Revision-Date: 2022-11-06 17:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,8 @@ msgstr "\n"
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
-msgstr ""
+msgstr "<b>⚠⚠⚠ ЭТО НЕ ШУТКА ⚠⚠⚠</b>\n"
+"Сообщение защищено от реакций. Любой, кто поставит здесь реакцию, будет <b>заблокирован</b> в чате на полгода."
 
 #: userbot/commands/chat_admin.py:63
 #, python-brace-format
@@ -85,7 +86,7 @@ msgstr "{icon} Должность человека в чате изменена 
 
 #: userbot/commands/chat_admin.py:159
 msgid "Recently banned:"
-msgstr ""
+msgstr "Недавно заблокированы:"
 
 #: userbot/commands/chat_admin.py:189 userbot/commands/chat_admin.py:208
 #, python-brace-format
