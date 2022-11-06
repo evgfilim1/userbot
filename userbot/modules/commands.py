@@ -496,6 +496,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         )
         if self._ensure_middlewares_registered:
             # These middlewares are expected by the base module to be registered
+            # TODO (2022-11-06): flag to disable this behavior
             if icon_middleware not in self._middleware:
                 self.add_middleware(icon_middleware)
             if translate_middleware not in self._middleware:
