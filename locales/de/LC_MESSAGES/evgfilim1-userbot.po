@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-05 22:13+0500\n"
-"PO-Revision-Date: 2022-11-05 19:47\n"
+"POT-Creation-Date: 2022-11-06 21:54+0500\n"
+"PO-Revision-Date: 2022-11-06 16:56\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -53,9 +53,8 @@ msgstr "\n"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
-"This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year.\n"
-msgstr "<b>⚠⚠⚠ Dies ist kein SCHERZ! ⚠⚠⚠</b>\n"
-"Diese Nachricht ist von Reaktionen geschützt. Jeder der hier eine Reaktion ausführt wird in diesem Chat für ein halbes Jahr <b>gesperrt</b>.\n"
+"This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
+msgstr ""
 
 #: userbot/commands/chat_admin.py:63
 #, python-brace-format
@@ -84,17 +83,21 @@ msgstr "{icon}{user_link} in diesem Chat <b>entsperrt</b>"
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Für diese Person wurde der Titel zu <i>{title}</i> geändert"
 
-#: userbot/commands/chat_admin.py:184 userbot/commands/chat_admin.py:203
+#: userbot/commands/chat_admin.py:159
+msgid "Recently banned:"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:189 userbot/commands/chat_admin.py:208
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Kein Gruppenchat"
 
-#: userbot/commands/chat_admin.py:187
+#: userbot/commands/chat_admin.py:192
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Kann in diesem Chat keine Nutzer sperren"
 
-#: userbot/commands/chat_admin.py:207
+#: userbot/commands/chat_admin.py:212
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Der Reaktionenban wurde für diese Nachricht deaktiviert"
