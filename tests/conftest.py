@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import random
+from typing import AsyncIterable
 
 import pytest
 import pytest_asyncio
 from pyrogram import Client
+from pyrogram.types import TermsOfService, User
 
 from userbot import __version__
 from userbot.config import Config, RedisConfig
@@ -24,11 +27,22 @@ def config() -> Config:
     config.kwargs.setdefault("test_mode", "1")
     config.kwargs.setdefault("in_memory", "1")
     if config.kwargs.get("phone_number", None) is None:
-        dc_n = str(random.randint(1, 3))
-        random_n = f"{random.randint(0, 9999):4d}"
-        # https://docs.pyrogram.org/topics/test-servers#test-numbers
-        config.kwargs["phone_number"] = f"99966{dc_n}{random_n}"
-        config.kwargs["phone_code"] = dc_n * 5
+        try:
+            with open(config.data_location / ".test_phone.json") as f:
+                phone_number, phone_code = json.load(f)
+        except FileNotFoundError:
+            dc_n = str(random.randint(1, 3))
+            random_n = f"{random.randint(0, 9999):4d}"
+            # https://docs.pyrogram.org/topics/test-servers#test-numbers
+            phone_number = f"99966{dc_n}{random_n}"
+            phone_code = dc_n * 5
+            try:
+                with open(config.data_location / ".test_phone.json", "w") as f:
+                    json.dump([phone_number, phone_code], f)
+            except OSError:
+                pass
+        config.kwargs["phone_number"] = phone_number
+        config.kwargs["phone_code"] = phone_code
 
     return config
 
@@ -50,7 +64,7 @@ def event_loop() -> asyncio.AbstractEventLoop:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def client(config: Config) -> Client:
+async def client(config: Config) -> AsyncIterable[Client]:
     app = Client(
         name=config.session,
         api_id=config.api_id,
@@ -62,6 +76,23 @@ async def client(config: Config) -> Client:
         workdir=str(config.data_location),
         **config.kwargs,
     )
+    # Make sure we are registered, register otherwise
+    is_authorized = await app.connect()
+    if not is_authorized:
+        phone_number = config.kwargs["phone_number"]
+        code = await app.send_code(phone_number)
+        signed_in = await app.sign_in(
+            phone_number, code.phone_code_hash, config.kwargs["phone_code"]
+        )
+        if not isinstance(signed_in, User):
+            await app.sign_up(
+                phone_number,
+                code.phone_code_hash,
+                f"Test {phone_number[-4:]}",
+            )
+            if isinstance(signed_in, TermsOfService):
+                await app.accept_terms_of_service(signed_in.id)
+    await app.disconnect()
     await app.start()
     yield app
     await app.stop()
