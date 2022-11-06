@@ -47,5 +47,5 @@ jobs:
         env:
           ENV_FILE_CONTENT: ${{ secrets.TEST_ENV_FILE_CONTENT }}
         run: |
-          eval "$(echo "$ENV_FILE_CONTENT" | sed '/^#/d;s/^/export /')"
+          echo "$ENV_FILE_CONTENT" >>"$GITHUB_ENV"
           pytest
