@@ -24,7 +24,7 @@ from ..utils import _, parse_timespec
 _REACT2BAN_TEXT = _(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
     "This message is protected from reactions. Anyone who puts a reaction here will be"
-    " <b>banned</b> in the chat for half a year.\n"
+    " <b>banned</b> in the chat for half a year."
 )
 
 commands = CommandsModule("Chat administration")
@@ -132,7 +132,7 @@ async def react2ban_raw_reaction_handler(
     client: Client,
     update: base.Update,
     users: dict[int, types.User],
-    _: dict[int, types.Chat | types.Channel],
+    ___: dict[int, types.Chat | types.Channel],
     *,
     storage: Storage,
 ) -> None:
@@ -151,7 +151,12 @@ async def react2ban_raw_reaction_handler(
             raise AssertionError(f"Unsupported peer type: {update.peer.__class__.__name__}")
     if not await storage.is_react2ban_enabled(chat_id, update.msg_id):
         return
-    t = f"{_REACT2BAN_TEXT}\nRecently banned:\n"
+
+    lang = await storage.get_chat_language(chat_id)
+    tr = Translation(lang)
+    _ = tr.gettext
+
+    t = _("Recently banned:")
     for r in update.reactions.recent_reactions:
         user_id = r.peer_id.user_id
         name = users[user_id].first_name
@@ -160,9 +165,9 @@ async def react2ban_raw_reaction_handler(
             try:
                 await client.ban_chat_member(chat_id, user_id, datetime.now() + timedelta(days=180))
             except UserAdminInvalid:
-                pass  # ignore, target peer is an admin or client lost the rights to ban anyone
-            else:
-                t += f"• <a href='tg://user?id={user_id}'>{name}</a> (#<code>{user_id}</code>)\n"
+                continue  # ignore, target peer is an admin or client lost the rights to ban anyone
+        t += f"\n• <a href='tg://user?id={user_id}'>{name}</a> (#<code>{user_id}</code>)"
+    t = "{header}\n\n{footer}".format(header=_(_REACT2BAN_TEXT), footer=t)
     try:
         await client.edit_message_text(chat_id, message_id, t)
     except FloodWait as e:
