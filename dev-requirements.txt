@@ -7,7 +7,7 @@ isort~=5.10.1
 pre-commit~=2.20.0
 
 # Tests
+hypothesis~=6.56.4
 pytest~=7.2.0
 pytest-asyncio~=0.20.1
 # TODO (2022-11-06): pytest-cov~=4.0.0
-# TODO (2022-11-06): hypothesis~=6.56.4

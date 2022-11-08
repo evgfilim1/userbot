@@ -1,11 +1,20 @@
+import string
 from unittest.mock import patch
 
+from hypothesis import assume, given
+from hypothesis import strategies as st
 from pyrogram import Client
 
+from userbot.modules.base import HandlerT
 from userbot.modules.commands import CommandsHandler, CommandsModule
 
 
+async def _sample_handler() -> str | None:
+    pass
+
+
 # region Test `CommandsModule`
+# TODO (2022-11-07): check expected failure cases
 def test_add_callable() -> None:
     """Tests add() can be used as a callable."""
 
@@ -49,13 +58,19 @@ def test_add_decorator() -> None:
     assert len(commands._handlers) == 1
 
 
-def test_add_args() -> None:
+@given(
+    handler=st.builds(
+        CommandsHandler,
+        commands=st.lists(st.text(string.ascii_letters), min_size=1),
+        prefix=st.sampled_from(string.punctuation),
+        handler=st.functions(like=_sample_handler),
+    ),
+)
+def test_add_args(handler: CommandsHandler) -> None:
     """Tests add() arguments are passed to the handler."""
-    commands = CommandsModule()
+    assume(handler.category != "" and handler.doc != "")  # These values are considered `None`
 
-    async def handler() -> None:
-        """Test handler"""
-        pass
+    commands = CommandsModule()
 
     with patch.object(
         CommandsModule,
@@ -63,46 +78,60 @@ def test_add_args() -> None:
         autospec=True,
     ) as mock:
         commands.add(
-            handler,
-            "test1",
-            "test2",
-            prefix="?",
-            usage="<usage>",
-            category="test",
-            hidden=True,
-            handle_edits=False,
-            waiting_message="test123",
-            timeout=42,
+            handler.handler,
+            *handler.commands,
+            prefix=handler.prefix,
+            usage=handler.usage,
+            doc=handler.doc,
+            category=handler.category,
+            hidden=handler.hidden,
+            handle_edits=handler.handle_edits,
+            waiting_message=handler.waiting_message,
+            timeout=handler.timeout,
         )
 
         h: CommandsHandler = mock.call_args.args[1]
 
-    assert all(expected == actual for expected, actual in zip(("test1", "test2"), iter(h.commands)))
-    assert h.prefix == "?"
-    assert h.handler is handler
-    assert h.usage == "<usage>"
-    assert h.doc == handler.__doc__
-    assert h.category == "test"
-    assert h.hidden is True
-    assert h.handle_edits is False
-    assert h.waiting_message == "test123"
-    assert h.timeout == 42
+    assert all(expected == actual for expected, actual in zip(handler.commands, iter(h.commands)))
+    assert h.prefix == handler.prefix
+    assert h.handler is handler.handler
+    assert h.usage == handler.usage
+    assert h.doc == handler.doc
+    assert h.category == handler.category
+    assert h.hidden == handler.hidden
+    assert h.handle_edits == handler.handle_edits
+    assert h.waiting_message == handler.waiting_message
+    assert h.timeout == handler.timeout
 
 
-def test_register(client: Client) -> None:
+@given(
+    handlers=st.lists(
+        st.tuples(
+            st.functions(like=_sample_handler),
+            st.lists(st.text(string.ascii_letters), min_size=1, unique=True),
+            st.booleans(),
+        ),
+    )
+)
+def test_register(handlers: list[tuple[HandlerT, list[str], bool]], client: Client) -> None:
     """Tests register() adds all handlers to pyrogram Client"""
+    # Don't repeat commands between handlers
+    # TODO (2022-11-08): optimize this
+    assume(
+        all(
+            cmd not in other[1]
+            for handler in handlers
+            for other in handlers
+            for cmd in handler[1]
+            if other != handler
+        )
+    )
 
     commands = CommandsModule()
-
-    @commands.add("foo")
-    async def foo() -> None:
-        """Test handler"""
-        pass
-
-    @commands.add("bar", handle_edits=False)
-    async def bar() -> None:
-        """Test handler"""
-        pass
+    handler_count = 0
+    for handler, command_list, handle_edits in handlers:
+        commands.add(handler, *command_list, handle_edits=handle_edits)
+        handler_count += 1 + int(handle_edits)
 
     with patch.object(
         Client,
@@ -112,11 +141,11 @@ def test_register(client: Client) -> None:
         commands.register(client)
 
         # Three handlers will be added: "foo", edited "foo" and "bar".
-        assert mock.call_count == 3
+        assert mock.call_count == handler_count
 
 
 def test_register_root(client: Client) -> None:
-    """Tests register() adds all handlers + help handler to pyrogram Client"""
+    """Tests register() adds a handler + help handler to pyrogram Client"""
 
     commands = CommandsModule(root=True)
 

@@ -25,6 +25,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: "true"
+
 jobs:
   test:
     name: Test code using pytest
