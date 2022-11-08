@@ -13,6 +13,7 @@ from pyrogram.types import TermsOfService, User
 
 from userbot import __version__
 from userbot.config import Config, RedisConfig
+from userbot.utils import SecretStr
 
 
 @pytest.fixture(scope="session")
@@ -24,8 +25,8 @@ def config() -> Config:
 
     config = Config.from_env()
 
-    config.kwargs.setdefault("test_mode", "1")
-    config.kwargs.setdefault("in_memory", "1")
+    config.kwargs.setdefault("test_mode", SecretStr("1"))
+    config.kwargs.setdefault("in_memory", SecretStr("1"))
     if config.kwargs.get("phone_number", None) is None:
         try:
             with open(config.data_location / ".test_phone.json") as f:
@@ -41,8 +42,8 @@ def config() -> Config:
                     json.dump([phone_number, phone_code], f)
             except OSError:
                 pass
-        config.kwargs["phone_number"] = phone_number
-        config.kwargs["phone_code"] = phone_code
+        config.kwargs["phone_number"] = SecretStr(phone_number)
+        config.kwargs["phone_code"] = SecretStr(phone_code)
 
     return config
 
@@ -69,7 +70,7 @@ async def client(config: Config) -> AsyncIterable[Client]:
     app = Client(
         name=config.session,
         api_id=config.api_id,
-        api_hash=config.api_hash,
+        api_hash=config.api_hash.value,
         app_version=f"evgfilim1/userbot {__version__} TEST",
         device_model="Linux",
         test_mode=config.kwargs.pop("test_mode") == "1",
@@ -80,10 +81,10 @@ async def client(config: Config) -> AsyncIterable[Client]:
     # Make sure we are registered, register otherwise
     is_authorized = await app.connect()
     if not is_authorized:
-        phone_number = config.kwargs["phone_number"]
+        phone_number = config.kwargs["phone_number"].value
         code = await app.send_code(phone_number)
         signed_in = await app.sign_in(
-            phone_number, code.phone_code_hash, config.kwargs["phone_code"]
+            phone_number, code.phone_code_hash, config.kwargs["phone_code"].value
         )
         if not isinstance(signed_in, User):
             await app.sign_up(
