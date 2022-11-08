@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-08 13:37+0500\n"
-"PO-Revision-Date: 2022-11-08 09:05\n"
+"PO-Revision-Date: 2022-11-08 12:23\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,8 @@ msgstr "\n"
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
-msgstr ""
+msgstr "<b>⚠⚠⚠ ЦЕ НЕ ЖАРТ ⚠⚠⚠</b>\n"
+"Повідомлення захищене від реакцій. Будь-хто, хто поставить реакцію, буде <b>заблокований</b> у чаті на півроку."
 
 #: userbot/commands/chat_admin.py:63
 #, python-brace-format
