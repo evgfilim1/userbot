@@ -9,22 +9,25 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+from .utils import SecretStr
+
 
 @dataclass()
 class RedisConfig:
     host: str
     port: int = 6379
     db: int = 0
-    password: str | None = None
+    password: SecretStr | None = None
 
     @classmethod
     def from_env(cls) -> RedisConfig:
         env = os.environ
+        password = env.get("REDIS_PASSWORD", None)
         return cls(
             host=env["REDIS_HOST"],
             port=int(env.get("REDIS_PORT", cls.port)),
             db=int(env.get("REDIS_DB", cls.db)),
-            password=env.get("REDIS_PASSWORD", None),
+            password=None if password is None else SecretStr(password),
         )
 
 
@@ -32,10 +35,10 @@ class RedisConfig:
 class Config:
     session: str
     api_id: int
-    api_hash: str
+    api_hash: SecretStr
     data_location: Path
     media_notes_chat: int | str
-    kwargs: dict[str, str]
+    kwargs: dict[str, SecretStr]
 
     @classmethod
     def from_env(cls) -> Config:
@@ -43,11 +46,11 @@ class Config:
         return cls(
             session=env["SESSION"],
             api_id=int(env["API_ID"]),
-            api_hash=env["API_HASH"],
+            api_hash=SecretStr(env["API_HASH"]),
             data_location=Path(env.get("DATA_LOCATION", ".dockerdata/userbot")).resolve(),
             media_notes_chat=env.get("MEDIA_NOTES_CHAT", "self"),
             kwargs={
-                key.lower().removeprefix("pyrogram_"): value
+                key.lower().removeprefix("pyrogram_"): SecretStr(value)
                 for key, value in env.items()
                 if key.startswith("PYROGRAM_")
             },

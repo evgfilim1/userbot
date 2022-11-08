@@ -41,11 +41,12 @@ def main():
         _log.warning("Pickle storage not found, skipping migration", exc_info=e)
         return
     redis_config = RedisConfig.from_env()
+    password = redis_config.password.value if redis_config.password else None
     new_storage = RedisStorage(
         redis_config.host,
         redis_config.port,
         redis_config.db,
-        redis_config.password,
+        password,
     )
 
     asyncio.run(_main(old_storage_raw, new_storage))

@@ -4,7 +4,6 @@ import logging
 import os
 from functools import partial
 
-from httpx import AsyncClient
 from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
@@ -53,20 +52,21 @@ def main() -> None:
     client = Client(
         name=config.session,
         api_id=config.api_id,
-        api_hash=config.api_hash,
+        api_hash=config.api_hash.value,
         app_version=f"evgfilim1/userbot {__version__}",
         device_model="Linux",
         workdir=str(config.data_location),
-        **config.kwargs,
+        **{k: v.value for k, v in config.kwargs.items()},
     )
     redis_config = RedisConfig.from_env()
+    password = redis_config.password.value if redis_config.password else None
     storage = RedisStorage(
         redis_config.host,
         redis_config.port,
         redis_config.db,
-        redis_config.password,
+        password,
     )
-    github_client = GitHubClient(AsyncClient(http2=True))
+    github_client = GitHubClient()
 
     _log.debug("Registering handlers...")
     client.add_handler(

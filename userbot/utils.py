@@ -10,6 +10,7 @@ __all__ = [
     "get_text",
     "GitHubClient",
     "parse_timespec",
+    "SecretStr",
     "sticker",
     "StickerInfo",
     "Unset",
@@ -20,7 +21,7 @@ import html
 import logging
 import re
 from base64 import b64encode
-from collections import defaultdict
+from collections import UserString, defaultdict
 from datetime import datetime, time, timedelta
 from types import TracebackType
 from typing import Any, Awaitable, Callable, ClassVar, Protocol, Self, Type, TypedDict, TypeVar
@@ -252,3 +253,20 @@ def async_partial(
         return await func(*args, *args_, **kwargs, **kwargs_)
 
     return wrapper
+
+
+class SecretStr(UserString):
+    """A string that doesn't show its value in repr() and str().
+
+    To get the actual value, use the `data` or `value` attribute.
+    """
+
+    @property
+    def value(self) -> str:
+        return self.data
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({str(self)})"
+
+    def __str__(self) -> str:
+        return "******"
