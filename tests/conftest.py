@@ -65,6 +65,7 @@ def event_loop() -> asyncio.AbstractEventLoop:
 
 @pytest_asyncio.fixture(scope="session")
 async def client(config: Config) -> AsyncIterable[Client]:
+    in_memory = config.kwargs.pop("in_memory") == "1"
     app = Client(
         name=config.session,
         api_id=config.api_id,
@@ -72,7 +73,7 @@ async def client(config: Config) -> AsyncIterable[Client]:
         app_version=f"evgfilim1/userbot {__version__} TEST",
         device_model="Linux",
         test_mode=config.kwargs.pop("test_mode") == "1",
-        in_memory=config.kwargs.pop("in_memory") == "1",
+        in_memory=in_memory,
         workdir=str(config.data_location),
         **config.kwargs,
     )
@@ -95,4 +96,7 @@ async def client(config: Config) -> AsyncIterable[Client]:
     await app.disconnect()
     await app.start()
     yield app
-    await app.stop()
+    if in_memory:
+        await app.log_out()
+    else:
+        await app.stop()
