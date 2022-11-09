@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-08 13:37+0500\n"
-"PO-Revision-Date: 2022-11-08 09:05\n"
+"PO-Revision-Date: 2022-11-09 07:31\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,8 @@ msgstr "\n"
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
-msgstr ""
+msgstr "<b>⚠⚠⚠ DAS IST KEIN SCHERZ ⚠⚠⚠</b>\n"
+"Diese Nachricht ist vor Reaktionen geschützt. Jeder, der auf diese Nachricht reagiert, wird für ein halbes Jahr <b>gesperrt</b>."
 
 #: userbot/commands/chat_admin.py:63
 #, python-brace-format
@@ -81,7 +82,7 @@ msgstr "{icon} Für diese Person wurde der Titel zu <i>{title}</i> geändert"
 
 #: userbot/commands/chat_admin.py:159
 msgid "Recently banned:"
-msgstr ""
+msgstr "Kürzlich gesperrt:"
 
 #: userbot/commands/chat_admin.py:189 userbot/commands/chat_admin.py:208
 #, python-brace-format
@@ -294,11 +295,11 @@ msgstr "{icon} <b>Erinnerung!</b>"
 #: userbot/commands/reminders.py:55
 #, python-brace-format
 msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr ""
+msgstr "{icon} Erinnerung {maybe_for_self}wurde auf <i>{t:%Y-%m-%d %H:%M:%S %Z}</i> gesetzt"
 
 #: userbot/commands/reminders.py:60
 msgid "for myself "
-msgstr ""
+msgstr "für mich selbst "
 
 #: userbot/commands/stickers.py:38
 msgid "<i>Picking random sticker...</i>"
@@ -319,13 +320,15 @@ msgstr "Vielleicht meintest du:\n\n"
 #, python-brace-format
 msgid "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
-msgstr ""
+msgstr "<b>Code:</b>\n"
+"<pre><code class='language-python'>{code}</code></pre>"
 
 #: userbot/commands/tools.py:86
 #, python-brace-format
 msgid "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
-msgstr ""
+msgstr "<b>Ergebnis:</b>\n"
+"<pre><code class='language-python'>{result}</code></pre>"
 
 #: userbot/commands/tools.py:127
 #, python-brace-format
@@ -339,7 +342,7 @@ msgstr "{icon} <b>Stoppe Userbot...</b>"
 
 #: userbot/modules/base.py:103
 msgid "<i>Userbot is processing the message...</i>"
-msgstr ""
+msgstr "<i>Der Userbot verarbeitet die Nachricht...</i>"
 
 #: userbot/modules/base.py:122
 #, python-brace-format
