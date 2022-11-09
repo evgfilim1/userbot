@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-08 13:37+0500\n"
-"PO-Revision-Date: 2022-11-09 07:31\n"
+"PO-Revision-Date: 2022-11-09 08:33\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -348,7 +348,8 @@ msgstr "<i>Der Userbot verarbeitet die Nachricht...</i>"
 #, python-brace-format
 msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
 "<i>More info can be found in logs.</i>"
-msgstr ""
+msgstr "{icon}<b>Hat nach {timeout} die maximale Zeit überschritten, während er versuchte die Nachricht zu verarbeiten.</b>\n"
+"<i>Weitere Infos sind in den Logs.</i>"
 
 #: userbot/modules/base.py:127
 #, python-brace-format
