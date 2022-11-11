@@ -1,6 +1,7 @@
 import string
 from unittest.mock import patch
 
+import pytest
 from hypothesis import assume, given
 from hypothesis import strategies as st
 from pyrogram import Client
@@ -100,6 +101,27 @@ def test_add_args(handler: CommandsHandler) -> None:
     assert h.timeout == handler.timeout
 
 
+def test_invalid_add() -> None:
+    """Tests add() raises ValueError when invalid arguments are passed."""
+    commands = CommandsModule()
+
+    async def handler() -> None:
+        """Test handler"""
+        pass
+
+    with patch.object(
+        CommandsModule,
+        "add_handler",
+        autospec=True,
+    ) as mock:
+        with pytest.raises(ValueError):
+            # This call should fail because no commands are passed.
+            # Type linting is disabled because it's expected to fail.
+            commands.add(handler, prefix="?", usage="<usage>")  # noqa  # type: ignore
+
+        mock.assert_not_called()
+
+
 @given(
     handlers=st.lists(
         st.tuples(
@@ -158,6 +180,29 @@ def test_register_root() -> None:
         assert mock.call_count == 4
         # Root CommandsModule also registers some necessary middlewares
         assert commands._middleware.has_handlers
+
+
+def test_register_duplicates() -> None:
+    """Tests register() raises ValueError when duplicate commands are added."""
+
+    commands = CommandsModule()
+    fake_client = Client("fake", in_memory=True)
+
+    @commands.add("foo")
+    @commands.add("foo")
+    async def foo() -> None:
+        """Test handler"""
+        pass
+
+    with patch.object(
+        Client,
+        "add_handler",
+        autospec=True,
+    ) as mock:
+        with pytest.raises(ValueError):
+            commands.register(fake_client)
+
+        mock.assert_not_called()
 
 
 # endregion
