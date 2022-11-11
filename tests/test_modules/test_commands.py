@@ -34,8 +34,6 @@ def test_add_callable() -> None:
 
         mock.assert_called_once()
 
-    assert len(commands._handlers) == 1
-
 
 def test_add_decorator() -> None:
     """Tests add() can be used as a decorator."""
@@ -54,8 +52,6 @@ def test_add_decorator() -> None:
             pass
 
         mock.assert_called_once()
-
-    assert len(commands._handlers) == 1
 
 
 @given(
@@ -113,21 +109,17 @@ def test_add_args(handler: CommandsHandler) -> None:
         ),
     )
 )
-def test_register(handlers: list[tuple[HandlerT, list[str], bool]], client: Client) -> None:
+def test_register(handlers: list[tuple[HandlerT, list[str], bool]]) -> None:
     """Tests register() adds all handlers to pyrogram Client"""
     # Don't repeat commands between handlers
-    # TODO (2022-11-08): optimize this
-    assume(
-        all(
-            cmd not in other[1]
-            for handler in handlers
-            for other in handlers
-            for cmd in handler[1]
-            if other != handler
-        )
-    )
+    all_commands = set()
+    for _, commands, _ in handlers:
+        for command in commands:
+            assume(command not in all_commands)
+            all_commands.add(command)
 
     commands = CommandsModule()
+    fake_client = Client("fake", in_memory=True)
     handler_count = 0
     for handler, command_list, handle_edits in handlers:
         commands.add(handler, *command_list, handle_edits=handle_edits)
@@ -138,16 +130,17 @@ def test_register(handlers: list[tuple[HandlerT, list[str], bool]], client: Clie
         "add_handler",
         autospec=True,
     ) as mock:
-        commands.register(client)
+        commands.register(fake_client)
 
         # Three handlers will be added: "foo", edited "foo" and "bar".
         assert mock.call_count == handler_count
 
 
-def test_register_root(client: Client) -> None:
+def test_register_root() -> None:
     """Tests register() adds a handler + help handler to pyrogram Client"""
 
     commands = CommandsModule(root=True)
+    fake_client = Client("fake", in_memory=True)
 
     @commands.add("foo")
     async def foo() -> None:
@@ -159,7 +152,7 @@ def test_register_root(client: Client) -> None:
         "add_handler",
         autospec=True,
     ) as mock:
-        commands.register(client)
+        commands.register(fake_client)
 
         # Two handlers will be added: "foo", edited "foo", "help" and edited "help".
         assert mock.call_count == 4
