@@ -7,18 +7,6 @@ COPY locales /tmp/locales
 # Having no locales raises an error and is expected to fail, continuing anyway
 RUN pybabel compile -D evgfilim1-userbot -d /tmp/locales || true
 
-FROM python:3.11.0-slim AS wheel-build
-
-WORKDIR /tmp
-
-RUN apt update \
-    && apt install -y --no-install-recommends gcc libc6-dev \
-    && apt clean -y \
-    && rm -rf /var/lib/apt/* /var/log/* /var/cache/*
-
-# (2022-10-28) TgCrypto 1.2.4 doesn't have wheel for 3.11
-RUN pip wheel --no-cache-dir 'TgCrypto==1.2.4' --wheel-dir /tmp/wheels
-
 FROM jrottenberg/ffmpeg:5.1-ubuntu2004 AS runtime
 
 WORKDIR /app
@@ -40,10 +28,8 @@ RUN useradd -Ud /app userbot \
 
 VOLUME /data
 
-COPY --from=wheel-build /tmp/wheels /tmp/wheels
 COPY requirements.txt ./
-RUN python3.11 -m pip install --no-cache-dir /tmp/wheels/* -r requirements.txt \
-    && rm -rf /tmp/*
+RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
 
 COPY --from=i18n-build /tmp/locales ./locales
 COPY userbot ./userbot
