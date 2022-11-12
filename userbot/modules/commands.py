@@ -21,6 +21,7 @@ from typing import Any, Callable, Iterable, Type, TypeAlias, overload
 from httpx import AsyncClient, HTTPError
 from pyrogram import Client, filters
 from pyrogram.enums import ParseMode
+from pyrogram.errors import MessageNotModified
 from pyrogram.filters import Filter
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.handlers.handler import Handler
@@ -183,8 +184,17 @@ class CommandsHandler(BaseHandler):
 
     async def _exception_handler(self, e: Exception, data: dict[str, Any]) -> str | None:
         """Handles exceptions raised by the command handler."""
-        client: Client = data["client"]
         message: Message = data["message"]
+        message_text = message.text
+        _log.exception(
+            "An error occurred during executing %r",
+            message_text,
+            extra={"data": data},
+        )
+        if isinstance(e, MessageNotModified):
+            return None
+
+        client: Client = data["client"]
         # In case one of the middlewares failed, we need to fill in the missing data with
         # the fallback values
         if "icons" not in data:
@@ -194,12 +204,6 @@ class CommandsHandler(BaseHandler):
         icons: Type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
-        message_text = message.text
-        _log.exception(
-            "An error occurred during executing %r",
-            message_text,
-            extra={"data": data},
-        )
         tb = _format_frames(*_extract_frames(e.__traceback__))
         tb += _format_exception(e)
         tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
