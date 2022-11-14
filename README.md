@@ -14,9 +14,8 @@ The userbot I use with some specific features written in Pyrogram.
 
 ### Commands
 
-Commands work only when sent by the user who runs userbot. Command prefix is `.`
-on production environment and `,` on development one. `GITHUB_SHA` environment variable is checked
-and, if non-empty, the environment is considered to be production.
+Commands work only when sent by the user who runs userbot. Default command prefix is `,` unless
+overriden in config.
 
 <details>
 <summary>Click to expand full command list</summary>
@@ -156,28 +155,7 @@ Shortcuts work only when sent by the user who runs userbot.
 
 ## Installation and running
 
-1. Copy the following to `.env` and modify for yourself:
-    ```
-    # Name for the session file.
-    SESSION=evgfilim1
-    # Telegram api_id.
-    API_ID=123456
-    # Telegram api_hash.
-    API_HASH=0123456789abcdef0123456789abcdef
-    # (Optional) Data location, used for saving session file and downloads, "/data" by default.
-    # DATA_LOCATION=/data
-    # (Optional) Media notes chat ID or @username, "self" (chat with yourself) by default.
-    # MEDIA_NOTES_CHAT=-1001234567890
-    # Variables starting with `PYROGRAM_` will be passed as kwargs directly to the `pyrogram.Client`
-    #  constructor, see Pyrogram docs for more info.
-    PYROGRAM_PHONE_NUMBER=+1234567890
-    # If you want to use other Redis server, you can specify it here. Don't forget to remove
-    #  the dependency and environment variables in `docker-compose.yaml` file.
-    # REDIS_HOST=redis
-    # REDIS_PORT=6379
-    # REDIS_DB=0
-    # REDIS_PASSWORD=secret
-    ```
+1. Copy [`.env.example`](.env.example) file to `.env` and modify for yourself.
 2. Make sure docker is installed, then run `docker-compose build`.
 3. Go through interactive authentication (needed only once as `/data` is mounted as docker volume)
   by running `docker-compose run --rm main python -m userbot`.

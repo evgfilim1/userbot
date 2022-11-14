@@ -2,12 +2,11 @@ __all__ = [
     "commands",
 ]
 
-from os import getenv
 from typing import Type
 
 from pyrogram import Client
 
-from .. import is_prod
+from .. import __git_commit__
 from ..constants import Icons, PremiumIcons
 from ..modules import CommandsModule
 from ..translation import Translation
@@ -21,7 +20,7 @@ async def about(client: Client, icons: Type[Icons], tr: Translation) -> str:
     _ = tr.gettext
     base_url = "https://github.com/evgfilim1/userbot"
     # TODO (2022-07-13): get this from the git repo also
-    commit = getenv("GITHUB_SHA", _("staging"))
+    commit = __git_commit__ if __git_commit__ else _("staging")
     if client.me.is_premium:
         github_icon = PremiumIcons.GITHUB
         commit_icon = PremiumIcons.GIT
@@ -33,7 +32,7 @@ async def about(client: Client, icons: Type[Icons], tr: Translation) -> str:
         f"{github_icon} <a href='{base_url}'>evgfilim1/userbot</a>\n"
         f"{commit_icon} <code>{commit}</code>"
     )
-    if is_prod:
+    if __git_commit__:
         t += _(" (<a href='{base_url}/deployments'>deployments</a>)").format(
             base_url=base_url,
         )

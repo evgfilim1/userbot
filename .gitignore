@@ -106,8 +106,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.venv
+.env*
+!.env.example
+.venv/
 env/
 venv/
 ENV/
@@ -141,3 +142,7 @@ cython_debug/
 # Prevent from accidentally committing test commands file
 # This name is reserved for manual testing new commands and features
 userbot/commands/test.py
+
+# Pyrogram stray and sensitive files which may accidentally appear in the directory
+*.session*
+unknown_errors.txt

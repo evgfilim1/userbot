@@ -27,13 +27,12 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
-from .. import is_prod
 from ..constants import DefaultIcons, Icons, PremiumIcons
 from ..middlewares import icon_middleware, translate_middleware
 from ..translation import Translation
 from .base import BaseHandler, BaseModule, HandlerT
 
-_DEFAULT_PREFIX = "." if is_prod else ","
+_DEFAULT_PREFIX = ","
 _DEFAULT_TIMEOUT = 30
 
 _log = logging.getLogger(__name__)
@@ -110,7 +109,7 @@ class CommandsHandler(BaseHandler):
         self,
         *,
         commands: Iterable[_CommandT],
-        prefix: str,
+        prefix: str | None,
         handler: HandlerT,
         usage: str,
         doc: str | None,
@@ -283,10 +282,17 @@ class CommandsHandler(BaseHandler):
 
 
 class CommandsModule(BaseModule[CommandsHandler]):
-    def __init__(self, category: str | None = None, *, root: bool = False):
+    def __init__(
+        self,
+        category: str | None = None,
+        *,
+        default_prefix: str = _DEFAULT_PREFIX,
+        ensure_middlewares_registered: bool = False,
+    ):
         super().__init__()
         self._category = category
-        self._root = root
+        self._default_prefix = default_prefix
+        self._ensure_middlewares_registered = ensure_middlewares_registered
 
     @overload
     def add(
@@ -294,7 +300,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         command: _CommandT,
         /,
         *commands: _CommandT,
-        prefix: str = _DEFAULT_PREFIX,
+        prefix: str | None = None,
         usage: str = "",
         doc: str | None = None,
         category: str | None = None,
@@ -313,7 +319,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         command: _CommandT,
         /,
         *commands: _CommandT,
-        prefix: str = _DEFAULT_PREFIX,
+        prefix: str | None = None,
         usage: str = "",
         doc: str | None = None,
         category: str | None = None,
@@ -330,7 +336,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         command_or_callable: _CommandT | HandlerT,
         /,
         *commands: _CommandT,
-        prefix: str = _DEFAULT_PREFIX,
+        prefix: str | None = None,
         usage: str = "",
         doc: str | None = None,
         category: str | None = None,
@@ -430,6 +436,12 @@ class CommandsModule(BaseModule[CommandsHandler]):
                     raise ValueError(f"Duplicate command: {cmd}")
                 commands.add(cmd)
 
+    def _set_prefix(self) -> None:
+        """Sets the prefix for all handlers if not set."""
+        for handler in self._handlers:
+            if handler.prefix is None:
+                handler.prefix = self._default_prefix
+
     def _create_handlers_filters(
         self,
         handler: CommandsHandler,
@@ -452,17 +464,18 @@ class CommandsModule(BaseModule[CommandsHandler]):
         return h, functools.reduce(operator.or_, f) & filters.me & ~filters.scheduled
 
     def register(self, client: Client) -> None:
-        if self._root:
-            self.add(
-                self._help_handler,
-                "help",
-                usage="[command]",
-                category="About",
-            )
+        self.add(
+            self._help_handler,
+            "help",
+            usage="[command]",
+            category="About",
+        )
+        if self._ensure_middlewares_registered:
             # These middlewares are expected by the base module to be registered
             if icon_middleware not in self._middleware:
                 self.add_middleware(icon_middleware)
             if translate_middleware not in self._middleware:
                 self.add_middleware(translate_middleware)
+        self._set_prefix()
         self._check_duplicates()
         super().register(client)

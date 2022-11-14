@@ -8,21 +8,19 @@ from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
 from pyrogram.methods.utilities.idle import idle
 
-from userbot import __version__, is_prod
+from userbot import __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
 from userbot.middlewares import KwargsMiddleware, icon_middleware, translate_middleware
-from userbot.modules import HooksModule
+from userbot.modules import CommandsModule, HooksModule
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
 from userbot.utils import GitHubClient, fetch_stickers
 
-logging.basicConfig(level=logging.WARNING)
 _log = logging.getLogger(__name__)
-_log.setLevel(logging.INFO if is_prod else logging.DEBUG)
 
 
 async def _main(
@@ -42,8 +40,11 @@ async def _main(
 
 
 def main() -> None:
-    _log.debug("Loading config...")
     config = Config.from_env()
+    log_level: int = getattr(logging, config.log_level)
+    logging.basicConfig(level=log_level)
+    # pyrogram is too verbose IMO, silence it a bit, respecting the log level set by user
+    logging.getLogger("pyrogram").setLevel(max(logging.WARNING, log_level))
     if not config.data_location.exists():
         config.data_location.mkdir()
     if not config.data_location.is_dir():
@@ -74,7 +75,10 @@ def main() -> None:
         group=1,
     )
 
-    root_hooks = HooksModule(commands=commands, storage=storage)
+    root_commands = CommandsModule(default_prefix=config.command_prefix)
+    root_commands.add_submodule(commands)
+
+    root_hooks = HooksModule(commands=root_commands, storage=storage)
     root_hooks.add_submodule(hooks)
 
     kwargs_middleware = KwargsMiddleware(
@@ -85,9 +89,9 @@ def main() -> None:
             "github_client": github_client,
         }
     )
-    commands.add_middleware(kwargs_middleware)
-    commands.add_middleware(translate_middleware)
-    commands.add_middleware(icon_middleware)
+    root_commands.add_middleware(kwargs_middleware)
+    root_commands.add_middleware(translate_middleware)
+    root_commands.add_middleware(icon_middleware)
     root_hooks.add_middleware(kwargs_middleware)
     root_hooks.add_middleware(translate_middleware)
     root_hooks.add_middleware(icon_middleware)
@@ -97,7 +101,7 @@ def main() -> None:
 
     # `HooksModule` must be registered before `CommandsModule` because it adds some commands
     root_hooks.register(client)
-    commands.register(client)
+    root_commands.register(client)
     shortcuts.register(client)
 
     job_manager = AsyncJobManager()

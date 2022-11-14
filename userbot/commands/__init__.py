@@ -25,7 +25,7 @@ try:
 except ImportError:
     test_commands = None
 
-commands = CommandsModule(root=True)
+commands = CommandsModule()
 
 for submodule in (
     about_commands,
