@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-08 13:37+0500\n"
-"PO-Revision-Date: 2022-11-09 08:33\n"
+"POT-Creation-Date: 2022-11-15 03:11+0500\n"
+"PO-Revision-Date: 2022-11-14 22:21\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -18,34 +18,32 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: de_DE\n"
 
-#: userbot/commands/about.py:24
+#: userbot/commands/about.py:23
 msgid "staging"
 msgstr "Staging"
 
-#: userbot/commands/about.py:29
+#: userbot/commands/about.py:28
 msgid "<i>Repo:</i>"
 msgstr "<i>Repo:</i>"
 
-#: userbot/commands/about.py:30
+#: userbot/commands/about.py:29
 msgid "<i>Commit:</i>"
 msgstr "<i>Commit:</i>"
 
-#: userbot/commands/about.py:31
+#: userbot/commands/about.py:30
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>\n"
 msgstr "{icon} <b>Über den Userbot</b>\n"
 
-#: userbot/commands/about.py:37
+#: userbot/commands/about.py:36
 #, python-brace-format
-msgid " (<a href='{base_url}/deployments'>deployments</a>)"
-msgstr " (<a href='{base_url}/deployments'>Deployment</a>)"
+msgid "(<a href='{base_url}/deployments'>deployments</a>)"
+msgstr ""
 
-#: userbot/commands/about.py:40
+#: userbot/commands/about.py:39
 #, python-brace-format
-msgid "\n"
-"{icon} <a href='{url}'>Contribute userbot translations</a>"
-msgstr "\n"
-"{icon} <a href='{url}'>Zur Übersetzung beitragen</a>"
+msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
+msgstr ""
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -60,15 +58,13 @@ msgstr "{icon}{user_link} ist in diesem Chat <b>geperrt</b>"
 
 #: userbot/commands/chat_admin.py:68
 #, python-brace-format
-msgid " until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr " bis <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgstr ""
 
 #: userbot/commands/chat_admin.py:71
 #, python-brace-format
-msgid "\n"
-"<b>Reason:</b> {reason}"
-msgstr "\n"
-"<b>Grund:</b> {reason}"
+msgid "<b>Reason:</b> {reason}"
+msgstr ""
 
 #: userbot/commands/chat_admin.py:90
 #, python-brace-format
@@ -216,12 +212,9 @@ msgstr "{icon} Es ist nicht möglich, nach der ersten Nachricht eines Kanals suc
 msgid "This is the first message of {mention}"
 msgstr "Die erste Nachricht von {mention}"
 
-#: userbot/commands/messages.py:118
-#, python-brace-format
-msgid "\n"
-"Permalink: https://t.me/c/{channel_id}/{msg_id}"
-msgstr "\n"
-"Permanenter Link: https://t.me/c/{channel_id}/{msg_id}"
+#: userbot/commands/messages.py:119
+msgid "Permalink:"
+msgstr ""
 
 #: userbot/commands/notes.py:34
 #, python-brace-format
@@ -358,20 +351,33 @@ msgid_plural "{timeout} seconds"
 msgstr[0] "{timeout} Sekunde"
 msgstr[1] "{timeout} Sekunden"
 
-#: userbot/modules/commands.py:206
+#: userbot/modules/commands.py:211
 #, python-brace-format
-msgid "{icon} <b>An error occurred during executing command.</b>\n\n"
-"<b>Command:</b> <code>{message_text}</code>\n"
-"<b>Traceback:</b>\n"
-"{tb}\n\n"
-"<i>More info can be found in logs.</i>"
-msgstr "{icon} <b>Während der Ausführung trat ein Fehler auf.</b>\n\n"
-"<b>Befehl:</b> <code>{message_text}</code>\n"
-"<b>Traceback:</b>\n"
-"{tb}\n\n"
-"<i>Mehr Informationen kann im Log eingesehen werden.</i>"
+msgid "{icon} <b>An error occurred during executing command.</b>"
+msgstr ""
 
-#: userbot/modules/commands.py:222
+#: userbot/modules/commands.py:215
+#, python-brace-format
+msgid "<b>Command:</b> <code>{message_text}</code>\n"
+"<b>Traceback:</b>\n"
+"{traceback}\n\n"
+"<i>More info can be found in the logs.</i>"
+msgstr ""
+
+#: userbot/modules/commands.py:228
+#, python-brace-format
+msgid "<b>Message:</b> {msg}\n"
+"<b>Traceback:</b>\n"
+"{traceback}"
+msgstr ""
+
+#: userbot/modules/commands.py:238
+#, python-brace-format
+msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
+"<i>More info can be found in the logs or in the traceback chat.</i>"
+msgstr ""
+
+#: userbot/modules/commands.py:249
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
@@ -380,19 +386,19 @@ msgstr "{icon} <b>Erfolgreich ausgeführt.</b>\n\n"
 "<b>Befehl:</b> <code>{message_text}</code>\n\n"
 "<b>Ergebnis:</b>"
 
-#: userbot/modules/commands.py:233
+#: userbot/modules/commands.py:260
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr "{text} <i>Siehe Antwort.</i>"
 
-#: userbot/modules/commands.py:400
+#: userbot/modules/commands.py:434
 #, python-brace-format
 msgid "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr "<b>Hilfe für {args}:</b>\n"
 "{usage}"
 
-#: userbot/modules/commands.py:406
+#: userbot/modules/commands.py:440
 msgid "<b>List of userbot commands available:</b>\n\n"
 msgstr "<b>Liste der verfügbaren Userbotbefehle:</b>\n\n"
 
