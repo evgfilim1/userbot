@@ -65,10 +65,10 @@ async def chat_ban(
         user_link=user_link,
     )
     if not ban_forever:
-        text += _(" until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(t=t.astimezone())
-    text += "."
+        text += " " + _("until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(t=t.astimezone())
+    text += ".\n"
     if reason:
-        text += _("\n<b>Reason:</b> {reason}").format(reason=html.escape(reason))
+        text += _("<b>Reason:</b> {reason}").format(reason=html.escape(reason))
     return text
 
 

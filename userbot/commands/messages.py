@@ -115,7 +115,7 @@ async def user_first_message(
         raise AssertionError("Cannot find any messages from this user")
     text = _("This is the first message of {mention}").format(mention=user.mention)
     if isinstance(first_msg_raw.peer_id, types.PeerChannel):
-        text += _("\nPermalink: https://t.me/c/{channel_id}/{msg_id}").format(
+        text += "\n" + _("Permalink: https://t.me/c/{channel_id}/{msg_id}").format(
             channel_id=first_msg_raw.peer_id.channel_id,
             msg_id=first_msg_raw.id,
         )

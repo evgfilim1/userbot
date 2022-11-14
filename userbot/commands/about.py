@@ -33,10 +33,10 @@ async def about(client: Client, icons: Type[Icons], tr: Translation) -> str:
         f"{commit_icon} <code>{commit}</code>"
     )
     if __git_commit__:
-        t += _(" (<a href='{base_url}/deployments'>deployments</a>)").format(
+        t += " " + _("(<a href='{base_url}/deployments'>deployments</a>)").format(
             base_url=base_url,
         )
-    t += _("\n{icon} <a href='{url}'>Contribute userbot translations</a>").format(
+    t += "\n" + _("{icon} <a href='{url}'>Contribute userbot translations</a>").format(
         icon=icons.GLOBE,
         url="https://crowdin.com/project/evgfilim1-userbot",
     )
