@@ -13,7 +13,7 @@ from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import FloodWait, UserAdminInvalid
 from pyrogram.raw import base, functions, types
 from pyrogram.types import Message
-from pyrogram.utils import get_channel_id
+from pyrogram.utils import get_channel_id, zero_datetime
 
 from ..constants import Icons
 from ..modules import CommandObject, CommandsModule
@@ -51,8 +51,8 @@ async def chat_ban(
     else:
         user_id = int(args_list[0])
     now = message.edit_date or message.date or datetime.now()
-    if len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever":
-        t = None
+    if ban_forever := (len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever"):
+        t = zero_datetime()
     else:
         t = parse_timespec(now, args_list[1])
     reason = " ".join(args_list[2:])
@@ -64,7 +64,7 @@ async def chat_ban(
         icon=icons.PERSON_BLOCK,
         user_link=user_link,
     )
-    if t:
+    if not ban_forever:
         text += _(" until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(t=t.astimezone())
     text += "."
     if reason:
