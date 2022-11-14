@@ -115,10 +115,19 @@ async def user_first_message(
         raise AssertionError("Cannot find any messages from this user")
     text = _("This is the first message of {mention}").format(mention=user.mention)
     if isinstance(first_msg_raw.peer_id, types.PeerChannel):
-        text += "\n" + _("Permalink: https://t.me/c/{channel_id}/{msg_id}").format(
+        text += "\n{text} https://t.me/c/{channel_id}/{msg_id}".format(
+            text=_("Permalink:"),
             channel_id=first_msg_raw.peer_id.channel_id,
             msg_id=first_msg_raw.id,
         )
+        chats: types.messages.Chats = await client.invoke(
+            functions.channels.GetChannels(id=[chat_peer])
+        )
+        is_forum = chats.chats[0].forum
+    else:
+        is_forum = False  # a legacy group cannot be a forum
+    if is_forum:
+        return text
     await client.send_message(
         message.chat.id,
         text,

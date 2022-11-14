@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-15 02:45+0500\n"
+"POT-Creation-Date: 2022-11-15 03:11+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,11 +211,8 @@ msgstr ""
 msgid "This is the first message of {mention}"
 msgstr ""
 
-#: userbot/commands/messages.py:118
-#, python-brace-format
-msgid ""
-"\n"
-"Permalink: https://t.me/c/{channel_id}/{msg_id}"
+#: userbot/commands/messages.py:119
+msgid "Permalink:"
 msgstr ""
 
 #: userbot/commands/notes.py:34
