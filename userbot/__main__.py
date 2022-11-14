@@ -87,6 +87,7 @@ def main() -> None:
             "data_dir": config.data_location,
             "notes_chat": config.media_notes_chat,
             "github_client": github_client,
+            "traceback_chat": config.traceback_chat,
         }
     )
     root_commands.add_middleware(kwargs_middleware)

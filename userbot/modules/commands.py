@@ -20,7 +20,7 @@ from typing import Any, Callable, Iterable, Type, TypeAlias, overload
 
 from httpx import AsyncClient, HTTPError
 from pyrogram import Client, filters
-from pyrogram.enums import ParseMode
+from pyrogram.enums import ChatType, ParseMode
 from pyrogram.errors import MessageNotModified
 from pyrogram.filters import Filter
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
@@ -203,19 +203,43 @@ class CommandsHandler(BaseHandler):
         icons: Type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
-        tb = _format_frames(*_extract_frames(e.__traceback__))
-        tb += _format_exception(e)
-        tb = f"<pre><code class='language-python'>{html.escape(tb)}</code></pre>"
-        return _(
-            "{icon} <b>An error occurred during executing command.</b>\n\n"
-            "<b>Command:</b> <code>{message_text}</code>\n"
-            "<b>Traceback:</b>\n{tb}\n\n"
-            "<i>More info can be found in logs.</i>"
-        ).format(
+        traceback_chat: int | str | None = data.get("traceback_chat", None)
+
+        traceback = _format_frames(*_extract_frames(e.__traceback__))
+        traceback += _format_exception(e)
+        traceback = f"<pre><code class='language-python'>{html.escape(traceback)}</code></pre>"
+        header = _("{icon} <b>An error occurred during executing command.</b>").format(
             icon=icons.STOP,
-            message_text=html.escape(message_text),
-            tb=tb,
         )
+        if traceback_chat is None:
+            footer = _(
+                "<b>Command:</b> <code>{message_text}</code>\n"
+                "<b>Traceback:</b>\n{traceback}\n\n"
+                "<i>More info can be found in the logs.</i>"
+            ).format(
+                message_text=html.escape(message_text),
+                traceback=traceback,
+            )
+        else:
+            await client.send_message(
+                chat_id=traceback_chat,
+                text="{header}\n\n{footer}".format(
+                    header=header,
+                    footer=_("<b>Message:</b> {msg}\n<b>Traceback:</b>\n{traceback}").format(
+                        msg=(
+                            message.link
+                            if message.chat.type in (ChatType.SUPERGROUP, ChatType.CHANNEL)
+                            else f"<code>{html.escape(message_text)}</code>"
+                        ),
+                        traceback=traceback,
+                    ),
+                ),
+            )
+            footer = _(
+                "<b>Command:</b> <code>{message_text}</code>\n\n"
+                "<i>More info can be found in the logs or in the traceback chat.</i>"
+            ).format(message_text=html.escape(message_text))
+        return f"{header}\n\n{footer}"
 
     async def _message_too_long_handler(self, result: str, data: dict[str, Any]) -> None:
         message: Message = data["message"]

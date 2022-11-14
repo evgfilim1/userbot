@@ -41,6 +41,7 @@ class Config:
     media_notes_chat: int | str
     command_prefix: str
     log_level: str
+    traceback_chat: int | str | None
     kwargs: dict[str, SecretStr]
 
     @classmethod
@@ -51,10 +52,11 @@ class Config:
             session=env["SESSION"],
             api_id=int(env["API_ID"]),
             api_hash=SecretStr(env["API_HASH"]),
-            data_location=Path(env.get("DATA_LOCATION", ".dockerdata/userbot")).resolve(),
+            data_location=Path(env.get("DATA_LOCATION", "/data")).resolve(),
             media_notes_chat=env.get("MEDIA_NOTES_CHAT", "self"),
             command_prefix=env.get("COMMAND_PREFIX", ","),
             log_level=env.get("LOG_LEVEL", "INFO").upper(),
+            traceback_chat=env.get("TRACEBACK_CHAT", None),
             kwargs={
                 key.lower().removeprefix("pyrogram_"): SecretStr(value)
                 for key, value in env.items()
