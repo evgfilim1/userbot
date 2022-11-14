@@ -132,7 +132,7 @@ def test_invalid_add() -> None:
     )
 )
 def test_register(handlers: list[tuple[HandlerT, list[str], bool]]) -> None:
-    """Tests register() adds all handlers to pyrogram Client"""
+    """Tests register() adds all handlers + help handlers to pyrogram Client"""
     # Don't repeat commands between handlers
     all_commands = set()
     for _, commands, _ in handlers:
@@ -154,14 +154,14 @@ def test_register(handlers: list[tuple[HandlerT, list[str], bool]]) -> None:
     ) as mock:
         commands.register(fake_client)
 
-        # Three handlers will be added: "foo", edited "foo" and "bar".
-        assert mock.call_count == handler_count
+        # Four handlers will be added: "foo", edited "foo", "bar", "help" and edited "help".
+        assert mock.call_count == handler_count + 2
 
 
-def test_register_root() -> None:
-    """Tests register() adds a handler + help handler to pyrogram Client"""
+def test_register_with_middlewares() -> None:
+    """Tests register() adds a handler + help handler + middlewares to pyrogram Client"""
 
-    commands = CommandsModule(root=True)
+    commands = CommandsModule(ensure_middlewares_registered=True)
     fake_client = Client("fake", in_memory=True)
 
     @commands.add("foo")
