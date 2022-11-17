@@ -3,7 +3,7 @@ __all__ = [
 ]
 
 from datetime import datetime
-from typing import NamedTuple, Type
+from typing import NamedTuple
 
 from pyrogram import Client
 from pyrogram.enums import ChatType, ParseMode
@@ -29,7 +29,7 @@ class _Result(NamedTuple):
 def _remind_common(
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
     *,
     for_myself: bool,
@@ -69,7 +69,7 @@ async def remind(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets a reminder in the chat
@@ -92,7 +92,7 @@ async def remind_me(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets a reminder for myself
@@ -114,7 +114,7 @@ async def remind(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sets a silent reminder in the chat (no confirmation about scheduled message)
@@ -137,7 +137,7 @@ async def remind_me(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sets a silent reminder for myself (no confirmation about scheduled message)

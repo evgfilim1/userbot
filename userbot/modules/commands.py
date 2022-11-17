@@ -16,7 +16,7 @@ from io import BytesIO
 from pathlib import Path
 from traceback import FrameSummary, extract_tb
 from types import TracebackType
-from typing import Any, Callable, Iterable, Type, TypeAlias, overload
+from typing import Any, Callable, Iterable, TypeAlias, overload
 
 from httpx import AsyncClient, HTTPError
 from pyrogram import Client, filters
@@ -200,7 +200,7 @@ class CommandsHandler(BaseHandler):
             data["icons"] = PremiumIcons if client.me.is_premium else DefaultIcons
         if "tr" not in data:
             data["tr"] = Translation(None)
-        icons: Type[Icons] = data["icons"]
+        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         traceback_chat: int | str | None = data.get("traceback_chat", None)
@@ -243,7 +243,7 @@ class CommandsHandler(BaseHandler):
 
     async def _message_too_long_handler(self, result: str, data: dict[str, Any]) -> None:
         message: Message = data["message"]
-        icons: Type[Icons] = data["icons"]
+        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         text = _(
@@ -469,7 +469,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
     def _create_handlers_filters(
         self,
         handler: CommandsHandler,
-    ) -> tuple[list[Type[Handler]], Filter]:
+    ) -> tuple[list[type[Handler]], Filter]:
         f: list[Filter] = []
         for cmd in handler.commands:
             if isinstance(cmd, re.Pattern):
@@ -482,7 +482,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
                 f.append(filters.command(cmd, prefixes=handler.prefix))
             else:
                 raise AssertionError(f"Unexpected command type: {type(cmd)}")
-        h: list[Type[Handler]] = [MessageHandler]
+        h: list[type[Handler]] = [MessageHandler]
         if handler.handle_edits:
             h.append(EditedMessageHandler)
         return h, functools.reduce(operator.or_, f) & filters.me & ~filters.scheduled

@@ -6,7 +6,6 @@ __all__ = [
 import html
 from asyncio import sleep
 from datetime import datetime, timedelta
-from typing import Type
 
 from pyrogram import Client, ContinuePropagation
 from pyrogram.enums import ChatMemberStatus
@@ -35,7 +34,7 @@ async def chat_ban(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Bans a user in a chat
@@ -77,7 +76,7 @@ async def chat_unban(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Unbans a user in a chat"""
@@ -98,7 +97,7 @@ async def promote(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Promotes a user to an admin without any rights but with title"""
@@ -180,7 +179,7 @@ async def react2ban(
     client: Client,
     message: Message,
     storage: Storage,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Bans a user whoever reacted to the message"""
@@ -198,7 +197,7 @@ async def react2ban(
 async def no_react2ban(
     message: Message,
     storage: Storage,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Stops react2ban on the message"""

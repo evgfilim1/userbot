@@ -4,7 +4,6 @@ __all__ = [
 
 import logging
 import random
-from typing import Type
 
 from pyrogram import Client
 from pyrogram.errors import MsgIdInvalid, ReactionEmpty, ReactionInvalid
@@ -36,7 +35,7 @@ async def put_reaction(message: Message, command: CommandObject) -> str | None:
 async def get_reactions(
     client: Client,
     message: Message,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Gets message reactions with users who reacted to it"""

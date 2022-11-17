@@ -5,7 +5,6 @@ __all__ = [
 import asyncio
 import html
 import json
-from typing import Type
 
 import jq
 from pyrogram import Client
@@ -35,7 +34,7 @@ async def delete_this(message: Message) -> None:
 async def dump(
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
@@ -75,7 +74,7 @@ async def dump(
 async def user_first_message(
     client: Client,
     message: Message,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Replies to user's very first message in the chat"""

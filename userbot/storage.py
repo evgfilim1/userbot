@@ -7,7 +7,7 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Self, Type, TypeAlias, TypeVar
+from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Self, TypeAlias, TypeVar
 
 from redis.asyncio import Redis
 from redis.asyncio.client import PubSub
@@ -36,7 +36,7 @@ class Storage(ABC):
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException] | None,
+        exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:

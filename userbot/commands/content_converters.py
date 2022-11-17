@@ -6,7 +6,7 @@ import asyncio
 from io import BytesIO
 from os import path
 from tempfile import NamedTemporaryFile
-from typing import BinaryIO, Type
+from typing import BinaryIO
 
 from PIL import Image
 from pyrogram import Client
@@ -58,7 +58,7 @@ def _convert_to_sticker(photo: BinaryIO, fmt: str) -> BytesIO:
 async def video_to_gif(
     client: Client,
     message: Message,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Converts a video to a mpeg4 gif"""
@@ -110,7 +110,7 @@ async def photo_to_sticker(client: Client, message: Message, command: CommandObj
 async def video_to_audio(
     client: Client,
     message: Message,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Extracts audio from video"""

@@ -3,7 +3,6 @@ __all__ = [
 ]
 
 from io import BytesIO
-from typing import Type
 
 from PIL import Image
 from pyrogram import Client
@@ -31,7 +30,7 @@ async def color(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sends a specified color sample
@@ -56,7 +55,7 @@ async def user_color(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sends a color sample of user's color as shown in clients"""

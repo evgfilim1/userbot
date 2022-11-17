@@ -2,7 +2,7 @@ __all__ = [
     "HooksModule",
 ]
 
-from typing import Any, Callable, Type, overload
+from typing import Any, Callable, overload
 
 from pyrogram import Client
 from pyrogram import filters as pyrogram_filters
@@ -159,8 +159,8 @@ class HooksModule(BaseModule):
     def _create_handlers_filters(
         self,
         handler: HooksHandler,
-    ) -> tuple[list[Type[Handler]], pyrogram_filters.Filter]:
-        h: list[Type[Handler]] = [MessageHandler]
+    ) -> tuple[list[type[Handler]], pyrogram_filters.Filter]:
+        h: list[type[Handler]] = [MessageHandler]
         if handler.handle_edits:
             h.append(EditedMessageHandler)
         return (

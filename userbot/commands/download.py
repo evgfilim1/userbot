@@ -3,7 +3,6 @@ __all__ = [
 ]
 
 from pathlib import Path
-from typing import Type
 
 import aiofiles
 import magic
@@ -26,7 +25,7 @@ async def _downloader(
     message: Message,
     filename: str,
     data_dir: Path,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     _ = tr.gettext
@@ -82,7 +81,7 @@ async def download(
     message: Message,
     command: CommandObject,
     data_dir: Path,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Downloads a file or files"""

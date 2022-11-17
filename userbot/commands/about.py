@@ -2,8 +2,6 @@ __all__ = [
     "commands",
 ]
 
-from typing import Type
-
 from pyrogram import Client
 
 from .. import __git_commit__
@@ -15,7 +13,7 @@ commands = CommandsModule("About")
 
 
 @commands.add("about")
-async def about(client: Client, icons: Type[Icons], tr: Translation) -> str:
+async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
     """Shows information about this userbot"""
     _ = tr.gettext
     base_url = "https://github.com/evgfilim1/userbot"

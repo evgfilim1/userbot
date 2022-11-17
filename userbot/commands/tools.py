@@ -9,7 +9,7 @@ from calendar import TextCalendar
 from datetime import datetime
 from os import getpid, kill
 from signal import SIGINT
-from typing import Any, NoReturn, Type
+from typing import Any, NoReturn
 
 from pyrogram.types import Message
 
@@ -117,7 +117,7 @@ async def test_error() -> NoReturn:
 
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
-async def sleep(command: CommandObject, icons: Type[Icons], tr: Translation) -> str:
+async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> str:
     """Sleeps for a specified amount of time
 
     This is a test command to check the command waiting message and timeout."""
@@ -128,7 +128,7 @@ async def sleep(command: CommandObject, icons: Type[Icons], tr: Translation) -> 
 
 
 @commands.add("stopself", hidden=True)
-async def stop_self(message: Message, icons: Type[Icons], tr: Translation) -> None:
+async def stop_self(message: Message, icons: type[Icons], tr: Translation) -> None:
     """Stops the bot
 
     If it's running in a production Docker container, it will be restarted automatically."""

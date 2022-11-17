@@ -4,7 +4,7 @@ __all__ = [
 
 from abc import ABC
 from types import TracebackType
-from typing import ClassVar, Self, Type
+from typing import ClassVar, Self
 
 from httpx import AsyncClient
 
@@ -29,7 +29,7 @@ class BaseClient(ABC):
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException] | None,
+        exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:

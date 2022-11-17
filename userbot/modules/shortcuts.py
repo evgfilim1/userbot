@@ -3,7 +3,7 @@ __all__ = [
 ]
 
 import re
-from typing import Any, Callable, Type, overload
+from typing import Any, Callable, overload
 
 from pyrogram import ContinuePropagation, filters
 from pyrogram.handlers import EditedMessageHandler, MessageHandler
@@ -147,8 +147,8 @@ class ShortcutsModule(BaseModule):
     def _create_handlers_filters(
         self,
         handler: ShortcutsHandler,
-    ) -> tuple[list[Type[Handler]], filters.Filter]:
-        h: list[Type[Handler]] = [MessageHandler]
+    ) -> tuple[list[type[Handler]], filters.Filter]:
+        h: list[type[Handler]] = [MessageHandler]
         if handler.handle_edits:
             h.append(EditedMessageHandler)
         return h, filters.outgoing & ~filters.scheduled & filters.regex(handler.pattern)

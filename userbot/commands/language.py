@@ -2,8 +2,6 @@ __all__ = [
     "commands",
 ]
 
-from typing import Type
-
 from pyrogram.types import Message
 
 from ..constants import Icons
@@ -19,7 +17,7 @@ async def chat_language(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
     lang: str,
 ) -> str:

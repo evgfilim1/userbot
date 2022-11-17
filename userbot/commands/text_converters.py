@@ -3,7 +3,6 @@ __all__ = [
 ]
 
 import re
-from typing import Type
 
 from pyrogram.enums import MessageEntityType, ParseMode
 from pyrogram.errors import MessageNotModified
@@ -75,7 +74,7 @@ async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
 async def sed(
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """sed-like replacement"""

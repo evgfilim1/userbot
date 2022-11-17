@@ -8,7 +8,7 @@ import asyncio
 import inspect
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Awaitable, Callable, Generic, NamedTuple, Type, TypeVar
+from typing import Any, Awaitable, Callable, Generic, NamedTuple, TypeVar
 
 from pyrogram import Client
 from pyrogram.enums import ParseMode
@@ -93,7 +93,7 @@ class BaseHandler(ABC):
         """Edit a message after some time to show that the bot is working on the message."""
         await asyncio.sleep(0.75)
         message: Message = data["message"]
-        icons: Type[Icons] = data["icons"]
+        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         if self.waiting_message is not None:
@@ -113,7 +113,7 @@ class BaseHandler(ABC):
             exc_info=True,
             extra={"data": data},
         )
-        icons: Type[Icons] = data["icons"]
+        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         __ = tr.ngettext
@@ -214,7 +214,7 @@ class BaseModule(Generic[_HT]):
         self._middleware.register(middleware)
 
     @abstractmethod
-    def _create_handlers_filters(self, handler: _HT) -> tuple[list[Type[Handler]], Filter]:
+    def _create_handlers_filters(self, handler: _HT) -> tuple[list[type[Handler]], Filter]:
         """Create Pyrogram handlers and filters for the given handler."""
         pass
 

@@ -3,7 +3,6 @@ __all__ = [
 ]
 
 import json
-from typing import Type
 
 from pyrogram import Client
 from pyrogram.enums import MessageMediaType, ParseMode
@@ -25,7 +24,7 @@ async def get_note(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Sends saved note"""
@@ -69,7 +68,7 @@ async def save_note(
     command: CommandObject,
     storage: Storage,
     notes_chat: int | str,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Saves replied message as note for later use"""
@@ -89,7 +88,7 @@ async def save_note(
 
 
 @commands.add("notes", "ns")
-async def saved_notes(storage: Storage, icons: Type[Icons], tr: Translation) -> str:
+async def saved_notes(storage: Storage, icons: type[Icons], tr: Translation) -> str:
     """Shows all saved notes"""
     _ = tr.gettext
     t = ""
@@ -104,7 +103,7 @@ async def delete_note(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Deletes saved note"""

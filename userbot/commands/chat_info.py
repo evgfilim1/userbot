@@ -5,7 +5,6 @@ __all__ = [
 import logging
 from asyncio import sleep
 from random import randint
-from typing import Type
 
 from pyrogram import Client
 from pyrogram.enums import MessagesFilter
@@ -81,7 +80,7 @@ async def random_chat_info(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: Type[Icons],
+    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets random chat photo and/or title

@@ -6,7 +6,7 @@ __all__ = [
 
 from asyncio import Task, create_task
 from types import TracebackType
-from typing import Any, Coroutine, Self, Type
+from typing import Any, Coroutine, Self
 
 
 class AsyncJobManager:
@@ -28,7 +28,7 @@ class AsyncJobManager:
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException] | None,
+        exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:
