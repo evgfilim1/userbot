@@ -54,7 +54,7 @@ def edit_or_reply(message: Message, tr: Translation) -> tuple[AnswerMethod, bool
         if message.reply_to_message.caption is not None:
             return send_helper(message.reply_to_message.edit_caption), True
         return send_helper(message.reply_to_message.edit), True
-    return send_helper(message.edit, _("<b>Maybe you mean:</b>\n\n")), False
+    return send_helper(message.edit, _("<b>Maybe you mean:</b>") + "\n\n"), False
 
 
 def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:

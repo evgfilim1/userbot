@@ -100,11 +100,11 @@ async def sed(
     rh = _ReplaceHelper(replace_re)
     text = re.sub(find_re, rh, text, flags=flags)
     if not delete:
-        prefix = _("Maybe you mean:\n\n")
+        prefix = _("Maybe you mean:")
         for entity in rh.entities:
             entity.offset += len(prefix)
         await message.edit(
-            f"{prefix}{text}",
+            f"{prefix}\n\n{text}",
             parse_mode=ParseMode.DISABLED,
             entities=[
                 MessageEntity(

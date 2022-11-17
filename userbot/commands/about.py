@@ -25,10 +25,10 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
     else:
         github_icon = _("<i>Repo:</i>")
         commit_icon = _("<i>Commit:</i>")
-    t = _("{icon} <b>About userbot</b>\n").format(icon=icons.INFO)
+    t = _("{icon} <b>About userbot</b>").format(icon=icons.INFO)
     t += (
-        f"{github_icon} <a href='{base_url}'>evgfilim1/userbot</a>\n"
-        f"{commit_icon} <code>{commit}</code>"
+        f"\n{github_icon} <a href='{base_url}'>evgfilim1/userbot</a>"
+        f"\n{commit_icon} <code>{commit}</code>"
     )
     if __git_commit__:
         t += " " + _("(<a href='{base_url}/deployments'>deployments</a>)").format(

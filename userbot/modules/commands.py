@@ -437,7 +437,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
                         )
             else:
                 return f"<b>No help found for {args}</b>"
-        text = _("<b>List of userbot commands available:</b>\n\n")
+        text = _("<b>List of userbot commands available:</b>") + "\n\n"
         prev_cat = ""
         for handler in sorted(self._handlers):
             if handler.hidden:

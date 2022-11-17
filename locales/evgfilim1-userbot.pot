@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-17 09:56+0500\n"
+"POT-Creation-Date: 2022-11-17 10:47+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: userbot/commands/about.py:28
 #, python-brace-format
-msgid "{icon} <b>About userbot</b>\n"
+msgid "{icon} <b>About userbot</b>"
 msgstr ""
 
 #: userbot/commands/about.py:34
@@ -291,7 +291,7 @@ msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</
 msgstr ""
 
 #: userbot/commands/reminders.py:60
-msgid "for myself "
+msgid "for myself"
 msgstr ""
 
 #: userbot/commands/stickers.py:38
@@ -307,9 +307,7 @@ msgid ""
 msgstr ""
 
 #: userbot/commands/text_converters.py:103
-msgid ""
-"Maybe you mean:\n"
-"\n"
+msgid "Maybe you mean:"
 msgstr ""
 
 #: userbot/commands/tools.py:83
@@ -408,9 +406,7 @@ msgid ""
 msgstr ""
 
 #: userbot/modules/commands.py:440
-msgid ""
-"<b>List of userbot commands available:</b>\n"
-"\n"
+msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
 #: userbot/modules/hooks.py:34
@@ -428,8 +424,6 @@ msgid ""
 msgstr ""
 
 #: userbot/utils/messages.py:57
-msgid ""
-"<b>Maybe you mean:</b>\n"
-"\n"
+msgid "<b>Maybe you mean:</b>"
 msgstr ""
 

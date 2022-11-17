@@ -57,7 +57,7 @@ def _remind_common(
         ).format(
             icon=icons.NOTIFICATION,
             t=t.astimezone(),
-            maybe_for_self=_("for myself ") if for_myself else "",
+            maybe_for_self=(_("for myself") + " ") if for_myself else "",
         )
     else:
         response = None
