@@ -52,14 +52,9 @@ jobs:
           key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Run pre-commit checks
-        env:
-          SKIP: "write-pot"
         run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Check code style
         run: |
           isort --check --diff userbot
           black --check --diff userbot
-
-      - name: Check message catalog template is up-to-date
-        run: python potctl.py --diff

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Helper script to check, extract and update the template message catalog."""
+
 import difflib
 import re
 import sys
@@ -24,6 +26,7 @@ DEFAULT_POT_NAME = "locales/evgfilim1-userbot.pot"
 
 
 def extract_message_template_catalog() -> Catalog:
+    """Extracts the messages from the source code and return a message catalog."""
     catalog = Catalog(
         domain="evgfilim1-userbot",
         project="evgfilim1/userbot",
@@ -54,23 +57,42 @@ def extract_message_template_catalog() -> Catalog:
     return catalog
 
 
-def write_message_template_catalog(
+def read_message_catalog(file: str = DEFAULT_POT_NAME) -> Catalog:
+    """Reads a message catalog from a file."""
+    with open(file, "rb") as f:
+        return read_po(f)
+
+
+def write_message_catalog(
     catalog: Catalog,
     file: str = DEFAULT_POT_NAME,
 ) -> None:
+    """Writes a message catalog to a file."""
     if file is None:
         file = DEFAULT_POT_NAME
     with open(file, "wb") as f:
         write_po(f, catalog, width=100)
 
 
+def check_write_message_template_catalog(
+    catalog: Catalog,
+    file: str = DEFAULT_POT_NAME,
+) -> None:
+    """Checks if the template message catalog is up-to-date and updates it if needed."""
+    if file is None:
+        file = DEFAULT_POT_NAME
+    if diff_message_templates(file) is None:
+        return  # up to date
+    write_message_catalog(catalog, file)
+
+
 def diff_message_templates(
     old_filename: str = DEFAULT_POT_NAME,
 ) -> bytes | None:
+    """Returns the unified diff between the old and the new template message catalog."""
     if old_filename is None:
         old_filename = DEFAULT_POT_NAME
-    with open(old_filename, "rb") as f:
-        old_catalog = read_po(f)
+    old_catalog = read_message_catalog(old_filename)
     new_catalog = extract_message_template_catalog()
 
     new_catalog.creation_date = old_catalog.creation_date  # don't diff it
@@ -98,7 +120,8 @@ def diff_message_templates(
 
 
 def main() -> None:
-    parser = ArgumentParser()
+    """Entry point for the script."""
+    parser = ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group(required=True)
     not_specified = object()
     actions.add_argument(
@@ -125,7 +148,7 @@ def main() -> None:
         print("The template message catalog is up to date.", file=sys.stderr)
         return
     if args.write is not not_specified:
-        write_message_template_catalog(extract_message_template_catalog(), args.write)
+        check_write_message_template_catalog(extract_message_template_catalog(), args.write)
         print("The template message catalog has been written.", file=sys.stderr)
         return
     raise AssertionError("This should never happen")
