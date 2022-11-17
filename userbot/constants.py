@@ -81,6 +81,7 @@ class Icons(Enum):
     WATCH = (5798396069406576367, "🕒")
     NOTIFICATION = (6039513858366773821, "🔔")
     GLOBE = (6037284117505116849, "🌐")
+    LOCK = (6003424016977628379, "🔒")
     # https://t.me/addemoji/uxtools
     GITHUB = (6318902906900711458, "🌐")
     # https://t.me/addemoji/MaterialIconsAlpha

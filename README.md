@@ -28,8 +28,8 @@ About:
 • help [command] — Sends help for all commands or for a specific one
 
 Chat administration:
-• chatban <reply 'reply'|id> [timespec] [reason...] — Bans a user in a chat
-• chatunban <id> — Unbans a user in a chat
+• chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
+• chatunban <reply 'reply'|id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 • promote <admin-title> — Promotes a user to an admin without any rights but with title
 • react2ban — Bans a user whoever reacted to the message

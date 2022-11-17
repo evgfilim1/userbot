@@ -11,7 +11,7 @@ from pyrogram import Client, ContinuePropagation
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import FloodWait, UserAdminInvalid
 from pyrogram.raw import base, functions, types
-from pyrogram.types import Message
+from pyrogram.types import ChatPermissions, Message
 from pyrogram.utils import get_channel_id, zero_datetime
 
 from ..constants import Icons
@@ -29,20 +29,133 @@ _REACT2BAN_TEXT = _(
 commands = CommandsModule("Chat administration")
 
 
-@commands.add("chatban", usage="<reply 'reply'|id> [timespec] [reason...]")
-async def chat_ban(
+def _parse_restrict_perms(perms: str) -> ChatPermissions:
+    """Parses a string of permissions into a ChatPermissions object.
+
+    The string is a comma-separated list of permissions to restrict. Possible permissions are:
+    "text", "media", "stickers", "polls", "links", "invite", "pin", "info".
+    """
+    permissions = ChatPermissions(
+        can_send_messages=True,
+        can_send_media_messages=True,
+        can_send_other_messages=True,
+        can_add_web_page_previews=True,
+        can_send_polls=True,
+        can_invite_users=True,
+        can_pin_messages=True,
+        can_change_info=True,
+    )
+    for p in perms.split(","):
+        match p:
+            case "text":
+                permissions.can_send_messages = False
+            case "media":
+                permissions.can_send_media_messages = False
+            case "stickers":
+                permissions.can_send_other_messages = False
+            case "polls":
+                permissions.can_send_polls = False
+            case "links":
+                permissions.can_add_web_page_previews = False
+            case "invite":
+                permissions.can_invite_users = False
+            case "pin":
+                permissions.can_pin_messages = False
+            case "info":
+                permissions.can_change_info = False
+            case _:
+                raise ValueError(f"Unknown permission: {p}")
+    return permissions
+
+
+def _describe_permissions(
+    permissions: ChatPermissions,
+    default_permissions: ChatPermissions,
+    tr: Translation,
+) -> str:
+    _ = tr.gettext
+    enabled = _("✅")
+    disabled = _("❌")
+    it = zip(
+        (
+            permissions.can_send_messages,
+            permissions.can_send_media_messages,
+            permissions.can_send_other_messages,
+            permissions.can_add_web_page_previews,
+            permissions.can_send_polls,
+            permissions.can_invite_users,
+            permissions.can_pin_messages,
+            permissions.can_change_info,
+        ),
+        (
+            default_permissions.can_send_messages,
+            default_permissions.can_send_media_messages,
+            default_permissions.can_send_other_messages,
+            default_permissions.can_add_web_page_previews,
+            default_permissions.can_send_polls,
+            default_permissions.can_invite_users,
+            default_permissions.can_pin_messages,
+            default_permissions.can_change_info,
+        ),
+        (
+            _("Send messages"),
+            _("Send media"),
+            _("Send stickers & GIFs"),
+            _("Embed links"),
+            _("Send polls"),
+            _("Add members"),
+            _("Pin messages"),
+            _("Change group info"),
+        ),
+    )
+    text = ""
+    for available, default, name in it:
+        if default is False:
+            continue  # This permission is disabled by default, so skip it
+        text += f"{enabled if available else disabled} {name}\n"
+    return text
+
+
+def _get_restrict_info(
+    permissions: ChatPermissions,
+    default_chat_permissions: ChatPermissions,
+    *,
+    tr: Translation,
+    is_forever: bool,
+) -> str:
+    """Returns a template string with information about the restrictions."""
+    _ = tr.gettext
+    if not is_forever:
+        text = " " + _("until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>")
+    else:
+        text = ""
+    if not permissions.can_send_messages:
+        text = _("{icon} {user_link} <b>banned</b> in this chat") + text
+    else:
+        text = _("{icon} {user_link} <b>restricted</b> in this chat") + text
+    text += ".\n{}\n".format(_("{icon_perms} <b>New permissions:</b>"))
+    text += _describe_permissions(permissions, default_chat_permissions, tr)
+    return text
+
+
+@commands.add("chatban", "chatrestrict", usage="<reply 'reply'|id> [timespec] [perms] [reason...]")
+async def restrict_user(
     client: Client,
     message: Message,
     command: CommandObject,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Bans a user in a chat
+    """Restricts or bans a user in a chat
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user.
     `timespec` can be a time delta (e.g. "1d3h"), a time string like "12:30" or "2022-12-31_23:59"),
-    literal "0" or literal "forever" (for a permanent ban).
-    If no time is specified, the user will be banned forever."""
+    literal "0" or literal "forever" (for a permanent restrict). If no time is specified, the user
+    will be restricted forever.
+    `perms` is a comma-separated list of permissions to be revoked from the user. To ban a user,
+    pass "*" as `perms` (or omit it). Possible permissions are: "text", "media", "stickers",
+    "polls", "links", "invite", "pin", "info".
+    `reason` is an optional argument that will be shown in the ban message."""
     _ = tr.gettext
     args_list = command.args.split(" ")
     if args_list[0] == "reply":
@@ -50,28 +163,33 @@ async def chat_ban(
     else:
         user_id = int(args_list[0])
     now = message.edit_date or message.date or datetime.now()
-    if ban_forever := (len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever"):
+    if is_forever := (len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever"):
         t = zero_datetime()
     else:
         t = parse_timespec(now, args_list[1])
-    reason = " ".join(args_list[2:])
-    await client.ban_chat_member(message.chat.id, user_id, t)
+    if len(args_list) <= 2 or args_list[2] == "*":
+        perms = ChatPermissions()  # ban
+    else:
+        perms = _parse_restrict_perms(args_list[2])
+    reason = " ".join(args_list[3:])
+    await client.restrict_chat_member(message.chat.id, user_id, perms, t)
     user = await client.get_chat(user_id)
-
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    text = _("{icon} {user_link} <b>banned</b> in this chat").format(
+    if user.username is not None:
+        user_link += f" (@{user.username})"
+    chat = await client.get_chat(message.chat.id)
+    text = _get_restrict_info(perms, chat.permissions, tr=tr, is_forever=is_forever).format(
         icon=icons.PERSON_BLOCK,
+        icon_perms=icons.LOCK,
         user_link=user_link,
+        t=t.astimezone(),
     )
-    if not ban_forever:
-        text += " " + _("until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>").format(t=t.astimezone())
-    text += ".\n"
     if reason:
-        text += _("<b>Reason:</b> {reason}").format(reason=html.escape(reason))
+        text += "\n" + _("<b>Reason:</b> {reason}").format(reason=html.escape(reason))
     return text
 
 
-@commands.add("chatunban", usage="<id>")
+@commands.add("chatunban", usage="<reply 'reply'|id>")
 async def chat_unban(
     client: Client,
     message: Message,
@@ -79,9 +197,15 @@ async def chat_unban(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Unbans a user in a chat"""
+    """Unbans a user in a chat
+
+    First argument must be a user ID to be banned or literal "reply" to ban the replied user."""
     _ = tr.gettext
-    user_id = int(command.args)
+    args = command.args
+    if args == "reply":
+        user_id = message.reply_to_message.from_user.id
+    else:
+        user_id = int(args)
     await client.unban_chat_member(message.chat.id, user_id)
     user = await client.get_chat(user_id)
 
