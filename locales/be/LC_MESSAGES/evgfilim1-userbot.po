@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-17 09:56+0500\n"
-"PO-Revision-Date: 2022-11-17 05:31\n"
+"POT-Creation-Date: 2022-11-17 15:31+0500\n"
+"PO-Revision-Date: 2022-11-17 10:37\n"
 "Last-Translator: \n"
 "Language-Team: Belarusian\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 
 #: userbot/commands/about.py:28
 #, python-brace-format
-msgid "{icon} <b>About userbot</b>\n"
+msgid "{icon} <b>About userbot</b>"
 msgstr ""
 
 #: userbot/commands/about.py:34
@@ -50,46 +50,96 @@ msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
 msgstr ""
 
-#: userbot/commands/chat_admin.py:62
-#, python-brace-format
-msgid "{icon} {user_link} <b>banned</b> in this chat"
+#: userbot/commands/chat_admin.py:77
+msgid "✅"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:67
+#: userbot/commands/chat_admin.py:78
+msgid "❌"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:101
+msgid "Send messages"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:102
+msgid "Send media"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:103
+msgid "Send stickers & GIFs"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:104
+msgid "Embed links"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:105
+msgid "Send polls"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:106
+msgid "Add members"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:107
+msgid "Pin messages"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:108
+msgid "Change group info"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:129
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:70
+#: userbot/commands/chat_admin.py:133
+#, python-brace-format
+msgid "{icon} {user_link} <b>banned</b> in this chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:135
+#, python-brace-format
+msgid "{icon} {user_link} <b>restricted</b> in this chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:136
+#, python-brace-format
+msgid "{icon_perms} <b>New permissions:</b>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:188
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:89
+#: userbot/commands/chat_admin.py:213
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:124
+#: userbot/commands/chat_admin.py:248
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:158
+#: userbot/commands/chat_admin.py:282
 msgid "Recently banned:"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:188 userbot/commands/chat_admin.py:207
+#: userbot/commands/chat_admin.py:312 userbot/commands/chat_admin.py:331
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:191
+#: userbot/commands/chat_admin.py:315
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:211
+#: userbot/commands/chat_admin.py:335
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr ""
@@ -278,7 +328,7 @@ msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</
 msgstr ""
 
 #: userbot/commands/reminders.py:60
-msgid "for myself "
+msgid "for myself"
 msgstr ""
 
 #: userbot/commands/stickers.py:38
@@ -292,7 +342,7 @@ msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing
 msgstr ""
 
 #: userbot/commands/text_converters.py:103
-msgid "Maybe you mean:\n\n"
+msgid "Maybe you mean:"
 msgstr ""
 
 #: userbot/commands/tools.py:83
@@ -381,7 +431,7 @@ msgid "<b>Help for {args}:</b>\n"
 msgstr ""
 
 #: userbot/modules/commands.py:440
-msgid "<b>List of userbot commands available:</b>\n\n"
+msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
 #: userbot/modules/hooks.py:34
@@ -397,6 +447,6 @@ msgid "Available hooks:\n"
 msgstr ""
 
 #: userbot/utils/messages.py:57
-msgid "<b>Maybe you mean:</b>\n\n"
+msgid "<b>Maybe you mean:</b>"
 msgstr ""
 
