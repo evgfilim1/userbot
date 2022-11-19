@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-17 15:31+0500\n"
-"PO-Revision-Date: 2022-11-17 10:37\n"
+"POT-Creation-Date: 2022-11-19 13:48+0500\n"
+"PO-Revision-Date: 2022-11-19 08:59\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -45,105 +45,110 @@ msgstr ""
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:23
+#: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 "This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
 msgstr "<b>⚠⚠⚠ ЦЕ НЕ ЖАРТ ⚠⚠⚠</b>\n"
 "Повідомлення захищене від реакцій. Будь-хто, хто поставить реакцію, буде <b>заблокований</b> у чаті на півроку."
 
-#: userbot/commands/chat_admin.py:77
+#: userbot/commands/chat_admin.py:78
 msgid "✅"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:78
+#: userbot/commands/chat_admin.py:79
 msgid "❌"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:101
+#: userbot/commands/chat_admin.py:102
 msgid "Send messages"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:102
+#: userbot/commands/chat_admin.py:103
 msgid "Send media"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:103
+#: userbot/commands/chat_admin.py:104
 msgid "Send stickers & GIFs"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:104
+#: userbot/commands/chat_admin.py:105
 msgid "Embed links"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:105
+#: userbot/commands/chat_admin.py:106
 msgid "Send polls"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:106
+#: userbot/commands/chat_admin.py:107
 msgid "Add members"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:107
+#: userbot/commands/chat_admin.py:108
 msgid "Pin messages"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:108
+#: userbot/commands/chat_admin.py:109
 msgid "Change group info"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:129
+#: userbot/commands/chat_admin.py:130
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:133
+#: userbot/commands/chat_admin.py:134
 #, python-brace-format
 msgid "{icon} {user_link} <b>banned</b> in this chat"
 msgstr "{icon} {user_link} <b>заблокований</b> в цьому чаті"
 
-#: userbot/commands/chat_admin.py:135
+#: userbot/commands/chat_admin.py:136
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:136
+#: userbot/commands/chat_admin.py:137
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:188
+#: userbot/commands/chat_admin.py:189
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:213
+#: userbot/commands/chat_admin.py:214
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr "{icon} {user_link} <b>розблокований</b> у цьому чаті"
 
-#: userbot/commands/chat_admin.py:248
+#: userbot/commands/chat_admin.py:249
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Посаду людини в чаті змінено на <i>{title}</i>"
 
-#: userbot/commands/chat_admin.py:282
+#: userbot/commands/chat_admin.py:283
 msgid "Recently banned:"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:312 userbot/commands/chat_admin.py:331
+#: userbot/commands/chat_admin.py:313 userbot/commands/chat_admin.py:332
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Не груповий чат"
 
-#: userbot/commands/chat_admin.py:315
+#: userbot/commands/chat_admin.py:316
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Неможливо забанити користувачів у чаті"
 
-#: userbot/commands/chat_admin.py:335
+#: userbot/commands/chat_admin.py:336
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Відстеження реакцій на повідомленні, щоб забанити користувача, було вимкнено"
+
+#: userbot/commands/chat_admin.py:380
+#, python-brace-format
+msgid "{icon} Message pinned"
+msgstr ""
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
