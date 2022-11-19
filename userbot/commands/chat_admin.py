@@ -6,6 +6,7 @@ __all__ = [
 import html
 from asyncio import sleep
 from datetime import datetime, timedelta
+from typing import Literal, overload
 
 from pyrogram import Client, ContinuePropagation
 from pyrogram.enums import ChatMemberStatus
@@ -337,3 +338,71 @@ async def no_react2ban(
         )
     )
     await message.delete()
+
+
+@overload
+async def _pin_common(
+    message: Message,
+    command: CommandObject,
+    icons: type[Icons],
+    tr: Translation,
+    *,
+    return_result: Literal[False],
+) -> None:
+    ...
+
+
+@overload
+async def _pin_common(
+    message: Message,
+    command: CommandObject,
+    icons: type[Icons],
+    tr: Translation,
+    *,
+    return_result: Literal[True],
+) -> str:
+    ...
+
+
+async def _pin_common(
+    message: Message,
+    command: CommandObject,
+    icons: type[Icons],
+    tr: Translation,
+    *,
+    return_result: bool,
+) -> str | None:
+    """Common code for pin and s_pin"""
+    _ = tr.gettext
+    no_notify = command.args == "silent"
+    await message.reply_to_message.pin(disable_notification=no_notify, both_sides=True)
+    if return_result:
+        return _("{icon} Message pinned").format(icon=icons.PIN)
+    await message.delete()
+    return None
+
+
+@commands.add("pin", usage="<reply> ['silent']")
+async def pin(
+    message: Message,
+    command: CommandObject,
+    icons: type[Icons],
+    tr: Translation,
+) -> str:
+    """Pins the message
+
+    If 'silent' is specified, the message will be pinned silently"""
+    return await _pin_common(message, command, icons, tr, return_result=True)
+
+
+@commands.add("s_pin", usage="<reply> ['silent']")
+async def s_pin(
+    message: Message,
+    command: CommandObject,
+    icons: type[Icons],
+    tr: Translation,
+) -> None:
+    """Pins the message silently (without returning the result)
+
+    If 'silent' is specified, the message will be pinned silently"""
+    await _pin_common(message, command, icons, tr, return_result=False)

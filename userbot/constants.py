@@ -82,6 +82,7 @@ class Icons(Enum):
     NOTIFICATION = (6039513858366773821, "🔔")
     GLOBE = (6037284117505116849, "🌐")
     LOCK = (6003424016977628379, "🔒")
+    PIN = (5974352611711651172, "📌")
     # https://t.me/addemoji/uxtools
     GITHUB = (6318902906900711458, "🌐")
     # https://t.me/addemoji/MaterialIconsAlpha

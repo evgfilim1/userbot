@@ -31,8 +31,10 @@ Chat administration:
 • chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
 • chatunban <reply 'reply'|id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
+• pin <reply> ['silent'] — Pins the message
 • promote <admin-title> — Promotes a user to an admin without any rights but with title
 • react2ban — Bans a user whoever reacted to the message
+• s_pin <reply> ['silent'] — Pins the message silently (without returning the result)
 
 Chat info:
 • rndinfo ['photo'|'title'] — Sets random chat photo and/or title
