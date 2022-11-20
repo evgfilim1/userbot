@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-19 13:48+0500\n"
-"PO-Revision-Date: 2022-11-19 08:59\n"
+"PO-Revision-Date: 2022-11-20 13:35\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -33,17 +33,17 @@ msgstr "<i>Коміт:</i>"
 #: userbot/commands/about.py:28
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
-msgstr ""
+msgstr "{icon} <b>Про користувальницького бота</b>"
 
 #: userbot/commands/about.py:34
 #, python-brace-format
 msgid "(<a href='{base_url}/deployments'>deployments</a>)"
-msgstr ""
+msgstr "(<a href='{base_url}/deployments'>розгортання</a>)"
 
 #: userbot/commands/about.py:37
 #, python-brace-format
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
-msgstr ""
+msgstr "{icon} <a href='{url}'>Зробити внесок до перекладу користувальницького боту</a>"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -53,11 +53,11 @@ msgstr "<b>⚠⚠⚠ ЦЕ НЕ ЖАРТ ⚠⚠⚠</b>\n"
 
 #: userbot/commands/chat_admin.py:78
 msgid "✅"
-msgstr ""
+msgstr "✅"
 
 #: userbot/commands/chat_admin.py:79
 msgid "❌"
-msgstr ""
+msgstr "❌"
 
 #: userbot/commands/chat_admin.py:102
 msgid "Send messages"
@@ -94,7 +94,7 @@ msgstr ""
 #: userbot/commands/chat_admin.py:130
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr ""
+msgstr "до <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
 #: userbot/commands/chat_admin.py:134
 #, python-brace-format
@@ -114,7 +114,7 @@ msgstr ""
 #: userbot/commands/chat_admin.py:189
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
-msgstr ""
+msgstr "<b>Причина:</b> {reason}"
 
 #: userbot/commands/chat_admin.py:214
 #, python-brace-format
@@ -347,7 +347,7 @@ msgstr "{icon} Нагадування {maybe_for_self}було встановл�
 
 #: userbot/commands/reminders.py:60
 msgid "for myself"
-msgstr ""
+msgstr "для мене"
 
 #: userbot/commands/stickers.py:38
 msgid "<i>Picking random sticker...</i>"
@@ -362,7 +362,7 @@ msgstr "{icon} Не достатньо значень для розпакува�
 
 #: userbot/commands/text_converters.py:103
 msgid "Maybe you mean:"
-msgstr ""
+msgstr "Можливо, ви маєте на увазі:"
 
 #: userbot/commands/tools.py:83
 #, python-brace-format
@@ -457,7 +457,7 @@ msgstr "<b>Довідка по {args}:</b>\n"
 
 #: userbot/modules/commands.py:440
 msgid "<b>List of userbot commands available:</b>"
-msgstr ""
+msgstr "<b>Список доступних команд користувацького боту:</b>"
 
 #: userbot/modules/hooks.py:34
 #, python-brace-format
@@ -475,5 +475,5 @@ msgstr "Доступні хуки:\n"
 
 #: userbot/utils/messages.py:57
 msgid "<b>Maybe you mean:</b>"
-msgstr ""
+msgstr "<b>Може ви маєте на увазі:</b>"
 
