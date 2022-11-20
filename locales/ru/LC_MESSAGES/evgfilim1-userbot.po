@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-19 13:48+0500\n"
-"PO-Revision-Date: 2022-11-19 08:59\n"
+"PO-Revision-Date: 2022-11-20 12:36\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "<i>Коммит:</i>"
 #: userbot/commands/about.py:28
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
-msgstr ""
+msgstr "{icon} <b>О пользовательском боте</b>"
 
 #: userbot/commands/about.py:34
 #, python-brace-format
@@ -53,11 +53,11 @@ msgstr "<b>⚠⚠⚠ ЭТО НЕ ШУТКА ⚠⚠⚠</b>\n"
 
 #: userbot/commands/chat_admin.py:78
 msgid "✅"
-msgstr ""
+msgstr "✅"
 
 #: userbot/commands/chat_admin.py:79
 msgid "❌"
-msgstr ""
+msgstr "❌"
 
 #: userbot/commands/chat_admin.py:102
 msgid "Send messages"
@@ -104,12 +104,12 @@ msgstr "{icon} {user_link} <b>заблокирован</b> в этом чате"
 #: userbot/commands/chat_admin.py:136
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
-msgstr ""
+msgstr "{icon} {user_link} <b>ограничен</b> в этом чате"
 
 #: userbot/commands/chat_admin.py:137
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
-msgstr ""
+msgstr "{icon_perms} <b>Новые права:</b>"
 
 #: userbot/commands/chat_admin.py:189
 #, python-brace-format
@@ -148,7 +148,7 @@ msgstr "{icon} Отслеживание реакций на сообщении �
 #: userbot/commands/chat_admin.py:380
 #, python-brace-format
 msgid "{icon} Message pinned"
-msgstr ""
+msgstr "{icon} Сообщение закреплено"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -347,7 +347,7 @@ msgstr "{icon} Напоминание {maybe_for_self}было установл�
 
 #: userbot/commands/reminders.py:60
 msgid "for myself"
-msgstr ""
+msgstr "для меня"
 
 #: userbot/commands/stickers.py:38
 msgid "<i>Picking random sticker...</i>"
@@ -362,7 +362,7 @@ msgstr "{icon} Недостаточно значений для распаков
 
 #: userbot/commands/text_converters.py:103
 msgid "Maybe you mean:"
-msgstr ""
+msgstr "Возможно, вы имеете в виду:"
 
 #: userbot/commands/tools.py:83
 #, python-brace-format
@@ -463,7 +463,7 @@ msgstr "<b>Справка для {args}:</b>\n"
 
 #: userbot/modules/commands.py:440
 msgid "<b>List of userbot commands available:</b>"
-msgstr ""
+msgstr "<b>Список доступных команд пользовательского бота:</b>"
 
 #: userbot/modules/hooks.py:34
 #, python-brace-format
