@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-19 13:48+0500\n"
-"PO-Revision-Date: 2022-11-20 12:36\n"
+"PO-Revision-Date: 2022-11-20 13:35\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -61,35 +61,35 @@ msgstr "❌"
 
 #: userbot/commands/chat_admin.py:102
 msgid "Send messages"
-msgstr ""
+msgstr "Отправка сообщений"
 
 #: userbot/commands/chat_admin.py:103
 msgid "Send media"
-msgstr ""
+msgstr "Отправка медиафайлов"
 
 #: userbot/commands/chat_admin.py:104
 msgid "Send stickers & GIFs"
-msgstr ""
+msgstr "Отправка стикеров и GIF"
 
 #: userbot/commands/chat_admin.py:105
 msgid "Embed links"
-msgstr ""
+msgstr "Предпросмотр для ссылок"
 
 #: userbot/commands/chat_admin.py:106
 msgid "Send polls"
-msgstr ""
+msgstr "Создание опросов"
 
 #: userbot/commands/chat_admin.py:107
 msgid "Add members"
-msgstr ""
+msgstr "Добавление участников"
 
 #: userbot/commands/chat_admin.py:108
 msgid "Pin messages"
-msgstr ""
+msgstr "Закрепление сообщений"
 
 #: userbot/commands/chat_admin.py:109
 msgid "Change group info"
-msgstr ""
+msgstr "Изменение профиля группы"
 
 #: userbot/commands/chat_admin.py:130
 #, python-brace-format
@@ -481,5 +481,5 @@ msgstr "Доступные хуки:\n"
 
 #: userbot/utils/messages.py:57
 msgid "<b>Maybe you mean:</b>"
-msgstr ""
+msgstr "<b>Возможно, вы имеете в виду</b>"
 
