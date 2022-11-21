@@ -1,4 +1,5 @@
 __all__ = [
+    "format_timedelta",
     "parse_timespec",
 ]
 
@@ -50,3 +51,17 @@ def parse_timespec(now: datetime, timespec: str) -> datetime:
     if parsed_time < now.time() and len(dt) == 1:
         return datetime.combine(now + timedelta(days=1), parsed_time)
     return datetime.combine(date, parsed_time)
+
+
+def format_timedelta(seconds: float | timedelta) -> str:
+    """Format a timedelta as a string like "1d2h3m4s"."""
+    if isinstance(seconds, timedelta):
+        seconds = seconds.total_seconds()
+    t = ""
+    for divisor, unit in ((60, "s"), (60, "m"), (24, "h"), (7, "d")):
+        seconds, remainder = divmod(seconds, divisor)
+        if remainder > 0:
+            t = f"{remainder}{unit}{t}"
+        if seconds == 0:
+            break
+    return t or "0s"

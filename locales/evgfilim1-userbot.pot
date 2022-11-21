@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-19 13:48+0500\n"
+"POT-Creation-Date: 2022-11-21 21:33+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,31 +17,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: userbot/commands/about.py:21
+#: userbot/commands/about.py:23
 msgid "staging"
 msgstr ""
 
-#: userbot/commands/about.py:26
+#: userbot/commands/about.py:28
 msgid "<i>Repo:</i>"
 msgstr ""
 
-#: userbot/commands/about.py:27
+#: userbot/commands/about.py:29
 msgid "<i>Commit:</i>"
 msgstr ""
 
-#: userbot/commands/about.py:28
+#: userbot/commands/about.py:30
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
 msgstr ""
 
-#: userbot/commands/about.py:34
+#: userbot/commands/about.py:36
 #, python-brace-format
 msgid "(<a href='{base_url}/deployments'>deployments</a>)"
 msgstr ""
 
-#: userbot/commands/about.py:37
+#: userbot/commands/about.py:39
 #, python-brace-format
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
+msgstr ""
+
+#: userbot/commands/about.py:49
+msgid "<i>Collecting stats...</i>"
+msgstr ""
+
+#: userbot/commands/about.py:104
+msgid "<b>Statistics:</b>"
+msgstr ""
+
+#: userbot/commands/about.py:105
+#, python-brace-format
+msgid "{icon} Uptime: {uptime}"
+msgstr ""
+
+#: userbot/commands/about.py:110
+msgid "Has premium"
+msgstr ""
+
+#: userbot/commands/about.py:110
+msgid "Has no premium"
+msgstr ""
+
+#: userbot/commands/about.py:116
+#, python-brace-format
+msgid "{icon} Total chats: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:120
+#, python-brace-format
+msgid "• {icon} Private: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:124
+#, python-brace-format
+msgid "• {icon} Bots: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:128
+#, python-brace-format
+msgid "• {icon} Groups and supergroups: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:132
+#, python-brace-format
+msgid "• {icon} Channels: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:136
+#, python-brace-format
+msgid "• {icon} Archived: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:149
+#, python-brace-format
+msgid "{icon} GIFs: {count}/{total}"
+msgstr ""
+
+#: userbot/commands/about.py:154
+#, python-brace-format
+msgid "{icon} Stickers: {count}/{total}"
+msgstr ""
+
+#: userbot/commands/about.py:159
+#, python-brace-format
+msgid "{icon} Archived stickers: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:163
+#, python-brace-format
+msgid "{icon} Custom emoji: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:165
+msgid "Unavailable"
 msgstr ""
 
 #: userbot/commands/chat_admin.py:24

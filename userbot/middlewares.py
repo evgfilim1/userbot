@@ -18,6 +18,9 @@ class KwargsMiddleware(Middleware[str | None]):
     def __init__(self, kwargs: dict[str | Any]):
         self.kwargs = kwargs
 
+    def set_arg(self, key: str, value: Any) -> None:
+        self.kwargs[key] = value
+
     async def __call__(
         self,
         handler: Handler[str | None],
