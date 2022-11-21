@@ -1,3 +1,8 @@
+# =============== WARNING ===============
+# This is an automatically generated file. Do not edit it manually. All changes will be lost.
+# To update this file, use `potctl.py` in the root of the project.
+# =======================================
+#
 # Translations template for evgfilim1/userbot.
 # Copyright (C) 2022 Evgeniy Filimonov
 # This file is distributed under the same license as the evgfilim1/userbot project.
@@ -8,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-26 06:37+0500\n"
+"POT-Creation-Date: 2022-11-26 06:59+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Helper script to check, extract and update the template message catalog."""
+"""Helper script to extract strings, check and update the message catalog template."""
 
 import difflib
 import re
@@ -54,6 +54,14 @@ def extract_message_template_catalog() -> Catalog:
         )
         msg.flags.discard("python-format")  # we don't use this
         catalog[message] = msg
+    catalog.header_comment = (
+        f"# =============== WARNING ===============\n"
+        f"# This is an automatically generated file. Do not edit it manually. All changes will be"
+        f" lost.\n"
+        f"# To update this file, use `potctl.py` in the root of the project.\n"
+        f"# =======================================\n#\n"
+        f"{catalog.header_comment}"
+    )
     return catalog
 
 
@@ -78,7 +86,7 @@ def check_write_message_template_catalog(
     catalog: Catalog,
     file: str = DEFAULT_POT_NAME,
 ) -> None:
-    """Checks if the template message catalog is up-to-date and updates it if needed."""
+    """Checks if the message catalog template is up-to-date and updates it if needed."""
     if file is None:
         file = DEFAULT_POT_NAME
     if diff_message_templates(file) is None:
@@ -89,7 +97,7 @@ def check_write_message_template_catalog(
 def diff_message_templates(
     old_filename: str = DEFAULT_POT_NAME,
 ) -> bytes | None:
-    """Returns the unified diff between the old and the new template message catalog."""
+    """Returns the unified diff between the old and the new message catalog template."""
     if old_filename is None:
         old_filename = DEFAULT_POT_NAME
     old_catalog = read_message_catalog(old_filename)
@@ -129,27 +137,27 @@ def main() -> None:
         nargs="?",
         default=not_specified,
         metavar="FILE",
-        help="Check if the template message catalog contained in FILE is up to date.",
+        help="Check if the message catalog template contained in FILE is up to date.",
     )
     actions.add_argument(
         "--write",
         nargs="?",
         default=not_specified,
         metavar="FILE",
-        help="Write the template message catalog to a file FILE.",
+        help="Write the message catalog template to a file FILE.",
     )
     args = parser.parse_args()
     if args.diff is not not_specified:
         if (diff := diff_message_templates(args.diff)) is not None:
-            print("The template message catalog is NOT up to date.", file=sys.stderr)
+            print("The message catalog template is NOT up to date.", file=sys.stderr)
             print(f"Please run `{sys.argv[0]} --write` to update it.", file=sys.stderr)
             print(diff.decode())
             sys.exit(1)
-        print("The template message catalog is up to date.", file=sys.stderr)
+        print("The message catalog template is up to date.", file=sys.stderr)
         return
     if args.write is not not_specified:
         check_write_message_template_catalog(extract_message_template_catalog(), args.write)
-        print("The template message catalog has been written.", file=sys.stderr)
+        print("The message catalog template has been written.", file=sys.stderr)
         return
     raise AssertionError("This should never happen")
 
