@@ -102,7 +102,7 @@ async def sed(
     if not delete:
         prefix = _("Maybe you mean:")
         for entity in rh.entities:
-            entity.offset += len(prefix)
+            entity.offset += len(prefix) + 2  # +2 for \n\n, see below
         await message.edit(
             f"{prefix}\n\n{text}",
             parse_mode=ParseMode.DISABLED,
