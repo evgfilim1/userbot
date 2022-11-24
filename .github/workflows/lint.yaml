@@ -51,10 +51,5 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: Run pre-commit checks
+      - name: Run checks
         run: pre-commit run --all-files --show-diff-on-failure
-
-      - name: Check code style
-        run: |
-          isort --check --diff userbot
-          black --check --diff userbot
