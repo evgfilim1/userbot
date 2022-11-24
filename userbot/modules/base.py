@@ -178,6 +178,7 @@ class BaseHandler(ABC):
         data = {
             "client": client,
             "message": message,
+            "handler_obj": self,
         }
         try:
             result = await middleware(self._invoke_with_timeout, data)

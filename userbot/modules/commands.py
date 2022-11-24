@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__ = [
+    "CommandsHandler",
     "CommandsModule",
     "CommandObject",
 ]
@@ -16,7 +17,7 @@ from io import BytesIO
 from pathlib import Path
 from traceback import FrameSummary, extract_tb
 from types import TracebackType
-from typing import Any, Callable, Iterable, TypeAlias, overload
+from typing import Any, Callable, Iterable, Self, TypeAlias, overload
 
 from httpx import AsyncClient, HTTPError
 from pyrogram import Client, filters
@@ -28,7 +29,6 @@ from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
 from ..constants import DefaultIcons, Icons, PremiumIcons
-from ..middlewares import icon_middleware, translate_middleware
 from ..translation import Translation
 from .base import BaseHandler, BaseModule, HandlerT
 
@@ -103,6 +103,19 @@ class CommandObject:
         """Returns the full command with arguments."""
         return f"{self.prefix}{self.command} {self.args}"
 
+    @classmethod
+    def parse(cls, text: str, commands: Iterable[_CommandT] | None = None) -> Self:
+        """Parses the text to a command object."""
+        command, _, args = text.partition(" ")
+        prefix, command = command[0], command[1:]
+        m = None
+        if commands is not None:
+            for cmd in commands:
+                if isinstance(cmd, re.Pattern):
+                    m = cmd.match(command)
+                    break
+        return cls(prefix=prefix, command=command, args=args, match=m)
+
 
 class CommandsHandler(BaseHandler):
     def __init__(
@@ -176,10 +189,6 @@ class CommandsHandler(BaseHandler):
             doc = doc.strip().split("\n")[0].strip()
         description = f" — {doc}" if self.doc else ""
         return f"{commands_str}{usage}{description}"
-
-    async def _invoke_handler(self, data: dict[str, Any]) -> str | None:
-        data["command"] = self._parse_command(data["message"].text)
-        return await super()._invoke_handler(data)
 
     async def _exception_handler(self, e: Exception, data: dict[str, Any]) -> str | None:
         """Handles exceptions raised by the command handler."""
@@ -271,18 +280,6 @@ class CommandsHandler(BaseHandler):
                     parse_mode=ParseMode.HTML,
                     disable_web_page_preview=True,
                 )
-
-    def _parse_command(self, text: str) -> CommandObject:
-        """Parses the command from the text."""
-        command, _, args = text.partition(" ")
-        prefix, command = command[0], command[1:]
-        for cmd in self.commands:
-            if isinstance(cmd, re.Pattern):
-                m = cmd.match(command)
-                break
-        else:
-            m = None
-        return CommandObject(prefix=prefix, command=command, args=args, match=m)
 
     @property
     def _sort_key(self) -> tuple[str, str]:
@@ -495,6 +492,9 @@ class CommandsModule(BaseModule[CommandsHandler]):
             category="About",
         )
         if self._ensure_middlewares_registered:
+            # Prevent circular import
+            from ..middlewares import icon_middleware, translate_middleware
+
             # These middlewares are expected by the base module to be registered
             if icon_middleware not in self._middleware:
                 self.add_middleware(icon_middleware)

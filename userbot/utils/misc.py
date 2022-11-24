@@ -70,12 +70,12 @@ class StatsController:
         self._startup_time: int | None = None
 
     def startup(self) -> None:
-        """Set the startup time to the current time. Must be done once."""
+        """Sets the startup time to the current time. Must be done once."""
         if self._startup_time is not None:
             raise RuntimeError("startup() has already been called")
         self._startup_time = int(time.time())
 
     @property
     def uptime(self) -> int:
-        """Get the uptime of the bot in seconds."""
+        """The uptime of the bot in seconds."""
         return int(time.time()) - self._startup_time

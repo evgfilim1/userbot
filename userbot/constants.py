@@ -95,6 +95,8 @@ class Icons(Enum):
     STICKER = (6037128751358151991, "📑")
     ARCHIVED_STICKER = (6039606071314615141, "🕒")
     EMOJI = (5971928678198676594, "🙂")
+    DIAGRAM = (5974083454701145202, "📊")
+    COMMAND = (5974226571601382719, "🔨")
     # https://t.me/addemoji/uxtools
     GITHUB = (6318902906900711458, "🌐")
     # https://t.me/addemoji/MaterialIconsAlpha

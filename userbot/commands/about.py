@@ -8,6 +8,7 @@ from pyrogram.raw import functions, types
 from .. import __git_commit__
 from ..constants import Icons, PremiumIcons
 from ..modules import CommandObject, CommandsModule
+from ..storage import Storage
 from ..translation import Translation
 from ..utils import AppLimits, DialogCount, StatsController, _, format_timedelta, get_dialogs_count
 
@@ -52,6 +53,7 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
 async def stats_handler(
     client: Client,
     command: CommandObject,
+    storage: Storage,
     icons: type[Icons],
     tr: Translation,
     stats: StatsController,
@@ -100,15 +102,26 @@ async def stats_handler(
         archived_dialogs_count = None
         archived_stickers_count = None
 
+    top5 = [
+        f"• {icons.DIAGRAM} <code>{cmd}</code>: {count}"
+        async for cmd, count in storage.list_command_usage(limit=5)
+    ]
+
     lines = [
         _("<b>Statistics:</b>"),
         _("{icon} Uptime: {uptime}").format(
-            icon=icons.SETTINGS, uptime=format_timedelta(stats.uptime)
+            icon=icons.SETTINGS,
+            uptime=format_timedelta(stats.uptime),
         ),
         "{icon} {premium}".format(
             icon=icons.PREMIUM,
             premium=_("Has premium") if me_is_premium else _("Has no premium"),
         ),
+        _("{icon} Commands used: {count}").format(
+            icon=icons.COMMAND,
+            count=await storage.get_total_command_usage(),
+        ),
+        *top5,
     ]
     if dialogs_count is not None and archived_dialogs_count is not None:
         lines.extend(

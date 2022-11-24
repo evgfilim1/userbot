@@ -115,6 +115,18 @@ class Storage(ABC):
     async def set_chat_language(self, chat_id: int, language: str) -> None:
         _log.debug("Language %r set for chat %d", language, chat_id)
 
+    @abstractmethod
+    async def list_command_usage(self, limit: int | None = None) -> AsyncIterable[tuple[str, int]]:
+        yield
+
+    @abstractmethod
+    async def get_total_command_usage(self) -> int:
+        pass
+
+    @abstractmethod
+    async def command_used(self, command: str) -> None:
+        _log.debug("%r command used", command)
+
 
 class RedisStorage(Storage):
     def __init__(self, host: str, port: int, db: int, password: str | None = None) -> None:
@@ -122,7 +134,7 @@ class RedisStorage(Storage):
         self._port = port
         self._db = db
         self._password = password
-        self._pool: Redis = Redis(
+        self._pool: Redis[str] = Redis(
             host=host,
             port=port,
             db=db,
@@ -234,3 +246,27 @@ class RedisStorage(Storage):
     async def set_chat_language(self, chat_id: int, language: str) -> None:
         await self._pool.set(self._key("language", chat_id), language)
         await super().set_chat_language(chat_id, language)
+
+    async def list_command_usage(self, limit: int | None = None) -> AsyncIterable[tuple[str, int]]:
+        if limit is None:
+            limit = 0  # will become -1 => unlimited (negative indices works same as in Python)
+        top = await self._pool.zrange(
+            self._key("commands"),
+            0,
+            limit - 1,  # 0 <= i < limit
+            desc=True,
+            withscores=True,
+            score_cast_func=int,
+        )
+        for item in top:
+            yield item[0], item[1]
+
+    async def get_total_command_usage(self) -> int:
+        total = 0
+        async for _, count in self._pool.zscan_iter(self._key("commands"), score_cast_func=int):
+            total += count
+        return total
+
+    async def command_used(self, command: str) -> None:
+        await self._pool.zincrby(self._key("commands"), 1, command)
+        await super().command_used(command)

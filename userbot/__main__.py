@@ -3,6 +3,7 @@ __all__ = []
 import logging
 import os
 from functools import partial
+from itertools import product
 
 from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
@@ -14,7 +15,13 @@ from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
-from userbot.middlewares import KwargsMiddleware, icon_middleware, translate_middleware
+from userbot.middlewares import (
+    KwargsMiddleware,
+    icon_middleware,
+    parse_command_middleware,
+    translate_middleware,
+    update_command_stats_middleware,
+)
 from userbot.modules import CommandsModule, HooksModule
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
@@ -87,6 +94,10 @@ def main() -> None:
     root_hooks = HooksModule(commands=root_commands, storage=storage)
     root_hooks.add_submodule(hooks)
 
+    # `HooksModule` must be present before `CommandsModule` because it adds some commands
+    # when calling `register()`.
+    all_modules = (root_hooks, root_commands, shortcuts)
+
     kwargs_middleware = KwargsMiddleware(
         {
             "storage": storage,
@@ -98,20 +109,15 @@ def main() -> None:
             "limits": None,  # will be set later
         }
     )
-    root_commands.add_middleware(kwargs_middleware)
-    root_commands.add_middleware(translate_middleware)
-    root_commands.add_middleware(icon_middleware)
-    root_hooks.add_middleware(kwargs_middleware)
-    root_hooks.add_middleware(translate_middleware)
-    root_hooks.add_middleware(icon_middleware)
-    shortcuts.add_middleware(kwargs_middleware)
-    shortcuts.add_middleware(translate_middleware)
-    shortcuts.add_middleware(icon_middleware)
+    root_commands.add_middleware(parse_command_middleware)
+    for module, middleware in product(
+        all_modules, (kwargs_middleware, translate_middleware, icon_middleware)
+    ):
+        module.add_middleware(middleware)
+    root_commands.add_middleware(update_command_stats_middleware)
 
-    # `HooksModule` must be registered before `CommandsModule` because it adds some commands
-    root_hooks.register(client)
-    root_commands.register(client)
-    shortcuts.register(client)
+    for module in all_modules:
+        module.register(client)
 
     job_manager = AsyncJobManager()
 
