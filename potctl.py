@@ -60,7 +60,7 @@ def extract_message_template_catalog() -> Catalog:
         f" lost.\n"
         f"# To update this file, use `potctl.py` in the root of the project.\n"
         f"# =======================================\n#\n"
-        f"{catalog.header_comment}"
+        f"{catalog.header_comment.removesuffix('#')}"
     )
     return catalog
 
