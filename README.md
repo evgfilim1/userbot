@@ -26,6 +26,7 @@ List of userbot commands available:
 About:
 • about — Shows information about this userbot
 • help [command] — Sends help for all commands or for a specific one
+• stats ['bot'|'short'|'full'] — Shows some statistics about this userbot
 
 Chat administration:
 • chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat

@@ -3,6 +3,7 @@ __all__ = []
 import logging
 import os
 from functools import partial
+from itertools import product
 
 from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
@@ -14,20 +15,29 @@ from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.hooks import hooks
 from userbot.job_manager import AsyncJobManager
-from userbot.middlewares import KwargsMiddleware, icon_middleware, translate_middleware
+from userbot.middlewares import (
+    KwargsMiddleware,
+    icon_middleware,
+    parse_command_middleware,
+    translate_middleware,
+    update_command_stats_middleware,
+)
 from userbot.modules import CommandsModule, HooksModule
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import GitHubClient, fetch_stickers
+from userbot.utils import AppLimitsController, GitHubClient, StatsController, fetch_stickers
 
 _log = logging.getLogger(__name__)
 
 
 async def _main(
+    *,
     client: Client,
     storage: Storage,
     github_client: GitHubClient,
     job_manager: AsyncJobManager,
+    stats: StatsController,
+    app_limits_controller: AppLimitsController,
 ) -> None:
     async with client, storage, github_client, job_manager:
         _log.debug("Checking for sticker cache presence...")
@@ -35,6 +45,8 @@ async def _main(
         if len(cache) == 0:
             await storage.put_sticker_cache(await fetch_stickers(client))
         job_manager.add_job(storage.sticker_cache_job(lambda: fetch_stickers(client)))
+        await app_limits_controller.load_limits(client)
+        stats.startup()
         _log.info("Bot started")
         await idle()
 
@@ -68,6 +80,8 @@ def main() -> None:
         password,
     )
     github_client = GitHubClient()
+    stats = StatsController()
+    app_limits = AppLimitsController()
 
     _log.debug("Registering handlers...")
     client.add_handler(
@@ -81,6 +95,10 @@ def main() -> None:
     root_hooks = HooksModule(commands=root_commands, storage=storage)
     root_hooks.add_submodule(hooks)
 
+    # `HooksModule` must be present before `CommandsModule` because it adds some commands
+    # when calling `register()`.
+    all_modules = (root_hooks, root_commands, shortcuts)
+
     kwargs_middleware = KwargsMiddleware(
         {
             "storage": storage,
@@ -88,27 +106,33 @@ def main() -> None:
             "notes_chat": config.media_notes_chat,
             "github_client": github_client,
             "traceback_chat": config.traceback_chat,
+            "stats": stats,
+            "limits": app_limits,
         }
     )
-    root_commands.add_middleware(kwargs_middleware)
-    root_commands.add_middleware(translate_middleware)
-    root_commands.add_middleware(icon_middleware)
-    root_hooks.add_middleware(kwargs_middleware)
-    root_hooks.add_middleware(translate_middleware)
-    root_hooks.add_middleware(icon_middleware)
-    shortcuts.add_middleware(kwargs_middleware)
-    shortcuts.add_middleware(translate_middleware)
-    shortcuts.add_middleware(icon_middleware)
+    root_commands.add_middleware(parse_command_middleware)
+    for module, middleware in product(
+        all_modules, (kwargs_middleware, translate_middleware, icon_middleware)
+    ):
+        module.add_middleware(middleware)
+    root_commands.add_middleware(update_command_stats_middleware)
 
-    # `HooksModule` must be registered before `CommandsModule` because it adds some commands
-    root_hooks.register(client)
-    root_commands.register(client)
-    shortcuts.register(client)
+    for module in all_modules:
+        module.register(client)
 
     job_manager = AsyncJobManager()
 
     _log.debug("Starting bot...")
-    client.run(_main(client, storage, github_client, job_manager))
+    client.run(
+        _main(
+            client=client,
+            storage=storage,
+            github_client=github_client,
+            job_manager=job_manager,
+            stats=stats,
+            app_limits_controller=app_limits,
+        )
+    )
 
 
 main()

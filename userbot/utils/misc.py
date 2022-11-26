@@ -3,10 +3,12 @@ from __future__ import annotations
 __all__ = [
     "async_partial",
     "SecretStr",
+    "StatsController",
     "Unset",
 ]
 
 import functools
+import time
 from collections import UserString
 from typing import Any, Awaitable, Callable, ClassVar, TypeVar
 
@@ -59,3 +61,21 @@ class SecretStr(UserString):
 
     def __str__(self) -> str:
         return "******"
+
+
+class StatsController:
+    """A class to store and control the stats of a bot."""
+
+    def __init__(self) -> None:
+        self._startup_time: int | None = None
+
+    def startup(self) -> None:
+        """Sets the startup time to the current time. Must be done once."""
+        if self._startup_time is not None:
+            raise RuntimeError("startup() has already been called")
+        self._startup_time = int(time.time())
+
+    @property
+    def uptime(self) -> int:
+        """The uptime of the bot in seconds."""
+        return int(time.time()) - self._startup_time
