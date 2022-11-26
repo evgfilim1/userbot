@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-26 06:37+0500\n"
-"PO-Revision-Date: 2022-11-26 01:47\n"
+"POT-Creation-Date: 2022-11-26 07:33+0500\n"
+"PO-Revision-Date: 2022-11-26 02:45\n"
 "Last-Translator: \n"
 "Language-Team: Belarusian\n"
 "MIME-Version: 1.0\n"
@@ -452,17 +452,17 @@ msgstr ""
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr ""
 
-#: userbot/modules/base.py:103
+#: userbot/meta/modules/base.py:104
 msgid "<i>Userbot is processing the message...</i>"
 msgstr ""
 
-#: userbot/modules/base.py:122
+#: userbot/meta/modules/base.py:123
 #, python-brace-format
 msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
 "<i>More info can be found in logs.</i>"
 msgstr ""
 
-#: userbot/modules/base.py:127
+#: userbot/meta/modules/base.py:128
 #, python-brace-format
 msgid "{timeout} second"
 msgid_plural "{timeout} seconds"
@@ -471,12 +471,12 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: userbot/modules/commands.py:220
+#: userbot/meta/modules/commands.py:220
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr ""
 
-#: userbot/modules/commands.py:224
+#: userbot/meta/modules/commands.py:224
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
@@ -484,48 +484,48 @@ msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<i>More info can be found in the logs.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:237
+#: userbot/meta/modules/commands.py:237
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
 "{traceback}"
 msgstr ""
 
-#: userbot/modules/commands.py:247
+#: userbot/meta/modules/commands.py:247
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:258
+#: userbot/meta/modules/commands.py:258
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<b>Result:</b>"
 msgstr ""
 
-#: userbot/modules/commands.py:269
+#: userbot/meta/modules/commands.py:269
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr ""
 
-#: userbot/modules/commands.py:431
+#: userbot/meta/modules/commands.py:431
 #, python-brace-format
 msgid "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/modules/commands.py:437
+#: userbot/meta/modules/commands.py:437
 msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
-#: userbot/modules/hooks.py:34
+#: userbot/meta/modules/hooks.py:34
 #, python-brace-format
 msgid "Hooks in this chat:\n"
 "{hooks}"
 msgstr ""
 
-#: userbot/modules/hooks.py:213
+#: userbot/meta/modules/hooks.py:213
 #, python-brace-format
 msgid "Available hooks:\n"
 "{hooks}"
