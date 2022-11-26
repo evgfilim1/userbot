@@ -17,10 +17,11 @@ from pyrogram.filters import Filter
 from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
-from ..constants import Icons
-from ..middleware_manager import Middleware, MiddlewareManager
-from ..translation import Translation
-from ..utils import async_partial
+from userbot.meta.middleware_manager import Middleware, MiddlewareManager
+
+from ...constants import Icons
+from ...utils import async_partial
+from ...utils.translations import Translation
 
 _log = logging.getLogger(__name__)
 

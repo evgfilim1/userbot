@@ -12,8 +12,8 @@ from pyrogram.errors import BadRequest, PhotoCropSizeSmall
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
-from ..translation import Translation
+from ..meta.modules import CommandObject, CommandsModule
+from ..utils.translations import Translation
 
 commands = CommandsModule("Chat info")
 

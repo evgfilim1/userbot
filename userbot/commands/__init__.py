@@ -2,7 +2,7 @@ __all__ = [
     "commands",
 ]
 
-from ..modules import CommandsModule
+from ..meta.modules import CommandsModule
 from .about import commands as about_commands
 from .chat_admin import commands as chat_admin_commands
 from .chat_info import commands as chat_info_commands

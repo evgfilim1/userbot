@@ -9,9 +9,9 @@ from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
-from ..translation import Translation
+from ..meta.modules import CommandObject, CommandsModule
 from ..utils import edit_or_reply, get_text
+from ..utils.translations import Translation
 
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 _kb_ru = 'ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,'

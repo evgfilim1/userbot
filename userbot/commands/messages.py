@@ -13,9 +13,9 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
-from ..translation import Translation
+from ..meta.modules import CommandObject, CommandsModule
 from ..utils import _
+from ..utils.translations import Translation
 
 commands = CommandsModule("Messages")
 

@@ -28,8 +28,8 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
-from ..constants import DefaultIcons, Icons, PremiumIcons
-from ..translation import Translation
+from ...constants import DefaultIcons, Icons, PremiumIcons
+from ...utils.translations import Translation
 from .base import BaseHandler, BaseModule, HandlerT
 
 _DEFAULT_PREFIX = ","

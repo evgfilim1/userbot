@@ -11,9 +11,9 @@ from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
-from ..translation import Translation
+from ..meta.modules import CommandObject, CommandsModule
 from ..utils import parse_timespec
+from ..utils.translations import Translation
 
 commands = CommandsModule("Reminders")
 

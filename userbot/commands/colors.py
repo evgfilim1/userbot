@@ -9,8 +9,8 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
-from ..translation import Translation
+from ..meta.modules import CommandObject, CommandsModule
+from ..utils.translations import Translation
 
 commands = CommandsModule("Colors")
 

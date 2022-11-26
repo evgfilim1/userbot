@@ -7,9 +7,8 @@ from pyrogram.raw import functions, types
 
 from .. import __git_commit__
 from ..constants import Icons, PremiumIcons
-from ..modules import CommandObject, CommandsModule
+from ..meta.modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..translation import Translation
 from ..utils import (
     AppLimitsController,
     DialogCount,
@@ -18,6 +17,7 @@ from ..utils import (
     format_timedelta,
     get_dialogs_count,
 )
+from ..utils.translations import Translation
 
 commands = CommandsModule("About")
 

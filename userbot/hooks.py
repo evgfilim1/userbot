@@ -16,7 +16,7 @@ from .constants import (
     TAP_STICKER,
     UWU_MEME_PICTURE,
 )
-from .modules import HooksModule
+from .meta.modules import HooksModule
 from .utils import sticker
 
 hooks = HooksModule()

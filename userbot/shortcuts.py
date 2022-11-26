@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from urllib.parse import quote_plus
 
 from .constants import GH_PATTERN
-from .modules import ShortcutsModule
+from .meta.modules import ShortcutsModule
 from .storage import Storage
 from .utils import GitHubClient
 

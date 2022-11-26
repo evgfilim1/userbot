@@ -5,9 +5,9 @@ __all__ = [
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
+from ..meta.modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..translation import Translation
+from ..utils.translations import Translation
 
 commands = CommandsModule("Language")
 

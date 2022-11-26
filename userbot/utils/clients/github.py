@@ -2,7 +2,7 @@ __all__ = [
     "GitHubClient",
 ]
 
-from .base_client import BaseClient
+from .base import BaseClient
 
 
 class GitHubClient(BaseClient, base_url="https://api.github.com"):

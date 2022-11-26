@@ -16,10 +16,10 @@ from pyrogram.types import ChatPermissions, Message
 from pyrogram.utils import get_channel_id, zero_datetime
 
 from ..constants import Icons
-from ..modules import CommandObject, CommandsModule
+from ..meta.modules import CommandObject, CommandsModule
 from ..storage import Storage
-from ..translation import Translation
 from ..utils import _, parse_timespec
+from ..utils.translations import Translation
 
 _REACT2BAN_TEXT = _(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"

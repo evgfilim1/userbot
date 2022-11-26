@@ -10,7 +10,7 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import LONGCAT, PACK_ALIASES
-from ..modules import CommandObject, CommandsModule
+from ..meta.modules import CommandObject, CommandsModule
 from ..storage import Storage
 from ..utils import StickerInfo, _
 

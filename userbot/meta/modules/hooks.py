@@ -10,8 +10,8 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
-from ..storage import Storage
-from ..translation import Translation
+from ...storage import Storage
+from ...utils.translations import Translation
 from . import CommandsModule
 from .base import BaseHandler, BaseModule, HandlerT
 

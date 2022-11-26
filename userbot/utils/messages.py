@@ -11,7 +11,7 @@ from typing import Protocol
 from pyrogram.enums import MessageEntityType, MessageMediaType, ParseMode
 from pyrogram.types import Chat, Message, User
 
-from ..translation import Translation
+from .translations import Translation
 
 
 class MessageMethod(Protocol):
