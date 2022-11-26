@@ -1,5 +1,6 @@
 __all__ = [
     "AppLimits",
+    "AppLimitsController",
     "get_app_limits",
     "Limit",
 ]
@@ -89,3 +90,20 @@ async def get_app_limits(client: Client) -> AppLimits:
             premium=int(res["reactions_user_max_premium"]),
         ),
     )
+
+
+class AppLimitsController:
+    """A class to store Telegram limits."""
+
+    def __init__(self) -> None:
+        self._limits: AppLimits | None = None
+
+    async def load_limits(self, client: Client) -> AppLimits:
+        self._limits = await get_app_limits(client)
+        return self._limits
+
+    @property
+    def limits(self) -> AppLimits:
+        if self._limits is None:
+            raise RuntimeError("App limits have not been loaded yet")
+        return self._limits

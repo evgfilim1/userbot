@@ -10,7 +10,14 @@ from ..constants import Icons, PremiumIcons
 from ..modules import CommandObject, CommandsModule
 from ..storage import Storage
 from ..translation import Translation
-from ..utils import AppLimits, DialogCount, StatsController, _, format_timedelta, get_dialogs_count
+from ..utils import (
+    AppLimitsController,
+    DialogCount,
+    StatsController,
+    _,
+    format_timedelta,
+    get_dialogs_count,
+)
 
 commands = CommandsModule("About")
 
@@ -57,7 +64,7 @@ async def stats_handler(
     icons: type[Icons],
     tr: Translation,
     stats: StatsController,
-    limits: AppLimits,
+    limits: AppLimitsController,
 ) -> str:
     """Shows some statistics about this userbot
 
@@ -162,12 +169,12 @@ async def stats_handler(
                 _("{icon} GIFs: {count}/{total}").format(
                     icon=icons.GIF,
                     count=len(saved_gifs.gifs),
-                    total=limits.saved_gifs.get(me_is_premium),
+                    total=limits.limits.saved_gifs.get(me_is_premium),
                 ),
                 _("{icon} Stickers: {count}/{total}").format(
                     icon=icons.STICKER,
                     count=len(saved_stickers.sets),
-                    total=limits.stickers.get(me_is_premium),
+                    total=limits.limits.stickers.get(me_is_premium),
                 ),
                 _("{icon} Archived stickers: {count}").format(
                     icon=icons.ARCHIVED_STICKER,

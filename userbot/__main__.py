@@ -25,7 +25,7 @@ from userbot.middlewares import (
 from userbot.modules import CommandsModule, HooksModule
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import GitHubClient, StatsController, fetch_stickers, get_app_limits
+from userbot.utils import AppLimitsController, GitHubClient, StatsController, fetch_stickers
 
 _log = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ async def _main(
     github_client: GitHubClient,
     job_manager: AsyncJobManager,
     stats: StatsController,
-    kwargs_middleware: KwargsMiddleware,
+    app_limits_controller: AppLimitsController,
 ) -> None:
     async with client, storage, github_client, job_manager:
         _log.debug("Checking for sticker cache presence...")
@@ -45,7 +45,7 @@ async def _main(
         if len(cache) == 0:
             await storage.put_sticker_cache(await fetch_stickers(client))
         job_manager.add_job(storage.sticker_cache_job(lambda: fetch_stickers(client)))
-        kwargs_middleware.set_arg("limits", await get_app_limits(client))
+        await app_limits_controller.load_limits(client)
         stats.startup()
         _log.info("Bot started")
         await idle()
@@ -81,6 +81,7 @@ def main() -> None:
     )
     github_client = GitHubClient()
     stats = StatsController()
+    app_limits = AppLimitsController()
 
     _log.debug("Registering handlers...")
     client.add_handler(
@@ -106,7 +107,7 @@ def main() -> None:
             "github_client": github_client,
             "traceback_chat": config.traceback_chat,
             "stats": stats,
-            "limits": None,  # will be set later
+            "limits": app_limits,
         }
     )
     root_commands.add_middleware(parse_command_middleware)
@@ -129,7 +130,7 @@ def main() -> None:
             github_client=github_client,
             job_manager=job_manager,
             stats=stats,
-            kwargs_middleware=kwargs_middleware,
+            app_limits_controller=app_limits,
         )
     )
 

@@ -2,6 +2,7 @@ __all__ = [
     "_",
     "__",
     "AppLimits",
+    "AppLimitsController",
     "async_partial",
     "DialogCount",
     "edit_or_reply",
@@ -23,7 +24,7 @@ __all__ = [
     "Unset",
 ]
 
-from .app_config import AppLimits, Limit, get_app_limits
+from .app_config import AppLimits, AppLimitsController, Limit, get_app_limits
 from .dialogs import DialogCount, get_dialogs_count
 from .filters import StickerFilter, sticker
 from .github_client import GitHubClient
