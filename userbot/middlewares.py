@@ -11,12 +11,12 @@ from typing import Any
 
 from pyrogram.types import Message
 
-from ..constants import DefaultIcons, PremiumIcons
-from ..storage import Storage
-from ..utils import Translation
-from .middleware_manager import Handler, Middleware
-from .modules import CommandObject
-from .modules.commands import CommandsHandler
+from .constants import DefaultIcons, PremiumIcons
+from .meta.middleware_manager import Handler, Middleware
+from .meta.modules import CommandObject
+from .meta.modules.commands import CommandsHandler
+from .storage import Storage
+from .utils import Translation
 
 
 class KwargsMiddleware(Middleware[str | None]):

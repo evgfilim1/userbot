@@ -15,14 +15,14 @@ from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import Config, RedisConfig
 from userbot.hooks import hooks
 from userbot.meta.job_manager import AsyncJobManager
-from userbot.meta.middlewares import (
+from userbot.meta.modules import CommandsModule, HooksModule
+from userbot.middlewares import (
     KwargsMiddleware,
     icon_middleware,
     parse_command_middleware,
     translate_middleware,
     update_command_stats_middleware,
 )
-from userbot.meta.modules import CommandsModule, HooksModule
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
 from userbot.utils import AppLimitsController, GitHubClient, StatsController, fetch_stickers

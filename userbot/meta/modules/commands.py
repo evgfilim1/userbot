@@ -493,7 +493,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         )
         if self._ensure_middlewares_registered:
             # Prevent circular import
-            from ..middlewares import icon_middleware, translate_middleware
+            from ...middlewares import icon_middleware, translate_middleware
 
             # These middlewares are expected by the base module to be registered
             if icon_middleware not in self._middleware:
