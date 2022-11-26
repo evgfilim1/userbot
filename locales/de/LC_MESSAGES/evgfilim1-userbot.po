@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-19 13:48+0500\n"
-"PO-Revision-Date: 2022-11-20 12:36\n"
+"POT-Creation-Date: 2022-11-26 06:37+0500\n"
+"PO-Revision-Date: 2022-11-26 01:47\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -18,32 +18,112 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: de_DE\n"
 
-#: userbot/commands/about.py:21
+#: userbot/commands/about.py:31
 msgid "staging"
 msgstr "Staging"
 
-#: userbot/commands/about.py:26
+#: userbot/commands/about.py:36
 msgid "<i>Repo:</i>"
 msgstr "<i>Repo:</i>"
 
-#: userbot/commands/about.py:27
+#: userbot/commands/about.py:37
 msgid "<i>Commit:</i>"
 msgstr "<i>Commit:</i>"
 
-#: userbot/commands/about.py:28
+#: userbot/commands/about.py:38
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
 msgstr "{icon} <b>Über den Userbot</b>"
 
-#: userbot/commands/about.py:34
+#: userbot/commands/about.py:44
 #, python-brace-format
 msgid "(<a href='{base_url}/deployments'>deployments</a>)"
 msgstr "(<a href='{base_url}/deployments'>Deployments</a>)"
 
-#: userbot/commands/about.py:37
+#: userbot/commands/about.py:47
 #, python-brace-format
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
 msgstr "{icon} <a href='{url}'>Hilf diesen Userbot zu übersetzen</a>"
+
+#: userbot/commands/about.py:57
+msgid "<i>Collecting stats...</i>"
+msgstr ""
+
+#: userbot/commands/about.py:118
+msgid "<b>Statistics:</b>"
+msgstr ""
+
+#: userbot/commands/about.py:119
+#, python-brace-format
+msgid "{icon} Uptime: {uptime}"
+msgstr ""
+
+#: userbot/commands/about.py:125
+msgid "Has premium"
+msgstr ""
+
+#: userbot/commands/about.py:125
+msgid "Has no premium"
+msgstr ""
+
+#: userbot/commands/about.py:127
+#, python-brace-format
+msgid "{icon} Commands used: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:136
+#, python-brace-format
+msgid "{icon} Total chats: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:140
+#, python-brace-format
+msgid "• {icon} Private: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:144
+#, python-brace-format
+msgid "• {icon} Bots: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:148
+#, python-brace-format
+msgid "• {icon} Groups and supergroups: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:152
+#, python-brace-format
+msgid "• {icon} Channels: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:156
+#, python-brace-format
+msgid "• {icon} Archived: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:169
+#, python-brace-format
+msgid "{icon} GIFs: {count}/{total}"
+msgstr ""
+
+#: userbot/commands/about.py:174
+#, python-brace-format
+msgid "{icon} Stickers: {count}/{total}"
+msgstr ""
+
+#: userbot/commands/about.py:179
+#, python-brace-format
+msgid "{icon} Archived stickers: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:183
+#, python-brace-format
+msgid "{icon} Custom emoji: {count}"
+msgstr ""
+
+#: userbot/commands/about.py:185
+msgid "Unavailable"
+msgstr ""
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -406,12 +486,12 @@ msgid_plural "{timeout} seconds"
 msgstr[0] "{timeout} Sekunde"
 msgstr[1] "{timeout} Sekunden"
 
-#: userbot/modules/commands.py:211
+#: userbot/modules/commands.py:220
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr "{icon} <b>Bei der Ausführung des Befehls ist ein Fehler aufgetreten.</b>"
 
-#: userbot/modules/commands.py:215
+#: userbot/modules/commands.py:224
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
@@ -422,7 +502,7 @@ msgstr "<b>Befehl:</b> <code>{message_text}</code>\n"
 "{traceback}\n\n"
 "<i>Weitere Informationen findest du in den Logs.</i>"
 
-#: userbot/modules/commands.py:228
+#: userbot/modules/commands.py:237
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
@@ -431,14 +511,14 @@ msgstr "<b>Nachricht:</b> {msg}\n"
 "<b>Traceback:</b>\n"
 "{traceback}"
 
-#: userbot/modules/commands.py:238
+#: userbot/modules/commands.py:247
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
 msgstr "<b>Befehl:</b> <code>{message_text}</code>\n\n"
 "<i>Weitere Informationen können in den Logs oder im Traceback Chat gefunden werden.</i>"
 
-#: userbot/modules/commands.py:249
+#: userbot/modules/commands.py:258
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
@@ -447,19 +527,19 @@ msgstr "{icon} <b>Erfolgreich ausgeführt.</b>\n\n"
 "<b>Befehl:</b> <code>{message_text}</code>\n\n"
 "<b>Ergebnis:</b>"
 
-#: userbot/modules/commands.py:260
+#: userbot/modules/commands.py:269
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr "{text} <i>Siehe Antwort.</i>"
 
-#: userbot/modules/commands.py:434
+#: userbot/modules/commands.py:431
 #, python-brace-format
 msgid "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr "<b>Hilfe für {args}:</b>\n"
 "{usage}"
 
-#: userbot/modules/commands.py:440
+#: userbot/modules/commands.py:437
 msgid "<b>List of userbot commands available:</b>"
 msgstr "<b>Liste der verfügbaren Userbotbefehle:</b>"
 
