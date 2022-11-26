@@ -1,12 +1,22 @@
 # userbot
 
+<!-- region Some nice badges because I love them ^^ -->
 [![wakatime](https://wakatime.com/badge/github/evgfilim1/userbot.svg)](https://wakatime.com/badge/github/evgfilim1/userbot)
 [![Crowdin](https://badges.crowdin.net/evgfilim1-userbot/localized.svg)](https://crowdin.com/project/evgfilim1-userbot)
-[![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[![build status](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml)
-[![code quality](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml)
-[![deployment status](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/evgfilim1/userbot)](https://github.com/evgfilim1/userbot/commits/)
+[![Latest commit](https://img.shields.io/github/last-commit/evgfilim1/userbot/master)](https://github.com/evgfilim1/userbot/commits/)
+[![Total LoC](https://img.shields.io/tokei/lines/github/evgfilim1/userbot)](https://github.com/evgfilim1/userbot)
+[![Code size](https://img.shields.io/github/languages/code-size/evgfilim1/userbot)](https://github.com/evgfilim1/userbot)
+[![License](https://img.shields.io/github/license/evgfilim1/userbot)](LICENSE)
+[![Python version](https://img.shields.io/badge/python-3.11-yellow.svg?logo=python&logoColor=yellow&labelColor=blue)](https://github.com/python/cpython)
+[![black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
+[![Build status](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/build.yaml)
+[![Code quality check](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/lint.yaml)
+[![Deployment status](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml/badge.svg)](https://github.com/evgfilim1/userbot/actions/workflows/deploy.yaml)
+<!-- endregion -->
 
 The userbot I use with some specific features written in Pyrogram.
 
