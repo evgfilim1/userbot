@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-26 07:33+0500\n"
-"PO-Revision-Date: 2022-11-26 02:45\n"
+"PO-Revision-Date: 2022-11-28 09:18\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -47,83 +47,83 @@ msgstr "{icon} <a href='{url}'>Зробити внесок до переклад
 
 #: userbot/commands/about.py:57
 msgid "<i>Collecting stats...</i>"
-msgstr ""
+msgstr "<i>Збір статистики...</i>"
 
 #: userbot/commands/about.py:118
 msgid "<b>Statistics:</b>"
-msgstr ""
+msgstr "<b>Статистика:</b>"
 
 #: userbot/commands/about.py:119
 #, python-brace-format
 msgid "{icon} Uptime: {uptime}"
-msgstr ""
+msgstr "{icon} Час безперервної роботи: {uptime}"
 
 #: userbot/commands/about.py:125
 msgid "Has premium"
-msgstr ""
+msgstr "Має преміум"
 
 #: userbot/commands/about.py:125
 msgid "Has no premium"
-msgstr ""
+msgstr "Не має преміум"
 
 #: userbot/commands/about.py:127
 #, python-brace-format
 msgid "{icon} Commands used: {count}"
-msgstr ""
+msgstr "{icon} Використано команд: {count}"
 
 #: userbot/commands/about.py:136
 #, python-brace-format
 msgid "{icon} Total chats: {count}"
-msgstr ""
+msgstr "{icon} Всього чатів: {count}"
 
 #: userbot/commands/about.py:140
 #, python-brace-format
 msgid "• {icon} Private: {count}"
-msgstr ""
+msgstr "• {icon} Особистих: {count}"
 
 #: userbot/commands/about.py:144
 #, python-brace-format
 msgid "• {icon} Bots: {count}"
-msgstr ""
+msgstr "• {icon} З ботами: {count}"
 
 #: userbot/commands/about.py:148
 #, python-brace-format
 msgid "• {icon} Groups and supergroups: {count}"
-msgstr ""
+msgstr "• {icon} Груп i супергруп: {count}"
 
 #: userbot/commands/about.py:152
 #, python-brace-format
 msgid "• {icon} Channels: {count}"
-msgstr ""
+msgstr "• {icon} Каналів: {count}"
 
 #: userbot/commands/about.py:156
 #, python-brace-format
 msgid "• {icon} Archived: {count}"
-msgstr ""
+msgstr "• {icon} Архівовано: {count}"
 
 #: userbot/commands/about.py:169
 #, python-brace-format
 msgid "{icon} GIFs: {count}/{total}"
-msgstr ""
+msgstr "{icon} GIF-анiмацiй: {count}/{total}"
 
 #: userbot/commands/about.py:174
 #, python-brace-format
 msgid "{icon} Stickers: {count}/{total}"
-msgstr ""
+msgstr "{icon} Стікерів: {count}/{total}"
 
 #: userbot/commands/about.py:179
 #, python-brace-format
 msgid "{icon} Archived stickers: {count}"
-msgstr ""
+msgstr "{icon} Заархівованих стікерів: {count}"
 
 #: userbot/commands/about.py:183
 #, python-brace-format
 msgid "{icon} Custom emoji: {count}"
-msgstr ""
+msgstr "{icon} Користувацький емодзі: {count}"
 
 #: userbot/commands/about.py:185
 msgid "Unavailable"
-msgstr ""
+msgstr "Недоступно"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -141,35 +141,35 @@ msgstr "❌"
 
 #: userbot/commands/chat_admin.py:102
 msgid "Send messages"
-msgstr ""
+msgstr "Відправлення повідомлень"
 
 #: userbot/commands/chat_admin.py:103
 msgid "Send media"
-msgstr ""
+msgstr "Надсилання медiа"
 
 #: userbot/commands/chat_admin.py:104
 msgid "Send stickers & GIFs"
-msgstr ""
+msgstr "Вiдправка стiкерiв i GIF"
 
 #: userbot/commands/chat_admin.py:105
 msgid "Embed links"
-msgstr ""
+msgstr "Передпрогляд для посилань"
 
 #: userbot/commands/chat_admin.py:106
 msgid "Send polls"
-msgstr ""
+msgstr "Створення опросiв"
 
 #: userbot/commands/chat_admin.py:107
 msgid "Add members"
-msgstr ""
+msgstr "Додати учасників"
 
 #: userbot/commands/chat_admin.py:108
 msgid "Pin messages"
-msgstr ""
+msgstr "Прикріплювання повідомлень"
 
 #: userbot/commands/chat_admin.py:109
 msgid "Change group info"
-msgstr ""
+msgstr "Змінити інформацію групи"
 
 #: userbot/commands/chat_admin.py:130
 #, python-brace-format
@@ -184,12 +184,12 @@ msgstr "{icon} {user_link} <b>заблокований</b> в цьому чат�
 #: userbot/commands/chat_admin.py:136
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
-msgstr ""
+msgstr "{icon} {user_link} <b>обмежений</b> в цьому чаті"
 
 #: userbot/commands/chat_admin.py:137
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
-msgstr ""
+msgstr "{icon_perms} <b>Нові права:</b>"
 
 #: userbot/commands/chat_admin.py:189
 #, python-brace-format
@@ -208,7 +208,7 @@ msgstr "{icon} Посаду людини в чаті змінено на <i>{tit
 
 #: userbot/commands/chat_admin.py:283
 msgid "Recently banned:"
-msgstr ""
+msgstr "Нещодавно заблоковані:"
 
 #: userbot/commands/chat_admin.py:313 userbot/commands/chat_admin.py:332
 #, python-brace-format
@@ -228,7 +228,7 @@ msgstr "{icon} Відстеження реакцій на повідомленн
 #: userbot/commands/chat_admin.py:380
 #, python-brace-format
 msgid "{icon} Message pinned"
-msgstr ""
+msgstr "{icon} Повідомлення прикріплено"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -349,7 +349,7 @@ msgstr "Це перше повідомлення від користувача {
 
 #: userbot/commands/messages.py:118
 msgid "Permalink:"
-msgstr ""
+msgstr "Постійне посилання:"
 
 #: userbot/commands/notes.py:33
 #, python-brace-format
@@ -491,7 +491,7 @@ msgstr[3] "{timeout} секунди"
 #: userbot/meta/modules/commands.py:220
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
-msgstr ""
+msgstr "{icon} <b>Сталася помилка під час виконання команди.</b>"
 
 #: userbot/meta/modules/commands.py:224
 #, python-brace-format
