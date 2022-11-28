@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-11-26 07:33+0500\n"
-"PO-Revision-Date: 2022-11-28 09:18\n"
+"PO-Revision-Date: 2022-11-28 10:13\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -499,20 +499,26 @@ msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
 "{traceback}\n\n"
 "<i>More info can be found in the logs.</i>"
-msgstr ""
+msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
+"<b>Послiдовнiсть викликiв</b>\n"
+"{traceback}\n\n"
+"<i>Бiльше iнформацiї можна знайти в журналах.</i>"
 
 #: userbot/meta/modules/commands.py:237
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
 "{traceback}"
-msgstr ""
+msgstr "<b>Повідомлення:</b> {msg}\n"
+"<b>Послiдовнiсть викликiв:</b>\n"
+"{traceback}"
 
 #: userbot/meta/modules/commands.py:247
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
-msgstr ""
+msgstr "<b>Команда:</b> <code>{message_text}</code>\n\n"
+"<i>Бiльше iнформацiї можна знайти в журналах або в чатi трасувань.</i>"
 
 #: userbot/meta/modules/commands.py:258
 #, python-brace-format
