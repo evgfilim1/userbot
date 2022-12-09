@@ -1,4 +1,4 @@
-FROM python:3.11.0-alpine AS i18n-build
+FROM python:3.11.1-alpine AS i18n-build
 
 COPY dev-requirements.txt /tmp/dev-requirements.txt
 RUN pip install --no-cache-dir -r /tmp/dev-requirements.txt
