@@ -26,9 +26,11 @@ class AnswerMethod(Protocol):
 
 def get_text(message: Message, *, as_html: bool = False) -> str | None:
     text = message.text or message.caption
+    if text is None:
+        return None
     if as_html:
         text = text.html
-    return text
+    return str(text)
 
 
 def get_sender(message: Message) -> User | Chat:

@@ -2,6 +2,7 @@ __all__ = [
     "commands",
 ]
 
+import logging
 import re
 
 from pyrogram.enums import MessageEntityType, ParseMode
@@ -13,6 +14,7 @@ from ..meta.modules import CommandObject, CommandsModule
 from ..utils import edit_or_reply, get_text
 from ..utils.translations import Translation
 
+_log = logging.getLogger(__name__)
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 _kb_ru = 'ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,'
 _ru2en_tr = str.maketrans(_kb_ru, _kb_en)
@@ -20,6 +22,13 @@ _en2ru_tr = str.maketrans(_kb_en, _kb_ru)
 _enru2ruen_tr = str.maketrans(_kb_ru + _kb_en, _kb_en + _kb_ru)
 
 commands = CommandsModule("Text converters")
+
+
+def _len(text: str) -> int:
+    """Returns the length of the text in utf-16 code units."""
+
+    # `timeit` says it's the fastest way of other possible ones.
+    return len(text.encode("utf-16-le")) // 2
 
 
 class _ReplaceHelper:
@@ -30,15 +39,15 @@ class _ReplaceHelper:
 
     def __call__(self, match: re.Match[str]) -> str:
         res = match.expand(self._template)
-        # FIXME (2022-08-30): emoji breaks proper offset calculation
+        res_len = _len(res)
         self.entities.append(
             MessageEntity(
                 type=MessageEntityType.UNDERLINE,
-                offset=match.start() + self._diff,
-                length=len(res),
+                offset=_len(match.string[: match.start()]) + self._diff,
+                length=res_len,
             )
         )
-        self._diff += len(res) - (match.end() - match.start())
+        self._diff += res_len - (match.end() - match.start())
         return res
 
 
