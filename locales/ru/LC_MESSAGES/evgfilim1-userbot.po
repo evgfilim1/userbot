@@ -1,9 +1,13 @@
+# Translations template for evgfilim1/userbot.
+# Copyright (C) 2022 Evgeniy Filimonov
+# This file is distributed under the same license as the evgfilim1/userbot project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-26 07:33+0500\n"
-"PO-Revision-Date: 2022-11-26 02:45\n"
+"POT-Creation-Date: 2022-12-22 01:24+0500\n"
+"PO-Revision-Date: 2022-12-21 20:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -433,16 +437,16 @@ msgstr "для меня"
 msgid "<i>Picking random sticker...</i>"
 msgstr "<i>Выбор случайного стикера...</i>"
 
-#: userbot/commands/text_converters.py:89
+#: userbot/commands/text_converters.py:16
+msgid "Maybe you mean:"
+msgstr "Возможно, вы имеете в виду:"
+
+#: userbot/commands/text_converters.py:100
 #, python-brace-format
 msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
 "Possible fix: <code>{message_text}/</code>"
 msgstr "{icon} Недостаточно значений для распаковки. Похоже, что вы забыли добавить конечный слэш.\n\n"
 "Возможное исправление: <code>{message_text}/</code>"
-
-#: userbot/commands/text_converters.py:103
-msgid "Maybe you mean:"
-msgstr "Возможно, вы имеете в виду:"
 
 #: userbot/commands/tools.py:83
 #, python-brace-format
@@ -558,8 +562,4 @@ msgid "Available hooks:\n"
 "{hooks}"
 msgstr "Доступные хуки:\n"
 "{hooks}"
-
-#: userbot/utils/messages.py:57
-msgid "<b>Maybe you mean:</b>"
-msgstr "<b>Возможно, вы имеете в виду</b>"
 
