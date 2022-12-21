@@ -1,30 +1,17 @@
 __all__ = [
-    "edit_or_reply",
+    "edit_replied_or_reply",
     "get_message_content",
-    "get_text",
+    "get_message_entities",
+    "get_message_text",
 ]
 
-import functools
 import html
-from typing import Protocol
 
 from pyrogram.enums import MessageEntityType, MessageMediaType, ParseMode
-from pyrogram.types import Chat, Message, User
-
-from .translations import Translation
+from pyrogram.types import Chat, Message, MessageEntity, User
 
 
-class MessageMethod(Protocol):
-    async def __call__(self, text: str, *, parse_mode: ParseMode | None) -> Message:
-        pass
-
-
-class AnswerMethod(Protocol):
-    async def __call__(self, text: str, *, prefix_override: str | None = None) -> Message:
-        pass
-
-
-def get_text(message: Message, *, as_html: bool = False) -> str | None:
+def get_message_text(message: Message, *, as_html: bool = False) -> str | None:
     text = message.text or message.caption
     if text is None:
         return None
@@ -33,30 +20,54 @@ def get_text(message: Message, *, as_html: bool = False) -> str | None:
     return str(text)
 
 
+def get_message_entities(message: Message) -> list[MessageEntity] | None:
+    return message.entities or message.caption_entities
+
+
 def get_sender(message: Message) -> User | Chat:
     return message.from_user or message.sender_chat
 
 
-def send_helper(fn: MessageMethod, prefix: str = "") -> AnswerMethod:
-    @functools.wraps(fn)
-    async def wrapper(text: str, prefix_override: str | None = None) -> Message:
-        return await fn(
-            f"{prefix_override or prefix}{html.escape(text)}",
-            parse_mode=ParseMode.HTML,
-        )
+async def edit_replied_or_reply(
+    message: Message,
+    text: str,
+    *,
+    maybe_you_mean_prefix: str,
+    entities: list[MessageEntity] | None = None,
+) -> Message:
+    reply = message.reply_to_message
+    is_my_message = get_sender(reply).id == get_sender(message).id
+    if not is_my_message:
+        method = message.edit_text
+        entities_key = "entities"
+    elif reply.text:
+        method = reply.edit_text
+        entities_key = "entities"
+    elif reply.caption:
+        method = reply.edit_caption
+        entities_key = "caption_entities"
+    else:
+        raise ValueError("Unsupported message type")
 
-    return wrapper
-
-
-def edit_or_reply(message: Message, tr: Translation) -> tuple[AnswerMethod, bool]:
-    _ = tr.gettext
-    reply_sender = get_sender(message.reply_to_message)
-    sender = get_sender(message)
-    if reply_sender.id == sender.id:  # it's me!
-        if message.reply_to_message.caption is not None:
-            return send_helper(message.reply_to_message.edit_caption), True
-        return send_helper(message.reply_to_message.edit), True
-    return send_helper(message.edit, _("<b>Maybe you mean:</b>") + "\n\n"), False
+    entities = entities if entities is not None else []
+    parse_mode = ParseMode.DISABLED if entities else ParseMode.HTML
+    if not is_my_message and maybe_you_mean_prefix:
+        prefix = maybe_you_mean_prefix + "\n\n"
+        for entity in entities:
+            entity.offset += len(prefix)
+    else:
+        prefix = ""
+    if prefix:
+        if entities:
+            entities.insert(
+                0, MessageEntity(type=MessageEntityType.BOLD, offset=0, length=len(prefix))
+            )
+        else:
+            prefix = f"<b>{html.escape(prefix)}</b>"
+    r = await method(f"{prefix}{text}", parse_mode=parse_mode, **{entities_key: entities})
+    if is_my_message:
+        await message.delete()
+    return r
 
 
 def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
@@ -74,8 +85,6 @@ def get_message_content(message: Message) -> tuple[dict[str, str | int], str]:
             data["disable_web_page_preview"] = True
         return data, "text"
     if (media := message.media) is not None:
-        # noinspection PyTypeChecker, PydanticTypeChecker
-        # https://youtrack.jetbrains.com/issue/PY-54503
         media_type: str = media.value
         if media == MessageMediaType.STICKER:
             # `file_id` for stickers doesn't expire, so we can use it directly

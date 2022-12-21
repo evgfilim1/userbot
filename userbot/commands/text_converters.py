@@ -5,14 +5,15 @@ __all__ = [
 import logging
 import re
 
-from pyrogram.enums import MessageEntityType, ParseMode
+from pyrogram.enums import MessageEntityType
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
 
 from ..constants import Icons
 from ..meta.modules import CommandObject, CommandsModule
-from ..utils import edit_or_reply, get_text
-from ..utils.translations import Translation
+from ..utils import Translation, _, edit_replied_or_reply, get_message_entities, get_message_text
+
+MAYBE_YOU_MEAN_PREFIX = _("Maybe you mean:")
 
 _log = logging.getLogger(__name__)
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
@@ -57,8 +58,8 @@ async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
 
     If no argument is provided, the layout will be switched between en and ru."""
     # TODO (2021-12-01): detect ambiguous replacements via previous char
-    # TODO (2022-02-17): work with entities
-    text = get_text(message.reply_to_message)
+    _ = tr.gettext
+    reply = message.reply_to_message
     target_layout = command.args
     match target_layout:
         case "en":
@@ -69,14 +70,15 @@ async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
             tr_abc = _enru2ruen_tr
         case _:
             raise ValueError(f"Unknown {target_layout=}")
-    translated = text.translate(tr_abc)
-    answer, delete = edit_or_reply(message, tr)
     try:
-        await answer(translated)
+        await edit_replied_or_reply(
+            message,
+            get_message_text(reply).translate(tr_abc),
+            maybe_you_mean_prefix=_(MAYBE_YOU_MEAN_PREFIX),
+            entities=get_message_entities(reply),
+        )
     except MessageNotModified:
         pass
-    if delete:
-        await message.delete()
 
 
 @commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
@@ -89,7 +91,7 @@ async def sed(
     """sed-like replacement"""
     # TODO (2022-02-17): work with entities
     _ = tr.gettext
-    text = get_text(message.reply_to_message)
+    text = get_message_text(message.reply_to_message)
     args = command.args
     try:
         find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
@@ -105,42 +107,30 @@ async def sed(
     flags = 0
     for flag in flags_str:
         flags |= getattr(re, flag.upper())
-    answer, delete = edit_or_reply(message, tr)
     rh = _ReplaceHelper(replace_re)
     text = re.sub(find_re, rh, text, flags=flags)
-    if not delete:
-        prefix = _("Maybe you mean:")
-        for entity in rh.entities:
-            entity.offset += len(prefix) + 2  # +2 for \n\n, see below
-        await message.edit(
-            f"{prefix}\n\n{text}",
-            parse_mode=ParseMode.DISABLED,
-            entities=[
-                MessageEntity(
-                    type=MessageEntityType.BOLD,
-                    offset=0,
-                    length=len(prefix),
-                ),
-                *rh.entities,
-            ],
-        )
-        return
     try:
-        await answer(text)
+        await edit_replied_or_reply(
+            message,
+            text,
+            maybe_you_mean_prefix=_(MAYBE_YOU_MEAN_PREFIX),
+            entities=rh.entities,
+        )
     except MessageNotModified:
         pass
-    if delete:
-        await message.delete()
 
 
 @commands.add("caps", usage="<reply>")
 async def caps(message: Message, tr: Translation) -> None:
     """Toggles capslock on the message"""
-    text = get_text(message.reply_to_message)
-    answer, delete = edit_or_reply(message, tr)
+    _ = tr.gettext
+    reply = message.reply_to_message
     try:
-        await answer(text.swapcase())
+        await edit_replied_or_reply(
+            message,
+            get_message_text(reply).swapcase(),
+            maybe_you_mean_prefix=_(MAYBE_YOU_MEAN_PREFIX),
+            entities=get_message_entities(reply),
+        )
     except MessageNotModified:
         pass
-    if delete:
-        await message.delete()

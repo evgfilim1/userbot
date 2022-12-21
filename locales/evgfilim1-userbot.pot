@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-21 22:33+0500\n"
+"POT-Creation-Date: 2022-12-22 01:24+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -437,16 +437,16 @@ msgstr ""
 msgid "<i>Picking random sticker...</i>"
 msgstr ""
 
-#: userbot/commands/text_converters.py:98
+#: userbot/commands/text_converters.py:16
+msgid "Maybe you mean:"
+msgstr ""
+
+#: userbot/commands/text_converters.py:100
 #, python-brace-format
 msgid ""
 "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n"
 "\n"
 "Possible fix: <code>{message_text}/</code>"
-msgstr ""
-
-#: userbot/commands/text_converters.py:112
-msgid "Maybe you mean:"
 msgstr ""
 
 #: userbot/commands/tools.py:83
@@ -560,9 +560,5 @@ msgstr ""
 msgid ""
 "Available hooks:\n"
 "{hooks}"
-msgstr ""
-
-#: userbot/utils/messages.py:59
-msgid "<b>Maybe you mean:</b>"
 msgstr ""
 
