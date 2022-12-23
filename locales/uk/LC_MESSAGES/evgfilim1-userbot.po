@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-22 01:24+0500\n"
-"PO-Revision-Date: 2022-12-21 20:27\n"
+"POT-Creation-Date: 2022-12-23 10:50+0500\n"
+"PO-Revision-Date: 2022-12-23 05:53\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -135,104 +135,123 @@ msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 msgstr "<b>⚠⚠⚠ ЦЕ НЕ ЖАРТ ⚠⚠⚠</b>\n"
 "Повідомлення захищене від реакцій. Будь-хто, хто поставить реакцію, буде <b>заблокований</b> у чаті на півроку."
 
-#: userbot/commands/chat_admin.py:78
+#: userbot/commands/chat_admin.py:83
 msgid "✅"
 msgstr "✅"
 
-#: userbot/commands/chat_admin.py:79
+#: userbot/commands/chat_admin.py:84
 msgid "❌"
 msgstr "❌"
 
-#: userbot/commands/chat_admin.py:102
+#: userbot/commands/chat_admin.py:107
 msgid "Send messages"
 msgstr "Відправлення повідомлень"
 
-#: userbot/commands/chat_admin.py:103
+#: userbot/commands/chat_admin.py:108
 msgid "Send media"
 msgstr "Надсилання медiа"
 
-#: userbot/commands/chat_admin.py:104
+#: userbot/commands/chat_admin.py:109
 msgid "Send stickers & GIFs"
 msgstr "Вiдправка стiкерiв i GIF"
 
-#: userbot/commands/chat_admin.py:105
+#: userbot/commands/chat_admin.py:110
 msgid "Embed links"
 msgstr "Передпрогляд для посилань"
 
-#: userbot/commands/chat_admin.py:106
+#: userbot/commands/chat_admin.py:111
 msgid "Send polls"
 msgstr "Створення опросiв"
 
-#: userbot/commands/chat_admin.py:107
+#: userbot/commands/chat_admin.py:112
 msgid "Add members"
 msgstr "Додати учасників"
 
-#: userbot/commands/chat_admin.py:108
+#: userbot/commands/chat_admin.py:113
 msgid "Pin messages"
 msgstr "Прикріплювання повідомлень"
 
-#: userbot/commands/chat_admin.py:109
+#: userbot/commands/chat_admin.py:114
 msgid "Change group info"
 msgstr "Змінити інформацію групи"
 
-#: userbot/commands/chat_admin.py:130
+#: userbot/commands/chat_admin.py:135
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr "до <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
-#: userbot/commands/chat_admin.py:134
+#: userbot/commands/chat_admin.py:139
 #, python-brace-format
 msgid "{icon} {user_link} <b>banned</b> in this chat"
 msgstr "{icon} {user_link} <b>заблокований</b> в цьому чаті"
 
-#: userbot/commands/chat_admin.py:136
+#: userbot/commands/chat_admin.py:141
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
 msgstr "{icon} {user_link} <b>обмежений</b> в цьому чаті"
 
-#: userbot/commands/chat_admin.py:137
+#: userbot/commands/chat_admin.py:142
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr "{icon_perms} <b>Нові права:</b>"
 
-#: userbot/commands/chat_admin.py:189
+#: userbot/commands/chat_admin.py:194
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr "<b>Причина:</b> {reason}"
 
-#: userbot/commands/chat_admin.py:214
+#: userbot/commands/chat_admin.py:219
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr "{icon} {user_link} <b>розблокований</b> у цьому чаті"
 
-#: userbot/commands/chat_admin.py:249
+#: userbot/commands/chat_admin.py:254
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Посаду людини в чаті змінено на <i>{title}</i>"
 
-#: userbot/commands/chat_admin.py:283
+#: userbot/commands/chat_admin.py:288
 msgid "Recently banned:"
 msgstr "Нещодавно заблоковані:"
 
-#: userbot/commands/chat_admin.py:313 userbot/commands/chat_admin.py:332
+#: userbot/commands/chat_admin.py:318 userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:431
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Не груповий чат"
 
-#: userbot/commands/chat_admin.py:316
+#: userbot/commands/chat_admin.py:320 userbot/commands/chat_admin.py:433
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Неможливо забанити користувачів у чаті"
 
-#: userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:340
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Відстеження реакцій на повідомленні, щоб забанити користувача, було вимкнено"
 
-#: userbot/commands/chat_admin.py:380
+#: userbot/commands/chat_admin.py:384
 #, python-brace-format
 msgid "{icon} Message pinned"
 msgstr "{icon} Повідомлення прикріплено"
+
+#: userbot/commands/chat_admin.py:417
+msgid "<i>Clearing Deleted Accounts...</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:453
+#, python-brace-format
+msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:457
+#, python-brace-format
+msgid "<i>({n} member checked)</i>"
+msgid_plural "<i>({n} members checked)</i>"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -437,11 +456,11 @@ msgstr "для мене"
 msgid "<i>Picking random sticker...</i>"
 msgstr "<i>Вибір випадкової наліпки...</i>"
 
-#: userbot/commands/text_converters.py:16
+#: userbot/commands/text_converters.py:23
 msgid "Maybe you mean:"
 msgstr "Можливо, ви маєте на увазі:"
 
-#: userbot/commands/text_converters.py:100
+#: userbot/commands/text_converters.py:107
 #, python-brace-format
 msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
 "Possible fix: <code>{message_text}/</code>"
