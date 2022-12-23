@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2022-12-23 10:50+0500\n"
-"PO-Revision-Date: 2022-12-23 05:53\n"
+"PO-Revision-Date: 2022-12-23 05:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -237,21 +237,21 @@ msgstr "{icon} Сообщение закреплено"
 
 #: userbot/commands/chat_admin.py:417
 msgid "<i>Clearing Deleted Accounts...</i>"
-msgstr ""
+msgstr "<i>Очистка Удалённых Аккаунтов...</i>"
 
 #: userbot/commands/chat_admin.py:453
 #, python-brace-format
 msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
-msgstr ""
+msgstr "<b>Кикнуто</b> Удалённых Аккаунтов: <i>{n}/{total_deleted}</i>"
 
 #: userbot/commands/chat_admin.py:457
 #, python-brace-format
 msgid "<i>({n} member checked)</i>"
 msgid_plural "<i>({n} members checked)</i>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "<i>({n} участник проверен)</i>"
+msgstr[1] "<i>({n} участника проверено)</i>"
+msgstr[2] "<i>({n} участников проверено)</i>"
+msgstr[3] "<i>({n} участников проверено)</i>"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
