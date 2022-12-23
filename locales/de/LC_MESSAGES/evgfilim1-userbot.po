@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-22 01:24+0500\n"
-"PO-Revision-Date: 2022-12-21 20:27\n"
+"POT-Creation-Date: 2022-12-23 10:50+0500\n"
+"PO-Revision-Date: 2022-12-23 05:53\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -135,104 +135,121 @@ msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 msgstr "<b>⚠⚠⚠ DAS IST KEIN SCHERZ ⚠⚠⚠</b>\n"
 "Diese Nachricht ist vor Reaktionen geschützt. Jeder, der auf diese Nachricht reagiert, wird für ein halbes Jahr <b>gesperrt</b>."
 
-#: userbot/commands/chat_admin.py:78
+#: userbot/commands/chat_admin.py:83
 msgid "✅"
 msgstr "✅"
 
-#: userbot/commands/chat_admin.py:79
+#: userbot/commands/chat_admin.py:84
 msgid "❌"
 msgstr "❌"
 
-#: userbot/commands/chat_admin.py:102
+#: userbot/commands/chat_admin.py:107
 msgid "Send messages"
 msgstr "Nachrichten senden"
 
-#: userbot/commands/chat_admin.py:103
+#: userbot/commands/chat_admin.py:108
 msgid "Send media"
 msgstr "Medien senden"
 
-#: userbot/commands/chat_admin.py:104
+#: userbot/commands/chat_admin.py:109
 msgid "Send stickers & GIFs"
 msgstr "Sticker & GIFs senden"
 
-#: userbot/commands/chat_admin.py:105
+#: userbot/commands/chat_admin.py:110
 msgid "Embed links"
 msgstr "Linkvorschau senden"
 
-#: userbot/commands/chat_admin.py:106
+#: userbot/commands/chat_admin.py:111
 msgid "Send polls"
 msgstr "Umfragen senden"
 
-#: userbot/commands/chat_admin.py:107
+#: userbot/commands/chat_admin.py:112
 msgid "Add members"
 msgstr "Mitglieder hinzufügen"
 
-#: userbot/commands/chat_admin.py:108
+#: userbot/commands/chat_admin.py:113
 msgid "Pin messages"
 msgstr "Nachrichten anheften"
 
-#: userbot/commands/chat_admin.py:109
+#: userbot/commands/chat_admin.py:114
 msgid "Change group info"
 msgstr "Gruppen-Info ändern"
 
-#: userbot/commands/chat_admin.py:130
+#: userbot/commands/chat_admin.py:135
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr "bis <i>{%d/%m/%Y %H:%M:%S %Z}</i>"
 
-#: userbot/commands/chat_admin.py:134
+#: userbot/commands/chat_admin.py:139
 #, python-brace-format
 msgid "{icon} {user_link} <b>banned</b> in this chat"
 msgstr "{icon}{user_link} ist in diesem Chat <b>geperrt</b>"
 
-#: userbot/commands/chat_admin.py:136
+#: userbot/commands/chat_admin.py:141
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
 msgstr "{icon}{user_link}<b>Eingeschränk</b> in diesem Chat"
 
-#: userbot/commands/chat_admin.py:137
+#: userbot/commands/chat_admin.py:142
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr "{icon_perms} <b>Neue Berechtigungen:</b>"
 
-#: userbot/commands/chat_admin.py:189
+#: userbot/commands/chat_admin.py:194
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr "<b>Begründung:</b> {reason}"
 
-#: userbot/commands/chat_admin.py:214
+#: userbot/commands/chat_admin.py:219
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr "{icon}{user_link} in diesem Chat <b>entsperrt</b>"
 
-#: userbot/commands/chat_admin.py:249
+#: userbot/commands/chat_admin.py:254
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Für diese Person wurde der Titel zu <i>{title}</i> geändert"
 
-#: userbot/commands/chat_admin.py:283
+#: userbot/commands/chat_admin.py:288
 msgid "Recently banned:"
 msgstr "Kürzlich gesperrt:"
 
-#: userbot/commands/chat_admin.py:313 userbot/commands/chat_admin.py:332
+#: userbot/commands/chat_admin.py:318 userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:431
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Kein Gruppenchat"
 
-#: userbot/commands/chat_admin.py:316
+#: userbot/commands/chat_admin.py:320 userbot/commands/chat_admin.py:433
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Kann in diesem Chat keine Nutzer sperren"
 
-#: userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:340
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Der Reaktionenban wurde für diese Nachricht deaktiviert"
 
-#: userbot/commands/chat_admin.py:380
+#: userbot/commands/chat_admin.py:384
 #, python-brace-format
 msgid "{icon} Message pinned"
 msgstr "{icon} Nachricht angeheftet"
+
+#: userbot/commands/chat_admin.py:417
+msgid "<i>Clearing Deleted Accounts...</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:453
+#, python-brace-format
+msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:457
+#, python-brace-format
+msgid "<i>({n} member checked)</i>"
+msgid_plural "<i>({n} members checked)</i>"
+msgstr[0] ""
+msgstr[1] ""
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -437,11 +454,11 @@ msgstr "für mich selbst"
 msgid "<i>Picking random sticker...</i>"
 msgstr "<i>Wähle einen zufälligen Sticker...</i>"
 
-#: userbot/commands/text_converters.py:16
+#: userbot/commands/text_converters.py:23
 msgid "Maybe you mean:"
 msgstr "Vielleicht meintest du:"
 
-#: userbot/commands/text_converters.py:100
+#: userbot/commands/text_converters.py:107
 #, python-brace-format
 msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
 "Possible fix: <code>{message_text}/</code>"
