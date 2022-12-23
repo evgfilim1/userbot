@@ -3,12 +3,13 @@ __all__ = [
     "get_message_content",
     "get_message_entities",
     "get_message_text",
+    "is_my_message",
 ]
 
 import html
 
 from pyrogram.enums import MessageEntityType, MessageMediaType, ParseMode
-from pyrogram.types import Chat, Message, MessageEntity, User
+from pyrogram.types import Message, MessageEntity
 
 
 def get_message_text(message: Message, *, as_html: bool = False) -> str | None:
@@ -24,8 +25,8 @@ def get_message_entities(message: Message) -> list[MessageEntity] | None:
     return message.entities or message.caption_entities
 
 
-def get_sender(message: Message) -> User | Chat:
-    return message.from_user or message.sender_chat
+def is_my_message(message: Message) -> bool:
+    return message.outgoing or (message.from_user is not None and message.from_user.is_self)
 
 
 async def edit_replied_or_reply(
@@ -36,8 +37,8 @@ async def edit_replied_or_reply(
     entities: list[MessageEntity] | None = None,
 ) -> Message:
     reply = message.reply_to_message
-    is_my_message = get_sender(reply).id == get_sender(message).id
-    if not is_my_message:
+    is_reply_my_message = is_my_message(reply)
+    if not is_reply_my_message:
         method = message.edit_text
         entities_key = "entities"
     elif reply.text:
@@ -51,7 +52,7 @@ async def edit_replied_or_reply(
 
     entities = entities if entities is not None else []
     parse_mode = ParseMode.DISABLED if entities else ParseMode.HTML
-    if not is_my_message and maybe_you_mean_prefix:
+    if not is_reply_my_message and maybe_you_mean_prefix:
         prefix = maybe_you_mean_prefix + "\n\n"
         for entity in entities:
             entity.offset += len(prefix)
@@ -65,7 +66,7 @@ async def edit_replied_or_reply(
         else:
             prefix = f"<b>{html.escape(prefix)}</b>"
     r = await method(f"{prefix}{text}", parse_mode=parse_mode, **{entities_key: entities})
-    if is_my_message:
+    if is_reply_my_message:
         await message.delete()
     return r
 

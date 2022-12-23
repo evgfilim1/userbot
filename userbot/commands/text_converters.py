@@ -11,7 +11,14 @@ from pyrogram.types import Message, MessageEntity
 
 from ..constants import Icons
 from ..meta.modules import CommandObject, CommandsModule
-from ..utils import Translation, _, edit_replied_or_reply, get_message_entities, get_message_text
+from ..utils import (
+    Translation,
+    _,
+    edit_replied_or_reply,
+    get_message_entities,
+    get_message_text,
+    is_my_message,
+)
 
 MAYBE_YOU_MEAN_PREFIX = _("Maybe you mean:")
 
@@ -114,7 +121,7 @@ async def sed(
             message,
             text,
             maybe_you_mean_prefix=_(MAYBE_YOU_MEAN_PREFIX),
-            entities=rh.entities,
+            entities=rh.entities if not is_my_message(message.reply_to_message) else None,
         )
     except MessageNotModified:
         pass

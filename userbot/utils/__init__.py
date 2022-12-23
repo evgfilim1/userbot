@@ -14,6 +14,7 @@ __all__ = [
     "get_message_entities",
     "get_message_text",
     "GitHubClient",
+    "is_my_message",
     "json_value_to_python",
     "Limit",
     "parse_timespec",
@@ -35,6 +36,7 @@ from .messages import (
     get_message_content,
     get_message_entities,
     get_message_text,
+    is_my_message,
 )
 from .misc import SecretStr, StatsController, Unset, async_partial
 from .stickers import StickerInfo, fetch_stickers
