@@ -244,10 +244,12 @@ class CommandsHandler(BaseHandler):
                     ),
                 ),
             )
+            exception = f"{e.__class__.__name__}: {e}"
             footer = _(
-                "<b>Command:</b> <code>{message_text}</code>\n\n"
+                "<b>Command:</b> <code>{message_text}</code>\n"
+                "<b>Exception:</b> <code>{exception}</code>\n\n"
                 "<i>More info can be found in the logs or in the traceback chat.</i>"
-            ).format(message_text=html.escape(message_text))
+            ).format(message_text=html.escape(message_text), exception=html.escape(exception))
         return f"{header}\n\n{footer}"
 
     async def _message_too_long_handler(self, result: str, data: dict[str, Any]) -> None:

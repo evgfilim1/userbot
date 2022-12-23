@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-23 10:50+0500\n"
+"POT-Creation-Date: 2022-12-23 11:32+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -531,15 +531,16 @@ msgid ""
 "{traceback}"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:247
+#: userbot/meta/modules/commands.py:248
 #, python-brace-format
 msgid ""
 "<b>Command:</b> <code>{message_text}</code>\n"
+"<b>Exception:</b> <code>{exception}</code>\n"
 "\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:258
+#: userbot/meta/modules/commands.py:260
 #, python-brace-format
 msgid ""
 "{icon} <b>Successfully executed.</b>\n"
@@ -549,19 +550,19 @@ msgid ""
 "<b>Result:</b>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:269
+#: userbot/meta/modules/commands.py:271
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:431
+#: userbot/meta/modules/commands.py:433
 #, python-brace-format
 msgid ""
 "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:437
+#: userbot/meta/modules/commands.py:439
 msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
