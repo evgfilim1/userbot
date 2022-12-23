@@ -30,6 +30,10 @@ from userbot.utils import AppLimitsController, GitHubClient, StatsController, fe
 _log = logging.getLogger(__name__)
 
 
+async def _fetch_and_put_stickers_to_cache(storage: Storage, client: Client) -> None:
+    await storage.put_sticker_cache(await fetch_stickers(client))
+
+
 async def _main(
     *,
     client: Client,
@@ -43,7 +47,8 @@ async def _main(
         _log.debug("Checking for sticker cache presence...")
         cache = await storage.get_sticker_cache()
         if len(cache) == 0:
-            await storage.put_sticker_cache(await fetch_stickers(client))
+            # don't wait for it, let it run in the background
+            job_manager.add_job(_fetch_and_put_stickers_to_cache(storage, client))
         job_manager.add_job(storage.sticker_cache_job(lambda: fetch_stickers(client)))
         await app_limits_controller.load_limits(client)
         stats.startup()
