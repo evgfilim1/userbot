@@ -30,6 +30,11 @@ _REACT2BAN_TEXT = _(
 commands = CommandsModule("Chat administration")
 
 
+async def _check_can_ban_members(client: Client, chat_id: int) -> bool:
+    self = await client.get_chat_member(chat_id, client.me.id)
+    return self.privileges is not None and self.privileges.can_restrict_members
+
+
 def _parse_restrict_perms(perms: str) -> ChatPermissions:
     """Parses a string of permissions into a ChatPermissions object.
 
@@ -311,8 +316,7 @@ async def react2ban(
     _ = tr.gettext
     if message.chat.id > 0:
         return _("{icon} Not a group chat").format(icon=icons.STOP)
-    self = await client.get_chat_member(message.chat.id, message.from_user.id)
-    if self.privileges is None or not self.privileges.can_restrict_members:
+    if not await _check_can_ban_members(client, message.chat.id):
         return _("{icon} Cannot ban users in the chat").format(icon=icons.STOP)
     await storage.add_react2ban(message.chat.id, message.id)
     return _(_REACT2BAN_TEXT)
@@ -406,3 +410,53 @@ async def s_pin(
 
     If 'silent' is specified, the message will be pinned silently"""
     await _pin_common(message, command, icons, tr, return_result=False)
+
+
+@commands.add(
+    "chatcleardel",
+    waiting_message=_("<i>Clearing Deleted Accounts...</i>"),
+    timeout=1800,
+)
+async def kick_deleted_accounts(
+    client: Client,
+    message: Message,
+    icons: type[Icons],
+    tr: Translation,
+) -> str:
+    """Kicks Deleted Accounts from the chat"""
+    _ = tr.gettext
+    __ = tr.ngettext
+    chat_id = message.chat.id
+    if chat_id > 0:
+        return _("{icon} Not a group chat").format(icon=icons.STOP)
+    if not await _check_can_ban_members(client, chat_id):
+        return _("{icon} Cannot ban users in the chat").format(icon=icons.STOP)
+    kicked = 0
+    failed = 0
+    total = 0
+    async for member in client.get_chat_members(chat_id):
+        total += 1
+        if not member.user.is_deleted:
+            continue
+        try:
+            await client.ban_chat_member(
+                chat_id,
+                member.user.id,
+                datetime.now() + timedelta(minutes=1),
+            )
+        except UserAdminInvalid:
+            # Target user is an admin or client lost the rights to ban anyone
+            failed += 1
+            continue
+        else:
+            kicked += 1
+    kicked_text = _("<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>").format(
+        n=kicked,
+        total_deleted=kicked + failed,
+    )
+    total_checked_text = __(
+        "<i>({n} member checked)</i>",
+        "<i>({n} members checked)</i>",
+        total,
+    ).format(n=total)
+    return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"

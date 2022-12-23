@@ -40,6 +40,7 @@ About:
 
 Chat administration:
 • chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
+• chatcleardel — Kicks Deleted Accounts from the chat
 • chatunban <reply 'reply'|id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 • pin <reply> ['silent'] — Pins the message
