@@ -1,9 +1,13 @@
+# Translations template for evgfilim1/userbot.
+# Copyright (C) 2022 Evgeniy Filimonov
+# This file is distributed under the same license as the evgfilim1/userbot project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-11-19 13:48+0500\n"
-"PO-Revision-Date: 2022-11-20 13:35\n"
+"POT-Creation-Date: 2022-12-23 10:50+0500\n"
+"PO-Revision-Date: 2022-12-23 05:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -18,32 +22,112 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: ru_RU\n"
 
-#: userbot/commands/about.py:21
+#: userbot/commands/about.py:31
 msgid "staging"
 msgstr "в разработке"
 
-#: userbot/commands/about.py:26
+#: userbot/commands/about.py:36
 msgid "<i>Repo:</i>"
 msgstr "<i>Репозиторий:</i>"
 
-#: userbot/commands/about.py:27
+#: userbot/commands/about.py:37
 msgid "<i>Commit:</i>"
 msgstr "<i>Коммит:</i>"
 
-#: userbot/commands/about.py:28
+#: userbot/commands/about.py:38
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
 msgstr "{icon} <b>О пользовательском боте</b>"
 
-#: userbot/commands/about.py:34
+#: userbot/commands/about.py:44
 #, python-brace-format
 msgid "(<a href='{base_url}/deployments'>deployments</a>)"
 msgstr "(<a href='{base_url}/deployments'>развёртывания</a>)"
 
-#: userbot/commands/about.py:37
+#: userbot/commands/about.py:47
 #, python-brace-format
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
 msgstr "{icon} <a href='{url}'>Внести вклад в перевод пользовательского бота</a>"
+
+#: userbot/commands/about.py:57
+msgid "<i>Collecting stats...</i>"
+msgstr "<i>Сбор статистики...</i>"
+
+#: userbot/commands/about.py:118
+msgid "<b>Statistics:</b>"
+msgstr "<b>Статистика:</b>"
+
+#: userbot/commands/about.py:119
+#, python-brace-format
+msgid "{icon} Uptime: {uptime}"
+msgstr "{icon} Время непрерывной работы: {uptime}"
+
+#: userbot/commands/about.py:125
+msgid "Has premium"
+msgstr "Имеет премиум"
+
+#: userbot/commands/about.py:125
+msgid "Has no premium"
+msgstr "Не имеет премиум"
+
+#: userbot/commands/about.py:127
+#, python-brace-format
+msgid "{icon} Commands used: {count}"
+msgstr "{icon} Использовано команд: {count}"
+
+#: userbot/commands/about.py:136
+#, python-brace-format
+msgid "{icon} Total chats: {count}"
+msgstr "{icon} Всего чатов: {count}"
+
+#: userbot/commands/about.py:140
+#, python-brace-format
+msgid "• {icon} Private: {count}"
+msgstr "• {icon} Личных: {count}"
+
+#: userbot/commands/about.py:144
+#, python-brace-format
+msgid "• {icon} Bots: {count}"
+msgstr "• {icon} С ботами: {count}"
+
+#: userbot/commands/about.py:148
+#, python-brace-format
+msgid "• {icon} Groups and supergroups: {count}"
+msgstr "• {icon} Групп и супергрупп: {count}"
+
+#: userbot/commands/about.py:152
+#, python-brace-format
+msgid "• {icon} Channels: {count}"
+msgstr "• {icon} Каналов: {count}"
+
+#: userbot/commands/about.py:156
+#, python-brace-format
+msgid "• {icon} Archived: {count}"
+msgstr "• {icon} Архивированных: {count}"
+
+#: userbot/commands/about.py:169
+#, python-brace-format
+msgid "{icon} GIFs: {count}/{total}"
+msgstr "{icon} GIF-анимаций: {count}/{total}"
+
+#: userbot/commands/about.py:174
+#, python-brace-format
+msgid "{icon} Stickers: {count}/{total}"
+msgstr "{icon} Стикеров: {count}/{total}"
+
+#: userbot/commands/about.py:179
+#, python-brace-format
+msgid "{icon} Archived stickers: {count}"
+msgstr "{icon} Архивированных стикеров: {count}"
+
+#: userbot/commands/about.py:183
+#, python-brace-format
+msgid "{icon} Custom emoji: {count}"
+msgstr "{icon} Пользовательских эмодзи: {count}"
+
+#: userbot/commands/about.py:185
+msgid "Unavailable"
+msgstr "Недоступно"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -51,104 +135,123 @@ msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
 msgstr "<b>⚠⚠⚠ ЭТО НЕ ШУТКА ⚠⚠⚠</b>\n"
 "Сообщение защищено от реакций. Любой, кто поставит здесь реакцию, будет <b>заблокирован</b> в чате на полгода."
 
-#: userbot/commands/chat_admin.py:78
+#: userbot/commands/chat_admin.py:83
 msgid "✅"
 msgstr "✅"
 
-#: userbot/commands/chat_admin.py:79
+#: userbot/commands/chat_admin.py:84
 msgid "❌"
 msgstr "❌"
 
-#: userbot/commands/chat_admin.py:102
+#: userbot/commands/chat_admin.py:107
 msgid "Send messages"
 msgstr "Отправка сообщений"
 
-#: userbot/commands/chat_admin.py:103
+#: userbot/commands/chat_admin.py:108
 msgid "Send media"
 msgstr "Отправка медиафайлов"
 
-#: userbot/commands/chat_admin.py:104
+#: userbot/commands/chat_admin.py:109
 msgid "Send stickers & GIFs"
 msgstr "Отправка стикеров и GIF"
 
-#: userbot/commands/chat_admin.py:105
+#: userbot/commands/chat_admin.py:110
 msgid "Embed links"
 msgstr "Предпросмотр для ссылок"
 
-#: userbot/commands/chat_admin.py:106
+#: userbot/commands/chat_admin.py:111
 msgid "Send polls"
 msgstr "Создание опросов"
 
-#: userbot/commands/chat_admin.py:107
+#: userbot/commands/chat_admin.py:112
 msgid "Add members"
 msgstr "Добавление участников"
 
-#: userbot/commands/chat_admin.py:108
+#: userbot/commands/chat_admin.py:113
 msgid "Pin messages"
 msgstr "Закрепление сообщений"
 
-#: userbot/commands/chat_admin.py:109
+#: userbot/commands/chat_admin.py:114
 msgid "Change group info"
 msgstr "Изменение профиля группы"
 
-#: userbot/commands/chat_admin.py:130
+#: userbot/commands/chat_admin.py:135
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr "до <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 
-#: userbot/commands/chat_admin.py:134
+#: userbot/commands/chat_admin.py:139
 #, python-brace-format
 msgid "{icon} {user_link} <b>banned</b> in this chat"
 msgstr "{icon} {user_link} <b>заблокирован</b> в этом чате"
 
-#: userbot/commands/chat_admin.py:136
+#: userbot/commands/chat_admin.py:141
 #, python-brace-format
 msgid "{icon} {user_link} <b>restricted</b> in this chat"
 msgstr "{icon} {user_link} <b>ограничен</b> в этом чате"
 
-#: userbot/commands/chat_admin.py:137
+#: userbot/commands/chat_admin.py:142
 #, python-brace-format
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr "{icon_perms} <b>Новые права:</b>"
 
-#: userbot/commands/chat_admin.py:189
+#: userbot/commands/chat_admin.py:194
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr "<b>Причина:</b> {reason}"
 
-#: userbot/commands/chat_admin.py:214
+#: userbot/commands/chat_admin.py:219
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr "{icon} {user_link} <b>разблокирован</b> в этом чате"
 
-#: userbot/commands/chat_admin.py:249
+#: userbot/commands/chat_admin.py:254
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Должность человека в чате изменена на <i>{title}</i>"
 
-#: userbot/commands/chat_admin.py:283
+#: userbot/commands/chat_admin.py:288
 msgid "Recently banned:"
 msgstr "Недавно заблокированы:"
 
-#: userbot/commands/chat_admin.py:313 userbot/commands/chat_admin.py:332
+#: userbot/commands/chat_admin.py:318 userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:431
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Не групповой чат"
 
-#: userbot/commands/chat_admin.py:316
+#: userbot/commands/chat_admin.py:320 userbot/commands/chat_admin.py:433
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Невозможно банить пользователей в этом чате"
 
-#: userbot/commands/chat_admin.py:336
+#: userbot/commands/chat_admin.py:340
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Отслеживание реакций на сообщении для блокировки пользователей было отключено"
 
-#: userbot/commands/chat_admin.py:380
+#: userbot/commands/chat_admin.py:384
 #, python-brace-format
 msgid "{icon} Message pinned"
 msgstr "{icon} Сообщение закреплено"
+
+#: userbot/commands/chat_admin.py:417
+msgid "<i>Clearing Deleted Accounts...</i>"
+msgstr "<i>Очистка Удалённых Аккаунтов...</i>"
+
+#: userbot/commands/chat_admin.py:453
+#, python-brace-format
+msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
+msgstr "<b>Кикнуто</b> Удалённых Аккаунтов: <i>{n}/{total_deleted}</i>"
+
+#: userbot/commands/chat_admin.py:457
+#, python-brace-format
+msgid "<i>({n} member checked)</i>"
+msgid_plural "<i>({n} members checked)</i>"
+msgstr[0] "<i>({n} участник проверен)</i>"
+msgstr[1] "<i>({n} участника проверено)</i>"
+msgstr[2] "<i>({n} участников проверено)</i>"
+msgstr[3] "<i>({n} участников проверено)</i>"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -353,16 +456,16 @@ msgstr "для меня"
 msgid "<i>Picking random sticker...</i>"
 msgstr "<i>Выбор случайного стикера...</i>"
 
-#: userbot/commands/text_converters.py:89
+#: userbot/commands/text_converters.py:23
+msgid "Maybe you mean:"
+msgstr "Возможно, вы имеете в виду:"
+
+#: userbot/commands/text_converters.py:107
 #, python-brace-format
 msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
 "Possible fix: <code>{message_text}/</code>"
 msgstr "{icon} Недостаточно значений для распаковки. Похоже, что вы забыли добавить конечный слэш.\n\n"
 "Возможное исправление: <code>{message_text}/</code>"
-
-#: userbot/commands/text_converters.py:103
-msgid "Maybe you mean:"
-msgstr "Возможно, вы имеете в виду:"
 
 #: userbot/commands/tools.py:83
 #, python-brace-format
@@ -388,18 +491,18 @@ msgstr "{icon} Сон в течение {sec} секунд окончен"
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr "{icon} <b>Остановка пользовательского бота...</b>"
 
-#: userbot/modules/base.py:103
+#: userbot/meta/modules/base.py:104
 msgid "<i>Userbot is processing the message...</i>"
 msgstr "<i>Пользовательский бот обрабатывает сообщение...</i>"
 
-#: userbot/modules/base.py:122
+#: userbot/meta/modules/base.py:123
 #, python-brace-format
 msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
 "<i>More info can be found in logs.</i>"
 msgstr "{icon} <b>Обработка сообщения прервана по тайм-ауту {timeout}.</b>\n"
 "<i>Больше информации можно найти в журналах.</i>"
 
-#: userbot/modules/base.py:127
+#: userbot/meta/modules/base.py:128
 #, python-brace-format
 msgid "{timeout} second"
 msgid_plural "{timeout} seconds"
@@ -408,12 +511,12 @@ msgstr[1] "{timeout} секунды"
 msgstr[2] "{timeout} секунд"
 msgstr[3] "{timeout} секунд"
 
-#: userbot/modules/commands.py:211
+#: userbot/meta/modules/commands.py:220
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr "{icon} <b>Произошла ошибка во время выполнения команды.</b>"
 
-#: userbot/modules/commands.py:215
+#: userbot/meta/modules/commands.py:224
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
@@ -424,7 +527,7 @@ msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
 "{traceback}\n\n"
 "<i>Больше информации можно найти в журналах.</i>"
 
-#: userbot/modules/commands.py:228
+#: userbot/meta/modules/commands.py:237
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
@@ -433,14 +536,14 @@ msgstr "<b>Сообщение:</b> {msg}\n"
 "<b>Последовательность вызовов:</b>\n"
 "{traceback}"
 
-#: userbot/modules/commands.py:238
+#: userbot/meta/modules/commands.py:247
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
 msgstr "<b>Команда:</b> <code>{message_text}</code>\n\n"
 "<i>Больше информации можно найти в журналах или в чате трассировок.</i>"
 
-#: userbot/modules/commands.py:249
+#: userbot/meta/modules/commands.py:258
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
@@ -449,37 +552,33 @@ msgstr "{icon} <b>Успешно выполнено.</b>\n\n"
 "<b>Команда:</b> <code>{message_text}</code>\n\n"
 "<b>Результат:</b>"
 
-#: userbot/modules/commands.py:260
+#: userbot/meta/modules/commands.py:269
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr "{text} <i>См. ответ.</i>"
 
-#: userbot/modules/commands.py:434
+#: userbot/meta/modules/commands.py:431
 #, python-brace-format
 msgid "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr "<b>Справка для {args}:</b>\n"
 "{usage}"
 
-#: userbot/modules/commands.py:440
+#: userbot/meta/modules/commands.py:437
 msgid "<b>List of userbot commands available:</b>"
 msgstr "<b>Список доступных команд пользовательского бота:</b>"
 
-#: userbot/modules/hooks.py:34
+#: userbot/meta/modules/hooks.py:34
 #, python-brace-format
 msgid "Hooks in this chat:\n"
 "{hooks}"
 msgstr "Хуки в этом чате:\n"
 "{hooks}"
 
-#: userbot/modules/hooks.py:213
+#: userbot/meta/modules/hooks.py:213
 #, python-brace-format
 msgid "Available hooks:\n"
 "{hooks}"
 msgstr "Доступные хуки:\n"
 "{hooks}"
-
-#: userbot/utils/messages.py:57
-msgid "<b>Maybe you mean:</b>"
-msgstr "<b>Возможно, вы имеете в виду</b>"
 
