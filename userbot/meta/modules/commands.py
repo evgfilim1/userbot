@@ -47,9 +47,11 @@ def _extract_frames(traceback: TracebackType) -> tuple[FrameSummary, FrameSummar
     """
     last_own_frame: FrameSummary | None = None
     last_frame: FrameSummary | None = None
-    own_package_name = Path(__file__).parent.parent
+    # Path(__file__):         .../userbot/meta/modules/commands.py
+    # Path(__file__).parents: ...   [2]   [1]    [0]
+    own_package_path = Path(__file__).parents[2]
     for frame in extract_tb(traceback):
-        if frame.filename is not None and own_package_name in Path(frame.filename).parents:
+        if frame.filename is not None and own_package_path in Path(frame.filename).parents:
             last_own_frame = frame
         last_frame = frame
     if last_frame is None:

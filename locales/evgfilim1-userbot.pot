@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-23 11:32+0500\n"
+"POT-Creation-Date: 2022-12-23 11:38+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -508,12 +508,12 @@ msgid_plural "{timeout} seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: userbot/meta/modules/commands.py:220
+#: userbot/meta/modules/commands.py:222
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:224
+#: userbot/meta/modules/commands.py:226
 #, python-brace-format
 msgid ""
 "<b>Command:</b> <code>{message_text}</code>\n"
@@ -523,7 +523,7 @@ msgid ""
 "<i>More info can be found in the logs.</i>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:237
+#: userbot/meta/modules/commands.py:239
 #, python-brace-format
 msgid ""
 "<b>Message:</b> {msg}\n"
@@ -531,7 +531,7 @@ msgid ""
 "{traceback}"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:248
+#: userbot/meta/modules/commands.py:250
 #, python-brace-format
 msgid ""
 "<b>Command:</b> <code>{message_text}</code>\n"
@@ -540,7 +540,7 @@ msgid ""
 "<i>More info can be found in the logs or in the traceback chat.</i>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:260
+#: userbot/meta/modules/commands.py:262
 #, python-brace-format
 msgid ""
 "{icon} <b>Successfully executed.</b>\n"
@@ -550,19 +550,19 @@ msgid ""
 "<b>Result:</b>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:271
+#: userbot/meta/modules/commands.py:273
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:433
+#: userbot/meta/modules/commands.py:435
 #, python-brace-format
 msgid ""
 "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:439
+#: userbot/meta/modules/commands.py:441
 msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
