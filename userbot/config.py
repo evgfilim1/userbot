@@ -5,6 +5,7 @@ __all__ = [
     "RedisConfig",
     "StorageConfig",
     "TelegramConfig",
+    "ThirdPartyServicesConfig",
     "TypeCastError",
 ]
 
@@ -196,3 +197,14 @@ class AppConfig:
             tracebacks_chat=_get_env_value("TRACEBACK_CHAT", default=None),
             allow_unsafe_commands=_get_env_value("ALLOW_UNSAFE_COMMANDS", bool, default=True),
         )
+
+
+@dataclass()
+class ThirdPartyServicesConfig:
+    ...
+
+    @classmethod
+    def from_env(cls) -> ThirdPartyServicesConfig:
+        """Load ThirdPartyServicesConfig from environment variables."""
+        # stub for future use
+        return cls()

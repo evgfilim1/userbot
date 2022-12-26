@@ -96,7 +96,9 @@ def main() -> None:
         password,
     )
 
+    # third_party_services_config = ThirdPartyServicesConfig.from_env()
     github_client = GitHubClient()
+
     stats = StatsController()
     app_limits = AppLimitsController()
 
