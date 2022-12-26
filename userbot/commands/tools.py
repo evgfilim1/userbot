@@ -28,16 +28,22 @@ async def mention_with_id(message: Message) -> str:
 
 
 @commands.add("calc", "eval", usage="<python-expr>")
-async def calc(**kwargs: Any) -> str:
+async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Evaluates Python expression"""
+    _ = tr.gettext
+    if not allow_unsafe:
+        return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
     command: CommandObject = kwargs["command"]
     expr = command.args
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
 
 
 @commands.add("exec", usage="<python-expr>")
-async def python_exec(**kwargs: Any) -> str:
+async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Executes Python expression"""
+    _ = tr.gettext
+    if not allow_unsafe:
+        return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
     command: CommandObject = kwargs["command"]
     tr: Translation = kwargs["tr"]
     _ = tr.gettext

@@ -113,6 +113,7 @@ def main() -> None:
             "traceback_chat": config.traceback_chat,
             "stats": stats,
             "limits": app_limits,
+            "allow_unsafe": config.allow_unsafe_commands,
         }
     )
     root_commands.add_middleware(parse_command_middleware)

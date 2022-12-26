@@ -43,6 +43,7 @@ class Config:
     log_level: str
     traceback_chat: int | str | None
     kwargs: dict[str, SecretStr]
+    allow_unsafe_commands: bool
 
     @classmethod
     def from_env(cls) -> Config:
@@ -62,6 +63,7 @@ class Config:
                 for key, value in env.items()
                 if key.startswith("PYROGRAM_")
             },
+            allow_unsafe_commands=env.get("ALLOW_UNSAFE_COMMANDS", "1") != "0",
         )
 
     def __post_init__(self) -> None:
