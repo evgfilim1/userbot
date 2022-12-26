@@ -2,17 +2,17 @@ from __future__ import annotations
 
 __all__ = [
     "async_partial",
-    "SecretStr",
+    "SecretValue",
     "StatsController",
     "Unset",
 ]
 
 import functools
 import time
-from collections import UserString
-from typing import Any, Awaitable, Callable, ClassVar, TypeVar
+from typing import Any, Awaitable, Callable, ClassVar, Generic, TypeVar
 
 _T = TypeVar("_T")
+_CT = TypeVar("_CT", covariant=True)
 
 
 class Unset:
@@ -46,15 +46,20 @@ def async_partial(
     return wrapper
 
 
-class SecretStr(UserString):
-    """A string that doesn't show its value in repr() and str().
+class SecretValue(Generic[_CT]):
+    """A value that hides itself in repr() and str().
 
-    To get the actual value, use the `data` or `value` attribute.
+    To get the actual value, use the `value` attribute.
     """
 
+    __slots__ = ("_value",)
+
+    def __init__(self, value: _CT) -> None:
+        self._value = value
+
     @property
-    def value(self) -> str:
-        return self.data
+    def value(self) -> _CT:
+        return self._value
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({str(self)})"

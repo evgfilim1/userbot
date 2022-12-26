@@ -1,4 +1,4 @@
-__all__ = []
+__all__: list[str] = []
 
 import logging
 import os
@@ -12,7 +12,7 @@ from pyrogram.methods.utilities.idle import idle
 from userbot import __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
-from userbot.config import Config, RedisConfig
+from userbot.config import AppConfig, RedisConfig, StorageConfig, TelegramConfig
 from userbot.hooks import hooks
 from userbot.meta.job_manager import AsyncJobManager
 from userbot.meta.modules import CommandsModule, HooksModule
@@ -25,7 +25,13 @@ from userbot.middlewares import (
 )
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import AppLimitsController, GitHubClient, StatsController, fetch_stickers
+from userbot.utils import (
+    AppLimitsController,
+    GitHubClient,
+    SecretValue,
+    StatsController,
+    fetch_stickers,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -57,25 +63,30 @@ async def _main(
 
 
 def main() -> None:
-    config = Config.from_env()
-    log_level: int = getattr(logging, config.log_level)
-    logging.basicConfig(level=log_level)
+    app_config = AppConfig.from_env()
+    logging.basicConfig(level=app_config.log_level.upper())
     # pyrogram is too verbose IMO, silence it a bit, respecting the log level set by user
-    logging.getLogger("pyrogram").setLevel(max(logging.WARNING, log_level))
-    if not config.data_location.exists():
-        config.data_location.mkdir()
-    if not config.data_location.is_dir():
-        raise NotADirectoryError(f"{config.data_location} must be a directory (`data_location`)")
-    os.chdir(config.data_location)
+    logging.getLogger("pyrogram").setLevel(max(logging.WARNING, logging.root.level))
+
+    storage_config = StorageConfig.from_env()
+    if not storage_config.data_location.exists():
+        storage_config.data_location.mkdir()
+    os.chdir(storage_config.data_location)
+
+    telegram_config = TelegramConfig.from_env()
     client = Client(
-        name=config.session,
-        api_id=config.api_id,
-        api_hash=config.api_hash.value,
+        name=storage_config.session_name,
+        api_id=telegram_config.api_id,
+        api_hash=telegram_config.api_hash.value,
         app_version=f"evgfilim1/userbot {__version__}",
         device_model="Linux",
-        workdir=str(config.data_location),
-        **{k: v.value for k, v in config.kwargs.items()},
+        workdir=str(storage_config.data_location),
+        **{
+            k: (v.value if isinstance(v, SecretValue) else v)
+            for k, v in telegram_config.pyrogram_kwargs.items()
+        },
     )
+
     redis_config = RedisConfig.from_env()
     password = redis_config.password.value if redis_config.password else None
     storage = RedisStorage(
@@ -84,6 +95,7 @@ def main() -> None:
         redis_config.db,
         password,
     )
+
     github_client = GitHubClient()
     stats = StatsController()
     app_limits = AppLimitsController()
@@ -94,7 +106,7 @@ def main() -> None:
         group=1,
     )
 
-    root_commands = CommandsModule(default_prefix=config.command_prefix)
+    root_commands = CommandsModule(default_prefix=app_config.command_prefix)
     root_commands.add_submodule(commands)
 
     root_hooks = HooksModule(commands=root_commands, storage=storage)
@@ -107,13 +119,13 @@ def main() -> None:
     kwargs_middleware = KwargsMiddleware(
         {
             "storage": storage,
-            "data_dir": config.data_location,
-            "notes_chat": config.media_notes_chat,
+            "data_dir": storage_config.data_location,
+            "notes_chat": app_config.media_notes_chat,
             "github_client": github_client,
-            "traceback_chat": config.traceback_chat,
+            "traceback_chat": app_config.tracebacks_chat,
             "stats": stats,
             "limits": app_limits,
-            "allow_unsafe": config.allow_unsafe_commands,
+            "allow_unsafe": app_config.allow_unsafe_commands,
         }
     )
     root_commands.add_middleware(parse_command_middleware)

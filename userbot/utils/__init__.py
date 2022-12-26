@@ -18,7 +18,7 @@ __all__ = [
     "json_value_to_python",
     "Limit",
     "parse_timespec",
-    "SecretStr",
+    "SecretValue",
     "StatsController",
     "sticker",
     "StickerFilter",
@@ -38,7 +38,7 @@ from .messages import (
     get_message_text,
     is_my_message,
 )
-from .misc import SecretStr, StatsController, Unset, async_partial
+from .misc import SecretValue, StatsController, Unset, async_partial
 from .stickers import StickerInfo, fetch_stickers
 from .telegram_json import json_value_to_python
 from .time import format_timedelta, parse_timespec
