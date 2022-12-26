@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-23 10:50+0500\n"
-"PO-Revision-Date: 2022-12-23 05:53\n"
+"POT-Creation-Date: 2022-12-26 21:14+0500\n"
+"PO-Revision-Date: 2022-12-26 20:06\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -467,26 +467,31 @@ msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing
 msgstr "{icon} Не достатньо значень для розпакування. Схоже, що ви забули додати косу риску.\n\n"
 "Можливий фікс: <code>{message_text}/</code>"
 
-#: userbot/commands/tools.py:83
+#: userbot/commands/tools.py:35 userbot/commands/tools.py:46
+#, python-brace-format
+msgid "{icon} Unsafe commands are disabled in the config"
+msgstr ""
+
+#: userbot/commands/tools.py:89
 #, python-brace-format
 msgid "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
 msgstr "<b>Код:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
 
-#: userbot/commands/tools.py:86
+#: userbot/commands/tools.py:92
 #, python-brace-format
 msgid "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
 msgstr "<b>Результат:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
 
-#: userbot/commands/tools.py:127
+#: userbot/commands/tools.py:133
 #, python-brace-format
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr "{icon} Сон протягом {sec} секунд закінчено"
 
-#: userbot/commands/tools.py:136
+#: userbot/commands/tools.py:142
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr "{icon} <b>Зупинка користувальницького боту...</b>"
@@ -511,12 +516,12 @@ msgstr[1] "{timeout} секунди"
 msgstr[2] "{timeout} секунди"
 msgstr[3] "{timeout} секунди"
 
-#: userbot/meta/modules/commands.py:220
+#: userbot/meta/modules/commands.py:222
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr "{icon} <b>Сталася помилка під час виконання команди.</b>"
 
-#: userbot/meta/modules/commands.py:224
+#: userbot/meta/modules/commands.py:226
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
@@ -527,7 +532,7 @@ msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
 "{traceback}\n\n"
 "<i>Бiльше iнформацiї можна знайти в журналах.</i>"
 
-#: userbot/meta/modules/commands.py:237
+#: userbot/meta/modules/commands.py:239
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
@@ -536,14 +541,14 @@ msgstr "<b>Повідомлення:</b> {msg}\n"
 "<b>Послiдовнiсть викликiв:</b>\n"
 "{traceback}"
 
-#: userbot/meta/modules/commands.py:247
+#: userbot/meta/modules/commands.py:250
 #, python-brace-format
-msgid "<b>Command:</b> <code>{message_text}</code>\n\n"
+msgid "<b>Command:</b> <code>{message_text}</code>\n"
+"<b>Exception:</b> <code>{exception}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
-msgstr "<b>Команда:</b> <code>{message_text}</code>\n\n"
-"<i>Бiльше iнформацiї можна знайти в журналах або в чатi трасувань.</i>"
+msgstr ""
 
-#: userbot/meta/modules/commands.py:258
+#: userbot/meta/modules/commands.py:262
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
@@ -552,19 +557,19 @@ msgstr "{icon} <b>Успішно виконано.</b>\n\n"
 "<b>Команда:</b> <code>{message_text}</code>\n\n"
 "<b>Результат:</b>"
 
-#: userbot/meta/modules/commands.py:269
+#: userbot/meta/modules/commands.py:273
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr "{text} <i>Перегляньте відповідь.</i>"
 
-#: userbot/meta/modules/commands.py:431
+#: userbot/meta/modules/commands.py:435
 #, python-brace-format
 msgid "<b>Help for {args}:</b>\n"
 "{usage}"
 msgstr "<b>Довідка по {args}:</b>\n"
 "{usage}"
 
-#: userbot/meta/modules/commands.py:437
+#: userbot/meta/modules/commands.py:441
 msgid "<b>List of userbot commands available:</b>"
 msgstr "<b>Список доступних команд користувацького боту:</b>"
 
