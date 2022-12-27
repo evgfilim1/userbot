@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-26 21:14+0500\n"
-"PO-Revision-Date: 2022-12-26 20:06\n"
+"POT-Creation-Date: 2022-12-27 19:25+0500\n"
+"PO-Revision-Date: 2022-12-27 14:42\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -456,24 +456,24 @@ msgstr ""
 msgid "{icon} Unsafe commands are disabled in the config"
 msgstr ""
 
-#: userbot/commands/tools.py:89
+#: userbot/commands/tools.py:87
 #, python-brace-format
 msgid "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:92
+#: userbot/commands/tools.py:90
 #, python-brace-format
 msgid "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:133
+#: userbot/commands/tools.py:131
 #, python-brace-format
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr ""
 
-#: userbot/commands/tools.py:142
+#: userbot/commands/tools.py:140
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr ""
