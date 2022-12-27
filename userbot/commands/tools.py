@@ -45,8 +45,6 @@ async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str
     if not allow_unsafe:
         return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
     command: CommandObject = kwargs["command"]
-    tr: Translation = kwargs["tr"]
-    _ = tr.gettext
     expr = command.args or "pass"
     ns = {"__builtins__": __builtins__}
     # Manually building AST to ignore boilerplate lines in line count while formatting an exception
