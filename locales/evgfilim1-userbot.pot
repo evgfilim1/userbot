@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-01-03 01:03+0500\n"
+"POT-Creation-Date: 2023-01-03 01:10+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,6 +250,11 @@ msgid "<i>({n} member checked)</i>"
 msgid_plural "<i>({n} members checked)</i>"
 msgstr[0] ""
 msgstr[1] ""
+
+#: userbot/commands/chat_admin.py:472
+#, python-brace-format
+msgid "User {user_id} has been invited to the chat"
+msgstr ""
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format

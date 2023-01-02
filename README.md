@@ -41,6 +41,7 @@ About:
 Chat administration:
 • chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
 • chatcleardel — Kicks Deleted Accounts from the chat
+• chatinvite <userid> — Invites a user to the current chat
 • chatunban <reply 'reply'|id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 • pin <reply> ['silent'] — Pins the message
@@ -124,11 +125,11 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
   - Sends a duck emoji (🦆) when someone writes "дак" (pronounced as "duck") or "кря"
     (pronounces as "krya", English equivalent is "quack")
   - Sends a pancake emoji (🥞) when someone writes "блин" (English equivalent is "pancake", also
-    that's how Russian equivalent to the English "f*ck" is "censored")
+    that's how Russian equivalent to the English "f*ck" may be "censored")
 - `tap`: Sends a sticker with a finger touching a seal when someone writes "тык" or sends that
-  sticker itself
+  sticker itself ([link to the pack](https://t.me/addstickers/belek_vk))
 - `mibib`: Sends a sticker (with 20% chance) with an animated pixelated bear when someone sends that
-  sticker itself
+  sticker itself ([link to the pack](https://t.me/addstickers/bttv_hlam))
 - `bra`: Sends a picture from [this](https://www.reddit.com/r/anime_irl/comments/u4zxol/anime_irl/)
   Reddit post when someone sends "бра" or "bra"
 - `uwu`: Sends a [picture](https://imgur.com/a/bDzntL5) when someone sends "uwu", "owo", "уву"

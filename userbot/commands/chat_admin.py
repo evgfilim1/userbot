@@ -463,3 +463,10 @@ async def kick_deleted_accounts(
         total,
     ).format(n=total)
     return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
+
+
+@commands.add("chatinvite", usage="<userid>")
+async def invite_to_chat(message: Message, command: CommandObject) -> None:
+    """Invites a user to the current chat"""
+    await message.chat.add_members(command.args)
+    return _("User {user_id} has been invited to the chat").format(user_id=command.args)
