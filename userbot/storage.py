@@ -7,7 +7,17 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Any, AsyncIterable, Awaitable, Callable, NoReturn, Self, TypeAlias, TypeVar
+from typing import (
+    Any,
+    AsyncIterable,
+    Awaitable,
+    Callable,
+    Iterable,
+    NoReturn,
+    Self,
+    TypeAlias,
+    TypeVar,
+)
 
 from redis.asyncio import Redis
 from redis.asyncio.client import PubSub
@@ -126,6 +136,22 @@ class Storage(ABC):
     @abstractmethod
     async def command_used(self, command: str) -> None:
         _log.debug("%r command used", command)
+
+    @abstractmethod
+    async def add_users_to_group(self, user_ids: Iterable[int], group_name: str) -> None:
+        _log.debug("Users %r added to group %r", set(user_ids), group_name)
+
+    @abstractmethod
+    async def list_users_in_group(self, group_name: str) -> AsyncIterable[int]:
+        yield
+
+    @abstractmethod
+    async def list_groups(self) -> AsyncIterable[str]:
+        yield
+
+    @abstractmethod
+    async def remove_users_from_group(self, user_ids: Iterable[int], group_name: str) -> None:
+        _log.debug("Users %r removed from group %r", set(user_ids), group_name)
 
 
 class RedisStorage(Storage):
@@ -270,3 +296,19 @@ class RedisStorage(Storage):
     async def command_used(self, command: str) -> None:
         await self._pool.zincrby(self._key("commands"), 1, command)
         await super().command_used(command)
+
+    async def add_users_to_group(self, user_ids: Iterable[int], group_name: str) -> None:
+        await self._pool.sadd(self._key("groups", group_name), *user_ids)
+        await super().add_users_to_group(user_ids, group_name)
+
+    async def list_users_in_group(self, group_name: str) -> AsyncIterable[int]:
+        async for user_id in self._pool.sscan_iter(self._key("groups", group_name)):
+            yield int(user_id)
+
+    async def list_groups(self) -> AsyncIterable[str]:
+        async for group_name in self._pool.scan_iter(match=self._key("groups", "*"), _type="set"):
+            yield group_name.rsplit(":", 1)[-1]
+
+    async def remove_users_from_group(self, user_ids: Iterable[int], group_name: str) -> None:
+        await self._pool.srem(self._key("groups", group_name), *user_ids)
+        await super().remove_users_from_group(user_ids, group_name)

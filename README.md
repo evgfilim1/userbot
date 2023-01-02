@@ -112,6 +112,12 @@ Tools:
 • calc|eval <python-expr> — Evaluates Python expression
 • exec <python-expr> — Executes Python expression
 • id <reply> — Sends replied user's ID as link
+
+User groups:
+• usergroupadd|ugadd <group-name> <reply|id> [id]... — Adds a user to the user group for later use with user resolving
+• usergroupdel|ugdel <group-name> <reply|id> [id]... — Removes a user from the user group
+• usergrouplist|uglist <group-name> ['resolve'] — Lists the users in the user group
+• usergroups|ugs — Lists all the user groups
 ```
 
 </details>

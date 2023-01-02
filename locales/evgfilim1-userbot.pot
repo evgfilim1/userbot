@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-01-03 01:10+0500\n"
+"POT-Creation-Date: 2023-01-03 02:10+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -498,6 +498,25 @@ msgstr ""
 #: userbot/commands/tools.py:140
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
+msgstr ""
+
+#: userbot/commands/user_groups.py:41
+#, python-brace-format
+msgid "{chat_id}: Cannot resolve peer"
+msgstr ""
+
+#: userbot/commands/user_groups.py:44
+#, python-brace-format
+msgid "{chat_id}: Not a user"
+msgstr ""
+
+#: userbot/commands/user_groups.py:48
+#, python-brace-format
+msgid "{icon} Added {count} users to group {group_name}"
+msgstr ""
+
+#: userbot/commands/user_groups.py:54
+msgid "<b>Errors:</b>"
 msgstr ""
 
 #: userbot/meta/modules/base.py:104

@@ -18,6 +18,7 @@ from .reminders import commands as reminders_commands
 from .stickers import commands as stickers_commands
 from .text_converters import commands as text_converters_commands
 from .tools import commands as tools_commands
+from .user_groups import commands as user_groups_commands
 
 try:
     # Automatically register commands from test submodule to allow manual testing of features
@@ -43,6 +44,7 @@ for submodule in (
     stickers_commands,
     text_converters_commands,
     tools_commands,
+    user_groups_commands,
 ):
     commands.add_submodule(submodule)
 
