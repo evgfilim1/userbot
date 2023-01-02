@@ -1,13 +1,13 @@
 # Translations template for evgfilim1/userbot.
-# Copyright (C) 2022 Evgeniy Filimonov
+# Copyright (C) 2023 Evgeniy Filimonov
 # This file is distributed under the same license as the evgfilim1/userbot project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2022-12-27 19:25+0500\n"
-"PO-Revision-Date: 2022-12-27 14:42\n"
+"POT-Creation-Date: 2023-01-03 04:28+0500\n"
+"PO-Revision-Date: 2023-01-02 23:37\n"
 "Last-Translator: \n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -194,61 +194,66 @@ msgstr ""
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:194
+#: userbot/commands/chat_admin.py:193
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:219
+#: userbot/commands/chat_admin.py:222
 #, python-brace-format
 msgid "{icon} {user_link} <b>unbanned</b> in this chat"
 msgstr "{icon}{user_link}<b>bu chatda <b>ban</b> dan chiqdi"
 
-#: userbot/commands/chat_admin.py:254
+#: userbot/commands/chat_admin.py:257
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Shaxs uchun chat nomi oʻrnatildi <i>{title}</i>"
 
-#: userbot/commands/chat_admin.py:288
+#: userbot/commands/chat_admin.py:291
 msgid "Recently banned:"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:318 userbot/commands/chat_admin.py:336
-#: userbot/commands/chat_admin.py:431
+#: userbot/commands/chat_admin.py:321 userbot/commands/chat_admin.py:339
+#: userbot/commands/chat_admin.py:434
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} guruh chati emas"
 
-#: userbot/commands/chat_admin.py:320 userbot/commands/chat_admin.py:433
+#: userbot/commands/chat_admin.py:323 userbot/commands/chat_admin.py:436
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Chatdagi foydalanuvchilarni ban qilish mumkin emas"
 
-#: userbot/commands/chat_admin.py:340
+#: userbot/commands/chat_admin.py:343
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Xabarda foydalanuvchini taqiqlash haqidagi xabarga reaktsiya bildirish o‘chirib qo‘yilgan"
 
-#: userbot/commands/chat_admin.py:384
+#: userbot/commands/chat_admin.py:387
 #, python-brace-format
 msgid "{icon} Message pinned"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:417
+#: userbot/commands/chat_admin.py:420
 msgid "<i>Clearing Deleted Accounts...</i>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:453
+#: userbot/commands/chat_admin.py:456
 #, python-brace-format
 msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:457
+#: userbot/commands/chat_admin.py:460
 #, python-brace-format
 msgid "<i>({n} member checked)</i>"
 msgid_plural "<i>({n} members checked)</i>"
 msgstr[0] ""
 msgstr[1] ""
+
+#: userbot/commands/chat_admin.py:472
+#, python-brace-format
+msgid "User {user_id} has been invited to the chat"
+msgstr ""
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -476,6 +481,44 @@ msgstr ""
 #: userbot/commands/tools.py:140
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
+msgstr ""
+
+#: userbot/commands/user_groups.py:36
+#, python-brace-format
+msgid "{chat_id}: Cannot resolve peer"
+msgstr ""
+
+#: userbot/commands/user_groups.py:39
+#, python-brace-format
+msgid "{chat_id}: Not a user"
+msgstr ""
+
+#: userbot/commands/user_groups.py:68
+#, python-brace-format
+msgid "{icon} Added {count} user to user group {group_name}"
+msgid_plural "{icon} Added {count} users to user group {group_name}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: userbot/commands/user_groups.py:75 userbot/commands/user_groups.py:111
+msgid "<b>Errors:</b>"
+msgstr ""
+
+#: userbot/commands/user_groups.py:104
+#, python-brace-format
+msgid "{icon} Removed {count} user from user group {group_name}"
+msgid_plural "{icon} Removed {count} users from user group {group_name}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: userbot/commands/user_groups.py:133
+#, python-brace-format
+msgid "{icon} Users in user group {key}:"
+msgstr ""
+
+#: userbot/commands/user_groups.py:152
+#, python-brace-format
+msgid "{icon} User groups:"
 msgstr ""
 
 #: userbot/meta/modules/base.py:104
