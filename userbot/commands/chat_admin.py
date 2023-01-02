@@ -123,7 +123,7 @@ def _describe_permissions(
 
 
 def _get_restrict_info(
-    permissions: ChatPermissions,
+    permissions: ChatPermissions | None,
     default_chat_permissions: ChatPermissions,
     *,
     tr: Translation,
@@ -135,12 +135,12 @@ def _get_restrict_info(
         text = " " + _("until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>")
     else:
         text = ""
-    if not permissions.can_send_messages:
+    if permissions is None:
         text = _("{icon} {user_link} <b>banned</b> in this chat") + text
     else:
         text = _("{icon} {user_link} <b>restricted</b> in this chat") + text
-    text += ".\n{}\n".format(_("{icon_perms} <b>New permissions:</b>"))
-    text += _describe_permissions(permissions, default_chat_permissions, tr)
+        text += ".\n{}\n".format(_("{icon_perms} <b>New permissions:</b>"))
+        text += _describe_permissions(permissions, default_chat_permissions, tr)
     return text
 
 
@@ -173,12 +173,11 @@ async def restrict_user(
         t = zero_datetime()
     else:
         t = parse_timespec(now, args_list[1])
-    if len(args_list) <= 2 or args_list[2] == "*":
-        perms = ChatPermissions()  # ban
-    else:
+    if not (ban := (len(args_list) <= 2 or args_list[2] == "*")):
         perms = _parse_restrict_perms(args_list[2])
+    else:
+        perms = None  # ban
     reason = " ".join(args_list[3:])
-    await client.restrict_chat_member(message.chat.id, user_id, perms, t)
     user = await client.get_chat(user_id)
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
     if user.username is not None:
@@ -192,6 +191,10 @@ async def restrict_user(
     )
     if reason:
         text += "\n" + _("<b>Reason:</b> {reason}").format(reason=html.escape(reason))
+    if not ban:
+        await client.restrict_chat_member(message.chat.id, user_id, perms, t)
+    else:
+        await client.ban_chat_member(message.chat.id, user_id, t)
     return text
 
 
