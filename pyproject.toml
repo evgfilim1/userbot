@@ -4,6 +4,6 @@ target-version = ['py311']
 
 [tool.isort]
 line_length = 100
-py_version = '310'  # (2022-10-28) isort 5.10.1 doesn't support 3.11
+py_version = '311'
 profile = 'black'
 known_first_party = ['userbot']
