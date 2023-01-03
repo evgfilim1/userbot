@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-01-03 04:28+0500\n"
-"PO-Revision-Date: 2023-01-02 23:37\n"
+"PO-Revision-Date: 2023-01-03 01:59\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgstr "Gruppen-Info ändern"
 #: userbot/commands/chat_admin.py:135
 #, python-brace-format
 msgid "until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
-msgstr "bis <i>{%d/%m/%Y %H:%M:%S %Z}</i>"
+msgstr "bis <i>{t:%d/%m/%Y %H:%M:%S %Z}</i>"
 
 #: userbot/commands/chat_admin.py:139
 #, python-brace-format
