@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-01-03 04:28+0500\n"
-"PO-Revision-Date: 2023-01-02 23:37\n"
+"PO-Revision-Date: 2023-01-03 01:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr[3] "<i>({n} участников проверено)</i>"
 #: userbot/commands/chat_admin.py:472
 #, python-brace-format
 msgid "User {user_id} has been invited to the chat"
-msgstr ""
+msgstr "Пользователь {user_id} приглашён в чат"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -475,7 +475,7 @@ msgstr "{icon} Недостаточно значений для распаков
 #: userbot/commands/tools.py:35 userbot/commands/tools.py:46
 #, python-brace-format
 msgid "{icon} Unsafe commands are disabled in the config"
-msgstr ""
+msgstr "{icon} Небезопасные команды отключены в конфигурации"
 
 #: userbot/commands/tools.py:87
 #, python-brace-format
@@ -504,44 +504,44 @@ msgstr "{icon} <b>Остановка пользовательского бота
 #: userbot/commands/user_groups.py:36
 #, python-brace-format
 msgid "{chat_id}: Cannot resolve peer"
-msgstr ""
+msgstr "{chat_id}: Невозможно определить пира"
 
 #: userbot/commands/user_groups.py:39
 #, python-brace-format
 msgid "{chat_id}: Not a user"
-msgstr ""
+msgstr "{chat_id}: Не пользователь"
 
 #: userbot/commands/user_groups.py:68
 #, python-brace-format
 msgid "{icon} Added {count} user to user group {group_name}"
 msgid_plural "{icon} Added {count} users to user group {group_name}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{icon} Добавлен {count} пользователь в группу пользователей {group_name}"
+msgstr[1] "{icon} Добавлено {count} пользователя в группу пользователей {group_name}"
+msgstr[2] "{icon} Добавлено {count} пользователей в группу пользователей {group_name}"
+msgstr[3] "{icon} Добавлено {count} пользователей в группу пользователей {group_name}"
 
 #: userbot/commands/user_groups.py:75 userbot/commands/user_groups.py:111
 msgid "<b>Errors:</b>"
-msgstr ""
+msgstr "<b>Ошибки:</b>"
 
 #: userbot/commands/user_groups.py:104
 #, python-brace-format
 msgid "{icon} Removed {count} user from user group {group_name}"
 msgid_plural "{icon} Removed {count} users from user group {group_name}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{icon} Удалён {count} пользователь из группы пользователей {group_name}"
+msgstr[1] "{icon} Удалено {count} пользователя из группы пользователей {group_name}"
+msgstr[2] "{icon} Удалено {count} пользователей из группы пользователей {group_name}"
+msgstr[3] "{icon} Удалено {count} пользователей из группы пользователей {group_name}"
 
 #: userbot/commands/user_groups.py:133
 #, python-brace-format
 msgid "{icon} Users in user group {key}:"
-msgstr ""
+msgstr "{icon} Пользователи в группе пользователей {key}:"
 
 #: userbot/commands/user_groups.py:152
 #, python-brace-format
 msgid "{icon} User groups:"
-msgstr ""
+msgstr "{icon} Группы пользователей:"
 
 #: userbot/meta/modules/base.py:104
 msgid "<i>Userbot is processing the message...</i>"
@@ -593,7 +593,9 @@ msgstr "<b>Сообщение:</b> {msg}\n"
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Exception:</b> <code>{exception}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
-msgstr ""
+msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
+"<b>Исключение:</b> <code>{exception}</code>\n\n"
+"<i>Больше информации можно найти в журналах или в чате трассировок.</i>"
 
 #: userbot/meta/modules/commands.py:262
 #, python-brace-format
