@@ -8,7 +8,7 @@ import logging
 import pickle
 from typing import Any
 
-from userbot.config import Config, RedisConfig
+from userbot.config import RedisConfig, StorageConfig
 from userbot.storage import RedisStorage
 
 _log = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ async def _main(old_storage_raw: dict[str, Any], new_storage: RedisStorage) -> N
 
 
 def main():
-    config = Config.from_env()
-    pickle_path = config.data_location / f"{config.session}.pkl"
+    config = StorageConfig.from_env()
+    pickle_path = config.data_location / f"{config.session_name}.pkl"
     try:
         with open(pickle_path, "rb") as f:
             _log.debug("Loading pickle storage from %s", pickle_path)

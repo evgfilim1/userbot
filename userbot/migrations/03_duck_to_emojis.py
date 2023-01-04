@@ -7,7 +7,7 @@ import logging
 import pickle
 from pathlib import Path
 
-from userbot.config import Config
+from userbot.config import StorageConfig
 
 _log = logging.getLogger(__name__)
 
@@ -28,9 +28,9 @@ def _main(storage_location: Path) -> None:
 
 
 def main():
-    config = Config.from_env()
+    config = StorageConfig.from_env()
     try:
-        _main(config.data_location / f"{config.session}.pkl")
+        _main(config.data_location / f"{config.session_name}.pkl")
     except FileNotFoundError as e:
         _log.warning("Pickle storage not found, skipping migration", exc_info=e)
 
