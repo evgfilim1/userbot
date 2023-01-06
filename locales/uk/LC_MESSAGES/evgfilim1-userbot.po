@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-01-03 04:28+0500\n"
-"PO-Revision-Date: 2023-01-05 22:00\n"
+"PO-Revision-Date: 2023-01-06 00:27\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr[3] "<i>({n} учасників перевірено)</i>"
 #: userbot/commands/chat_admin.py:472
 #, python-brace-format
 msgid "User {user_id} has been invited to the chat"
-msgstr ""
+msgstr "Користувач {user_id} був запрошений до чату"
 
 #: userbot/commands/chat_info.py:94
 #, python-brace-format
@@ -475,7 +475,7 @@ msgstr "{icon} Не достатньо значень для розпакува�
 #: userbot/commands/tools.py:35 userbot/commands/tools.py:46
 #, python-brace-format
 msgid "{icon} Unsafe commands are disabled in the config"
-msgstr ""
+msgstr "{icon} Небезпечні команди вимкнено у конфігурації"
 
 #: userbot/commands/tools.py:87
 #, python-brace-format
@@ -504,12 +504,12 @@ msgstr "{icon} <b>Зупинка користувальницького боту
 #: userbot/commands/user_groups.py:36
 #, python-brace-format
 msgid "{chat_id}: Cannot resolve peer"
-msgstr ""
+msgstr "{chat_id}: Неможливо визначити учасника"
 
 #: userbot/commands/user_groups.py:39
 #, python-brace-format
 msgid "{chat_id}: Not a user"
-msgstr ""
+msgstr "{chat_id}: Не користувач"
 
 #: userbot/commands/user_groups.py:68
 #, python-brace-format
@@ -518,30 +518,30 @@ msgid_plural "{icon} Added {count} users to user group {group_name}"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "{icon} Додано {count} користувачів до групи користувачів {group_name}"
 
 #: userbot/commands/user_groups.py:75 userbot/commands/user_groups.py:111
 msgid "<b>Errors:</b>"
-msgstr ""
+msgstr "<b>Помилки:</b>"
 
 #: userbot/commands/user_groups.py:104
 #, python-brace-format
 msgid "{icon} Removed {count} user from user group {group_name}"
 msgid_plural "{icon} Removed {count} users from user group {group_name}"
-msgstr[0] ""
+msgstr[0] "{icon} Видалено {count} користувача з групи користувачів {group_name}"
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "{icon} Видалено {count} користувачів з групи користувачів {group_name}"
 
 #: userbot/commands/user_groups.py:133
 #, python-brace-format
 msgid "{icon} Users in user group {key}:"
-msgstr ""
+msgstr "{icon} Користувачі у групі користувачів {key}:"
 
 #: userbot/commands/user_groups.py:152
 #, python-brace-format
 msgid "{icon} User groups:"
-msgstr ""
+msgstr "{icon} Групи користувачів:"
 
 #: userbot/meta/modules/base.py:104
 msgid "<i>Userbot is processing the message...</i>"
@@ -593,7 +593,9 @@ msgstr "<b>Повідомлення:</b> {msg}\n"
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Exception:</b> <code>{exception}</code>\n\n"
 "<i>More info can be found in the logs or in the traceback chat.</i>"
-msgstr ""
+msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
+"<b>Виключення:</b> <code>{exception}</code>\n\n"
+"<i>Більше інформації можна знайти в журналі, або в чаті трасування.</i>"
 
 #: userbot/meta/modules/commands.py:262
 #, python-brace-format
