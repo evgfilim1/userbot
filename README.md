@@ -39,13 +39,13 @@ About:
 • stats ['bot'|'short'|'full'] — Shows some statistics about this userbot
 
 Chat administration:
-• chatban|chatrestrict <reply 'reply'|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
+• chatban|chatrestrict <reply|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
 • chatcleardel — Kicks Deleted Accounts from the chat
-• chatinvite <userid> — Invites a user to the current chat
-• chatunban <reply 'reply'|id> — Unbans a user in a chat
+• chatinvite <user_id> — Invites a user to the current chat
+• chatunban <reply|id> — Unbans a user in a chat
 • no_react2ban|noreact2ban <reply> — Stops react2ban on the message
 • pin <reply> ['silent'] — Pins the message
-• promote <admin-title> — Promotes a user to an admin without any rights but with title
+• promote <admin_title> — Promotes a user to an admin without any rights but with title
 • react2ban — Bans a user whoever reacted to the message
 • s_pin <reply> ['silent'] — Pins the message silently (without returning the result)
 
@@ -54,7 +54,7 @@ Chat info:
 • rndmsg — Sends a random message from the chat
 
 Colors:
-• color <color-spec> — Sends a specified color sample
+• color <color_spec> — Sends a specified color sample
 • usercolor <reply|id> — Sends a color sample of user's color as shown in clients
 
 Content converters:
@@ -63,7 +63,7 @@ Content converters:
 • tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
 
 Dice:
-• roll|dice <dice-spec> — Rolls dice according to d20.roll syntax
+• roll|dice <dice_spec> — Rolls dice according to d20.roll syntax
 
 Download:
 • download|dl [reply] [filename] — Downloads a file or files
@@ -73,16 +73,16 @@ Hooks:
 • hookshere|hooks_here — List enabled hooks in the chat
 
 Language:
-• lang [language-code] — Get or change the language of the bot for the current chat
+• lang [language_code] — Get or change the language of the bot for the current chat
 
 Messages:
 • copyhere|cphere|cph <reply> — Copies replied message to current chat
 • delete|delet|del <reply> — Deletes replied message for everyone
-• dump [jq-query] — Dumps entire message or its attribute specified with jq syntax
+• dump [jq_query] — Dumps entire message or its attribute specified with jq syntax
 • userfirstmsg [reply] — Replies to user's very first message in the chat
 
 Notes:
-• get|note|n <name> — Sends saved note
+• get|note|n [reply] <name> — Sends saved note
 • note_del|ndel <name> — Deletes saved note
 • notes|ns — Shows all saved notes
 • save|note_add|nadd <reply> <name> — Saves replied message as note for later use
@@ -100,23 +100,23 @@ Reminders:
 
 Stickers:
 • longcat — Sends random longcat
-• rnds <pack-shortlink|pack-alias|emoji> — Sends random sticker from specified pack or one matching specified emoji
+• rnds <pack_shortlink|pack_alias|emoji> — Sends random sticker from specified pack or one matching specified emoji
 
 Text converters:
 • caps <reply> — Toggles capslock on the message
-• s <reply> <find-re>/<replace-re>/[flags] — sed-like replacement
+• s <reply> <find_re>'/'<replace_re>'/'[flags] — sed-like replacement
 • tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
 
 Tools:
 • cal [month] [year] — Sends a calendar for a specified month and year
-• calc|eval <python-expr> — Evaluates Python expression
-• exec <python-expr> — Executes Python expression
+• calc|eval <python_expr> — Evaluates Python expression
+• exec <python_code> — Executes Python expression
 • id <reply> — Sends replied user's ID as link
 
 User groups:
-• usergroupadd|ugadd <group-name> <reply|id> [id]... — Adds a user to the user group for later use with user resolving
-• usergroupdel|ugdel <group-name> <reply|id> [id]... — Removes a user from the user group
-• usergrouplist|uglist <group-name> ['resolve'] — Lists the users in the user group
+• usergroupadd|ugadd [reply] <group_name> [ids...] — Adds a user to the user group for later use with user resolving
+• usergroupdel|ugdel [reply] <group_name> [ids...] — Removes a user from the user group
+• usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group
 • usergroups|ugs — Lists all the user groups
 ```
 
