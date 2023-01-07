@@ -25,7 +25,7 @@ def _create_filled_pic(col: str, size: tuple[int, int] = (100, 100)) -> BytesIO:
     return tmp
 
 
-@commands.add("color", usage="<color-spec>")
+@commands.add("color", usage="<color_spec>")
 async def color(
     client: Client,
     message: Message,

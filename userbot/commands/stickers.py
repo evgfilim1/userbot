@@ -34,7 +34,7 @@ async def longcat(client: Client, message: Message) -> None:
 
 @commands.add(
     "rnds",
-    usage="<pack-shortlink|pack-alias|emoji>",
+    usage="<pack_shortlink|pack_alias|emoji>",
     waiting_message=_("<i>Picking random sticker...</i>"),
 )
 async def random_sticker(

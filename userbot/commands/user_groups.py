@@ -42,7 +42,7 @@ async def _resolve_ids(client: Client, ids: list[str], tr: Translation) -> _Reso
     return _ResolveResult(result, errors)
 
 
-@commands.add("usergroupadd", "ugadd", usage="<group-name> <reply|id> [id]...")
+@commands.add("usergroupadd", "ugadd", usage="[reply] <group_name> [ids...]")
 async def group_add(
     client: Client,
     message: Message,
@@ -78,7 +78,7 @@ async def group_add(
     return t
 
 
-@commands.add("usergroupdel", "ugdel", usage="<group-name> <reply|id> [id]...")
+@commands.add("usergroupdel", "ugdel", usage="[reply] <group_name> [ids...]")
 async def group_del(
     client: Client,
     message: Message,
@@ -114,7 +114,7 @@ async def group_del(
     return t
 
 
-@commands.add("usergrouplist", "uglist", usage="<group-name> ['resolve']")
+@commands.add("usergrouplist", "uglist", usage="<group_name> ['resolve']")
 async def group_list(
     client: Client,
     command: CommandObject,

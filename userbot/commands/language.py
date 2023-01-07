@@ -12,7 +12,7 @@ from ..utils.translations import Translation
 commands = CommandsModule("Language")
 
 
-@commands.add("lang", usage="[language-code]")
+@commands.add("lang", usage="[language_code]")
 async def chat_language(
     message: Message,
     command: CommandObject,

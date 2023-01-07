@@ -144,7 +144,7 @@ def _get_restrict_info(
     return text
 
 
-@commands.add("chatban", "chatrestrict", usage="<reply 'reply'|id> [timespec] [perms] [reason...]")
+@commands.add("chatban", "chatrestrict", usage="<reply|id> [timespec] [perms] [reason...]")
 async def restrict_user(
     client: Client,
     message: Message,
@@ -164,7 +164,7 @@ async def restrict_user(
     `reason` is an optional argument that will be shown in the ban message."""
     _ = tr.gettext
     args_list = command.args.split(" ")
-    if args_list[0] == "reply":
+    if message.reply_to_message is not None:
         user_id = message.reply_to_message.from_user.id
     else:
         user_id = int(args_list[0])
@@ -198,7 +198,7 @@ async def restrict_user(
     return text
 
 
-@commands.add("chatunban", usage="<reply 'reply'|id>")
+@commands.add("chatunban", usage="<reply|id>")
 async def chat_unban(
     client: Client,
     message: Message,
@@ -211,7 +211,7 @@ async def chat_unban(
     First argument must be a user ID to be banned or literal "reply" to ban the replied user."""
     _ = tr.gettext
     args = command.args
-    if args == "reply":
+    if message.reply_to_message is not None:
         user_id = message.reply_to_message.from_user.id
     else:
         user_id = int(args)
@@ -225,7 +225,7 @@ async def chat_unban(
     )
 
 
-@commands.add("promote", usage="<admin-title>")
+@commands.add("promote", usage="<admin_title>")
 async def promote(
     client: Client,
     message: Message,
@@ -465,7 +465,7 @@ async def kick_deleted_accounts(
     return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
 
 
-@commands.add("chatinvite", usage="<userid>")
+@commands.add("chatinvite", usage="<user_id>")
 async def invite_to_chat(message: Message, command: CommandObject) -> None:
     """Invites a user to the current chat"""
     await message.chat.add_members(command.args)

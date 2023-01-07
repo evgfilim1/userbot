@@ -3,7 +3,6 @@
 
 import difflib
 import re
-import sys
 from argparse import ArgumentParser
 from io import BytesIO
 
@@ -17,7 +16,17 @@ except ImportError as e:
         " You can do so by running `pip install -r dev-requirements.txt`."
     ) from e
 
-from userbot import __version__
+try:
+    from userbot import __version__
+except ImportError as e:
+    import os
+    import sys
+
+    sys.path.append(os.getcwd())  # https://stackoverflow.com/a/37927943/12519972
+    try:
+        from userbot import __version__
+    except ImportError:
+        raise RuntimeError("This script must be run from the root of the project.") from e
 
 # https://docs.python.org/3/library/string.html#format-string-syntax
 BRACES_RE = re.compile(r"(?<!{)\{\w+(?:![rsa])?(?::[^}]+)?}")
@@ -58,7 +67,7 @@ def extract_message_template_catalog() -> Catalog:
         f"# =============== WARNING ===============\n"
         f"# This is an automatically generated file. Do not edit it manually. All changes will be"
         f" lost.\n"
-        f"# To update this file, use `potctl.py` in the root of the project.\n"
+        f"# To update this file, use `scripts/potctl.py` in the root of the project.\n"
         f"# =======================================\n#\n"
         f"{catalog.header_comment.removesuffix('#')}"
     )

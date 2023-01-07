@@ -27,7 +27,7 @@ async def mention_with_id(message: Message) -> str:
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
-@commands.add("calc", "eval", usage="<python-expr>")
+@commands.add("calc", "eval", usage="<python_expr>")
 async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Evaluates Python expression"""
     _ = tr.gettext
@@ -38,7 +38,7 @@ async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
 
 
-@commands.add("exec", usage="<python-expr>")
+@commands.add("exec", usage="<python_code>")
 async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Executes Python expression"""
     _ = tr.gettext

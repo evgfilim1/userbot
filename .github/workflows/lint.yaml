@@ -10,7 +10,7 @@ on:
       - "userbot/**"
       - ".pre-commit-config.yaml"
       - "dev-requirements.txt"
-      - "potctl.py"
+      - "scripts/potctl.py"
       - "pyproject.toml"
   pull_request:
     branches:
@@ -21,7 +21,7 @@ on:
       - "userbot/**"
       - ".pre-commit-config.yaml"
       - "dev-requirements.txt"
-      - "potctl.py"
+      - "scripts/potctl.py"
       - "pyproject.toml"
 
 permissions:

@@ -1,6 +1,6 @@
 # =============== WARNING ===============
 # This is an automatically generated file. Do not edit it manually. All changes will be lost.
-# To update this file, use `potctl.py` in the root of the project.
+# To update this file, use `scripts/potctl.py` in the root of the project.
 # =======================================
 #
 # Translations template for evgfilim1/userbot.
@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.5.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-01-03 04:28+0500\n"
+"POT-Creation-Date: 2023-01-08 01:07+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

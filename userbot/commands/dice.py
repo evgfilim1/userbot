@@ -40,7 +40,7 @@ class _HTMLDiceStringifier(SimpleStringifier):
         return ", ".join(the_rolls)
 
 
-@commands.add("roll", "dice", usage="<dice-spec>")
+@commands.add("roll", "dice", usage="<dice_spec>")
 async def dice(command: CommandObject) -> str:
     """Rolls dice according to d20.roll syntax
 

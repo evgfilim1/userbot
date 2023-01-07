@@ -110,7 +110,7 @@ async def remind_me(
 
 
 @commands.add("sremind", usage="[reply] <time> [message...]")
-async def remind(
+async def silent_remind(
     client: Client,
     message: Message,
     command: CommandObject,
@@ -133,7 +133,7 @@ async def remind(
 
 
 @commands.add("sremindme", usage="[reply] <time> [message...]")
-async def remind_me(
+async def silent_remind_me(
     client: Client,
     message: Message,
     command: CommandObject,

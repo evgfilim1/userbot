@@ -30,7 +30,7 @@ async def delete_this(message: Message) -> None:
     await message.delete()
 
 
-@commands.add("dump", usage="[jq-query]")
+@commands.add("dump", usage="[jq_query]")
 async def dump(
     message: Message,
     command: CommandObject,

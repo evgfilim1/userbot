@@ -88,7 +88,7 @@ async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
         pass
 
 
-@commands.add("s", usage="<reply> <find-re>/<replace-re>/[flags]")
+@commands.add("s", usage="<reply> <find_re>'/'<replace_re>'/'[flags]")
 async def sed(
     message: Message,
     command: CommandObject,

@@ -18,7 +18,7 @@ from ..utils.translations import Translation
 commands = CommandsModule("Notes")
 
 
-@commands.add("get", "note", "n", usage="<name>")
+@commands.add("get", "note", "n", usage="[reply] <name>")
 async def get_note(
     client: Client,
     message: Message,

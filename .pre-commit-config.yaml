@@ -23,9 +23,18 @@ repos:
       - id: isort
   - repo: local
     hooks:
+      - id: check-usage-strings
+        name: Check "usage" strings
+        entry: ./scripts/check_usages.py
+        language: script
+        types:
+          - python
+        pass_filenames: false
+  - repo: local
+    hooks:
       - id: write-pot
         name: Write POT file
-        entry: ./potctl.py --write
+        entry: ./scripts/potctl.py --write
         language: script
         types:
           - python
