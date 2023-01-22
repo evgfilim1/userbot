@@ -29,7 +29,7 @@ from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
 from ...constants import DefaultIcons, Icons, PremiumIcons
-from ...utils.translations import Translation
+from ...utils import Translation
 from ..args_parser import create_args_parser_grammar
 from ..usage_parser import parser as usage_parser
 from .base import BaseHandler, BaseModule, HandlerT

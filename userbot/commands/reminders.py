@@ -13,8 +13,7 @@ from pyrogram.utils import get_channel_id
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils import parse_timespec
-from ..utils.translations import Translation
+from ..utils import Translation, parse_timespec
 
 commands = CommandsModule("Reminders")
 

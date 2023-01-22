@@ -20,8 +20,7 @@ from pyrogram.types import Message
 from userbot.meta.middleware_manager import Middleware, MiddlewareManager
 
 from ...constants import Icons
-from ...utils import async_partial
-from ...utils.translations import Translation
+from ...utils import Translation, async_partial
 
 _log = logging.getLogger(__name__)
 

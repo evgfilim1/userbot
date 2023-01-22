@@ -16,7 +16,7 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils.translations import Translation
+from ..utils import Translation
 
 commands = CommandsModule("Tools")
 

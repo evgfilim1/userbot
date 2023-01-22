@@ -39,10 +39,10 @@ About:
 • stats ['bot'|'short'|'full'] — Shows some statistics about this userbot
 
 Chat administration:
-• chatban|chatrestrict <'reply'|user_id> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat
+• chatban|chatrestrict <'reply'|user_id|username|user_group> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat
 • chatcleardel — Kicks Deleted Accounts from the chat
-• chatinvite <user_id|username> — Invites a user to the current chat
-• chatunban <'reply'|user_id> — Unbans a user in a chat
+• chatinvite <user_id|username|user_group> — Invites a user to the current chat
+• chatunban <'reply'|user_id|username|user_group> — Unbans a user in a chat
 • <in reply> no_react2ban|noreact2ban — Stops react2ban on the message
 • <in reply> pin ['silent'] — Pins the message
 • <in reply> promote <admin_title...> — Promotes a user to an admin without any rights but with title
@@ -55,7 +55,7 @@ Chat info:
 
 Colors:
 • color <color_spec> — Sends a specified color sample
-• usercolor [user_id] — Sends a color sample of user's color as shown in clients
+• usercolor [user_id|username|user_group] — Sends a color sample of user's color as shown in clients
 
 Content converters:
 • toaudio — Extracts audio from video

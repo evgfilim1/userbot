@@ -19,8 +19,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import _, parse_timespec
-from ..utils.translations import Translation
+from ..utils import Translation, _, parse_timespec, resolve_user_or_user_group
 
 _REACT2BAN_TEXT = _(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -137,9 +136,9 @@ def _get_restrict_info(
     else:
         text = ""
     if permissions is None:
-        text = _("{icon} {user_link} <b>banned</b> in this chat") + text
+        text = _("{icon} {users} <b>banned</b> in this chat") + text
     else:
-        text = _("{icon} {user_link} <b>restricted</b> in this chat") + text
+        text = _("{icon} {users} <b>restricted</b> in this chat") + text
         text += ".\n{}\n".format(_("{icon_perms} <b>New permissions:</b>"))
         text += _describe_permissions(permissions, default_chat_permissions, tr)
     return text
@@ -148,12 +147,13 @@ def _get_restrict_info(
 @commands.add(
     "chatban",
     "chatrestrict",
-    usage="<'reply'|user_id> ['0'|'forever'|timespec] ['*'|perms] [reason...]",
+    usage="<'reply'|user_id|username|user_group> ['0'|'forever'|timespec] ['*'|perms] [reason...]",
 )
 async def restrict_user(
     client: Client,
     message: Message,
     command: CommandObject,
+    storage: Storage,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
@@ -168,47 +168,50 @@ async def restrict_user(
     "polls", "links", "invite", "pin", "info".
     `reason` is an optional argument that will be shown in the ban message."""
     _ = tr.gettext
-    args = command.args
-    if message.reply_to_message is not None:
-        user_id = message.reply_to_message.from_user.id
+    user_arg, time, perms_str, reason = command.args
+    if user_arg == "reply":
+        user_ids = {message.reply_to_message.from_user.id}
     else:
-        user_id = int(args[0])
+        user_ids = await resolve_user_or_user_group(client, storage, user_arg)
     now = message.edit_date or message.date or datetime.now()
-    if is_forever := (args[1] in ("0", "forever", None)):
+    if is_forever := (time in ("0", "forever", None)):
         t = zero_datetime()
     else:
-        t = parse_timespec(now, args[1])
-    ban = args[2] in ("*", None)
+        t = parse_timespec(now, time)
+    ban = perms_str in ("*", None)
     if not ban:
-        perms = _parse_restrict_perms(args[2])
+        perms = _parse_restrict_perms(perms_str)
     else:
         perms = None
-    reason = args["reason"]
-    user = await client.get_chat(user_id)
-    user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    if user.username is not None:
-        user_link += f" (@{user.username})"
+    users: list[str] = []
+    for user_id in user_ids:
+        user = await client.get_chat(user_id)
+        info = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
+        if user.username is not None:
+            info += f" (@{user.username})"
+        users.append(info)
+        if not ban:
+            await client.restrict_chat_member(message.chat.id, user_id, perms, t)
+        else:
+            await client.ban_chat_member(message.chat.id, user_id, t)
     chat = await client.get_chat(message.chat.id)
     text = _get_restrict_info(perms, chat.permissions, tr=tr, is_forever=is_forever).format(
         icon=icons.PERSON_BLOCK,
         icon_perms=icons.LOCK,
-        user_link=user_link,
+        users=", ".join(users),
         t=t.astimezone(),
     )
     if reason:
         text += "\n" + _("<b>Reason:</b> {reason}").format(reason=html.escape(reason))
-    if not ban:
-        await client.restrict_chat_member(message.chat.id, user_id, perms, t)
-    else:
-        await client.ban_chat_member(message.chat.id, user_id, t)
     return text
 
 
-@commands.add("chatunban", usage="<'reply'|user_id>")
+@commands.add("chatunban", usage="<'reply'|user_id|username|user_group>")
 async def chat_unban(
     client: Client,
     message: Message,
     command: CommandObject,
+    storage: Storage,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
@@ -216,17 +219,25 @@ async def chat_unban(
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user."""
     _ = tr.gettext
-    user = command.args[0]
-    if user == "reply":
-        user_id = message.reply_to_message.from_user.id
+    user_arg = command.args[0]
+    if user_arg == "reply":
+        user_ids = {message.reply_to_message.from_user.id}
     else:
-        user_id = int(user)
-    await client.unban_chat_member(message.chat.id, user_id)
-    user = await client.get_chat(user_id)
-    user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
-    return _("{icon} {user_link} <b>unbanned</b> in this chat").format(
-        icon=icons.PERSON_TICK,
-        user_link=user_link,
+        user_ids = await resolve_user_or_user_group(client, storage, user_arg)
+    links: list[str] = []
+    for user_id in user_ids:
+        user = await client.get_chat(user_id)
+        info = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
+        if user.username is not None:
+            info += f" (@{user.username})"
+        links.append(info)
+        await client.unban_chat_member(message.chat.id, user_id)
+    return (
+        _("{icon} {user_links} <b>unbanned</b> in this chat").format(
+            icon=icons.PERSON_TICK,
+            user_links=", ".join(links),
+        )
+        + "\n"
     )
 
 
@@ -486,12 +497,19 @@ async def kick_deleted_accounts(
     return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
 
 
-@commands.add("chatinvite", usage="<user_id|username>")
+@commands.add("chatinvite", usage="<user_id|username|user_group>")
 async def invite_to_chat(
+    client: Client,
     message: Message,
     command: CommandObject,
+    storage: Storage,
+    icons: type[Icons],
 ) -> None:
     """Invites a user to the current chat"""
     value = command.args[0]
-    await message.chat.add_members(value)
-    return _("{value} has been invited to the chat").format(value=value)
+    users = await resolve_user_or_user_group(client, storage, value)
+    await message.chat.add_members(list(users))
+    return _("{icon} <i>{value}</i> has been invited to the chat").format(
+        icon=icons.PERSON_TICK,
+        value=value,
+    )

@@ -15,8 +15,7 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils import _
-from ..utils.translations import Translation
+from ..utils import Translation, _
 
 commands = CommandsModule("Content converters")
 

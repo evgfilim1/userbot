@@ -56,22 +56,28 @@ def _parse_arguments(
                 value = arg_obj.variants[int(arg_variant_n)].value
             else:
                 # fill aliases
-                key_names = [arg_variant.name for arg_variant in arg_obj.variants]
+                key_names = [
+                    arg_variant.name
+                    for arg_variant in arg_obj.variants
+                    if isinstance(arg_variant, VariableArgumentVariant)
+                ]
                 for key_name in key_names:
                     args_dict[key_name] = value
         args_list.append(value)
         args_dict[key] = value
-    for arg in usage_tree.variants[int(args_tree.data.removeprefix("v"))].args:
+    for i, arg in enumerate(usage_tree.variants[int(args_tree.data.removeprefix("v"))].args):
+        if arg.repeat:
+            value = ()
+        else:
+            value = None
         for arg_variant in arg.variants:
-            # fill missing args
-            if arg.repeat:
-                value = ()
-            else:
-                value = None
-            if isinstance(arg_variant, VariableArgumentVariant):
-                if arg_variant.name in args_dict:
-                    continue
-                args_dict[arg_variant.name] = value
+            if (
+                not isinstance(arg_variant, VariableArgumentVariant)
+                or arg_variant.name in args_dict
+            ):
+                continue
+            args_dict[arg_variant.name] = value
+        if i >= len(args_list):
             args_list.append(value)
     return args_dict, tuple(args_list)
 

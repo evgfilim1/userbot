@@ -18,6 +18,7 @@ __all__ = [
     "json_value_to_python",
     "Limit",
     "parse_timespec",
+    "resolve_user_or_user_group",
     "SecretValue",
     "StatsController",
     "StickerFilter",
@@ -42,3 +43,4 @@ from .stickers import StickerInfo, fetch_stickers
 from .telegram_json import json_value_to_python
 from .time import format_timedelta, parse_timespec
 from .translations import Translation, _, __
+from .users import resolve_user_or_user_group

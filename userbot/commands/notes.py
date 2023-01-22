@@ -13,8 +13,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import get_message_content
-from ..utils.translations import Translation
+from ..utils import Translation, get_message_content
 
 commands = CommandsModule("Notes")
 

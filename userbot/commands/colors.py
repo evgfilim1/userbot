@@ -11,7 +11,8 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils.translations import Translation
+from ..storage import Storage
+from ..utils import Translation, resolve_user_or_user_group
 
 commands = CommandsModule("Colors")
 
@@ -51,19 +52,26 @@ async def color(
     await message.delete()
 
 
-@commands.add("usercolor", usage="[user_id]")
+@commands.add("usercolor", usage="[user_id|username|user_group]")
 async def user_color(
     client: Client,
     message: Message,
     command: CommandObject,
+    storage: Storage,
     reply: Message,
     icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sends a color sample of user's color as shown in clients"""
     _ = tr.gettext
-    if command.args[0] is not None:
-        user_id = command.args[0]
+    user = command.args[0]
+    if user is not None:
+        user_ids = await resolve_user_or_user_group(client, storage, user)
+        if len(user_ids) == 0:
+            return _("{icon} No users were specified").format(icon=icons.STOP)
+        if len(user_ids) > 1:
+            return _("{icon} Multiple user are not supported here").format(icon=icons.STOP)
+        user_id = user_ids.pop()
     else:
         user_id = reply.from_user.id
     colors = ("e17076", "eda86c", "a695e7", "7bc862", "6ec9cb", "65aadd", "ee7aae")
@@ -77,7 +85,7 @@ async def user_color(
             user=user_id,
             c=c,
         ),
-        reply_to_message_id=message.reply_to_message.id,
+        reply_to_message_id=message.reply_to_message_id,
         disable_notification=True,
     )
     await message.delete()

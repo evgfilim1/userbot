@@ -8,7 +8,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils.translations import Translation
+from ..utils import Translation
 
 commands = CommandsModule("Language")
 

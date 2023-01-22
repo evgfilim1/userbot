@@ -14,11 +14,11 @@ from ..utils import (
     AppLimitsController,
     DialogCount,
     StatsController,
+    Translation,
     _,
     format_timedelta,
     get_dialogs_count,
 )
-from ..utils.translations import Translation
 
 commands = CommandsModule("About")
 
