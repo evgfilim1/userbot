@@ -39,15 +39,15 @@ About:
 • stats ['bot'|'short'|'full'] — Shows some statistics about this userbot
 
 Chat administration:
-• chatban|chatrestrict <reply|id> [timespec] [perms] [reason...] — Restricts or bans a user in a chat
+• chatban|chatrestrict <'reply'|user_id> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat
 • chatcleardel — Kicks Deleted Accounts from the chat
-• chatinvite <user_id> — Invites a user to the current chat
-• chatunban <reply|id> — Unbans a user in a chat
-• no_react2ban|noreact2ban <reply> — Stops react2ban on the message
-• pin <reply> ['silent'] — Pins the message
-• promote <admin_title> — Promotes a user to an admin without any rights but with title
+• chatinvite <user_id|username> — Invites a user to the current chat
+• chatunban <'reply'|user_id> — Unbans a user in a chat
+• <in reply> no_react2ban|noreact2ban — Stops react2ban on the message
+• <in reply> pin ['silent'] — Pins the message
+• <in reply> promote <admin_title...> — Promotes a user to an admin without any rights but with title
 • react2ban — Bans a user whoever reacted to the message
-• s_pin <reply> ['silent'] — Pins the message silently (without returning the result)
+• <in reply> s_pin ['silent'] — Pins the message silently (without returning the result)
 
 Chat info:
 • rndinfo ['photo'|'title'] — Sets random chat photo and/or title
@@ -55,18 +55,18 @@ Chat info:
 
 Colors:
 • color <color_spec> — Sends a specified color sample
-• usercolor <reply|id> — Sends a color sample of user's color as shown in clients
+• usercolor [user_id] — Sends a color sample of user's color as shown in clients
 
 Content converters:
-• toaudio [reply] — Extracts audio from video
-• togif [reply] — Converts a video to a mpeg4 gif
-• tosticker [reply] ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
+• toaudio — Extracts audio from video
+• togif — Converts a video to a mpeg4 gif
+• tosticker ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
 
 Dice:
 • roll|dice <dice_spec> — Rolls dice according to d20.roll syntax
 
 Download:
-• download|dl [reply] [filename] — Downloads a file or files
+• download|dl ['single'|'all'] [filename]... — Downloads a file or files
 
 Hooks:
 • hooklist|hook_list — List all available hooks
@@ -76,46 +76,46 @@ Language:
 • lang [language_code] — Get or change the language of the bot for the current chat
 
 Messages:
-• copyhere|cphere|cph <reply> — Copies replied message to current chat
-• delete|delet|del <reply> — Deletes replied message for everyone
-• dump [jq_query] — Dumps entire message or its attribute specified with jq syntax
-• userfirstmsg [reply] — Replies to user's very first message in the chat
+• <in reply> copyhere|cphere|cph — Copies replied message to current chat
+• <in reply> delete|delet|del — Deletes replied message for everyone
+• dump [jq_query...] — Dumps entire message or its attribute specified with jq syntax
+• userfirstmsg — Replies to user's very first message in the chat
 
 Notes:
-• get|note|n [reply] <name> — Sends saved note
-• note_del|ndel <name> — Deletes saved note
+• get|note|n <key...> — Sends saved note
+• note_del|ndel <key...> — Deletes saved note
 • notes|ns — Shows all saved notes
-• save|note_add|nadd <reply> <name> — Saves replied message as note for later use
+• <in reply> save|note_add|nadd <key...> — Saves replied message as note for later use
 
 Reactions:
-• r <reply> [emoji] — Reacts to a message with a specified emoji or removes any reaction
-• rr <reply> — Reacts to a message with a random available emoji
-• rs <reply> — Gets message reactions with users who reacted to it
+• <in reply> r [emoji] — Reacts to a message with a specified emoji or removes any reaction
+• <in reply> rr — Reacts to a message with a random available emoji
+• <in reply> rs — Gets message reactions with users who reacted to it
 
 Reminders:
-• remind [reply] <time> [message...] — Sets a reminder in the chat
-• remindme [reply] <time> [message...] — Sets a reminder for myself
-• sremind [reply] <time> [message...] — Sets a silent reminder in the chat (no confirmation about scheduled message)
-• sremindme [reply] <time> [message...] — Sets a silent reminder for myself (no confirmation about scheduled message)
+• remind <time> [message...] — Sets a reminder in the chat
+• remindme <time> [message...] — Sets a reminder for myself
+• sremind <time> [message...] — Sets a silent reminder in the chat (no confirmation about scheduled message)
+• sremindme <time> [message...] — Sets a silent reminder for myself (no confirmation about scheduled message)
 
 Stickers:
 • longcat — Sends random longcat
 • rnds <pack_shortlink|pack_alias|emoji> — Sends random sticker from specified pack or one matching specified emoji
 
 Text converters:
-• caps <reply> — Toggles capslock on the message
-• s <reply> <find_re>'/'<replace_re>'/'[flags] — sed-like replacement
-• tr <reply> ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
+• <in reply> caps — Toggles capslock on the message
+• <in reply> s <args...> — sed-like replacement
+• <in reply> tr ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
 
 Tools:
 • cal [month] [year] — Sends a calendar for a specified month and year
-• calc|eval <python_expr> — Evaluates Python expression
-• exec <python_code> — Executes Python expression
-• id <reply> — Sends replied user's ID as link
+• calc|eval <python_expr...> — Evaluates Python expression
+• exec <python_code...> — Executes Python expression
+• <in reply> id — Sends replied user's ID as link
 
 User groups:
-• usergroupadd|ugadd [reply] <group_name> [ids...] — Adds a user to the user group for later use with user resolving
-• usergroupdel|ugdel [reply] <group_name> [ids...] — Removes a user from the user group
+• usergroupadd|ugadd <group_name> [user_id|username]... — Adds a user to the user group for later use with user resolving
+• usergroupdel|ugdel <group_name> [user_id|username]... — Removes a user from the user group
 • usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group
 • usergroups|ugs — Lists all the user groups
 ```

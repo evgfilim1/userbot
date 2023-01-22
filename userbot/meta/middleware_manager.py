@@ -28,6 +28,8 @@ class Middleware(Protocol[_ReturnT]):
 
 
 class MiddlewareManager(Middleware[_ReturnT]):
+    # noinspection PyProtocol
+    # https://youtrack.jetbrains.com/issue/PY-49246
     def __init__(self):
         self._middlewares: list[Middleware[_ReturnT]] = []
 

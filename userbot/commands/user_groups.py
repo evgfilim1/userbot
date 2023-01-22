@@ -11,7 +11,8 @@ from pyrogram.raw.types import InputPeerUser
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import Translation
 
@@ -42,11 +43,15 @@ async def _resolve_ids(client: Client, ids: list[str], tr: Translation) -> _Reso
     return _ResolveResult(result, errors)
 
 
-@commands.add("usergroupadd", "ugadd", usage="[reply] <group_name> [ids...]")
+@commands.add(
+    "usergroupadd",
+    "ugadd",
+    usage="<group_name> [user_id|username]...",
+)
 async def group_add(
     client: Client,
-    message: Message,
     command: CommandObject,
+    reply: Message | None,
     storage: Storage,
     icons: type[Icons],
     tr: Translation,
@@ -55,12 +60,12 @@ async def group_add(
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
-    args = command.args.split()
-    group_name = args[0]
-    if len(args) == 1:
-        user_ids = [message.reply_to_message.from_user.id]
+    args = command.args
+    group_name = args["group_name"]
+    if len(args[1]) == 0:
+        user_ids = [reply.from_user.id]
     else:
-        user_ids, errors = await _resolve_ids(client, args[1:], tr)
+        user_ids, errors = await _resolve_ids(client, args[1], tr)
     await storage.add_users_to_group(user_ids, group_name)
     t = __(
         "{icon} Added {count} user to user group {group_name}",
@@ -78,11 +83,15 @@ async def group_add(
     return t
 
 
-@commands.add("usergroupdel", "ugdel", usage="[reply] <group_name> [ids...]")
+@commands.add(
+    "usergroupdel",
+    "ugdel",
+    usage="<group_name> [user_id|username]...",
+)
 async def group_del(
     client: Client,
-    message: Message,
     command: CommandObject,
+    reply: Message | None,
     storage: Storage,
     icons: type[Icons],
     tr: Translation,
@@ -91,12 +100,12 @@ async def group_del(
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
-    args = command.args.split()
-    group_name = args[0]
-    if len(args) == 1:
-        user_ids = [message.reply_to_message.from_user.id]
+    args = command.args
+    group_name = args["group_name"]
+    if len(args[1]) == 0:
+        user_ids = [reply.from_user.id]
     else:
-        user_ids, errors = await _resolve_ids(client, args[1:], tr)
+        user_ids, errors = await _resolve_ids(client, args[1], tr)
     await storage.remove_users_from_group(user_ids, group_name)
     t = __(
         "{icon} Removed {count} user from user group {group_name}",
@@ -126,9 +135,9 @@ async def group_list(
 
     If 'resolve' is passed as the second argument, the user ids will be resolved to usernames"""
     _ = tr.gettext
-    args = command.args.split()
-    group_name = args[0]
-    resolve = len(args) > 1 and args[1] == "resolve"
+    args = command.args
+    group_name = args["group_name"]
+    resolve = args[1] == "resolve"
     users: list[int] = [x async for x in storage.list_users_in_group(group_name)]
     t = _("{icon} Users in user group {key}:").format(icon=icons.GROUP_CHAT, key=group_name)
     if resolve:

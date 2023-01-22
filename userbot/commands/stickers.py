@@ -10,7 +10,8 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import LONGCAT, PACK_ALIASES
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import StickerInfo, _
 
@@ -44,15 +45,15 @@ async def random_sticker(
     storage: Storage,
 ) -> None:
     """Sends random sticker from specified pack or one matching specified emoji"""
-    args = command.args
-    if not args.isalnum():
+    arg = command.args[0]
+    if not arg.isalnum():
         # assume it's an emoji
         cache = await storage.get_sticker_cache()
         if len(cache) == 0:
             # Background job may be already running, wait for it to finish
             cache = await storage.wait_sticker_cache()
         # \uFE0F is a variation selector, it's not needed for matching
-        sticker: StickerInfo = random.choice(cache[args.rstrip(" \n\uFE0F")])
+        sticker: StickerInfo = random.choice(cache[arg.rstrip(" \n\uFE0F")])
         input_sticker = types.InputDocument(
             id=sticker["id"],
             access_hash=sticker["access_hash"],
@@ -60,7 +61,7 @@ async def random_sticker(
         )
     else:
         # assume it's a pack shortlink or alias
-        set_name = PACK_ALIASES.get(args, args)
+        set_name = PACK_ALIASES.get(arg, arg)
         stickerset: types.messages.StickerSet = await client.invoke(
             functions.messages.GetStickerSet(
                 stickerset=types.InputStickerSetShortName(

@@ -18,8 +18,8 @@ from userbot.meta.job_manager import AsyncJobManager
 from userbot.meta.modules import CommandsModule, HooksModule
 from userbot.middlewares import (
     KwargsMiddleware,
+    ParseCommandMiddleware,
     icon_middleware,
-    parse_command_middleware,
     translate_middleware,
     update_command_stats_middleware,
 )
@@ -130,11 +130,11 @@ def main() -> None:
             "allow_unsafe": app_config.allow_unsafe_commands,
         }
     )
-    root_commands.add_middleware(parse_command_middleware)
     for module, middleware in product(
         all_modules, (kwargs_middleware, translate_middleware, icon_middleware)
     ):
         module.add_middleware(middleware)
+    root_commands.add_middleware(ParseCommandMiddleware(app_config.command_prefix))
     root_commands.add_middleware(update_command_stats_middleware)
 
     for module in all_modules:

@@ -13,36 +13,38 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils import _
 from ..utils.translations import Translation
 
 commands = CommandsModule("Messages")
 
 
-@commands.add("delete", "delet", "del", usage="<reply>")
-async def delete_this(message: Message) -> None:
+@commands.add("delete", "delet", "del", reply_required=True)
+async def delete_this(message: Message, reply: Message) -> None:
     """Deletes replied message for everyone"""
     try:
-        await message.reply_to_message.delete()
+        await reply.delete()
     except BadRequest:
         pass
     await message.delete()
 
 
-@commands.add("dump", usage="[jq_query]")
+@commands.add("dump", usage="[jq_query...]")
 async def dump(
     message: Message,
     command: CommandObject,
+    reply: Message | None,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Dumps entire message or its attribute specified with jq syntax"""
     _ = tr.gettext
-    obj = message.reply_to_message or message
-    attr = command.args
+    obj = reply if reply is not None else message
+    q = command.args["jq_query"]
     try:
-        prog = jq.compile(attr)
+        prog = jq.compile(q)
     except ValueError as e:
         return _(
             "{icon} <b>Invalid jq query:</b> <code>{attr}</code>\n"
@@ -50,7 +52,7 @@ async def dump(
             "<b>Possible fix:</b> <code>{full_command} .{attr}</code>"
         ).format(
             icon=icons.WARNING,
-            attr=html.escape(attr),
+            attr=html.escape(q),
             e=str(e),
             full_command=command.full_command,
         )
@@ -61,25 +63,26 @@ async def dump(
         ensure_ascii=False,
     )
     return _("<b>Attribute</b> <code>{attr}</code>\n\n<pre>{text}</pre>").format(
-        attr=html.escape(attr),
+        attr=html.escape(q),
         text=html.escape(text),
     )
 
 
 @commands.add(
     "userfirstmsg",
-    usage="[reply]",
     waiting_message=_("<i>Searching for user's first message...</i>"),
 )
 async def user_first_message(
     client: Client,
     message: Message,
+    reply: Message | None,
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Replies to user's very first message in the chat"""
     _ = tr.gettext
-    if (user := (message.reply_to_message or message).from_user) is None:
+    msg = reply if reply is not None else message
+    if (user := msg.from_user) is None:
         return _("{icon} Cannot search for first message from channel").format(icon=icons.WARNING)
     chat_peer = await client.resolve_peer(message.chat.id)
     user_peer = await client.resolve_peer(user.id)
@@ -122,11 +125,8 @@ async def user_first_message(
         chats: types.messages.Chats = await client.invoke(
             functions.channels.GetChannels(id=[chat_peer])
         )
-        is_forum = chats.chats[0].forum
-    else:
-        is_forum = False  # a legacy group cannot be a forum
-    if is_forum:
-        return text
+        if chats.chats[0].forum:
+            return text
     await client.send_message(
         message.chat.id,
         text,
@@ -136,10 +136,10 @@ async def user_first_message(
     await message.delete()
 
 
-@commands.add("copyhere", "cphere", "cph", usage="<reply>")
-async def copy_here(message: Message) -> None:
+@commands.add("copyhere", "cphere", "cph", reply_required=True)
+async def copy_here(message: Message, reply: Message) -> None:
     """Copies replied message to current chat"""
-    await message.reply_to_message.copy(message.chat.id)
-    if message.reply_to_message.from_user.id == message.from_user.id:
-        await message.reply_to_message.delete()
+    await reply.copy(message.chat.id)
+    if reply.from_user.id == message.from_user.id:
+        await reply.delete()
     await message.delete()

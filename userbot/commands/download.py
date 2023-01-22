@@ -11,7 +11,8 @@ from pyrogram.enums import MessageMediaType
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils import _
 from ..utils.translations import Translation
 
@@ -73,35 +74,32 @@ async def _downloader(
 @commands.add(
     "download",
     "dl",
-    usage="[reply] [filename]",
+    usage="['single'|'all'] [filename]...",
     waiting_message=_("<i>Downloading file(s)...</i>"),
 )
 async def download(
     client: Client,
     message: Message,
     command: CommandObject,
+    reply: Message | None,
     data_dir: Path,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Downloads a file or files"""
-    msg = message.reply_to_message if message.reply_to_message else message
-    if msg.media_group_id:
+    """Downloads a file or files
+
+    If "all" is specified, all the files in the media group will be downloaded (default).
+    If "single" is specified, only the replied file will be downloaded."""
+    msg = reply if reply is not None else message
+    if msg.media_group_id and command.args[0] == "all":
         all_messages = await msg.get_media_group()
     else:
         all_messages = [msg]
 
     t = ""
-    for m in all_messages:
+    for target, filename in zip(all_messages, command.args["filename"]):
         try:
-            t += await _downloader(
-                client,
-                m,
-                command.args if len(all_messages) == 1 else "",
-                data_dir,
-                icons,
-                tr,
-            )
+            t += await _downloader(client, target, filename, data_dir, icons, tr)
         except Exception as e:
             t += f"{icons.WARNING} <code>{type(e).__name__}: {e}</code>"
         finally:

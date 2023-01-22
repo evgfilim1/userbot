@@ -3,6 +3,7 @@
 
 import difflib
 import re
+import sys
 from argparse import ArgumentParser
 from io import BytesIO
 
@@ -20,7 +21,6 @@ try:
     from userbot import __version__
 except ImportError as e:
     import os
-    import sys
 
     sys.path.append(os.getcwd())  # https://stackoverflow.com/a/37927943/12519972
     try:

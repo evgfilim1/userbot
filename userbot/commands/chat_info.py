@@ -12,7 +12,8 @@ from pyrogram.errors import BadRequest, PhotoCropSizeSmall
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils.translations import Translation
 
 commands = CommandsModule("Chat info")
@@ -20,7 +21,7 @@ commands = CommandsModule("Chat info")
 _log = logging.getLogger(__name__)
 
 
-async def get_random_message(
+async def _get_random_message(
     chat_id: int,
     message_filter: MessagesFilter,
     client: Client,
@@ -31,11 +32,11 @@ async def get_random_message(
     return await gen.__anext__()
 
 
-async def set_random_chat_photo(chat_id: int, client: Client) -> Message:
+async def _set_random_chat_photo(chat_id: int, client: Client) -> Message:
     """Sets a random chat photo"""
     retries = 20
     while retries >= 0:
-        message = await get_random_message(chat_id, MessagesFilter.PHOTO, client)
+        message = await _get_random_message(chat_id, MessagesFilter.PHOTO, client)
         try:
             await client.set_chat_photo(chat_id, photo=message.photo.file_id)
         except PhotoCropSizeSmall:
@@ -48,13 +49,13 @@ async def set_random_chat_photo(chat_id: int, client: Client) -> Message:
         raise RuntimeError("Retries exceeded")
 
 
-async def set_random_chat_title(chat_id: int, client: Client) -> Message:
+async def _set_random_chat_title(chat_id: int, client: Client) -> Message:
     """Sets a random chat title"""
     retries = 50
     chat = await client.get_chat(chat_id)
     title_prefix = chat.title.split(" — ")[0]
     while retries >= 0:
-        message = await get_random_message(chat_id, MessagesFilter.EMPTY, client)
+        message = await _get_random_message(chat_id, MessagesFilter.EMPTY, client)
         try:
             if message.text is None:
                 continue
@@ -88,15 +89,15 @@ async def random_chat_info(
     Sets both if no argument is given."""
     _ = tr.gettext
     text = ""
-    args = command.args
-    if args == "photo" or args == "":
-        msg = await set_random_chat_photo(message.chat.id, client)
+    what = command.args[0]
+    if what == "photo" or what == "":
+        msg = await _set_random_chat_photo(message.chat.id, client)
         text += _(
             "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
         ).format(icon=icons.PICTURE, msg_link=msg.link)
         await sleep(0.1)
-    if args == "title" or args == "":
-        msg = await set_random_chat_title(message.chat.id, client)
+    if what == "title" or what == "":
+        msg = await _set_random_chat_title(message.chat.id, client)
         text += _("{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>").format(
             icon=icons.PENCIL, msg_link=msg.link
         )
@@ -108,5 +109,5 @@ async def random_chat_info(
 async def random_chat_message(client: Client, message: Message, tr: Translation) -> str:
     """Sends a random message from the chat"""
     _ = tr.gettext
-    msg = await get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
+    msg = await _get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
     return _("<a href='{msg.link}'>Random message (#{msg.id})</a>").format(msg=msg)

@@ -14,38 +14,39 @@ from typing import Any, NoReturn
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils.translations import Translation
 
 commands = CommandsModule("Tools")
 
 
-@commands.add("id", usage="<reply>")
-async def mention_with_id(message: Message) -> str:
+@commands.add("id", reply_required=True)
+async def mention_with_id(reply: Message) -> str:
     """Sends replied user's ID as link"""
-    user = message.reply_to_message.from_user
+    user = reply.from_user
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
-@commands.add("calc", "eval", usage="<python_expr>")
+@commands.add("calc", "eval", usage="<python_expr...>")
 async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Evaluates Python expression"""
     _ = tr.gettext
     if not allow_unsafe:
         return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
     command: CommandObject = kwargs["command"]
-    expr = command.args
+    expr = command.args["python_expr"]
     return f"<code>{html.escape(f'{expr} = {eval(expr)!r}', quote=False)}</code>"
 
 
-@commands.add("exec", usage="<python_code>")
+@commands.add("exec", usage="<python_code...>")
 async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
     """Executes Python expression"""
     _ = tr.gettext
     if not allow_unsafe:
         return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
     command: CommandObject = kwargs["command"]
-    expr = command.args or "pass"
+    expr = command.args["python_code"] or "pass"
     ns = {"__builtins__": __builtins__}
     # Manually building AST to ignore boilerplate lines in line count while formatting an exception
     code_tree = ast.Module(
@@ -98,15 +99,15 @@ async def calendar(message: Message, command: CommandObject) -> str:
     """Sends a calendar for a specified month and year
 
     If no arguments are given, the current month and year are used."""
-    args_list = command.args.split()
+    args = command.args
     # It's more reliable to get current date/time from the message
     now = message.edit_date or message.date or datetime.now()
-    if len(args_list) >= 1:
-        month = int(args_list[0])
+    if args["month"] is not None:
+        month = int(args[0])
     else:
         month = now.month
-    if len(args_list) == 2:
-        year = int(args_list[1])
+    if args["year"] is not None:
+        year = int(args[1])
     else:
         year = now.year
     return f"<pre><code>{TextCalendar().formatmonth(year, month)}</code></pre>"
@@ -126,7 +127,7 @@ async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> 
 
     This is a test command to check the command waiting message and timeout."""
     _ = tr.gettext
-    sec = float(command.args)
+    sec = float(command.args["seconds"])
     await asyncio.sleep(sec)
     return _("{icon} Done sleeping for {sec} seconds").format(icon=icons.WATCH, sec=sec)
 

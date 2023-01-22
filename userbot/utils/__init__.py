@@ -20,7 +20,6 @@ __all__ = [
     "parse_timespec",
     "SecretValue",
     "StatsController",
-    "sticker",
     "StickerFilter",
     "StickerInfo",
     "Translation",
@@ -30,7 +29,7 @@ __all__ = [
 from .app_config import AppLimits, AppLimitsController, Limit, get_app_limits
 from .clients import GitHubClient
 from .dialogs import DialogCount, get_dialogs_count
-from .filters import StickerFilter, sticker
+from .filters import StickerFilter
 from .messages import (
     edit_replied_or_reply,
     get_message_content,

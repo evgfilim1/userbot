@@ -16,7 +16,8 @@ from pyrogram.types import ChatPermissions, Message
 from pyrogram.utils import get_channel_id, zero_datetime
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import _, parse_timespec
 from ..utils.translations import Translation
@@ -144,7 +145,11 @@ def _get_restrict_info(
     return text
 
 
-@commands.add("chatban", "chatrestrict", usage="<reply|id> [timespec] [perms] [reason...]")
+@commands.add(
+    "chatban",
+    "chatrestrict",
+    usage="<'reply'|user_id> ['0'|'forever'|timespec] ['*'|perms] [reason...]",
+)
 async def restrict_user(
     client: Client,
     message: Message,
@@ -163,21 +168,22 @@ async def restrict_user(
     "polls", "links", "invite", "pin", "info".
     `reason` is an optional argument that will be shown in the ban message."""
     _ = tr.gettext
-    args_list = command.args.split(" ")
+    args = command.args
     if message.reply_to_message is not None:
         user_id = message.reply_to_message.from_user.id
     else:
-        user_id = int(args_list[0])
+        user_id = int(args[0])
     now = message.edit_date or message.date or datetime.now()
-    if is_forever := (len(args_list) <= 1 or args_list[1] == "0" or args_list[1] == "forever"):
+    if is_forever := (args[1] in ("0", "forever", None)):
         t = zero_datetime()
     else:
-        t = parse_timespec(now, args_list[1])
-    if not (ban := (len(args_list) <= 2 or args_list[2] == "*")):
-        perms = _parse_restrict_perms(args_list[2])
+        t = parse_timespec(now, args[1])
+    ban = args[2] in ("*", None)
+    if not ban:
+        perms = _parse_restrict_perms(args[2])
     else:
-        perms = None  # ban
-    reason = " ".join(args_list[3:])
+        perms = None
+    reason = args["reason"]
     user = await client.get_chat(user_id)
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
     if user.username is not None:
@@ -198,7 +204,7 @@ async def restrict_user(
     return text
 
 
-@commands.add("chatunban", usage="<reply|id>")
+@commands.add("chatunban", usage="<'reply'|user_id>")
 async def chat_unban(
     client: Client,
     message: Message,
@@ -210,14 +216,13 @@ async def chat_unban(
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user."""
     _ = tr.gettext
-    args = command.args
-    if message.reply_to_message is not None:
+    user = command.args[0]
+    if user == "reply":
         user_id = message.reply_to_message.from_user.id
     else:
-        user_id = int(args)
+        user_id = int(user)
     await client.unban_chat_member(message.chat.id, user_id)
     user = await client.get_chat(user_id)
-
     user_link = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
     return _("{icon} {user_link} <b>unbanned</b> in this chat").format(
         icon=icons.PERSON_TICK,
@@ -225,7 +230,7 @@ async def chat_unban(
     )
 
 
-@commands.add("promote", usage="<admin_title>")
+@commands.add("promote", usage="<admin_title...>", reply_required=True)
 async def promote(
     client: Client,
     message: Message,
@@ -234,8 +239,9 @@ async def promote(
     tr: Translation,
 ) -> str:
     """Promotes a user to an admin without any rights but with title"""
+    # TODO (2023-01-21): promote to admin with custom permissions
     _ = tr.gettext
-    title = command.args
+    title = command.args[0]
     await client.invoke(
         functions.channels.EditAdmin(
             channel=await client.resolve_peer(message.chat.id),
@@ -325,7 +331,7 @@ async def react2ban(
     return _(_REACT2BAN_TEXT)
 
 
-@commands.add("no_react2ban", "noreact2ban", usage="<reply>")
+@commands.add("no_react2ban", "noreact2ban", reply_required=True)
 async def no_react2ban(
     message: Message,
     storage: Storage,
@@ -350,10 +356,10 @@ async def no_react2ban(
 @overload
 async def _pin_common(
     message: Message,
-    command: CommandObject,
+    *,
+    no_notify: bool,
     icons: type[Icons],
     tr: Translation,
-    *,
     return_result: Literal[False],
 ) -> None:
     ...
@@ -362,10 +368,10 @@ async def _pin_common(
 @overload
 async def _pin_common(
     message: Message,
-    command: CommandObject,
+    *,
+    no_notify: bool,
     icons: type[Icons],
     tr: Translation,
-    *,
     return_result: Literal[True],
 ) -> str:
     ...
@@ -373,46 +379,61 @@ async def _pin_common(
 
 async def _pin_common(
     message: Message,
-    command: CommandObject,
+    *,
+    no_notify: bool,
     icons: type[Icons],
     tr: Translation,
-    *,
     return_result: bool,
 ) -> str | None:
     """Common code for pin and s_pin"""
     _ = tr.gettext
-    no_notify = command.args == "silent"
-    await message.reply_to_message.pin(disable_notification=no_notify, both_sides=True)
+    await message.pin(disable_notification=no_notify, both_sides=True)
     if return_result:
-        return _("{icon} Message pinned").format(icon=icons.PIN)
-    await message.delete()
+        r = _("{icon} Message pinned").format(icon=icons.PIN)
+        if no_notify:
+            r += " " + _("silently")
+        return r
     return None
 
 
-@commands.add("pin", usage="<reply> ['silent']")
+@commands.add("pin", usage="['silent']", reply_required=True)
 async def pin(
-    message: Message,
     command: CommandObject,
+    reply: Message,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Pins the message
 
     If 'silent' is specified, the message will be pinned silently"""
-    return await _pin_common(message, command, icons, tr, return_result=True)
+    return await _pin_common(
+        reply,
+        no_notify=command.args[0] == "silent",
+        icons=icons,
+        tr=tr,
+        return_result=True,
+    )
 
 
-@commands.add("s_pin", usage="<reply> ['silent']")
+@commands.add("s_pin", usage="['silent']", reply_required=True)
 async def s_pin(
     message: Message,
     command: CommandObject,
+    reply: Message,
     icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Pins the message silently (without returning the result)
 
     If 'silent' is specified, the message will be pinned silently"""
-    await _pin_common(message, command, icons, tr, return_result=False)
+    await _pin_common(
+        reply,
+        no_notify=command.args[0] == "silent",
+        icons=icons,
+        tr=tr,
+        return_result=True,
+    )
+    await message.delete()
 
 
 @commands.add(
@@ -465,8 +486,12 @@ async def kick_deleted_accounts(
     return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
 
 
-@commands.add("chatinvite", usage="<user_id>")
-async def invite_to_chat(message: Message, command: CommandObject) -> None:
+@commands.add("chatinvite", usage="<user_id|username>")
+async def invite_to_chat(
+    message: Message,
+    command: CommandObject,
+) -> None:
     """Invites a user to the current chat"""
-    await message.chat.add_members(command.args)
-    return _("User {user_id} has been invited to the chat").format(user_id=command.args)
+    value = command.args[0]
+    await message.chat.add_members(value)
+    return _("{value} has been invited to the chat").format(value=value)

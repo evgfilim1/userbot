@@ -5,7 +5,8 @@ __all__ = [
 import d20
 from d20 import SimpleStringifier
 
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 
 commands = CommandsModule("Dice")
 

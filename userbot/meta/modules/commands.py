@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 __all__ = [
+    "CommandT",
     "CommandsHandler",
     "CommandsModule",
-    "CommandObject",
 ]
 
 import functools
@@ -12,14 +12,14 @@ import inspect
 import logging
 import operator
 import re
-from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
 from traceback import FrameSummary, extract_tb
 from types import TracebackType
-from typing import Any, Callable, Iterable, Self, TypeAlias, overload
+from typing import TYPE_CHECKING, Any, Callable, Iterable, TypeAlias, overload
 
 from httpx import AsyncClient, HTTPError
+from lark import Lark
 from pyrogram import Client, filters
 from pyrogram.enums import ChatType, ParseMode
 from pyrogram.errors import MessageNotModified
@@ -30,14 +30,18 @@ from pyrogram.types import Message
 
 from ...constants import DefaultIcons, Icons, PremiumIcons
 from ...utils.translations import Translation
+from ..args_parser import create_args_parser_grammar
+from ..usage_parser import parser as usage_parser
 from .base import BaseHandler, BaseModule, HandlerT
 
-_DEFAULT_PREFIX = ","
+if TYPE_CHECKING:
+    from ...middlewares import CommandObject
+
 _DEFAULT_TIMEOUT = 30
 
 _log = logging.getLogger(__name__)
 
-_CommandT: TypeAlias = str | re.Pattern[str]
+CommandT: TypeAlias = str | re.Pattern[str]
 
 
 def _extract_frames(traceback: TracebackType) -> tuple[FrameSummary, FrameSummary]:
@@ -87,46 +91,15 @@ def _format_exception(exc: Exception) -> str:
     return res
 
 
-@dataclass()
-class CommandObject:
-    """Represents a command object."""
-
-    prefix: str
-    command: str
-    args: str
-    match: re.Match[str] | None
-
-    @property
-    def full_command(self) -> str:
-        """Returns the full command without arguments."""
-        return f"{self.prefix}{self.command}"
-
-    def __str__(self) -> str:
-        """Returns the full command with arguments."""
-        return f"{self.prefix}{self.command} {self.args}"
-
-    @classmethod
-    def parse(cls, text: str, commands: Iterable[_CommandT] | None = None) -> Self:
-        """Parses the text to a command object."""
-        command, _, args = text.partition(" ")
-        prefix, command = command[0], command[1:]
-        m = None
-        if commands is not None:
-            for cmd in commands:
-                if isinstance(cmd, re.Pattern):
-                    m = cmd.match(command)
-                    break
-        return cls(prefix=prefix, command=command, args=args, match=m)
-
-
 class CommandsHandler(BaseHandler):
     def __init__(
         self,
         *,
-        commands: Iterable[_CommandT],
+        commands: Iterable[CommandT],
         prefix: str | None,
         handler: HandlerT,
         usage: str,
+        reply_required: bool,
         doc: str | None,
         category: str | None,
         hidden: bool,
@@ -146,6 +119,12 @@ class CommandsHandler(BaseHandler):
         self.commands = commands
         self.prefix = prefix
         self.usage = usage
+        self.usage_tree = usage_parser.parse(usage)
+        self.args_parser = Lark(
+            create_args_parser_grammar(self.usage_tree),
+            maybe_placeholders=False,
+        )
+        self.reply_required = reply_required
         self.doc = doc
         self.category = category
         self.hidden = hidden
@@ -157,6 +136,7 @@ class CommandsHandler(BaseHandler):
         commands = self.commands
         prefix = self.prefix
         usage = self.usage
+        reply_required = self.reply_required
         category = self.category
         hidden = self.hidden
         handle_edits = self.handle_edits
@@ -166,6 +146,7 @@ class CommandsHandler(BaseHandler):
             f" {commands=}"
             f" {prefix=}"
             f" {usage=}"
+            f" {reply_required=}"
             f" {category=}"
             f" {hidden=}"
             f" {handle_edits=}"
@@ -184,13 +165,18 @@ class CommandsHandler(BaseHandler):
                     commands.append(command)
                 case _:
                     raise AssertionError(f"Unexpected command type: {type(command)}")
-        commands_str = "|".join(commands)
-        usage = f" {self.usage}".rstrip()
-        doc = self.doc or ""
-        if not full:
-            doc = doc.strip().split("\n")[0].strip()
-        description = f" — {doc}" if self.doc else ""
-        return f"{commands_str}{usage}{description}"
+        res = ""
+        if self.reply_required:
+            res += "<in reply> "
+        res += "|".join(commands) + " "
+        if self.usage:
+            res += f"{self.usage} "
+        if self.doc:
+            doc = self.doc
+            if not full:
+                doc = doc.strip().split("\n")[0].strip()
+            res += f"— {doc}"
+        return res.rstrip()
 
     async def _exception_handler(self, e: Exception, data: dict[str, Any]) -> str | None:
         """Handles exceptions raised by the command handler."""
@@ -311,7 +297,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         self,
         category: str | None = None,
         *,
-        default_prefix: str = _DEFAULT_PREFIX,
+        default_prefix: str | None = None,
         ensure_middlewares_registered: bool = False,
     ):
         super().__init__()
@@ -322,11 +308,12 @@ class CommandsModule(BaseModule[CommandsHandler]):
     @overload
     def add(
         self,
-        command: _CommandT,
+        command: CommandT,
         /,
-        *commands: _CommandT,
+        *commands: CommandT,
         prefix: str | None = None,
         usage: str = "",
+        reply_required: bool = False,
         doc: str | None = None,
         category: str | None = None,
         hidden: bool = False,
@@ -341,11 +328,12 @@ class CommandsModule(BaseModule[CommandsHandler]):
     def add(
         self,
         callable_: HandlerT,
-        command: _CommandT,
+        command: CommandT,
         /,
-        *commands: _CommandT,
+        *commands: CommandT,
         prefix: str | None = None,
         usage: str = "",
+        reply_required: bool = False,
         doc: str | None = None,
         category: str | None = None,
         hidden: bool = False,
@@ -358,11 +346,12 @@ class CommandsModule(BaseModule[CommandsHandler]):
 
     def add(
         self,
-        command_or_callable: _CommandT | HandlerT,
+        command_or_callable: CommandT | HandlerT,
         /,
-        *commands: _CommandT,
+        *commands: CommandT,
         prefix: str | None = None,
         usage: str = "",
+        reply_required: bool = False,
         doc: str | None = None,
         category: str | None = None,
         hidden: bool = False,
@@ -398,6 +387,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
                     prefix=prefix,
                     handler=handler,
                     usage=usage,
+                    reply_required=reply_required,
                     doc=doc or inspect.getdoc(inspect.unwrap(handler)),
                     category=category or self._category,
                     hidden=hidden,
@@ -420,24 +410,24 @@ class CommandsModule(BaseModule[CommandsHandler]):
     async def _help_handler(self, command: CommandObject, tr: Translation) -> str:
         """Sends help for all commands or for a specific one"""
         _ = tr.gettext
-        if args := command.args:
+        if query := command.args["command"]:
             for h in self._handlers:
                 for cmd in h.commands:
                     match cmd:
                         case re.Pattern() as pattern:
-                            matches = pattern.fullmatch(args) is not None
+                            matches = pattern.fullmatch(query) is not None
                         case str():
-                            matches = cmd == args
+                            matches = cmd == query
                         case _:
                             raise AssertionError(f"Unexpected command type: {type(cmd)}")
                     if matches:
                         usage = h.format_usage(full=True)
-                        return _("<b>Help for {args}:</b>\n{usage}").format(
-                            args=html.escape(args),
+                        return _("<b>Help for {query}:</b>\n{usage}").format(
+                            query=html.escape(query),
                             usage=html.escape(usage),
                         )
             else:
-                return f"<b>No help found for {args}</b>"
+                return f"<b>No help found for {query}</b>"
         text = _("<b>List of userbot commands available:</b>") + "\n\n"
         prev_cat = ""
         for handler in sorted(self._handlers):
@@ -463,6 +453,8 @@ class CommandsModule(BaseModule[CommandsHandler]):
 
     def _set_prefix(self) -> None:
         """Sets the prefix for all handlers if not set."""
+        if self._default_prefix is None:
+            raise ValueError("No default prefix specified")
         for handler in self._handlers:
             if handler.prefix is None:
                 handler.prefix = self._default_prefix

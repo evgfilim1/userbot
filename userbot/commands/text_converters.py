@@ -10,7 +10,8 @@ from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message, MessageEntity
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils import (
     Translation,
     _,
@@ -59,21 +60,20 @@ class _ReplaceHelper:
         return res
 
 
-@commands.add("tr", usage="<reply> ['en'|'ru']")
-async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
+@commands.add("tr", usage="['en'|'ru']", reply_required=True)
+async def sw(message: Message, command: CommandObject, reply: Message, tr: Translation) -> None:
     """Swaps keyboard layout from en to ru or vice versa
 
     If no argument is provided, the layout will be switched between en and ru."""
     # TODO (2021-12-01): detect ambiguous replacements via previous char
     _ = tr.gettext
-    reply = message.reply_to_message
-    target_layout = command.args
+    target_layout = command.args[0]
     match target_layout:
         case "en":
             tr_abc = _ru2en_tr
         case "ru":
             tr_abc = _en2ru_tr
-        case "":
+        case None:
             tr_abc = _enru2ruen_tr
         case _:
             raise ValueError(f"Unknown {target_layout=}")
@@ -88,17 +88,21 @@ async def sw(message: Message, command: CommandObject, tr: Translation) -> None:
         pass
 
 
-@commands.add("s", usage="<reply> <find_re>'/'<replace_re>'/'[flags]")
+@commands.add("s", usage="<args...>", reply_required=True)
 async def sed(
     message: Message,
     command: CommandObject,
+    reply: Message,
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """sed-like replacement"""
+    """sed-like replacement
+
+    `args` is a string of a pattern to find, replacement string and optional regex flags separated
+    by '/'. If no flags are specified, trailing slash is mandatory."""
     # TODO (2022-02-17): work with entities
     _ = tr.gettext
-    text = get_message_text(message.reply_to_message)
+    text = get_message_text(reply)
     args = command.args
     try:
         find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
@@ -121,17 +125,16 @@ async def sed(
             message,
             text,
             maybe_you_mean_prefix=_(MAYBE_YOU_MEAN_PREFIX),
-            entities=rh.entities if not is_my_message(message.reply_to_message) else None,
+            entities=rh.entities if not is_my_message(reply) else None,
         )
     except MessageNotModified:
         pass
 
 
-@commands.add("caps", usage="<reply>")
-async def caps(message: Message, tr: Translation) -> None:
+@commands.add("caps", reply_required=True)
+async def caps(message: Message, reply: Message, tr: Translation) -> None:
     """Toggles capslock on the message"""
     _ = tr.gettext
-    reply = message.reply_to_message
     try:
         await edit_replied_or_reply(
             message,

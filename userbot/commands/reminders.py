@@ -11,7 +11,8 @@ from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils import parse_timespec
 from ..utils.translations import Translation
 
@@ -37,10 +38,9 @@ def _remind_common(
 ) -> _Result:
     """Common code for reminder commands below which set a reminder in the chat"""
     _ = tr.gettext
-    args_list = command.args.split(" ")
-    if len(args_list) >= 2:
-        text = " ".join(args_list[1:])
-    else:
+    args = command.args
+    text = args["message"]
+    if text is None:
         text = _("{icon} <b>Reminder!</b>").format(icon=icons.NOTIFICATION)
     if for_myself and message.reply_to_message is not None:
         # Add a link to the replied message
@@ -50,7 +50,7 @@ def _remind_common(
         elif message.chat.type == ChatType.PRIVATE and message.chat.username is not None:
             text += f"\n\n@{message.chat.username}"
     now = message.edit_date or message.date or datetime.now()
-    t = parse_timespec(now, args_list[0])
+    t = parse_timespec(now, args["time"])
     if not silent:
         response = _(
             "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
@@ -64,7 +64,7 @@ def _remind_common(
     return _Result(text, t, response)
 
 
-@commands.add("remind", usage="[reply] <time> [message...]")
+@commands.add("remind", usage="<time> [message...]")
 async def remind(
     client: Client,
     message: Message,
@@ -87,7 +87,7 @@ async def remind(
     return r.response
 
 
-@commands.add("remindme", usage="[reply] <time> [message...]")
+@commands.add("remindme", usage="<time> [message...]")
 async def remind_me(
     client: Client,
     message: Message,
@@ -109,7 +109,7 @@ async def remind_me(
     return r.response
 
 
-@commands.add("sremind", usage="[reply] <time> [message...]")
+@commands.add("sremind", usage="<time> [message...]")
 async def silent_remind(
     client: Client,
     message: Message,
@@ -132,7 +132,7 @@ async def silent_remind(
     await message.delete()
 
 
-@commands.add("sremindme", usage="[reply] <time> [message...]")
+@commands.add("sremindme", usage="<time> [message...]")
 async def silent_remind_me(
     client: Client,
     message: Message,

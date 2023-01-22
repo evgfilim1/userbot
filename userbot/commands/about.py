@@ -7,7 +7,8 @@ from pyrogram.raw import functions, types
 
 from .. import __git_commit__
 from ..constants import Icons, PremiumIcons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import (
     AppLimitsController,
@@ -75,7 +76,8 @@ async def stats_handler(
     _ = tr.gettext
 
     me_is_premium = client.me.is_premium
-    if command.args in ("short", "full", ""):
+    report_type = command.args[0]
+    if report_type in ("short", "full", ""):
         saved_gifs: types.messages.SavedGifs | None = await client.invoke(
             functions.messages.GetSavedGifs(hash=0),
         )
@@ -96,7 +98,7 @@ async def stats_handler(
             )
         else:
             saved_emoji = None
-        if command.args == "full":
+        if report_type == "full":
             dialogs_count, archived_dialogs_count = await get_dialogs_count(client)
         else:
             dialogs_count: DialogCount | None = None

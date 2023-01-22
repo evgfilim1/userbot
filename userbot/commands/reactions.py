@@ -11,19 +11,20 @@ from pyrogram.raw import functions, types
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..utils.translations import Translation
 
 commands = CommandsModule("Reactions")
 _log = logging.getLogger(__name__)
 
 
-@commands.add("r", usage="<reply> [emoji]")
-async def put_reaction(message: Message, command: CommandObject) -> str | None:
+@commands.add("r", usage="[emoji]", reply_required=True)
+async def put_reaction(message: Message, command: CommandObject, reply: Message) -> str | None:
     """Reacts to a message with a specified emoji or removes any reaction"""
     reaction = command.args
     try:
-        await message.reply_to_message.react(reaction)
+        await reply.react(reaction)
     except ReactionInvalid:
         return reaction
     except ReactionEmpty:
@@ -31,10 +32,11 @@ async def put_reaction(message: Message, command: CommandObject) -> str | None:
     await message.delete()
 
 
-@commands.add("rs", usage="<reply>")
+@commands.add("rs", reply_required=True)
 async def get_reactions(
     client: Client,
     message: Message,
+    reply: Message,
     icons: type[Icons],
     tr: Translation,
 ) -> str:
@@ -46,7 +48,7 @@ async def get_reactions(
         messages: types.messages.MessageReactionsList = await client.invoke(
             functions.messages.GetMessageReactionsList(
                 peer=chat_peer,
-                id=message.reply_to_message.id,
+                id=reply.id,
                 limit=100,
             )
         )
@@ -61,7 +63,7 @@ async def get_reactions(
         else:
             _log.warning(
                 "Empty reaction found! (msg_id=%r, chat_id=%r)",
-                message.reply_to_message.id,
+                reply.id,
                 message.chat.id,
             )
             continue
@@ -86,9 +88,9 @@ async def get_reactions(
     return t or _("{icon} <i>No reactions here</i>").format(icon=icons.WARNING)
 
 
-@commands.add("rr", usage="<reply>")
-async def put_random_reaction(client: Client, message: Message) -> None:
+@commands.add("rr", reply_required=True)
+async def put_random_reaction(client: Client, message: Message, reply: Message) -> None:
     """Reacts to a message with a random available emoji"""
     chat = await client.get_chat(message.chat.id)
-    await message.reply_to_message.react(random.choice(chat.available_reactions))
+    await reply.react(random.choice(chat.available_reactions))
     await message.delete()

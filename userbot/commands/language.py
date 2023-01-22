@@ -5,7 +5,8 @@ __all__ = [
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils.translations import Translation
 
@@ -31,7 +32,8 @@ async def chat_language(
     languages = ""
     for language in tr.get_available_languages():
         languages += f"• <code>{language}</code>\n"
-    if not command.args:
+    new_lang = command.args[0]
+    if new_lang is None:
         return _(
             "{icon} Current chat language: {flag} {lang}\n\n"
             "To change it, type <code>{message_text} code</code>\n"
@@ -43,7 +45,6 @@ async def chat_language(
             message_text=message.text,
             languages=languages,
         )
-    new_lang = command.args
     if new_lang not in tr.get_available_languages():
         return _(
             "{icon} Invalid language code {lang!r}\n\nAvailable languages:\n{languages}"

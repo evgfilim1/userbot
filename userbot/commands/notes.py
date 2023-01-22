@@ -10,7 +10,8 @@ from pyrogram.errors import FileReferenceExpired
 from pyrogram.types import Message
 
 from ..constants import Icons
-from ..meta.modules import CommandObject, CommandsModule
+from ..meta.modules import CommandsModule
+from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import get_message_content
 from ..utils.translations import Translation
@@ -18,7 +19,7 @@ from ..utils.translations import Translation
 commands = CommandsModule("Notes")
 
 
-@commands.add("get", "note", "n", usage="[reply] <name>")
+@commands.add("get", "note", "n", usage="<key...>")
 async def get_note(
     client: Client,
     message: Message,
@@ -29,11 +30,13 @@ async def get_note(
 ) -> str | None:
     """Sends saved note"""
     _ = tr.gettext
-    if not (key := command.args):
-        return _("{icon} No name specified").format(icon=icons.WARNING)
+    key = command.args["key"]
     data = await storage.get_note(key)
     if data is None:
-        return _("{icon} Message with key={key!r} not found").format(icon=icons.WARNING, key=key)
+        return _("{icon} Note with key <code>{key}</code> not found").format(
+            icon=icons.WARNING,
+            key=key,
+        )
     content, type_ = json.loads(data[0]), data[1]
     if "caption" in content or "text" in content:
         content["parse_mode"] = ParseMode.HTML
@@ -62,10 +65,10 @@ async def get_note(
     await message.delete()
 
 
-@commands.add("save", "note_add", "nadd", usage="<reply> <name>")
+@commands.add("save", "note_add", "nadd", usage="<key...>", reply_required=True)
 async def save_note(
-    message: Message,
     command: CommandObject,
+    reply: Message,
     storage: Storage,
     notes_chat: int | str,
     icons: type[Icons],
@@ -73,11 +76,8 @@ async def save_note(
 ) -> str:
     """Saves replied message as note for later use"""
     _ = tr.gettext
-    if not (key := command.args):
-        return _(
-            "{icon} Please specify note key\n\n" "Possible fix: <code>{message_text} key</code>"
-        ).format(icon=icons.QUESTION, message_text=message.text)
-    target = message.reply_to_message
+    key = command.args["key"]
+    target = reply
     if target.media not in (MessageMediaType.STICKER, MessageMediaType.WEB_PAGE, None):
         # Stickers and text messages can be saved without problems, other media types should be
         # saved in a chat to be able to send them later even when the original message is deleted.
@@ -98,9 +98,8 @@ async def saved_notes(storage: Storage, icons: type[Icons], tr: Translation) -> 
     return _("{icon} <b>Saved notes:</b>\n{t}").format(icon=icons.BOOKMARK, t=t)
 
 
-@commands.add("note_del", "ndel", usage="<name>")
+@commands.add("note_del", "ndel", usage="<key...>")
 async def delete_note(
-    message: Message,
     command: CommandObject,
     storage: Storage,
     icons: type[Icons],
@@ -108,9 +107,6 @@ async def delete_note(
 ) -> str:
     """Deletes saved note"""
     _ = tr.gettext
-    if not (key := command.args):
-        return _(
-            "{icon} Please specify note key\n\n" "Possible fix: <code>{message_text} key</code>"
-        ).format(icon=icons.QUESTION, message_text=message.text)
+    key = command.args["key"]
     await storage.delete_note(key)
     return _("{icon} Note <code>{key}</code> deleted").format(icon=icons.TRASH, key=key)

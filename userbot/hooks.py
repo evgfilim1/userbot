@@ -17,7 +17,7 @@ from .constants import (
     UWU_MEME_PICTURE,
 )
 from .meta.modules import HooksModule
-from .utils import sticker
+from .utils import StickerFilter
 
 hooks = HooksModule()
 
@@ -34,12 +34,12 @@ async def on_emojis(message: Message) -> str:
     return t
 
 
-@hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | sticker(TAP_FLT)))
+@hooks.add("tap", (filters.regex(r"\b(?:тык|nsr)\b", flags=re.I) | StickerFilter(TAP_FLT)))
 async def on_tap(message: Message) -> None:
     await message.reply_sticker(TAP_STICKER)
 
 
-@hooks.add("mibib", filters.sticker & sticker(MIBIB_FLT))
+@hooks.add("mibib", filters.sticker & StickerFilter(MIBIB_FLT))
 async def mibib(client: Client, message: Message) -> None:
     # TODO (2022-02-13): Don't send it again for N minutes
     if random.random() <= (1 / 5):
