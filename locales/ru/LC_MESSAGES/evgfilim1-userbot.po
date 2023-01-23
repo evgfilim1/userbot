@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-01-22 16:17+0500\n"
-"PO-Revision-Date: 2023-01-22 11:35\n"
+"POT-Creation-Date: 2023-01-23 22:29+0500\n"
+"PO-Revision-Date: 2023-01-23 19:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -22,15 +22,15 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: ru_RU\n"
 
-#: userbot/middlewares.py:167
+#: userbot/middlewares.py:171
 msgid "Reply is required."
 msgstr ""
 
-#: userbot/middlewares.py:176
+#: userbot/middlewares.py:180
 msgid "Invalid syntax."
 msgstr ""
 
-#: userbot/middlewares.py:195
+#: userbot/middlewares.py:199
 #, python-brace-format
 msgid "{icon} <b>{error}</b>\n"
 "<b>Usage:</b> {usage}\n\n"
@@ -518,17 +518,17 @@ msgstr "{icon} Сон в течение {sec} секунд окончен"
 msgid "{icon} <b>Stopping userbot...</b>"
 msgstr "{icon} <b>Остановка пользовательского бота...</b>"
 
-#: userbot/commands/user_groups.py:37
+#: userbot/commands/user_groups.py:41
 #, python-brace-format
 msgid "{chat_id}: Cannot resolve peer"
 msgstr "{chat_id}: Невозможно определить пира"
 
-#: userbot/commands/user_groups.py:40
+#: userbot/commands/user_groups.py:48
 #, python-brace-format
 msgid "{chat_id}: Not a user"
 msgstr "{chat_id}: Не пользователь"
 
-#: userbot/commands/user_groups.py:73
+#: userbot/commands/user_groups.py:80
 #, python-brace-format
 msgid "{icon} Added {count} user to user group {group_name}"
 msgid_plural "{icon} Added {count} users to user group {group_name}"
@@ -537,11 +537,11 @@ msgstr[1] "{icon} Добавлено {count} пользователя в гру�
 msgstr[2] "{icon} Добавлено {count} пользователей в группу пользователей {group_name}"
 msgstr[3] "{icon} Добавлено {count} пользователей в группу пользователей {group_name}"
 
-#: userbot/commands/user_groups.py:80 userbot/commands/user_groups.py:120
+#: userbot/commands/user_groups.py:87 userbot/commands/user_groups.py:126
 msgid "<b>Errors:</b>"
 msgstr "<b>Ошибки:</b>"
 
-#: userbot/commands/user_groups.py:113
+#: userbot/commands/user_groups.py:119
 #, python-brace-format
 msgid "{icon} Removed {count} user from user group {group_name}"
 msgid_plural "{icon} Removed {count} users from user group {group_name}"
@@ -550,12 +550,12 @@ msgstr[1] "{icon} Удалено {count} пользователя из груп�
 msgstr[2] "{icon} Удалено {count} пользователей из группы пользователей {group_name}"
 msgstr[3] "{icon} Удалено {count} пользователей из группы пользователей {group_name}"
 
-#: userbot/commands/user_groups.py:142
+#: userbot/commands/user_groups.py:148
 #, python-brace-format
 msgid "{icon} Users in user group {key}:"
 msgstr "{icon} Пользователи в группе пользователей {key}:"
 
-#: userbot/commands/user_groups.py:161
+#: userbot/commands/user_groups.py:167
 #, python-brace-format
 msgid "{icon} User groups:"
 msgstr "{icon} Группы пользователей:"
