@@ -17,7 +17,8 @@ except ImportError as e:
     print(sys.path)
     try:
         from userbot.meta.usage_parser import parser
-    except ImportError:
+    except ImportError as e2:
+        print(e, e2, sep="\n\n")
         raise RuntimeError("This script must be run from the root of the project.") from e
 
 
