@@ -12,6 +12,7 @@ except ImportError as e:
     import os
     import sys
 
+    print(os.getcwd())
     sys.path.append(os.getcwd())  # https://stackoverflow.com/a/37927943/12519972
     try:
         from userbot.meta.usage_parser import parser
