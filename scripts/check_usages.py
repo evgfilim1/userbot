@@ -14,6 +14,7 @@ except ImportError as e:
 
     print(os.getcwd())
     sys.path.append(os.getcwd())  # https://stackoverflow.com/a/37927943/12519972
+    print(sys.path)
     try:
         from userbot.meta.usage_parser import parser
     except ImportError:
