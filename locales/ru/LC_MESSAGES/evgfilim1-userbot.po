@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-01-23 22:29+0500\n"
-"PO-Revision-Date: 2023-01-23 19:00\n"
+"PO-Revision-Date: 2023-01-23 20:15\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -24,18 +24,20 @@ msgstr ""
 
 #: userbot/middlewares.py:171
 msgid "Reply is required."
-msgstr ""
+msgstr "Необходимо ответить на сообщение."
 
 #: userbot/middlewares.py:180
 msgid "Invalid syntax."
-msgstr ""
+msgstr "Неверный синтаксис."
 
 #: userbot/middlewares.py:199
 #, python-brace-format
 msgid "{icon} <b>{error}</b>\n"
 "<b>Usage:</b> {usage}\n\n"
 "To get more info about a command, send <code>{prefix}help {command}</code>."
-msgstr ""
+msgstr "{icon} <b>{error}</b>\n"
+"<b>Использование:</b> {usage}\n\n"
+"Чтобы получить больше информации о команде, отправьте <code>{prefix}help {command}</code>."
 
 #: userbot/commands/about.py:32
 msgid "staging"
@@ -198,12 +200,12 @@ msgstr "до <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 #: userbot/commands/chat_admin.py:139
 #, python-brace-format
 msgid "{icon} {users} <b>banned</b> in this chat"
-msgstr ""
+msgstr "{icon} {users} <b>заблокирован(ы)</b> в этом чате"
 
 #: userbot/commands/chat_admin.py:141
 #, python-brace-format
 msgid "{icon} {users} <b>restricted</b> in this chat"
-msgstr ""
+msgstr "{icon} {users} <b>ограничен(ы)</b> в этом чате"
 
 #: userbot/commands/chat_admin.py:142
 #, python-brace-format
@@ -218,7 +220,7 @@ msgstr "<b>Причина:</b> {reason}"
 #: userbot/commands/chat_admin.py:236
 #, python-brace-format
 msgid "{icon} {user_links} <b>unbanned</b> in this chat"
-msgstr ""
+msgstr "{icon} {user_links} <b>разблокирован(ы)</b> в этом чате"
 
 #: userbot/commands/chat_admin.py:274
 #, python-brace-format
@@ -252,7 +254,7 @@ msgstr "{icon} Сообщение закреплено"
 
 #: userbot/commands/chat_admin.py:405
 msgid "silently"
-msgstr ""
+msgstr "без звука"
 
 #: userbot/commands/chat_admin.py:452
 msgid "<i>Clearing Deleted Accounts...</i>"
@@ -275,7 +277,7 @@ msgstr[3] "<i>({n} участников проверено)</i>"
 #: userbot/commands/chat_admin.py:512
 #, python-brace-format
 msgid "{icon} <i>{value}</i> has been invited to the chat"
-msgstr ""
+msgstr "{icon} <i>{value}</i> был приглашён в чат"
 
 #: userbot/commands/chat_info.py:95
 #, python-brace-format
@@ -299,17 +301,17 @@ msgstr "{icon} Цвет {color_spec}"
 #: userbot/commands/colors.py:71
 #, python-brace-format
 msgid "{icon} No users were specified"
-msgstr ""
+msgstr "{icon} Не указаны пользователи"
 
 #: userbot/commands/colors.py:73
 #, python-brace-format
 msgid "{icon} Multiple user are not supported here"
-msgstr ""
+msgstr "{icon} Несколько пользователей здесь не поддерживаются"
 
 #: userbot/commands/colors.py:83
 #, python-brace-format
 msgid "{icon} Color of the user {user} is {c}"
-msgstr ""
+msgstr "{icon} Цвет пользователя {user} — {c}"
 
 #: userbot/commands/content_converters.py:57
 msgid "<i>Converting to mpeg4gif...</i>"
@@ -411,7 +413,7 @@ msgstr "Постоянная ссылка:"
 #: userbot/commands/notes.py:35
 #, python-brace-format
 msgid "{icon} Note with key <code>{key}</code> not found"
-msgstr ""
+msgstr "{icon} Заметка с ключом <code>{key}</code> не найдена"
 
 #: userbot/commands/notes.py:54
 #, python-brace-format
@@ -632,7 +634,8 @@ msgstr "{text} <i>См. ответ.</i>"
 #, python-brace-format
 msgid "<b>Help for {query}:</b>\n"
 "{usage}"
-msgstr ""
+msgstr "<b>Справка для {query}:</b>\n"
+"{usage}"
 
 #: userbot/meta/modules/commands.py:431
 msgid "<b>List of userbot commands available:</b>"
