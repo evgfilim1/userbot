@@ -10,6 +10,7 @@ on:
       - "userbot/**"
       - ".pre-commit-config.yaml"
       - "dev-requirements.txt"
+      - "scripts/check_usages.py"
       - "scripts/potctl.py"
       - "pyproject.toml"
   pull_request:
@@ -21,6 +22,7 @@ on:
       - "userbot/**"
       - ".pre-commit-config.yaml"
       - "dev-requirements.txt"
+      - "scripts/check_usages.py"
       - "scripts/potctl.py"
       - "pyproject.toml"
 
