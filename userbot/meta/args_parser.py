@@ -16,7 +16,7 @@ class _Rule(NamedTuple):
 
 
 _SINGLE_ARG_RULE = _Rule(name="SINGLE_ARG", definition="/[^ ]+/")
-_REST_ARG_RULE = _Rule(name="REST_ARG", definition="/.+$/")
+_REST_ARG_RULE = _Rule(name="REST_ARG", definition="/.+$/s")
 
 
 def _parse_argument(arg: Argument, *, variant_n: int, arg_n: int) -> _Rule:
