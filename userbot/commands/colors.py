@@ -12,7 +12,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation, resolve_user_or_user_group
+from ..utils import Translation, resolve_users
 
 commands = CommandsModule("Colors")
 
@@ -66,7 +66,7 @@ async def user_color(
     _ = tr.gettext
     user = command.args[0]
     if user is not None:
-        user_ids = await resolve_user_or_user_group(client, storage, user)
+        user_ids = await resolve_users(client, storage, user)
         if len(user_ids) == 0:
             return _("{icon} No users were specified").format(icon=icons.STOP)
         if len(user_ids) > 1:

@@ -7,14 +7,13 @@ from typing import NamedTuple
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 from pyrogram.errors import PeerIdInvalid
-from pyrogram.raw.types import InputPeerUser
 from pyrogram.types import Message
 
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation
+from ..utils import Translation, resolve_users
 
 commands = CommandsModule("User groups")
 
@@ -24,7 +23,12 @@ class _ResolveResult(NamedTuple):
     errors: list[str]
 
 
-async def _resolve_ids(client: Client, ids: list[str], tr: Translation) -> _ResolveResult:
+async def _resolve_users(
+    client: Client,
+    ids: list[str],
+    storage: Storage,
+    tr: Translation,
+) -> _ResolveResult:
     if len(ids) == 0:
         raise ValueError("No IDs provided")
     _ = tr.gettext
@@ -32,21 +36,25 @@ async def _resolve_ids(client: Client, ids: list[str], tr: Translation) -> _Reso
     errors: list[str] = []
     for chat_id in ids:
         try:
-            chat = await client.resolve_peer(chat_id)
+            user_ids = await resolve_users(client, storage, chat_id, resolve_ids=True)
         except PeerIdInvalid:
             errors.append(_("{chat_id}: Cannot resolve peer").format(chat_id=chat_id))
             continue
-        if not isinstance(chat, InputPeerUser):
+        except AttributeError as e:
+            e_msg = str(e)
+            if not ("user_id" in e_msg and "Peer" in e_msg):
+                # FIXME (2023-01-23): Temporary workaround unless I implement custom exceptions
+                raise
             errors.append(_("{chat_id}: Not a user").format(chat_id=chat_id))
             continue
-        result.append(chat.user_id)
+        result.extend(user_ids)
     return _ResolveResult(result, errors)
 
 
 @commands.add(
     "usergroupadd",
     "ugadd",
-    usage="<group_name> [user_id|username]...",
+    usage="<group_name> [user_id|username|user_group]...",
 )
 async def group_add(
     client: Client,
@@ -60,12 +68,11 @@ async def group_add(
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
-    args = command.args
-    group_name = args["group_name"]
-    if len(args[1]) == 0:
+    group_name, users = command.args
+    if len(users) == 0:
         user_ids = [reply.from_user.id]
     else:
-        user_ids, errors = await _resolve_ids(client, args[1], tr)
+        user_ids, errors = await _resolve_users(client, users, storage, tr)
     await storage.add_users_to_group(user_ids, group_name)
     t = __(
         "{icon} Added {count} user to user group {group_name}",
@@ -86,7 +93,7 @@ async def group_add(
 @commands.add(
     "usergroupdel",
     "ugdel",
-    usage="<group_name> [user_id|username]...",
+    usage="<group_name> [user_id|username|user_group]...",
 )
 async def group_del(
     client: Client,
@@ -100,12 +107,11 @@ async def group_del(
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
-    args = command.args
-    group_name = args["group_name"]
-    if len(args[1]) == 0:
+    group_name, users = command.args
+    if len(users) == 0:
         user_ids = [reply.from_user.id]
     else:
-        user_ids, errors = await _resolve_ids(client, args[1], tr)
+        user_ids, errors = await _resolve_users(client, users, storage, tr)
     await storage.remove_users_from_group(user_ids, group_name)
     t = __(
         "{icon} Removed {count} user from user group {group_name}",

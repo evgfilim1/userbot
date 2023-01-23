@@ -39,14 +39,18 @@ def _parse_arguments(
     args_tree = parser.parse(args)
     args_dict: dict[str, tuple[str] | str | None] = {}
     args_list: list[str] = []
-    for arg in args_tree.children:
-        key = arg.data
-        if len(arg.children) == 0:
-            value = None
-        elif len(arg.children) == 1:
-            value = str(arg.children[0])
+    usage_variant = usage_tree.variants[int(args_tree.data.removeprefix("v"))]
+    for child, arg in zip(args_tree.children, usage_variant.args):
+        key = child.data
+        if arg.repeat:
+            value = tuple(map(str, child.children))
         else:
-            value = tuple(map(str, arg.children))
+            if len(child.children) == 0:
+                value = None  # literal
+            elif len(child.children) == 1:
+                value = str(child.children[0])
+            else:
+                raise AssertionError("More than one child found, but arg is not repeatable")
         parsed_key = re.fullmatch(r"(arg|literal)(\d+)_(\d+)(?:_(\d+))?", key)
         if parsed_key is not None:
             key = f"_{key}"
@@ -65,7 +69,7 @@ def _parse_arguments(
                     args_dict[key_name] = value
         args_list.append(value)
         args_dict[key] = value
-    for i, arg in enumerate(usage_tree.variants[int(args_tree.data.removeprefix("v"))].args):
+    for i, arg in enumerate(usage_variant.args):
         if arg.repeat:
             value = ()
         else:

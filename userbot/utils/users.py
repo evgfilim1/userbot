@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 __all__ = [
-    "resolve_user_or_user_group",
+    "resolve_users",
 ]
 
 from dataclasses import dataclass, field
+from typing import Iterable
 
 from lark import Lark, ParseTree, Tree, UnexpectedInput
 from pyrogram import Client
@@ -32,6 +33,7 @@ _GRAMMAR = r"""
 
 // Named terminals (captured user input)
 USERNAME: "@" CNAME
+USER_GROUP_NAME: /[a-zA-Z0-9_\-.]+/
 
 // Rules
 key: "exclude" -> exclude
@@ -42,7 +44,7 @@ param: key "=" values
 _params: (param ";")* param
 
 // Main rule
-user_group: CNAME ["[" _params? "]"]
+user_group: USER_GROUP_NAME ["[" _params? "]"]
 
 // Parser directives
 %import common (CNAME, INT, WORD)
@@ -87,12 +89,14 @@ def _parse_user_group_spec(user_group_spec: str) -> _UserGroup:
     return _parse_user_group_tree(tree)
 
 
-async def resolve_user_or_user_group(
+async def resolve_users(
     client: Client,
     storage: Storage,
-    value: str | int,
+    value: str | int | Iterable[str | int],
+    *,
+    resolve_ids: bool = False,
 ) -> set[int]:
-    """Resolves user by ID, username or user group by user group string
+    """Resolves users by ID, username or user group by user group string.
 
     User group string consists of a user group name and an optional list of parameters in square
     brackets. Parameters are separated by semicolons and have the following format:
@@ -102,22 +106,30 @@ async def resolve_user_or_user_group(
     * `include=<comma-separated user_ids, usernames or user group strings>`: this temporarily
       includes users to the group;
     * `include` have more priority than `exclude`;
-    * The square brackets are optional if there are no parameters.
+
+    The square brackets are optional if there are no parameters.
+
+    Returns a set of user IDs resolved.
     """
-    if isinstance(value, int):
-        return [value]
-    if value.isdecimal():
-        return [int(value)]
+    if isinstance(value, Iterable) and not isinstance(value, str):
+        return set(await resolve_users(client, storage, item) for item in value)
+    if isinstance(value, int) or value.isdecimal():
+        if resolve_ids:
+            peer = await client.resolve_peer(value)
+            res = peer.user_id
+        else:
+            res = value if isinstance(value, int) else int(value)
+        return {res}
     if value.startswith("@"):
         peer = await client.resolve_peer(value)
-        return [peer.user_id]
+        return {peer.user_id}
     user_group = _parse_user_group_spec(value)
     exclude_ids: set[int] = set()
     include_ids: set[int] = set()
     for item in user_group.exclude:
-        exclude_ids.update(await resolve_user_or_user_group(client, storage, item))
+        exclude_ids.update(await resolve_users(client, storage, item))
     for item in user_group.include:
-        include_ids.update(await resolve_user_or_user_group(client, storage, item))
+        include_ids.update(await resolve_users(client, storage, item))
     users = set()
     async for user_id in storage.list_users_in_group(user_group.name):
         if user_id not in exclude_ids:

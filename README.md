@@ -114,8 +114,8 @@ Tools:
 • <in reply> id — Sends replied user's ID as link
 
 User groups:
-• usergroupadd|ugadd <group_name> [user_id|username]... — Adds a user to the user group for later use with user resolving
-• usergroupdel|ugdel <group_name> [user_id|username]... — Removes a user from the user group
+• usergroupadd|ugadd <group_name> [user_id|username|user_group]... — Adds a user to the user group for later use with user resolving
+• usergroupdel|ugdel <group_name> [user_id|username|user_group]... — Removes a user from the user group
 • usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group
 • usergroups|ugs — Lists all the user groups
 ```

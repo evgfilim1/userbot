@@ -19,7 +19,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation, _, parse_timespec, resolve_user_or_user_group
+from ..utils import Translation, _, parse_timespec, resolve_users
 
 _REACT2BAN_TEXT = _(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
@@ -172,7 +172,7 @@ async def restrict_user(
     if user_arg == "reply":
         user_ids = {message.reply_to_message.from_user.id}
     else:
-        user_ids = await resolve_user_or_user_group(client, storage, user_arg)
+        user_ids = await resolve_users(client, storage, user_arg)
     now = message.edit_date or message.date or datetime.now()
     if is_forever := (time in ("0", "forever", None)):
         t = zero_datetime()
@@ -223,7 +223,7 @@ async def chat_unban(
     if user_arg == "reply":
         user_ids = {message.reply_to_message.from_user.id}
     else:
-        user_ids = await resolve_user_or_user_group(client, storage, user_arg)
+        user_ids = await resolve_users(client, storage, user_arg)
     links: list[str] = []
     for user_id in user_ids:
         user = await client.get_chat(user_id)
@@ -507,7 +507,7 @@ async def invite_to_chat(
 ) -> None:
     """Invites a user to the current chat"""
     value = command.args[0]
-    users = await resolve_user_or_user_group(client, storage, value)
+    users = await resolve_users(client, storage, value)
     await message.chat.add_members(list(users))
     return _("{icon} <i>{value}</i> has been invited to the chat").format(
         icon=icons.PERSON_TICK,
