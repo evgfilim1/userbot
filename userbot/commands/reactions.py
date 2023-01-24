@@ -22,7 +22,7 @@ _log = logging.getLogger(__name__)
 @commands.add("r", usage="[emoji]", reply_required=True)
 async def put_reaction(message: Message, command: CommandObject, reply: Message) -> str | None:
     """Reacts to a message with a specified emoji or removes any reaction"""
-    reaction = command.args
+    reaction = command.args[0]
     try:
         await reply.react(reaction)
     except ReactionInvalid:
