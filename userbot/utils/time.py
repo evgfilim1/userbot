@@ -29,7 +29,7 @@ def parse_delta(delta: str) -> timedelta | None:
 
 
 def parse_timespec(now: datetime, timespec: str) -> datetime:
-    """Parse a time specification and return target datetime.
+    """Parses a time specification and return target datetime.
 
     The time specification is a string of the form:
     – HH:MM

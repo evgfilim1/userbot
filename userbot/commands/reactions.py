@@ -21,7 +21,7 @@ _log = logging.getLogger(__name__)
 
 @commands.add("r", usage="[emoji]", reply_required=True)
 async def put_reaction(message: Message, command: CommandObject, reply: Message) -> str | None:
-    """Reacts to a message with a specified emoji or removes any reaction"""
+    """Reacts to a message with a specified emoji or removes any reaction."""
     reaction = command.args[0]
     try:
         await reply.react(reaction)
@@ -40,7 +40,7 @@ async def get_reactions(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Gets message reactions with users who reacted to it"""
+    """Gets message reactions with users who reacted to it."""
     _ = tr.gettext
     chat_peer = await client.resolve_peer(message.chat.id)
     t = ""
@@ -90,7 +90,7 @@ async def get_reactions(
 
 @commands.add("rr", reply_required=True)
 async def put_random_reaction(client: Client, message: Message, reply: Message) -> None:
-    """Reacts to a message with a random available emoji"""
+    """Reacts to a message with a random available emoji."""
     chat = await client.get_chat(message.chat.id)
     await reply.react(random.choice(chat.available_reactions))
     await message.delete()

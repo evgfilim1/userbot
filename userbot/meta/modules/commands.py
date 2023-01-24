@@ -44,8 +44,13 @@ _log = logging.getLogger(__name__)
 CommandT: TypeAlias = str | re.Pattern[str]
 
 
+def _get_handler_docstring(handler: HandlerT) -> str | None:
+    """Gets the docstring of the handler."""
+    return inspect.getdoc(inspect.unwrap(handler))
+
+
 def _extract_frames(traceback: TracebackType) -> tuple[FrameSummary, FrameSummary]:
-    """Extract the last frames from the traceback.
+    """Extracts the last frames from the traceback.
 
     Returns a tuple of the last own frame, and the last frame in traceback.
     """
@@ -66,7 +71,7 @@ def _extract_frames(traceback: TracebackType) -> tuple[FrameSummary, FrameSummar
 
 
 def _format_frames(last_own_frame: FrameSummary, last_frame: FrameSummary) -> str:
-    """Format the traceback to a string."""
+    """Formats the traceback to a string."""
     tb = '  <...snip...>\n  File "{}", line {}, in {}\n    {}\n'.format(
         last_own_frame.filename,
         last_own_frame.lineno,
@@ -84,7 +89,7 @@ def _format_frames(last_own_frame: FrameSummary, last_frame: FrameSummary) -> st
 
 
 def _format_exception(exc: Exception) -> str:
-    """Format the exception to a string."""
+    """Formats the exception to a string."""
     res = type(exc).__qualname__
     if exc_value := str(exc):
         res += f": {exc_value}"
@@ -100,7 +105,8 @@ class CommandsHandler(BaseHandler):
         handler: HandlerT,
         usage: str,
         reply_required: bool,
-        doc: str | None,
+        summary: str | None,
+        description: str | None,
         category: str | None,
         hidden: bool,
         handle_edits: bool,
@@ -125,12 +131,13 @@ class CommandsHandler(BaseHandler):
             maybe_placeholders=False,
         )
         self.reply_required = reply_required
-        self.doc = doc
+        self.summary = summary
+        self.description = description
         self.category = category
         self.hidden = hidden
 
-        if self.doc is not None:
-            self.doc = self.doc.strip()
+        if self.description is not None:
+            self.description = self.description.strip()
 
     def __repr__(self) -> str:
         commands = self.commands
@@ -171,11 +178,10 @@ class CommandsHandler(BaseHandler):
         res += "|".join(commands) + " "
         if self.usage:
             res += f"{self.usage} "
-        if self.doc:
-            doc = self.doc
-            if not full:
-                doc = doc.strip().split("\n")[0].strip()
-            res += f"— {doc}"
+        if self.summary:
+            res += f"— {self.summary}"
+        if full and self.description:
+            res += f"\n\n{self.description}"
         return res.rstrip()
 
     async def _exception_handler(self, e: Exception, data: dict[str, Any]) -> str | None:
@@ -273,7 +279,7 @@ class CommandsHandler(BaseHandler):
 
     @property
     def _sort_key(self) -> tuple[str, str]:
-        """Return a key to use for sorting commands."""
+        """Returns a key to use for sorting commands."""
         category = self.category or ""
         command = next(iter(self.commands))
         match command:
@@ -381,6 +387,16 @@ class CommandsModule(BaseModule[CommandsHandler]):
         """
 
         def decorator(handler: HandlerT) -> HandlerT:
+            docstring = doc or _get_handler_docstring(handler)
+            if docstring is not None:
+                summary, __, description = docstring.partition("\n\n")
+                if description:
+                    description = re.sub(r"([^\n])\n([^\n])", r"\1 \2", description)
+                    description = re.sub(r"([^\n])\n\n([^\n])", r"\1\n\2", description)
+                else:
+                    description = None
+            else:
+                summary, description = None, None
             self.add_handler(
                 CommandsHandler(
                     commands=commands,
@@ -388,7 +404,8 @@ class CommandsModule(BaseModule[CommandsHandler]):
                     handler=handler,
                     usage=usage,
                     reply_required=reply_required,
-                    doc=doc or inspect.getdoc(inspect.unwrap(handler)),
+                    summary=summary,
+                    description=description,
                     category=category or self._category,
                     hidden=hidden,
                     handle_edits=handle_edits,
@@ -408,7 +425,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         return decorator
 
     async def _help_handler(self, command: CommandObject, tr: Translation) -> str:
-        """Sends help for all commands or for a specific one"""
+        """Sends help for all commands or for a specific one."""
         _ = tr.gettext
         if query := command.args["command"]:
             for h in self._handlers:
@@ -481,6 +498,7 @@ class CommandsModule(BaseModule[CommandsHandler]):
         return h, functools.reduce(operator.or_, f) & filters.me & ~filters.scheduled
 
     def register(self, client: Client) -> None:
+        """Registers the module with the client."""
         self.add(
             self._help_handler,
             "help",

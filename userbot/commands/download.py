@@ -85,10 +85,12 @@ async def download(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Downloads a file or files
+    """Downloads a file or files.
 
     If "all" is specified, all the files in the media group will be downloaded (default).
-    If "single" is specified, only the replied file will be downloaded."""
+
+    If "single" is specified, only the replied file will be downloaded.
+    """
     msg = reply if reply is not None else message
     if msg.media_group_id and command.args[0] == "all":
         all_messages = await msg.get_media_group()

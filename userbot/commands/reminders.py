@@ -35,7 +35,7 @@ def _remind_common(
     for_myself: bool,
     silent: bool = False,
 ) -> _Result:
-    """Common code for reminder commands below which set a reminder in the chat"""
+    """Common code for reminder commands below which set a reminder in the chat."""
     _ = tr.gettext
     args = command.args
     text = args["message"]
@@ -71,10 +71,12 @@ async def remind(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Sets a reminder in the chat
+    """Sets a reminder in the chat.
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
-    Message will be scheduled via Telegram's message scheduling system."""
+
+    Message will be scheduled via Telegram's message scheduling system.
+    """
     r = _remind_common(message, command, icons, tr, for_myself=False)
     await client.send_message(
         message.chat.id,
@@ -94,10 +96,12 @@ async def remind_me(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Sets a reminder for myself
+    """Sets a reminder for myself.
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
-    Message will be scheduled via Telegram's message scheduling system."""
+
+    Message will be scheduled via Telegram's message scheduling system.
+    """
     r = _remind_common(message, command, icons, tr, for_myself=True)
     await client.send_message(
         "me",
@@ -116,10 +120,12 @@ async def silent_remind(
     icons: type[Icons],
     tr: Translation,
 ) -> None:
-    """Sets a silent reminder in the chat (no confirmation about scheduled message)
+    """Sets a silent reminder in the chat (no confirmation about scheduled message).
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
-    Message will be scheduled via Telegram's message scheduling system."""
+
+    Message will be scheduled via Telegram's message scheduling system.
+    """
     r = _remind_common(message, command, icons, tr, for_myself=False, silent=True)
     await client.send_message(
         message.chat.id,
@@ -139,10 +145,12 @@ async def silent_remind_me(
     icons: type[Icons],
     tr: Translation,
 ) -> None:
-    """Sets a silent reminder for myself (no confirmation about scheduled message)
+    """Sets a silent reminder for myself (no confirmation about scheduled message).
 
     `time` can be a time delta (e.g. "1d3h") or a time string (e.g. "12:30" or "2022-12-31_23:59").
-    Message will be scheduled via Telegram's message scheduling system."""
+
+    Message will be scheduled via Telegram's message scheduling system.
+    """
     r = _remind_common(message, command, icons, tr, for_myself=True, silent=True)
     await client.send_message(
         "me",

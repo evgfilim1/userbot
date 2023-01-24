@@ -64,7 +64,10 @@ async def group_add(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Adds a user to the user group for later use with user resolving"""
+    """Adds a user to the user group for later use with user resolving.
+
+    If non-existent user group is specified, it will be created automatically.
+    """
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
@@ -103,7 +106,7 @@ async def group_del(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Removes a user from the user group"""
+    """Removes a user from the user group."""
     _ = tr.gettext
     __ = tr.ngettext
     errors: list[str] | None = None
@@ -137,9 +140,10 @@ async def group_list(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Lists the users in the user group
+    """Lists the users in the user group.
 
-    If 'resolve' is passed as the second argument, the user ids will be resolved to usernames"""
+    If "resolve" is passed as the second argument, the user ids will be resolved to usernames.
+    """
     _ = tr.gettext
     args = command.args
     group_name = args["group_name"]
@@ -162,7 +166,7 @@ async def groups(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Lists all the user groups"""
+    """Lists all user groups."""
     _ = tr.gettext
     t = _("{icon} User groups:").format(icon=icons.GROUP_CHAT)
     async for group in storage.list_groups():

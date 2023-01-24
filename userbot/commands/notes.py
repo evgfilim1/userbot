@@ -27,7 +27,7 @@ async def get_note(
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """Sends saved note"""
+    """Sends saved note."""
     _ = tr.gettext
     key = command.args["key"]
     data = await storage.get_note(key)
@@ -73,7 +73,7 @@ async def save_note(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Saves replied message as note for later use"""
+    """Saves replied message as note for later use."""
     _ = tr.gettext
     key = command.args["key"]
     target = reply
@@ -88,7 +88,7 @@ async def save_note(
 
 @commands.add("notes", "ns")
 async def saved_notes(storage: Storage, icons: type[Icons], tr: Translation) -> str:
-    """Shows all saved notes"""
+    """Shows all saved notes."""
     _ = tr.gettext
     t = ""
     async for key in storage.saved_notes():
@@ -104,7 +104,7 @@ async def delete_note(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Deletes saved note"""
+    """Deletes saved note."""
     _ = tr.gettext
     key = command.args["key"]
     await storage.delete_note(key)

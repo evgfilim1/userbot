@@ -25,7 +25,7 @@ async def _call_ffmpeg(
     output_file: str,
     *args: str,
 ) -> None:
-    """Call ffmpeg with the given arguments"""
+    """Calls ffmpeg with the given arguments."""
     proc = await asyncio.subprocess.create_subprocess_exec(
         "/usr/bin/env",
         "ffmpeg",
@@ -62,7 +62,7 @@ async def video_to_gif(
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """Converts a video to a mpeg4 gif"""
+    """Converts a video to a mpeg4 gif."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (video := msg.video) is None:
@@ -86,9 +86,10 @@ async def photo_to_sticker(
     command: CommandObject,
     reply: Message | None,
 ) -> None:
-    """Converts a photo to a sticker-ready png or webp
+    """Converts a photo to a sticker-ready png or webp.
 
-    Both are assumed when no argument is specified."""
+    Both are assumed when no argument is specified.
+    """
     msg = reply if reply is not None else message
     image = await client.download_media(msg, in_memory=True)
     image.seek(0)
@@ -118,7 +119,7 @@ async def video_to_audio(
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """Extracts audio from video"""
+    """Extracts audio from video."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (video := msg.video) is None:

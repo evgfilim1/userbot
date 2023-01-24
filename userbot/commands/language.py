@@ -22,7 +22,7 @@ async def chat_language(
     tr: Translation,
     lang: str,
 ) -> str:
-    """Get or change the language of the bot for the current chat"""
+    """Gets or changes the language of the bot for the current chat."""
     # Mark the flag as translatable string but don't translate it here yet
     _ = lambda x: x
     # i18n: flag must be country flag for the language

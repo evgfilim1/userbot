@@ -62,9 +62,10 @@ class _ReplaceHelper:
 
 @commands.add("tr", usage="['en'|'ru']", reply_required=True)
 async def sw(message: Message, command: CommandObject, reply: Message, tr: Translation) -> None:
-    """Swaps keyboard layout from en to ru or vice versa
+    """Swaps keyboard layout from en to ru or vice versa.
 
-    If no argument is provided, the layout will be switched between en and ru."""
+    If no argument is provided, the layout will be switched between en and ru.
+    """
     # TODO (2021-12-01): detect ambiguous replacements via previous char
     _ = tr.gettext
     target_layout = command.args[0]
@@ -96,10 +97,11 @@ async def sed(
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """sed-like replacement
+    """sed-like replacement.
 
     `args` is a string of a pattern to find, replacement string and optional regex flags separated
-    by '/'. If no flags are specified, trailing slash is mandatory."""
+    by '/'. If no flags are specified, trailing slash is mandatory.
+    """
     # TODO (2022-02-17): work with entities
     _ = tr.gettext
     text = get_message_text(reply)
@@ -133,7 +135,7 @@ async def sed(
 
 @commands.add("caps", reply_required=True)
 async def caps(message: Message, reply: Message, tr: Translation) -> None:
-    """Toggles capslock on the message"""
+    """Toggles capslock on the message."""
     _ = tr.gettext
     try:
         await edit_replied_or_reply(

@@ -20,7 +20,7 @@ commands = CommandsModule("Stickers")
 
 @commands.add("longcat")
 async def longcat(client: Client, message: Message) -> None:
-    """Sends random longcat"""
+    """Sends random longcat."""
     key = "black" if random.random() >= 0.5 else "white"
     head, body, tail = (
         random.choice(LONGCAT[f"head_{key}"]),
@@ -44,7 +44,7 @@ async def random_sticker(
     command: CommandObject,
     storage: Storage,
 ) -> None:
-    """Sends random sticker from specified pack or one matching specified emoji"""
+    """Sends random sticker from specified pack or one matching specified emoji."""
     arg = command.args[0]
     if not arg.isalnum():
         # assume it's an emoji

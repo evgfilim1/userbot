@@ -123,7 +123,7 @@ class TelegramConfig:
 
     @classmethod
     def from_env(cls) -> TelegramConfig:
-        """Load TelegramConfig from environment variables."""
+        """Loads `TelegramConfig` from environment variables."""
         return cls(
             api_id=_get_env_value("API_ID", int),
             api_hash=SecretValue(_get_env_value("API_HASH")),
@@ -149,7 +149,7 @@ class StorageConfig:
 
     @classmethod
     def from_env(cls) -> StorageConfig:
-        """Load StorageConfig from environment variables."""
+        """Loads `StorageConfig` from environment variables."""
         return cls(
             session_name=_get_env_value("SESSION"),
             data_location=Path(_get_env_value("DATA_LOCATION", default="/data")),
@@ -165,7 +165,7 @@ class RedisConfig:
 
     @classmethod
     def from_env(cls) -> RedisConfig:
-        """Load RedisConfig from environment variables."""
+        """Loads `RedisConfig` from environment variables."""
         password = _get_env_value("REDIS_PASSWORD", default=None)
         return cls(
             host=_get_env_value("REDIS_HOST"),
@@ -189,7 +189,7 @@ class AppConfig:
 
     @classmethod
     def from_env(cls) -> AppConfig:
-        """Load AppConfig from environment variables."""
+        """Loads `AppConfig` from environment variables."""
         return cls(
             command_prefix=_get_env_value("COMMAND_PREFIX", default=","),
             log_level=_get_env_value("LOG_LEVEL", default="INFO").upper(),
@@ -205,6 +205,6 @@ class ThirdPartyServicesConfig:
 
     @classmethod
     def from_env(cls) -> ThirdPartyServicesConfig:
-        """Load ThirdPartyServicesConfig from environment variables."""
+        """Loads `ThirdPartyServicesConfig` from environment variables."""
         # stub for future use
         return cls()

@@ -33,7 +33,7 @@ async def _get_random_message(
 
 
 async def _set_random_chat_photo(chat_id: int, client: Client) -> Message:
-    """Sets a random chat photo"""
+    """Sets a random chat photo."""
     retries = 20
     while retries >= 0:
         message = await _get_random_message(chat_id, MessagesFilter.PHOTO, client)
@@ -50,7 +50,7 @@ async def _set_random_chat_photo(chat_id: int, client: Client) -> Message:
 
 
 async def _set_random_chat_title(chat_id: int, client: Client) -> Message:
-    """Sets a random chat title"""
+    """Sets a random chat title."""
     retries = 50
     chat = await client.get_chat(chat_id)
     title_prefix = chat.title.split(" — ")[0]
@@ -84,9 +84,10 @@ async def random_chat_info(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Sets random chat photo and/or title
+    """Sets random chat photo and/or title.
 
-    Sets both if no argument is given."""
+    Sets both if no argument is given.
+    """
     _ = tr.gettext
     text = ""
     what = command.args[0]
@@ -107,7 +108,7 @@ async def random_chat_info(
 
 @commands.add("rndmsg")
 async def random_chat_message(client: Client, message: Message, tr: Translation) -> str:
-    """Sends a random message from the chat"""
+    """Sends a random message from the chat."""
     _ = tr.gettext
     msg = await _get_random_message(message.chat.id, MessagesFilter.EMPTY, client)
     return _("<a href='{msg.link}'>Random message (#{msg.id})</a>").format(msg=msg)

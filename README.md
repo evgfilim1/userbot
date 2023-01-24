@@ -34,90 +34,90 @@ overriden in config.
 List of userbot commands available:
 
 About:
-• about — Shows information about this userbot
-• help [command] — Sends help for all commands or for a specific one
-• stats ['bot'|'short'|'full'] — Shows some statistics about this userbot
+• about — Shows information about this userbot.
+• help [command] — Sends help for all commands or for a specific one.
+• stats ['bot'|'short'|'full'] — Shows some statistics about this userbot.
 
 Chat administration:
-• chatban|chatrestrict <'reply'|user_id|username|user_group> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat
-• chatcleardel — Kicks Deleted Accounts from the chat
-• chatinvite <user_id|username|user_group> — Invites a user to the current chat
-• chatunban <'reply'|user_id|username|user_group> — Unbans a user in a chat
-• <in reply> no_react2ban|noreact2ban — Stops react2ban on the message
-• <in reply> pin ['silent'] — Pins the message
-• <in reply> promote <admin_title...> — Promotes a user to an admin without any rights but with title
-• react2ban — Bans a user whoever reacted to the message
-• <in reply> s_pin ['silent'] — Pins the message silently (without returning the result)
+• chatban|chatrestrict <'reply'|user_id|username|user_group> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat.
+• chatcleardel — Kicks Deleted Accounts from the chat.
+• chatinvite <user_id|username|user_group> — Invites users to the current chat.
+• chatunban <'reply'|user_id|username|user_group> — Unbans a user in a chat.
+• <in reply> no_react2ban|noreact2ban — Stops react2ban on the message.
+• <in reply> pin ['silent'] — Pins the message.
+• <in reply> promote <admin_title...> — Promotes a user to an admin without any rights but with title.
+• react2ban — Bans a user whoever reacted to the message.
+• <in reply> s_pin ['silent'] — Pins the message silently (without returning the result).
 
 Chat info:
-• rndinfo ['photo'|'title'] — Sets random chat photo and/or title
-• rndmsg — Sends a random message from the chat
+• rndinfo ['photo'|'title'] — Sets random chat photo and/or title.
+• rndmsg — Sends a random message from the chat.
 
 Colors:
-• color <color_spec> — Sends a specified color sample
-• usercolor [user_id|username|user_group] — Sends a color sample of user's color as shown in clients
+• color <color_spec> — Sends a specified color sample.
+• usercolor [user_id|username|user_group] — Sends a color sample of user's color as shown in clients.
 
 Content converters:
-• toaudio — Extracts audio from video
-• togif — Converts a video to a mpeg4 gif
-• tosticker ['png'|'webp'] — Converts a photo to a sticker-ready png or webp
+• toaudio — Extracts audio from video.
+• togif — Converts a video to a mpeg4 gif.
+• tosticker ['png'|'webp'] — Converts a photo to a sticker-ready png or webp.
 
 Dice:
-• roll|dice <dice_spec> — Rolls dice according to d20.roll syntax
+• roll|dice <dice_spec> — Rolls dice according to `d20.roll` syntax.
 
 Download:
-• download|dl ['single'|'all'] [filename]... — Downloads a file or files
+• download|dl ['single'|'all'] [filename]... — Downloads a file or files.
 
 Hooks:
-• hooklist|hook_list — List all available hooks
-• hookshere|hooks_here — List enabled hooks in the chat
+• hooklist|hook_list — Lists all available hooks.
+• hookshere|hooks_here — Lists enabled hooks in the chat.
 
 Language:
-• lang [language_code] — Get or change the language of the bot for the current chat
+• lang [language_code] — Gets or changes the language of the bot for the current chat.
 
 Messages:
-• <in reply> copyhere|cphere|cph — Copies replied message to current chat
-• <in reply> delete|delet|del — Deletes replied message for everyone
-• dump [jq_query...] — Dumps entire message or its attribute specified with jq syntax
-• userfirstmsg — Replies to user's very first message in the chat
+• <in reply> copyhere|cphere|cph — Copies replied message to current chat.
+• <in reply> delete|delet|del — Deletes replied message for everyone.
+• dump [jq_query...] — Dumps entire message or its attribute specified with `jq` syntax.
+• userfirstmsg — Looks for the user's very first message in the chat.
 
 Notes:
-• get|note|n <key...> — Sends saved note
-• note_del|ndel <key...> — Deletes saved note
-• notes|ns — Shows all saved notes
-• <in reply> save|note_add|nadd <key...> — Saves replied message as note for later use
+• get|note|n <key...> — Sends saved note.
+• note_del|ndel <key...> — Deletes saved note.
+• notes|ns — Shows all saved notes.
+• <in reply> save|note_add|nadd <key...> — Saves replied message as note for later use.
 
 Reactions:
-• <in reply> r [emoji] — Reacts to a message with a specified emoji or removes any reaction
-• <in reply> rr — Reacts to a message with a random available emoji
-• <in reply> rs — Gets message reactions with users who reacted to it
+• <in reply> r [emoji] — Reacts to a message with a specified emoji or removes any reaction.
+• <in reply> rr — Reacts to a message with a random available emoji.
+• <in reply> rs — Gets message reactions with users who reacted to it.
 
 Reminders:
-• remind <time> [message...] — Sets a reminder in the chat
-• remindme <time> [message...] — Sets a reminder for myself
-• sremind <time> [message...] — Sets a silent reminder in the chat (no confirmation about scheduled message)
-• sremindme <time> [message...] — Sets a silent reminder for myself (no confirmation about scheduled message)
+• remind <time> [message...] — Sets a reminder in the chat.
+• remindme <time> [message...] — Sets a reminder for myself.
+• sremind <time> [message...] — Sets a silent reminder in the chat (no confirmation about scheduled message).
+• sremindme <time> [message...] — Sets a silent reminder for myself (no confirmation about scheduled message).
 
 Stickers:
-• longcat — Sends random longcat
-• rnds <pack_shortlink|pack_alias|emoji> — Sends random sticker from specified pack or one matching specified emoji
+• longcat — Sends random longcat.
+• rnds <pack_shortlink|pack_alias|emoji> — Sends random sticker from specified pack or one matching specified emoji.
 
 Text converters:
-• <in reply> caps — Toggles capslock on the message
-• <in reply> s <args...> — sed-like replacement
-• <in reply> tr ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa
+• <in reply> caps — Toggles capslock on the message.
+• <in reply> s <args...> — sed-like replacement.
+• <in reply> tr ['en'|'ru'] — Swaps keyboard layout from en to ru or vice versa.
 
 Tools:
-• cal [month] [year] — Sends a calendar for a specified month and year
-• calc|eval <python_expr...> — Evaluates Python expression
-• exec <python_code...> — Executes Python expression
-• <in reply> id — Sends replied user's ID as link
+• cal [month] [year] — Sends a calendar for a specified month and year.
+• calc|eval <python_expr...> — Evaluates Python expression.
+• exec <python_code...> — Executes Python code.
+• <in reply> id — Sends replied user's ID as link.
 
 User groups:
-• usergroupadd|ugadd <group_name> [user_id|username|user_group]... — Adds a user to the user group for later use with user resolving
-• usergroupdel|ugdel <group_name> [user_id|username|user_group]... — Removes a user from the user group
-• usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group
-• usergroups|ugs — Lists all the user groups
+• usergroupadd|ugadd <group_name> [user_id|username|user_group]... — Adds a user to the user group for later use with user resolving.
+• usergroupdel|ugdel <group_name> [user_id|username|user_group]... — Removes a user from the user group.
+• usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group.
+• usergroups|ugs — Lists all user groups.
 ```
 
 </details>

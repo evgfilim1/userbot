@@ -27,7 +27,7 @@ _GRAMMAR = r"""
 // * Each argument is usually either a literal or a variable;
 //   * Literals are surrounded by single quotes: `'literal'`;
 //   * Variables are just a valid ASCII identifier from Python except it cannot start with
-//     an underscore: `foo`, `a1b2c3`, `FooBar`;
+//     an underscore: `foo`, `a1_b2_c3`, `FooBar`;
 //   * Variable name cannot be "reply", this is because usage string contained a literal "reply"
 //     in earlier versions that meant a reply to another message is required, but I decided to
 //     remove it due to increased args parsing complexity, so now it's a reserved word;

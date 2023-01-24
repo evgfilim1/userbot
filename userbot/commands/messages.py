@@ -22,7 +22,7 @@ commands = CommandsModule("Messages")
 
 @commands.add("delete", "delet", "del", reply_required=True)
 async def delete_this(message: Message, reply: Message) -> None:
-    """Deletes replied message for everyone"""
+    """Deletes replied message for everyone."""
     try:
         await reply.delete()
     except BadRequest:
@@ -38,7 +38,7 @@ async def dump(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Dumps entire message or its attribute specified with jq syntax"""
+    """Dumps entire message or its attribute specified with `jq` syntax."""
     _ = tr.gettext
     obj = reply if reply is not None else message
     q = command.args["jq_query"]
@@ -78,7 +78,7 @@ async def user_first_message(
     icons: type[Icons],
     tr: Translation,
 ) -> str | None:
-    """Replies to user's very first message in the chat"""
+    """Looks for the user's very first message in the chat."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (user := msg.from_user) is None:
@@ -137,7 +137,7 @@ async def user_first_message(
 
 @commands.add("copyhere", "cphere", "cph", reply_required=True)
 async def copy_here(message: Message, reply: Message) -> None:
-    """Copies replied message to current chat"""
+    """Copies replied message to current chat."""
     await reply.copy(message.chat.id)
     if reply.from_user.id == message.from_user.id:
         await reply.delete()

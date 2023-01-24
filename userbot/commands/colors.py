@@ -35,9 +35,10 @@ async def color(
     icons: type[Icons],
     tr: Translation,
 ) -> None:
-    """Sends a specified color sample
+    """Sends a specified color sample.
 
-    <color-spec> can be a hex color code prefixed by #, or a color name."""
+    <color-spec> can be a hex color code prefixed by #, or a color name.
+    """
     _ = tr.gettext
     color_spec = command.args[0]
     tmp = _create_filled_pic(color_spec)
@@ -62,7 +63,7 @@ async def user_color(
     icons: type[Icons],
     tr: Translation,
 ) -> None:
-    """Sends a color sample of user's color as shown in clients"""
+    """Sends a color sample of user's color as shown in clients."""
     _ = tr.gettext
     user = command.args[0]
     if user is not None:

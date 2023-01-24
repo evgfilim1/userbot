@@ -157,16 +157,20 @@ async def restrict_user(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Restricts or bans a user in a chat
+    """Restricts or bans a user in a chat.
 
     First argument must be a user ID to be banned or literal "reply" to ban the replied user.
+
     `timespec` can be a time delta (e.g. "1d3h"), a time string like "12:30" or "2022-12-31_23:59"),
     literal "0" or literal "forever" (for a permanent restrict). If no time is specified, the user
     will be restricted forever.
+
     `perms` is a comma-separated list of permissions to be revoked from the user. To ban a user,
     pass "*" as `perms` (or omit it). Possible permissions are: "text", "media", "stickers",
     "polls", "links", "invite", "pin", "info".
-    `reason` is an optional argument that will be shown in the ban message."""
+
+    `reason` is an optional argument that will be shown in the ban message.
+    """
     _ = tr.gettext
     user_arg, time, perms_str, reason = command.args
     if user_arg == "reply":
@@ -215,9 +219,10 @@ async def chat_unban(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Unbans a user in a chat
+    """Unbans a user in a chat.
 
-    First argument must be a user ID to be banned or literal "reply" to ban the replied user."""
+    First argument must be a user ID to be banned or literal "reply" to ban the replied user.
+    """
     _ = tr.gettext
     user_arg = command.args[0]
     if user_arg == "reply":
@@ -249,7 +254,7 @@ async def promote(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Promotes a user to an admin without any rights but with title"""
+    """Promotes a user to an admin without any rights but with title."""
     # TODO (2023-01-21): promote to admin with custom permissions
     _ = tr.gettext
     title = command.args[0]
@@ -332,7 +337,7 @@ async def react2ban(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Bans a user whoever reacted to the message"""
+    """Bans a user whoever reacted to the message."""
     _ = tr.gettext
     if message.chat.id > 0:
         return _("{icon} Not a group chat").format(icon=icons.STOP)
@@ -349,7 +354,7 @@ async def no_react2ban(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Stops react2ban on the message"""
+    """Stops react2ban on the message."""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
     _ = tr.gettext
     if message.chat.id > 0:
@@ -396,7 +401,7 @@ async def _pin_common(
     tr: Translation,
     return_result: bool,
 ) -> str | None:
-    """Common code for pin and s_pin"""
+    """Common code for `pin` and `s_pin`."""
     _ = tr.gettext
     await message.pin(disable_notification=no_notify, both_sides=True)
     if return_result:
@@ -414,9 +419,10 @@ async def pin(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Pins the message
+    """Pins the message.
 
-    If 'silent' is specified, the message will be pinned silently"""
+    If 'silent' is specified, the message will be pinned without notification.
+    """
     return await _pin_common(
         reply,
         no_notify=command.args[0] == "silent",
@@ -434,9 +440,10 @@ async def s_pin(
     icons: type[Icons],
     tr: Translation,
 ) -> None:
-    """Pins the message silently (without returning the result)
+    """Pins the message silently (without returning the result).
 
-    If 'silent' is specified, the message will be pinned silently"""
+    If 'silent' is specified, the message will be pinned without notification.
+    """
     await _pin_common(
         reply,
         no_notify=command.args[0] == "silent",
@@ -458,7 +465,7 @@ async def kick_deleted_accounts(
     icons: type[Icons],
     tr: Translation,
 ) -> str:
-    """Kicks Deleted Accounts from the chat"""
+    """Kicks Deleted Accounts from the chat."""
     _ = tr.gettext
     __ = tr.ngettext
     chat_id = message.chat.id
@@ -505,7 +512,7 @@ async def invite_to_chat(
     storage: Storage,
     icons: type[Icons],
 ) -> None:
-    """Invites a user to the current chat"""
+    """Invites users to the current chat."""
     value = command.args[0]
     users = await resolve_users(client, storage, value)
     await message.chat.add_members(list(users))

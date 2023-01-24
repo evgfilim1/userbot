@@ -23,14 +23,14 @@ commands = CommandsModule("Tools")
 
 @commands.add("id", reply_required=True)
 async def mention_with_id(reply: Message) -> str:
-    """Sends replied user's ID as link"""
+    """Sends replied user's ID as link."""
     user = reply.from_user
     return f"<a href='tg://user?id={user.id}'>{user.id}</a>"
 
 
 @commands.add("calc", "eval", usage="<python_expr...>")
 async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
-    """Evaluates Python expression"""
+    """Evaluates Python expression."""
     _ = tr.gettext
     if not allow_unsafe:
         return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
@@ -41,7 +41,7 @@ async def calc(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
 
 @commands.add("exec", usage="<python_code...>")
 async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str:
-    """Executes Python expression"""
+    """Executes Python code."""
     _ = tr.gettext
     if not allow_unsafe:
         return _("{icon} Unsafe commands are disabled in the config").format(icon=Icons.STOP)
@@ -96,9 +96,10 @@ async def python_exec(tr: Translation, allow_unsafe: bool, **kwargs: Any) -> str
 
 @commands.add("cal", usage="[month] [year]")
 async def calendar(message: Message, command: CommandObject) -> str:
-    """Sends a calendar for a specified month and year
+    """Sends a calendar for a specified month and year.
 
-    If no arguments are given, the current month and year are used."""
+    If no arguments are given, the current month and year are used.
+    """
     args = command.args
     # It's more reliable to get current date/time from the message
     now = message.edit_date or message.date or datetime.now()
@@ -115,7 +116,7 @@ async def calendar(message: Message, command: CommandObject) -> str:
 
 @commands.add("testerror", hidden=True)
 async def test_error() -> NoReturn:
-    """Always throws an error
+    """Always throws an error.
 
     This is a test command to see if the error handler works."""
     raise RuntimeError("Test error")
@@ -123,9 +124,10 @@ async def test_error() -> NoReturn:
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
 async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> str:
-    """Sleeps for a specified amount of time
+    """Sleeps for a specified amount of time.
 
-    This is a test command to check the command waiting message and timeout."""
+    This is a test command to check the command waiting message and timeout.
+    """
     _ = tr.gettext
     sec = float(command.args["seconds"])
     await asyncio.sleep(sec)
@@ -134,9 +136,14 @@ async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> 
 
 @commands.add("stopself", hidden=True)
 async def stop_self(message: Message, icons: type[Icons], tr: Translation) -> None:
-    """Stops the bot
+    """Stops the bot.
 
-    If it's running in a production Docker container, it will be restarted automatically."""
+    This effectively works like pressing Ctrl-C in the terminal.
+
+    This command is useful to restart the bot if it's running in a Docker container or under
+    a process manager like systemd and is configured to restart unless manually stopped, which is
+    the default behavior for production docker-compose config in this repo.
+    """
     _ = tr.gettext
     await message.edit(_("{icon} <b>Stopping userbot...</b>").format(icon=icons.WARNING))
-    kill(getpid(), SIGINT)  # Emulate pressing Ctrl-C
+    kill(getpid(), SIGINT)

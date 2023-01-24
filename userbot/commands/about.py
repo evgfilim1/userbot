@@ -25,7 +25,7 @@ commands = CommandsModule("About")
 
 @commands.add("about")
 async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
-    """Shows information about this userbot"""
+    """Shows information about this userbot."""
     _ = tr.gettext
     base_url = "https://github.com/evgfilim1/userbot"
     # TODO (2022-07-13): get this from the git repo also
@@ -67,12 +67,15 @@ async def stats_handler(
     stats: StatsController,
     limits: AppLimitsController,
 ) -> str:
-    """Shows some statistics about this userbot
+    """Shows some statistics about this userbot.
 
     If 'bot' is passed as an argument, shows userbot stats only. No API calls will be made.
+
     If 'short' is passed as an argument, shows the stats without dialogs count (default).
+
     If 'full' is passed as an argument, shows full stats. If you have a lot of dialogs, this may
-    take a while."""
+    take a while.
+    """
     _ = tr.gettext
 
     me_is_premium = client.me.is_premium

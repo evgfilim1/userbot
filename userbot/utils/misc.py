@@ -16,7 +16,7 @@ _CT = TypeVar("_CT", covariant=True)
 
 
 class Unset:
-    """A singleton to represent an unset value"""
+    """A singleton that represents an unset value."""
 
     _instance: ClassVar[Unset | None] = None
 
@@ -37,7 +37,7 @@ def async_partial(
     *args: Any,
     **kwargs: Any,
 ) -> Callable[..., Awaitable[_T]]:
-    """Create a partial function that is awaitable."""
+    """Creates a partial function that is awaitable."""
 
     @functools.wraps(func)
     async def wrapper(*args_: Any, **kwargs_: Any) -> _T:
@@ -69,7 +69,7 @@ class SecretValue(Generic[_CT]):
 
 
 class StatsController:
-    """A class to store and control the stats of a bot."""
+    """A class that stores and controls the stats of a bot."""
 
     def __init__(self) -> None:
         self._startup_time: int | None = None

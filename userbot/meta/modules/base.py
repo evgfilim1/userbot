@@ -66,7 +66,7 @@ class BaseHandler(ABC):
 
     @staticmethod
     async def _edit_or_reply_html_text(message: Message, text: str, **kwargs: Any) -> _NewMessage:
-        """Edit a message if it's outgoing, otherwise reply to it."""
+        """Edits a message if it's outgoing, otherwise reply to it."""
         if message.outgoing or message.from_user is not None and message.from_user.is_self:
             return _NewMessage(
                 message=await message.edit_text(text, parse_mode=ParseMode.HTML, **kwargs),
@@ -78,7 +78,7 @@ class BaseHandler(ABC):
         )
 
     async def _invoke_handler(self, data: dict[str, Any]) -> str | None:
-        """Filter data and call the handler."""
+        """Filters data and calls the handler."""
         suitable_kwargs = {}
         # TODO (2022-11-01): check all params are passed, otherwise raise an error
         for name, param in self._signature.parameters.items():
@@ -90,7 +90,7 @@ class BaseHandler(ABC):
         return await self.handler(**suitable_kwargs)
 
     async def _send_waiting_message(self, data: dict[str, Any]) -> None:
-        """Edit a message after some time to show that the bot is working on the message."""
+        """Edits a message after some time to show that the bot is working on the message."""
         await asyncio.sleep(0.75)
         message: Message = data["message"]
         icons: type[Icons] = data["icons"]
@@ -128,7 +128,7 @@ class BaseHandler(ABC):
         )
 
     async def _invoke_with_timeout(self, data: dict[str, Any]) -> str | None:
-        """Call the handler with a timeout."""
+        """Calls the handler with a timeout."""
         waiting_task = asyncio.create_task(self._send_waiting_message(data))
         try:
             return await asyncio.wait_for(self._invoke_handler(data), timeout=self.timeout)
@@ -139,7 +139,7 @@ class BaseHandler(ABC):
             waiting_task.cancel()
 
     async def _exception_handler(self, e: Exception, data: dict[str, Any]) -> str | None:
-        """Handle exceptions raised by the handler. Re-raises an exception by default."""
+        """Handles exceptions raised by the handler. Re-raises an exception by default."""
         raise
 
     async def _message_too_long_handler(self, result: str, data: dict[str, Any]) -> None:
@@ -159,7 +159,7 @@ class BaseHandler(ABC):
         return
 
     async def _result_handler(self, result: str, data: dict[str, Any]) -> None:
-        """Handle the result of the handler. Edits a message by default."""
+        """Handles the result of the handler. Edits a message by default."""
         actual_message: Message = data.get("new_message", data["message"])
         try:
             await self._edit_or_reply_html_text(actual_message, result)
@@ -193,7 +193,7 @@ _HT = TypeVar("_HT", bound=BaseHandler)
 
 
 class BaseModule(Generic[_HT]):
-    """Base class for modules"""
+    """Base class for modules."""
 
     def __init__(self):
         self._handlers: list[_HT] = []
@@ -216,10 +216,11 @@ class BaseModule(Generic[_HT]):
 
     @abstractmethod
     def _create_handlers_filters(self, handler: _HT) -> tuple[list[type[Handler]], Filter]:
-        """Create Pyrogram handlers and filters for the given handler."""
+        """Creates Pyrogram handlers and filters for the given handler."""
         pass
 
     def register(self, client: Client) -> None:
+        """Registers the module with the given client."""
         for handler in self._handlers:
             handlers, filters = self._create_handlers_filters(handler)
             for handler_cls in handlers:

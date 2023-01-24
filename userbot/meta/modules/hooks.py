@@ -26,7 +26,7 @@ class _HookEnabledFilter(pyrogram_filters.Filter):
 
 
 async def _list_enabled_hooks(message: Message, storage: Storage, tr: Translation) -> str:
-    """List enabled hooks in the chat"""
+    """Lists enabled hooks in the chat."""
     _ = tr.gettext
     hooks = ""
     async for hook in storage.list_enabled_hooks(message.chat.id):
@@ -191,21 +191,23 @@ class HooksModule(BaseModule):
                 handler.add_handler,
                 f"{handler.name}here",
                 f"{handler.name}_here",
-                doc=f"Enable {handler.name} hook for this chat",
+                doc=f"Enables {handler.name} hook for this chat.",
+                category="Hooks",
                 hidden=True,
             )
             commands.add(
                 handler.remove_handler,
                 f"no{handler.name}here",
                 f"no_{handler.name}_here",
-                doc=f"Disable {handler.name} hook for this chat",
+                doc=f"Disables {handler.name} hook for this chat.",
+                category="Hooks",
                 hidden=True,
             )
         super().register(client)
         self.commands.add_submodule(commands)
 
     async def _list_hooks(self, tr: Translation) -> str:
-        """List all available hooks"""
+        """Lists all available hooks."""
         _ = tr.gettext
         hooks = ""
         for handler in self._handlers:
