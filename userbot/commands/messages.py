@@ -41,7 +41,7 @@ async def dump(
     """Dumps entire message or its attribute specified with `jq` syntax."""
     _ = tr.gettext
     obj = reply if reply is not None else message
-    q = command.args["jq_query"]
+    q = q_raw if (q_raw := command.args["jq_query"]) is not None else ""
     try:
         prog = jq.compile(q)
     except ValueError as e:
