@@ -28,8 +28,9 @@ from userbot.storage import RedisStorage, Storage
 from userbot.utils import (
     AppLimitsController,
     GitHubClient,
-    SecretValue,
     StatsController,
+    SecretValue,
+    WakatimeClient,
     fetch_stickers,
 )
 
@@ -98,6 +99,7 @@ def main() -> None:
 
     # third_party_services_config = ThirdPartyServicesConfig.from_env()
     github_client = GitHubClient()
+    wakatime_client = WakatimeClient(config.wakatime_token)
 
     stats = StatsController()
     app_limits = AppLimitsController()
@@ -126,6 +128,7 @@ def main() -> None:
             "notes_chat": app_config.media_notes_chat,
             "github_client": github_client,
             "traceback_chat": app_config.tracebacks_chat,
+            "wakatime_client": wakatime_client,
             "stats": stats,
             "limits": app_limits,
             "allow_unsafe": app_config.allow_unsafe_commands,

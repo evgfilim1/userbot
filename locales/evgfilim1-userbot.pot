@@ -632,6 +632,32 @@ msgstr ""
 msgid "<b>List of userbot commands available:</b>"
 msgstr ""
 
+#: userbot/commands/wakatime.py:30
+msgid: "<b>Wakatime is not responding. Please, try again later</b>"
+msgstr: "<b>Wakatime не відповідає. Спробуйте, будь ласка, пізніше</b>"
+
+#: userbot/commands/wakatime.py:37
+#, python-brace-format
+msgid: "<b>Total time for today:</b> {today_time}"
+msgstr: "<b>Загальний час за сьогодні:</b> {today_time}"
+
+#: userbot/commands/wakatime.py:38
+#, python-brace-format
+msgid: "<b>Total time for the last week:</b> {total_time}"
+msgstr: ""
+
+#: userbot/commands/wakatime.py:40
+msgid: "<b>Top languages:</b>"
+msgstr: ""
+
+#: userbot/commands/wakatime.py:43
+msgid: "<b>Top editors:</b>"
+msgstr: ""
+
+#: userbot/commands/wakatime.py:46
+msgid: "<b>Top projects:</b>"
+msgstr: ""
+
 #: userbot/meta/modules/hooks.py:34
 #, python-brace-format
 msgid ""

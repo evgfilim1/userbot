@@ -564,6 +564,32 @@ msgstr "<b>Hilfe für {args}:</b>\n"
 msgid "<b>List of userbot commands available:</b>"
 msgstr "<b>Liste der verfügbaren Userbotbefehle:</b>"
 
+#: userbot/commands/wakatime.py:30
+msgid: "<b>Wakatime is not responding. Please, try again later</b>"
+msgstr: "<b>Wakatime reagiert nicht. Bitte versuchen Sie es später erneut</b>"
+
+#: userbot/commands/wakatime.py:37
+#, python-brace-format
+msgid: "<b>Total time for today:</b> {today_time}"
+msgstr: "<b>Gesamtzeit für heute:</b> {today_time}"
+
+#: userbot/commands/wakatime.py:38
+#, python-brace-format
+msgid: "<b>Total time for the last week:</b> {total_time}"
+msgstr: "<b>Gesamtzeit für die letzte Woche</b> {total_time}"
+
+#: userbot/commands/wakatime.py:40
+msgid: "<b>Top languages:</b>"
+msgstr: "<b>Top Sprachen:</b>"
+
+#: userbot/commands/wakatime.py:43
+msgid: "<b>Top editors:</b>"
+msgstr: "<b>Top Quellcode-Editoren:</b>"
+
+#: userbot/commands/wakatime.py:46
+msgid: "<b>Top projects:</b>"
+msgstr: "<b>Top Projekte:</b>"
+
 #: userbot/meta/modules/hooks.py:34
 #, python-brace-format
 msgid "Hooks in this chat:\n"
