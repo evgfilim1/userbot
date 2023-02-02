@@ -23,7 +23,7 @@ commands = CommandsModule("Download")
 async def _downloader(
     client: Client,
     message: Message,
-    filename: str,
+    filename: str | None,
     data_dir: Path,
     icons: type[Icons],
     tr: Translation,
@@ -92,13 +92,17 @@ async def download(
     If "single" is specified, only the replied file will be downloaded.
     """
     msg = reply if reply is not None else message
-    if msg.media_group_id and command.args[0] == "all":
+    if msg.media_group_id and command.args[0] in ("all", None):
         all_messages = await msg.get_media_group()
     else:
         all_messages = [msg]
 
     t = ""
-    for target, filename in zip(all_messages, command.args["filename"]):
+    for i, target in enumerate(all_messages):
+        try:
+            filename = command.args["filename"][i]
+        except IndexError:
+            filename = None
         try:
             t += await _downloader(client, target, filename, data_dir, icons, tr)
         except Exception as e:
