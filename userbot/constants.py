@@ -1,16 +1,14 @@
 __all__ = [
-    "TAP_STICKER",
-    "TAP_FLT",
-    "MIBIB_STICKER",
-    "MIBIB_FLT",
-    "LONGCAT",
     "BRA_MEME_PICTURE",
-    "UWU_MEME_PICTURE",
-    "PACK_ALIASES",
     "GH_PATTERN",
     "Icons",
-    "DefaultIcons",
-    "PremiumIcons",
+    "LONGCAT",
+    "MIBIB_FLT",
+    "MIBIB_STICKER",
+    "PACK_ALIASES",
+    "TAP_FLT",
+    "TAP_STICKER",
+    "UWU_MEME_PICTURE",
 ]
 
 import re
@@ -65,57 +63,43 @@ GH_PATTERN = re.compile(  # https://regex101.com/r/bvjYVf/1
 
 class Icons(Enum):
     # https://t.me/addemoji/IconsInTg
-    TRASH = (6050677771154231040, "🗑")
-    INFO = (6050744746874244036, "ℹ")
+    ARCHIVED_CHAT = (6039701346574142584, "📥")
+    ARCHIVED_STICKER = (6039606071314615141, "🕒")
+    BOOKMARK = (6041768050477239766, "⭐")
+    BOT = (5971808079811972376, "🤖")
+    CHANNEL_CHAT = (5764623873974734153, "📢")
+    COLOR = (6048474766463996499, "🎨")
+    COMMAND = (5974226571601382719, "🔨")
     CROSS = (6041914500272098262, "🚫")
-    STOP = (5798760304108113223, "🚫")
+    DIAGRAM = (5974083454701145202, "📊")
+    DOWNLOAD = (6050713964843633615, "⬇")
+    EMOJI = (5971928678198676594, "🙂")
+    GIF = (6048825205730577727, "🎞")
+    GLOBE = (6037284117505116849, "🌐")
+    GROUP_CHAT = (6037355667365300960, "👥")
+    INFO = (6050744746874244036, "ℹ")
+    LOCK = (6003424016977628379, "🔒")
+    MESSAGE = (6041858261970324774, "💬")
+    NOTIFICATION = (6039513858366773821, "🔔")
+    PENCIL = (6039884277821213379, "✏")
     PERSON_BLOCK = (6037623961087380601, "🚫")
     PERSON_TICK = (5801094618833489205, "✅")
     PICTURE = (6048727692793089927, "🖼")
-    PENCIL = (6039884277821213379, "✏")
-    COLOR = (6048474766463996499, "🎨")
-    BOOKMARK = (6041768050477239766, "⭐")
+    PIN = (5974352611711651172, "📌")
+    PREMIUM = (5782804629452492061, "⭐")
+    PRIVATE_CHAT = (6037122016849432064, "👤")
+    SETTINGS = (6039769000898988691, "⚙")
+    STICKER = (6037128751358151991, "📑")
+    STOP = (5798760304108113223, "🚫")
+    TRASH = (6050677771154231040, "🗑")
+    WATCH = (5798396069406576367, "🕒")
     WARNING = (6037615384037690578, "❗")
     QUESTION = (5974229895906069525, "❓")
-    DOWNLOAD = (6050713964843633615, "⬇")
-    WATCH = (5798396069406576367, "🕒")
-    NOTIFICATION = (6039513858366773821, "🔔")
-    GLOBE = (6037284117505116849, "🌐")
-    LOCK = (6003424016977628379, "🔒")
-    PIN = (5974352611711651172, "📌")
-    SETTINGS = (6039769000898988691, "⚙")
-    PREMIUM = (5782804629452492061, "⭐")
-    MESSAGE = (6041858261970324774, "💬")
-    ARCHIVED_CHAT = (6039701346574142584, "📥")
-    PRIVATE_CHAT = (6037122016849432064, "👤")
-    BOT = (5971808079811972376, "🤖")
-    GROUP_CHAT = (6037355667365300960, "👥")
-    CHANNEL_CHAT = (5764623873974734153, "📢")
-    GIF = (6048825205730577727, "🎞")
-    STICKER = (6037128751358151991, "📑")
-    ARCHIVED_STICKER = (6039606071314615141, "🕒")
-    EMOJI = (5971928678198676594, "🙂")
-    DIAGRAM = (5974083454701145202, "📊")
-    COMMAND = (5974226571601382719, "🔨")
     # https://t.me/addemoji/uxtools
     GITHUB = (6318902906900711458, "🌐")
     # https://t.me/addemoji/MaterialIconsAlpha
     GIT = (5469770984670108755, "💩")
 
-
-def _default_str(self: Icons) -> str:
-    return self.value[1]
-
-
-def _premium_str(self: Icons) -> str:
-    custom_emoji_id, emoji = self.value[:2]
-    return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"
-
-
-# Enums cannot be inherited, but I don't want to repeat myself, so I'm creating a class dynamically
-# with all the icons from the Icons enum and override the __str__ method to return needed icon.
-_all_icons = {icon.name: icon.value for icon in Icons}
-DefaultIcons = Enum("DefaultIcons", _all_icons)
-DefaultIcons.__str__ = _default_str
-PremiumIcons = Enum("PremiumIcons", _all_icons)
-PremiumIcons.__str__ = _premium_str
+    def __str__(self) -> str:
+        custom_emoji_id, emoji = self.value[:2]
+        return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"

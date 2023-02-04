@@ -3,7 +3,6 @@ from __future__ import annotations
 __all__ = [
     "Arguments",
     "CommandObject",
-    "icon_middleware",
     "KwargsMiddleware",
     "ParseCommandMiddleware",
     "translate_middleware",
@@ -14,13 +13,12 @@ import html
 import re
 from asyncio import create_task
 from dataclasses import dataclass
-from re import Match
 from typing import Any, Iterable, Iterator, NamedTuple
 
 from lark import Lark, UnexpectedInput
 from pyrogram.types import Message
 
-from .constants import DefaultIcons, Icons, PremiumIcons
+from .constants import Icons
 from .meta.middleware_manager import Handler, Middleware
 from .meta.modules.commands import CommandsHandler, CommandT
 from .meta.usage_parser import Usage, VariableArgumentVariant
@@ -133,7 +131,7 @@ class _CommandInfo(NamedTuple):
     prefix: str
     command: str
     args: str
-    match: Match[str] | None
+    match: re.Match[str] | None
 
 
 def _get_command_info(
@@ -223,15 +221,6 @@ class KwargsMiddleware(Middleware[str | None]):
     ) -> str | None:
         data.update(self.kwargs)
         return await handler(data)
-
-
-async def icon_middleware(
-    handler: Handler[str | None],
-    data: dict[str | Any],
-) -> str | None:
-    """Provides the icons to the handler."""
-    data["icons"] = PremiumIcons if data["client"].me.is_premium else DefaultIcons
-    return await handler(data)
 
 
 async def translate_middleware(

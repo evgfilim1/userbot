@@ -6,7 +6,7 @@ from pyrogram import Client
 from pyrogram.raw import functions, types
 
 from .. import __git_commit__
-from ..constants import Icons, PremiumIcons
+from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
@@ -30,9 +30,10 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
     base_url = "https://github.com/evgfilim1/userbot"
     # TODO (2022-07-13): get this from the git repo also
     commit = __git_commit__ if __git_commit__ else _("staging")
-    if client.me.is_premium:
-        github_icon = PremiumIcons.GITHUB
-        commit_icon = PremiumIcons.GIT
+    me = await client.get_me()
+    if me.is_premium:
+        github_icon = Icons.GITHUB
+        commit_icon = Icons.GIT
     else:
         github_icon = _("<i>Repo:</i>")
         commit_icon = _("<i>Commit:</i>")
@@ -78,7 +79,7 @@ async def stats_handler(
     """
     _ = tr.gettext
 
-    me_is_premium = client.me.is_premium
+    me = await client.get_me()
     report_type = command.args[0]
     if report_type in ("short", "full", ""):
         saved_gifs: types.messages.SavedGifs | None = await client.invoke(
@@ -95,7 +96,7 @@ async def stats_handler(
                 ),
             )
         ).count
-        if me_is_premium:
+        if me.is_premium:
             saved_emoji: types.messages.AllStickers | None = await client.invoke(
                 functions.messages.GetEmojiStickers(hash=0),
             )
@@ -127,7 +128,7 @@ async def stats_handler(
         ),
         "{icon} {premium}".format(
             icon=icons.PREMIUM,
-            premium=_("Has premium") if me_is_premium else _("Has no premium"),
+            premium=_("Has premium") if me.is_premium else _("Has no premium"),
         ),
         _("{icon} Commands used: {count}").format(
             icon=icons.COMMAND,
@@ -174,12 +175,12 @@ async def stats_handler(
                 _("{icon} GIFs: {count}/{total}").format(
                     icon=icons.GIF,
                     count=len(saved_gifs.gifs),
-                    total=limits.limits.saved_gifs.get(me_is_premium),
+                    total=limits.limits.saved_gifs.get(me.is_premium),
                 ),
                 _("{icon} Stickers: {count}/{total}").format(
                     icon=icons.STICKER,
                     count=len(saved_stickers.sets),
-                    total=limits.limits.stickers.get(me_is_premium),
+                    total=limits.limits.stickers.get(me.is_premium),
                 ),
                 _("{icon} Archived stickers: {count}").format(
                     icon=icons.ARCHIVED_STICKER,

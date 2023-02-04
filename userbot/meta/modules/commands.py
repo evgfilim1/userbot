@@ -28,7 +28,7 @@ from pyrogram.handlers import EditedMessageHandler, MessageHandler
 from pyrogram.handlers.handler import Handler
 from pyrogram.types import Message
 
-from ...constants import DefaultIcons, Icons, PremiumIcons
+from ...constants import Icons
 from ...utils import Translation
 from ..args_parser import create_args_parser_grammar
 from ..usage_parser import parser as usage_parser
@@ -199,8 +199,6 @@ class CommandsHandler(BaseHandler):
         client: Client = data["client"]
         # In case one of the middlewares failed, we need to fill in the missing data with
         # the fallback values
-        if "icons" not in data:
-            data["icons"] = PremiumIcons if client.me.is_premium else DefaultIcons
         if "tr" not in data:
             data["tr"] = Translation(None)
         icons: type[Icons] = data["icons"]
@@ -507,11 +505,9 @@ class CommandsModule(BaseModule[CommandsHandler]):
         )
         if self._ensure_middlewares_registered:
             # Prevent circular import
-            from ...middlewares import icon_middleware, translate_middleware
+            from ...middlewares import translate_middleware
 
             # These middlewares are expected by the base module to be registered
-            if icon_middleware not in self._middleware:
-                self.add_middleware(icon_middleware)
             if translate_middleware not in self._middleware:
                 self.add_middleware(translate_middleware)
         self._set_prefix()

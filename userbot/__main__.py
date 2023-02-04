@@ -13,13 +13,13 @@ from userbot import __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
 from userbot.config import AppConfig, RedisConfig, StorageConfig, TelegramConfig
+from userbot.constants import Icons
 from userbot.hooks import hooks
 from userbot.meta.job_manager import AsyncJobManager
 from userbot.meta.modules import CommandsModule, HooksModule
 from userbot.middlewares import (
     KwargsMiddleware,
     ParseCommandMiddleware,
-    icon_middleware,
     translate_middleware,
     update_command_stats_middleware,
 )
@@ -121,6 +121,7 @@ def main() -> None:
     kwargs_middleware = KwargsMiddleware(
         {
             "storage": storage,
+            "icons": Icons,
             "data_dir": storage_config.data_location,
             "notes_chat": app_config.media_notes_chat,
             "github_client": github_client,
@@ -130,9 +131,7 @@ def main() -> None:
             "allow_unsafe": app_config.allow_unsafe_commands,
         }
     )
-    for module, middleware in product(
-        all_modules, (kwargs_middleware, translate_middleware, icon_middleware)
-    ):
+    for module, middleware in product(all_modules, (kwargs_middleware, translate_middleware)):
         module.add_middleware(middleware)
     root_commands.add_middleware(ParseCommandMiddleware(app_config.command_prefix))
     root_commands.add_middleware(update_command_stats_middleware)

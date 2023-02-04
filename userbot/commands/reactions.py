@@ -68,9 +68,10 @@ async def get_reactions(
             )
             continue
         reactions.setdefault(reaction, set()).add(r.peer_id.user_id)
+    me = await client.get_me()
     for reaction, peers in reactions.items():
         if isinstance(reaction, int):
-            if client.me.is_premium:
+            if me.is_premium:
                 reaction_str = f"<emoji id={reaction}>⁉</emoji>"
             else:
                 reaction_str = _("Custom reaction #<code>{r}</code>").format(r=reaction)
