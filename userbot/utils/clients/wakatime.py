@@ -1,22 +1,52 @@
+from __future__ import annotations
+
 __all__ = [
+    "StatElement",
+    "WakatimeStats",
     "WakatimeClient",
 ]
 
+import logging
 from base64 import b64encode
+from dataclasses import dataclass
 from datetime import datetime
-from math import floor
+from typing import Any, TypedDict
 
 from .base import BaseClient
 
+_log = logging.getLogger(__name__)
 
-def format_time(seconds: int) -> str:
-    if seconds < 60:
-        return "no coding stats for today"
 
-    hours = int(seconds // 3600)
-    minutes = int((seconds - hours * 3600) // 60)
+class _StatElementDict(TypedDict):
+    name: str
+    text: str
+    percent: float
+    total_seconds: float
 
-    return "{0}{1}".format(f"{hours}h" if hours > 0 else "", f" {minutes}m" if minutes > 0 else "")
+
+@dataclass()
+class StatElement:
+    name: str
+    text: str
+    percent: float
+    total_seconds: float
+
+    @classmethod
+    def from_dict(cls, data: _StatElementDict) -> StatElement:
+        return cls(
+            name=data["name"],
+            text=data["text"],
+            percent=data["percent"],
+            total_seconds=data["total_seconds"],
+        )
+
+
+@dataclass()
+class WakatimeStats:
+    total_time: float
+    languages: list[StatElement]
+    editors: list[StatElement]
+    projects: list[StatElement]
 
 
 class WakatimeClient(BaseClient, base_url="https://wakatime.com/api/v1/"):
@@ -24,38 +54,35 @@ class WakatimeClient(BaseClient, base_url="https://wakatime.com/api/v1/"):
         super().__init__()
         self._client.headers = {"Authorization": f"Basic {b64encode(token.encode()).decode()}"}
 
-    @staticmethod
-    def __process_stats_entity(entities) -> list[dict]:
-        return [
-            {"name": entity["name"], "text": entity["text"], "percent": entity["percent"]}
-            for entity in entities
-        ]
-
-    async def get_today_time(self) -> str:
+    async def get_today_time(self) -> float:
         date = datetime.today().strftime("%Y-%m-%d")
 
-        response: dict = (
+        response: dict[str, Any] = (
             await self._client.get(
                 "/users/current/durations",
                 params={"date": date},
             )
         ).json()
 
-        return format_time(sum([floor(project["duration"]) for project in response["data"]]))
+        return sum(project["duration"] for project in response["data"])
 
-    async def get_stats(self) -> dict:
-        response: dict = (await self._client.get("/users/current/stats/last_7_days")).json()["data"]
+    async def get_stats(self) -> WakatimeStats | None:
+        response = await self._client.get("/users/current/stats/last_7_days")
+        response_json = response.json()
+        _log.debug("get_stats got %r", response_json)
+        if response.status_code == 202:
+            return None
+        response.raise_for_status()
 
-        total_time = format_time(response["total_seconds"])
-        languages = self.__process_stats_entity(response["languages"])
-        editors = self.__process_stats_entity(response["editors"])
-        projects = self.__process_stats_entity(response["projects"])
+        data = response_json["data"]
+        total_time = data["total_seconds"]
+        languages = [StatElement.from_dict(x) for x in data["languages"]]
+        editors = [StatElement.from_dict(x) for x in data["editors"]]
+        projects = [StatElement.from_dict(x) for x in data["projects"]]
 
-        result = {
-            "total_time": total_time,
-            "languages": languages,
-            "editors": editors,
-            "projects": projects,
-        }
-
-        return result
+        return WakatimeStats(
+            total_time=total_time,
+            languages=languages,
+            editors=editors,
+            projects=projects,
+        )

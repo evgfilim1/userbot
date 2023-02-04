@@ -13,8 +13,6 @@ __all__ = [
     "get_message_content",
     "get_message_entities",
     "get_message_text",
-    "GitHubClient",
-    "WakatimeClient",
     "is_my_message",
     "json_value_to_python",
     "Limit",
@@ -29,7 +27,6 @@ __all__ = [
 ]
 
 from .app_config import AppLimits, AppLimitsController, Limit, get_app_limits
-from .clients import GitHubClient, WakatimeClient
 from .dialogs import DialogCount, get_dialogs_count
 from .filters import StickerFilter
 from .messages import (

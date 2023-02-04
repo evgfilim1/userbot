@@ -10,7 +10,7 @@ from urllib.parse import quote_plus
 from .constants import GH_PATTERN
 from .meta.modules import ShortcutsModule
 from .storage import Storage
-from .utils import GitHubClient
+from .utils.clients import GitHubClient
 
 shortcuts = ShortcutsModule()
 
