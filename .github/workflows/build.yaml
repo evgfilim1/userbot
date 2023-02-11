@@ -2,9 +2,9 @@ name: Build and push Docker image
 
 on:
   push:
-    branches: &branches
+    branches:
       - master
-    paths: &paths
+    paths:
       - ".github/workflows/build.yaml"
       - "locales/**.po"
       - "userbot/**"
@@ -13,8 +13,16 @@ on:
       - "Dockerfile"
       - "requirements.txt"
   pull_request:
-    branches: *branches
-    paths: *paths
+    branches:
+      - master
+    paths:
+      - ".github/workflows/build.yaml"
+      - "locales/**.po"
+      - "userbot/**"
+      - ".dockerignore"
+      - "dev-requirements.txt"
+      - "Dockerfile"
+      - "requirements.txt"
 
 env:
   REGISTRY: ghcr.io

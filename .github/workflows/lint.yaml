@@ -2,9 +2,9 @@ name: Lint code
 
 on:
   push:
-    branches: &branches
+    branches:
       - master
-    paths: &paths
+    paths:
       - ".github/workflows/lint.yaml"
       - "locales/*.pot"
       - "userbot/**"
@@ -15,8 +15,18 @@ on:
       - "scripts/potctl.py"
       - "pyproject.toml"
   pull_request:
-    branches: *branches
-    paths: *paths
+    branches:
+      - master
+    paths:
+      - ".github/workflows/lint.yaml"
+      - "locales/*.pot"
+      - "userbot/**"
+      - ".pre-commit-config.yaml"
+      - "dev-requirements.txt"
+      - "requirements.txt"
+      - "scripts/check_usages.py"
+      - "scripts/potctl.py"
+      - "pyproject.toml"
 
 permissions:
   contents: read
