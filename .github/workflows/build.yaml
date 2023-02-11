@@ -2,9 +2,9 @@ name: Build and push Docker image
 
 on:
   push:
-    branches:
+    branches: &branches
       - master
-    paths:
+    paths: &paths
       - ".github/workflows/build.yaml"
       - "locales/**.po"
       - "userbot/**"
@@ -12,7 +12,9 @@ on:
       - "dev-requirements.txt"
       - "Dockerfile"
       - "requirements.txt"
-  # TODO (2022-09-30): Add `pull_request` trigger.
+  pull_request:
+    branches: *branches
+    paths: *paths
 
 env:
   REGISTRY: ghcr.io
@@ -55,7 +57,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
