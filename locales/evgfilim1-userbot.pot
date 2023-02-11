@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-05 01:51+0500\n"
+"POT-Creation-Date: 2023-02-11 20:21+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -556,43 +556,51 @@ msgstr ""
 msgid "{icon} User groups:"
 msgstr ""
 
-#: userbot/commands/wakatime.py:36
+#: userbot/commands/wakatime.py:76
+msgid "Collecting Wakatime stats..."
+msgstr ""
+
+#: userbot/commands/wakatime.py:85
 #, python-brace-format
 msgid ""
 "{icon} <b>Wakatime is not configured.</b> Please set up your API key in order to use this "
 "command. See project README for more."
 msgstr ""
 
-#: userbot/commands/wakatime.py:45
+#: userbot/commands/wakatime.py:94
 #, python-brace-format
 msgid "{icon} <b>Wakatime is not responding. Please, try again later.</b>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:49
+#: userbot/commands/wakatime.py:98
 #, python-brace-format
 msgid "{icon} Stats are refreshing, please try again in a few seconds."
 msgstr ""
 
-#: userbot/commands/wakatime.py:58
+#: userbot/commands/wakatime.py:107
+msgid "<b>My Wakatime stats:</b>"
+msgstr ""
+
+#: userbot/commands/wakatime.py:108
 #, python-brace-format
-msgid "<b>Total time for today:</b> {today_time}"
+msgid "• <i>Total time for today:</i> {today_time}"
 msgstr ""
 
-#: userbot/commands/wakatime.py:61
+#: userbot/commands/wakatime.py:111
 #, python-brace-format
-msgid "<b>Total time for the last week:</b> {total_time}"
+msgid "• <i>Total time for the last 7 days:</i> {total_time}"
 msgstr ""
 
-#: userbot/commands/wakatime.py:65
-msgid "<b>Top languages:</b>"
+#: userbot/commands/wakatime.py:115
+msgid "• <i>Top languages:</i>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:68
-msgid "<b>Top editors:</b>"
+#: userbot/commands/wakatime.py:118
+msgid "• <i>Top editors:</i>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:71
-msgid "<b>Top projects:</b>"
+#: userbot/commands/wakatime.py:121
+msgid "• <i>Top projects:</i>"
 msgstr ""
 
 #: userbot/meta/modules/base.py:103
