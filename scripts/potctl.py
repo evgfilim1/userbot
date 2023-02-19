@@ -43,7 +43,7 @@ def extract_message_template_catalog() -> Catalog:
         copyright_holder="Evgeniy Filimonov",
         msgid_bugs_address="https://github.com/evgfilim1/userbot/issues",
     )
-    for (filename, lineno, message, comments, context) in extract_from_dir(
+    for filename, lineno, message, comments, context in extract_from_dir(
         "userbot",
         keywords={"_": None, "__": (1, 2)},
         comment_tags=("i18n",),
