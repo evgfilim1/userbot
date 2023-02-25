@@ -146,7 +146,3 @@ userbot/commands/test.py
 # Pyrogram stray and sensitive files which may accidentally appear in the directory
 *.session*
 unknown_errors.txt
-
-# IDE Settings
-.idea/
-.vscode/
