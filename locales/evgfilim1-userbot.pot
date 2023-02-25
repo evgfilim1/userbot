@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-11 20:21+0500\n"
+"POT-Creation-Date: 2023-02-26 01:48+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -556,50 +556,50 @@ msgstr ""
 msgid "{icon} User groups:"
 msgstr ""
 
-#: userbot/commands/wakatime.py:76
+#: userbot/commands/wakatime.py:78
 msgid "Collecting Wakatime stats..."
 msgstr ""
 
-#: userbot/commands/wakatime.py:85
+#: userbot/commands/wakatime.py:87
 #, python-brace-format
 msgid ""
 "{icon} <b>Wakatime is not configured.</b> Please set up your API key in order to use this "
 "command. See project README for more."
 msgstr ""
 
-#: userbot/commands/wakatime.py:94
+#: userbot/commands/wakatime.py:96
 #, python-brace-format
 msgid "{icon} <b>Wakatime is not responding. Please, try again later.</b>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:98
+#: userbot/commands/wakatime.py:100
 #, python-brace-format
 msgid "{icon} Stats are refreshing, please try again in a few seconds."
 msgstr ""
 
-#: userbot/commands/wakatime.py:107
+#: userbot/commands/wakatime.py:109
 msgid "<b>My Wakatime stats:</b>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:108
+#: userbot/commands/wakatime.py:110
 #, python-brace-format
 msgid "• <i>Total time for today:</i> {today_time}"
 msgstr ""
 
-#: userbot/commands/wakatime.py:111
+#: userbot/commands/wakatime.py:113
 #, python-brace-format
 msgid "• <i>Total time for the last 7 days:</i> {total_time}"
 msgstr ""
 
-#: userbot/commands/wakatime.py:115
+#: userbot/commands/wakatime.py:117
 msgid "• <i>Top languages:</i>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:118
+#: userbot/commands/wakatime.py:120
 msgid "• <i>Top editors:</i>"
 msgstr ""
 
-#: userbot/commands/wakatime.py:121
+#: userbot/commands/wakatime.py:123
 msgid "• <i>Top projects:</i>"
 msgstr ""
 

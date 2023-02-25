@@ -1,4 +1,6 @@
-__all__ = ["commands"]
+__all__ = [
+    "commands",
+]
 
 from typing import Iterable
 
