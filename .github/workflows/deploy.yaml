@@ -47,15 +47,13 @@ jobs:
           COMPOSE_CMD: docker compose -p userbot
           REGISTRY: ghcr.io
           IMAGE_NAME: ${{ github.repository }}
-        # Using `docker-compose` because it properly supports pulling from different registries.
-        # More: https://github.com/docker/compose/issues/9448
         run: |
           set -eu
           mkdir ~/.ssh/
           echo "$SSH_PRIVATE_KEY" >~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
           echo "$SSH_PUBLIC_KEY" >~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
           echo "$ENV_FILE_CONTENT" >.env && chmod 400 .env
-          docker-compose pull
+          eval $COMPOSE_CMD pull
           eval $COMPOSE_CMD stop main
           eval $COMPOSE_CMD run --rm --entrypoint /usr/bin/env main python3.11 -m userbot.migrations
           eval $COMPOSE_CMD up -d main
