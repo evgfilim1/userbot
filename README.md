@@ -118,6 +118,9 @@ User groups:
 • usergroupdel|ugdel <group_name> [user_id|username|user_group]... — Removes a user from the user group.
 • usergrouplist|uglist <group_name> ['resolve'] — Lists the users in the user group.
 • usergroups|ugs — Lists all user groups.
+
+Wakatime:
+• wakatime|waka — Gets your Wakatime stats for today and the last 7 days.
 ```
 
 </details>

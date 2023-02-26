@@ -12,7 +12,13 @@ from pyrogram.methods.utilities.idle import idle
 from userbot import __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
-from userbot.config import AppConfig, RedisConfig, StorageConfig, TelegramConfig
+from userbot.config import (
+    AppConfig,
+    RedisConfig,
+    StorageConfig,
+    TelegramConfig,
+    ThirdPartyServicesConfig,
+)
 from userbot.constants import Icons
 from userbot.hooks import hooks
 from userbot.meta.job_manager import AsyncJobManager
@@ -25,13 +31,8 @@ from userbot.middlewares import (
 )
 from userbot.shortcuts import shortcuts
 from userbot.storage import RedisStorage, Storage
-from userbot.utils import (
-    AppLimitsController,
-    GitHubClient,
-    SecretValue,
-    StatsController,
-    fetch_stickers,
-)
+from userbot.utils import AppLimitsController, SecretValue, StatsController, fetch_stickers
+from userbot.utils.clients import GitHubClient, WakatimeClient
 
 _log = logging.getLogger(__name__)
 
@@ -96,8 +97,12 @@ def main() -> None:
         password,
     )
 
-    # third_party_services_config = ThirdPartyServicesConfig.from_env()
+    third_party_services_config = ThirdPartyServicesConfig.from_env()
     github_client = GitHubClient()
+    if third_party_services_config.wakatime_token is not None:
+        wakatime_client = WakatimeClient(third_party_services_config.wakatime_token.value)
+    else:
+        wakatime_client = None
 
     stats = StatsController()
     app_limits = AppLimitsController()
@@ -129,6 +134,7 @@ def main() -> None:
             "stats": stats,
             "limits": app_limits,
             "allow_unsafe": app_config.allow_unsafe_commands,
+            "wakatime_client": wakatime_client,
         }
     )
     for module, middleware in product(all_modules, (kwargs_middleware, translate_middleware)):

@@ -54,17 +54,17 @@ def parse_timespec(now: datetime, timespec: str) -> datetime:
 
 
 def format_timedelta(seconds: int | float | timedelta) -> str:
-    """Format a timedelta as a string like "1d2h3m4s"."""
+    """Format a timedelta as a string like "1d 2h 3m 4s"."""
     if isinstance(seconds, timedelta):
         seconds = seconds.total_seconds()
     seconds = int(seconds)
-    t = ""
+    parts = []
     for divisor, unit in ((60, "s"), (60, "m"), (24, "h"), (365, "d")):
         seconds, remainder = divmod(seconds, divisor)
         if remainder > 0:
-            t = f"{remainder}{unit}{t}"
+            parts.append(f"{remainder}{unit}")
         if seconds == 0:
             break
     if seconds > 0:
-        t = f"{seconds}y{t}"
-    return t or "0s"
+        parts.append(f"{seconds}y")
+    return " ".join(reversed(parts)) or "0s"

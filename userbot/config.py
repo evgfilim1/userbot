@@ -201,10 +201,12 @@ class AppConfig:
 
 @dataclass()
 class ThirdPartyServicesConfig:
-    ...
+    wakatime_token: SecretValue[str] | None = None
 
     @classmethod
     def from_env(cls) -> ThirdPartyServicesConfig:
         """Loads `ThirdPartyServicesConfig` from environment variables."""
-        # stub for future use
-        return cls()
+        wakatime_token = _get_env_value("WAKATIME_TOKEN", default=None)
+        return cls(
+            wakatime_token=SecretValue(wakatime_token) if wakatime_token is not None else None,
+        )
