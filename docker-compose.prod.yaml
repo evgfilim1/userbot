@@ -3,6 +3,11 @@ services:
   main:
     image: "${REGISTRY:?}/${IMAGE_NAME:?}:${IMAGE_TAG:?}"
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 512M
     env_file: .env
     environment:
       GITHUB_SHA: "${GITHUB_SHA:-}"
