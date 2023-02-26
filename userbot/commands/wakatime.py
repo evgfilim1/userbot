@@ -8,7 +8,7 @@ from httpx import ConnectTimeout, ReadTimeout
 
 from ..constants import Icons
 from ..meta.modules import CommandsModule
-from ..utils import Translation, _, format_timedelta
+from ..utils import Translation, format_timedelta, gettext
 from ..utils.clients import WakatimeClient
 from ..utils.clients.wakatime import StatElement
 
@@ -75,7 +75,7 @@ def _format_top(
         )
 
 
-@commands.add("wakatime", "waka", waiting_message=_("Collecting Wakatime stats..."))
+@commands.add("wakatime", "waka", waiting_message=gettext("Collecting Wakatime stats..."))
 async def wakatime_handler(
     icons: type[Icons],
     wakatime_client: WakatimeClient | None,

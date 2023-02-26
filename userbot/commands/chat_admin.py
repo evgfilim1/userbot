@@ -19,9 +19,9 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation, _, parse_timespec, resolve_users
+from ..utils import Translation, gettext, parse_timespec, resolve_users
 
-_REACT2BAN_TEXT = _(
+_REACT2BAN_TEXT = gettext(
     "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
     "This message is protected from reactions. Anyone who puts a reaction here will be"
     " <b>banned</b> in the chat for half a year."
@@ -456,7 +456,7 @@ async def s_pin(
 
 @commands.add(
     "chatcleardel",
-    waiting_message=_("<i>Clearing Deleted Accounts...</i>"),
+    waiting_message=gettext("<i>Clearing Deleted Accounts...</i>"),
     timeout=1800,
 )
 async def kick_deleted_accounts(
@@ -511,8 +511,10 @@ async def invite_to_chat(
     command: CommandObject,
     storage: Storage,
     icons: type[Icons],
+    tr: Translation,
 ) -> None:
     """Invites users to the current chat."""
+    _ = tr.gettext
     value = command.args[0]
     users = await resolve_users(client, storage, value)
     await message.chat.add_members(list(users))

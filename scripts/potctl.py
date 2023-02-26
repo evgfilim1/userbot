@@ -45,7 +45,7 @@ def extract_message_template_catalog() -> Catalog:
     )
     for filename, lineno, message, comments, context in extract_from_dir(
         "userbot",
-        keywords={"_": None, "__": (1, 2)},
+        keywords={"_": None, "gettext": None, "__": (1, 2), "ngettext": (1, 2)},
         comment_tags=("i18n",),
     ):
         if isinstance(message, str):

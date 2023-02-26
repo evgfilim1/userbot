@@ -15,9 +15,9 @@ from ..utils import (
     DialogCount,
     StatsController,
     Translation,
-    _,
     format_timedelta,
     get_dialogs_count,
+    gettext,
 )
 
 commands = CommandsModule("About")
@@ -56,7 +56,7 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
 @commands.add(
     "stats",
     usage="['bot'|'short'|'full']",
-    waiting_message=_("<i>Collecting stats...</i>"),
+    waiting_message=gettext("<i>Collecting stats...</i>"),
     timeout=120,
 )
 async def stats_handler(

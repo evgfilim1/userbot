@@ -1,6 +1,6 @@
 __all__ = [
-    "_",
-    "__",
+    "gettext",
+    "ngettext",
     "Translation",
 ]
 
@@ -9,12 +9,12 @@ from pathlib import Path
 from typing import Final, Iterable
 
 
-def _(s: str) -> str:
+def gettext(s: str) -> str:
     """A dummy function that marks strings for translation."""
     return s
 
 
-def __(one: str, many: str, n: int) -> str:
+def ngettext(one: str, many: str, n: int) -> str:
     """A dummy function that marks plural strings for translation."""
     return one if n == 1 else many
 

@@ -13,7 +13,7 @@ from ..constants import LONGCAT, PACK_ALIASES
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import StickerInfo, _
+from ..utils import StickerInfo, gettext
 
 commands = CommandsModule("Stickers")
 
@@ -36,7 +36,7 @@ async def longcat(client: Client, message: Message) -> None:
 @commands.add(
     "rnds",
     usage="<pack_shortlink|pack_alias|emoji>",
-    waiting_message=_("<i>Picking random sticker...</i>"),
+    waiting_message=gettext("<i>Picking random sticker...</i>"),
 )
 async def random_sticker(
     client: Client,

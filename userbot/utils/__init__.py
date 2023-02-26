@@ -1,6 +1,4 @@
 __all__ = [
-    "_",
-    "__",
     "AppLimits",
     "AppLimitsController",
     "async_partial",
@@ -13,9 +11,11 @@ __all__ = [
     "get_message_content",
     "get_message_entities",
     "get_message_text",
+    "gettext",
     "is_my_message",
     "json_value_to_python",
     "Limit",
+    "ngettext",
     "parse_timespec",
     "resolve_users",
     "SecretValue",
@@ -40,5 +40,5 @@ from .misc import SecretValue, StatsController, Unset, async_partial
 from .stickers import StickerInfo, fetch_stickers
 from .telegram_json import json_value_to_python
 from .time import format_timedelta, parse_timespec
-from .translations import Translation, _, __
+from .translations import Translation, gettext, ngettext
 from .users import resolve_users

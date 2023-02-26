@@ -15,7 +15,7 @@ from pyrogram.types import Message
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils import Translation, _
+from ..utils import Translation, gettext
 
 commands = CommandsModule("Content converters")
 
@@ -54,7 +54,7 @@ def _convert_to_sticker(photo: BinaryIO, fmt: str) -> BytesIO:
     return sticker
 
 
-@commands.add("togif", waiting_message=_("<i>Converting to mpeg4gif...</i>"))
+@commands.add("togif", waiting_message=gettext("<i>Converting to mpeg4gif...</i>"))
 async def video_to_gif(
     client: Client,
     message: Message,
@@ -78,7 +78,7 @@ async def video_to_gif(
 @commands.add(
     "tosticker",
     usage="['png'|'webp']",
-    waiting_message=_("<i>Converting to sticker...</i>"),
+    waiting_message=gettext("<i>Converting to sticker...</i>"),
 )
 async def photo_to_sticker(
     client: Client,
@@ -111,7 +111,7 @@ async def photo_to_sticker(
         await message.delete()
 
 
-@commands.add("toaudio", waiting_message=_("<i>Extracting audio...</i>"))
+@commands.add("toaudio", waiting_message=gettext("<i>Extracting audio...</i>"))
 async def video_to_audio(
     client: Client,
     message: Message,

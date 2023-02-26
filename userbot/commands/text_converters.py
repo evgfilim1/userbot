@@ -14,14 +14,14 @@ from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..utils import (
     Translation,
-    _,
     edit_replied_or_reply,
     get_message_entities,
     get_message_text,
+    gettext,
     is_my_message,
 )
 
-MAYBE_YOU_MEAN_PREFIX = _("Maybe you mean:")
+MAYBE_YOU_MEAN_PREFIX = gettext("Maybe you mean:")
 
 _log = logging.getLogger(__name__)
 _kb_en = "`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
