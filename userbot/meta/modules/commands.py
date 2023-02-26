@@ -256,7 +256,7 @@ class CommandsHandler(BaseHandler):
         ).format(icon=icons.INFO, message_text=html.escape(message.text))
         async with AsyncClient(base_url="https://nekobin.com/") as nekobin:
             try:
-                res = await nekobin.post("/api/documents", json={"content": text})
+                res = await nekobin.post("/api/documents", json={"content": result})
                 res.raise_for_status()
             except HTTPError:
                 await message.edit(
