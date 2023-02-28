@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-26 14:16+0500\n"
-"PO-Revision-Date: 2023-02-26 09:31\n"
+"POT-Creation-Date: 2023-02-28 15:57+0500\n"
+"PO-Revision-Date: 2023-02-28 11:05\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -313,22 +313,43 @@ msgstr "{icon} Несколько пользователей здесь не п�
 msgid "{icon} Color of the user {user} is {c}"
 msgstr "{icon} Цвет пользователя {user} — {c}"
 
-#: userbot/commands/content_converters.py:57
+#: userbot/commands/content_converters.py:62
 msgid "<i>Converting to mpeg4gif...</i>"
 msgstr "<i>Преобразование в mpeg4gif...</i>"
 
-#: userbot/commands/content_converters.py:69 userbot/commands/content_converters.py:126
+#: userbot/commands/content_converters.py:74 userbot/commands/content_converters.py:131
 #, python-brace-format
 msgid "{icon} No video found"
 msgstr "{icon} Видео не найдено"
 
-#: userbot/commands/content_converters.py:81
+#: userbot/commands/content_converters.py:86
 msgid "<i>Converting to sticker...</i>"
 msgstr "<i>Преобразование в стикер...</i>"
 
-#: userbot/commands/content_converters.py:114
+#: userbot/commands/content_converters.py:119
 msgid "<i>Extracting audio...</i>"
 msgstr "<i>Извлечение аудио...</i>"
+
+#: userbot/commands/content_converters.py:160
+#, python-brace-format
+msgid "{icon} No voice or video note found"
+msgstr ""
+
+#: userbot/commands/content_converters.py:170
+#, python-brace-format
+msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:176
+#, python-brace-format
+msgid "{icon} <i>Transcription is pending...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:177 userbot/commands/content_converters.py:209
+#, python-brace-format
+msgid "{icon} <b>Transcribed text:</b>\n"
+"{text}"
+msgstr ""
 
 #: userbot/commands/download.py:42
 #, python-brace-format
