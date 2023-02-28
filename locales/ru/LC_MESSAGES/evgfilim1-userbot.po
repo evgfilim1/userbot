@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-02-28 17:07+0500\n"
-"PO-Revision-Date: 2023-02-28 12:25\n"
+"PO-Revision-Date: 2023-02-28 19:05\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -25,19 +25,20 @@ msgstr ""
 #: userbot/commands/content_converters.py:161 userbot/hooks.py:73
 #, python-brace-format
 msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
-msgstr ""
+msgstr "{icon} <i>Транскрипция не удалась, возможно, сообщение не имеет распознаваемого голоса?</i>"
 
 #: userbot/commands/content_converters.py:166 userbot/hooks.py:80
 #, python-brace-format
 msgid "{icon} <i>Transcription is pending...</i>"
-msgstr ""
+msgstr "{icon} <i>Транскрипция в обработке...</i>"
 
 #: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:199
 #: userbot/hooks.py:85
 #, python-brace-format
 msgid "{icon} <b>Transcribed text:</b>\n"
 "{text}"
-msgstr ""
+msgstr "{icon} <b>Транскрипция:</b>\n"
+"{text}"
 
 #: userbot/middlewares.py:169
 msgid "Reply is required."
@@ -350,7 +351,7 @@ msgstr "<i>Извлечение аудио...</i>"
 #: userbot/commands/content_converters.py:158
 #, python-brace-format
 msgid "{icon} No voice or video note found"
-msgstr ""
+msgstr "{icon} Это сообщение не является голосовым или видео"
 
 #: userbot/commands/download.py:41
 #, python-brace-format
@@ -586,48 +587,48 @@ msgstr "{icon} Группы пользователей:"
 
 #: userbot/commands/wakatime.py:78
 msgid "Collecting Wakatime stats..."
-msgstr ""
+msgstr "Сбор статистики Wakatime..."
 
 #: userbot/commands/wakatime.py:86
 #, python-brace-format
 msgid "{icon} <b>Wakatime is not configured.</b> Please set up your API key in order to use this command. See project README for more."
-msgstr ""
+msgstr "{icon} <b>Wakatime не настроен.</b> Пожалуйста, настройте свой API ключ, чтобы использовать эту команду. Смотрите README в проекте для получения дополнительной информации."
 
 #: userbot/commands/wakatime.py:95
 #, python-brace-format
 msgid "{icon} <b>Wakatime is not responding. Please, try again later.</b>"
-msgstr ""
+msgstr "{icon} <b>Wakatime не отвечает. Попробуйте, пожалуйста, позже</b>"
 
 #: userbot/commands/wakatime.py:99
 #, python-brace-format
 msgid "{icon} Stats are refreshing, please try again in a few seconds."
-msgstr ""
+msgstr "{icon} Статистика обновляется, пожалуйста, попробуйте снова через несколько секунд."
 
 #: userbot/commands/wakatime.py:108
 msgid "<b>My Wakatime stats:</b>"
-msgstr ""
+msgstr "<b>Моя статистика в Wakatime:</b>"
 
 #: userbot/commands/wakatime.py:109
 #, python-brace-format
 msgid "• <i>Total time for today:</i> {today_time}"
-msgstr ""
+msgstr "• <i>Общее время за сегодня:</i> {today_time}"
 
 #: userbot/commands/wakatime.py:112
 #, python-brace-format
 msgid "• <i>Total time for the last 7 days:</i> {total_time}"
-msgstr ""
+msgstr "• <i>Общее время за последние 7 дней:</i> {total_time}"
 
 #: userbot/commands/wakatime.py:116
 msgid "• <i>Top languages:</i>"
-msgstr ""
+msgstr "• <i>Топ языков:</i>"
 
 #: userbot/commands/wakatime.py:119
 msgid "• <i>Top editors:</i>"
-msgstr ""
+msgstr "• <i>Топ редакторов:</i>"
 
 #: userbot/commands/wakatime.py:122
 msgid "• <i>Top projects:</i>"
-msgstr ""
+msgstr "• <i>Топ проектов:</i>"
 
 #: userbot/meta/modules/base.py:102
 msgid "<i>Userbot is processing the message...</i>"
