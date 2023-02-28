@@ -11,8 +11,7 @@ from typing import BinaryIO
 
 from PIL import Image
 from pyrogram import Client, ContinuePropagation
-from pyrogram.errors import BadRequest
-from pyrogram.raw import base, functions, types
+from pyrogram.raw import base, types
 from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
 
@@ -21,6 +20,7 @@ from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
 from ..utils import Translation, gettext
+from ..utils.premium import transcribe_message
 
 commands = CommandsModule("Content converters")
 
@@ -156,25 +156,17 @@ async def speech_to_text(
     _ = tr.gettext
     if reply.video_note is None and reply.voice is None:
         return _("{icon} No voice or video note found").format(icon=Icons.STOP)
-    try:
-        transcribed: types.messages.TranscribedAudio = await client.invoke(
-            functions.messages.TranscribeAudio(
-                peer=await client.resolve_peer(reply.chat.id),
-                msg_id=reply.id,
-            )
-        )
-    except BadRequest as e:
-        if isinstance(e.value, str) and "TRANSCRIPTION_FAILED" in e.value:
-            return _(
-                "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
-            ).format(icon=Icons.WARNING)
-        raise
-    if transcribed.pending:
-        await storage.save_transcription(transcribed.transcription_id, message.id)
+    result = await transcribe_message(client, reply)
+    if result is None:
+        return _(
+            "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+        ).format(icon=Icons.WARNING)
+    if isinstance(result, int):
+        await storage.save_transcription(result, message.id)
         return _("{icon} <i>Transcription is pending...</i>").format(icon=Icons.WATCH)
     return _("{icon} <b>Transcribed text:</b>\n{text}").format(
         icon=Icons.SPEECH_TO_TEXT,
-        text=transcribed.text,
+        text=result,
     )
 
 

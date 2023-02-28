@@ -15,9 +15,12 @@ from .constants import (
     TAP_FLT,
     TAP_STICKER,
     UWU_MEME_PICTURE,
+    Icons,
 )
 from .meta.modules import HooksModule
-from .utils import StickerFilter
+from .storage import Storage
+from .utils import StickerFilter, Translation
+from .utils.premium import transcribe_message
 
 hooks = HooksModule()
 
@@ -54,3 +57,33 @@ async def on_bra(message: Message) -> None:
 @hooks.add("uwu", filters.regex(r"\b(?:uwu|owo|уву|ово)\b", flags=re.I))
 async def on_uwu(message: Message) -> None:
     await message.reply_photo(UWU_MEME_PICTURE)
+
+
+@hooks.add("auto_transcribe", filters.voice | filters.video_note)
+async def on_voice_or_video(
+    client: Client,
+    message: Message,
+    storage: Storage,
+    tr: Translation,
+) -> None:
+    _ = tr.gettext
+    result = await transcribe_message(client, message)
+    if result is None:
+        await message.reply_text(
+            _(
+                "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+            ).format(icon=Icons.WARNING)
+        )
+        return
+    if isinstance(result, int):
+        msg = await message.reply_text(
+            _("{icon} <i>Transcription is pending...</i>").format(icon=Icons.WATCH)
+        )
+        await storage.save_transcription(result, msg.id)
+        return
+    await message.reply_text(
+        _("{icon} <b>Transcribed text:</b>\n{text}").format(
+            icon=Icons.SPEECH_TO_TEXT,
+            text=result,
+        )
+    )

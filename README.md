@@ -144,6 +144,8 @@ everywhere by default. To check if a hook is enabled or disabled, use `.hooksher
   Reddit post when someone sends "бра" or "bra"
 - `uwu`: Sends a [picture](https://imgur.com/a/bDzntL5) when someone sends "uwu", "owo", "уву"
   or "ово"
+- `auto_transcribe`: Automatically transcribes speech in voice and video messages to text whenever
+  it is sent in the chat
 
 ### Shortcuts
 

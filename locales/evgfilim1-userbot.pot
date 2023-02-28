@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-28 16:29+0500\n"
+"POT-Creation-Date: 2023-02-28 17:07+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,24 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
+
+#: userbot/commands/content_converters.py:161 userbot/hooks.py:73
+#, python-brace-format
+msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:166 userbot/hooks.py:80
+#, python-brace-format
+msgid "{icon} <i>Transcription is pending...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:199
+#: userbot/hooks.py:85
+#, python-brace-format
+msgid ""
+"{icon} <b>Transcribed text:</b>\n"
+"{text}"
+msgstr ""
 
 #: userbot/middlewares.py:169
 msgid "Reply is required."
@@ -331,23 +349,6 @@ msgstr ""
 #: userbot/commands/content_converters.py:158
 #, python-brace-format
 msgid "{icon} No voice or video note found"
-msgstr ""
-
-#: userbot/commands/content_converters.py:168
-#, python-brace-format
-msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
-msgstr ""
-
-#: userbot/commands/content_converters.py:174
-#, python-brace-format
-msgid "{icon} <i>Transcription is pending...</i>"
-msgstr ""
-
-#: userbot/commands/content_converters.py:175 userbot/commands/content_converters.py:207
-#, python-brace-format
-msgid ""
-"{icon} <b>Transcribed text:</b>\n"
-"{text}"
 msgstr ""
 
 #: userbot/commands/download.py:41
