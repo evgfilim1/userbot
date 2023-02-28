@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-04 14:48+0500\n"
-"PO-Revision-Date: 2023-02-04 09:58\n"
+"POT-Creation-Date: 2023-02-28 17:07+0500\n"
+"PO-Revision-Date: 2023-02-28 12:25\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -22,6 +22,23 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: uk_UA\n"
 
+#: userbot/commands/content_converters.py:161 userbot/hooks.py:73
+#, python-brace-format
+msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:166 userbot/hooks.py:80
+#, python-brace-format
+msgid "{icon} <i>Transcription is pending...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:199
+#: userbot/hooks.py:85
+#, python-brace-format
+msgid "{icon} <b>Transcribed text:</b>\n"
+"{text}"
+msgstr ""
+
 #: userbot/middlewares.py:169
 msgid "Reply is required."
 msgstr ""
@@ -30,7 +47,7 @@ msgstr ""
 msgid "Invalid syntax."
 msgstr ""
 
-#: userbot/middlewares.py:197
+#: userbot/middlewares.py:196
 #, python-brace-format
 msgid "{icon} <b>{error}</b>\n"
 "<b>Usage:</b> {usage}\n\n"
@@ -68,79 +85,79 @@ msgstr "{icon} <a href='{url}'>Зробити внесок до переклад
 msgid "<i>Collecting stats...</i>"
 msgstr "<i>Збір статистики...</i>"
 
-#: userbot/commands/about.py:124
+#: userbot/commands/about.py:123
 msgid "<b>Statistics:</b>"
 msgstr "<b>Статистика:</b>"
 
-#: userbot/commands/about.py:125
+#: userbot/commands/about.py:124
 #, python-brace-format
 msgid "{icon} Uptime: {uptime}"
 msgstr "{icon} Час безперервної роботи: {uptime}"
 
-#: userbot/commands/about.py:131
+#: userbot/commands/about.py:130
 msgid "Has premium"
 msgstr "Має преміум"
 
-#: userbot/commands/about.py:131
+#: userbot/commands/about.py:130
 msgid "Has no premium"
 msgstr "Не має преміум"
 
-#: userbot/commands/about.py:133
+#: userbot/commands/about.py:132
 #, python-brace-format
 msgid "{icon} Commands used: {count}"
 msgstr "{icon} Використано команд: {count}"
 
-#: userbot/commands/about.py:142
+#: userbot/commands/about.py:141
 #, python-brace-format
 msgid "{icon} Total chats: {count}"
 msgstr "{icon} Всього чатів: {count}"
 
-#: userbot/commands/about.py:146
+#: userbot/commands/about.py:145
 #, python-brace-format
 msgid "• {icon} Private: {count}"
 msgstr "• {icon} Особистих: {count}"
 
-#: userbot/commands/about.py:150
+#: userbot/commands/about.py:149
 #, python-brace-format
 msgid "• {icon} Bots: {count}"
 msgstr "• {icon} З ботами: {count}"
 
-#: userbot/commands/about.py:154
+#: userbot/commands/about.py:153
 #, python-brace-format
 msgid "• {icon} Groups and supergroups: {count}"
 msgstr "• {icon} Груп i супергруп: {count}"
 
-#: userbot/commands/about.py:158
+#: userbot/commands/about.py:157
 #, python-brace-format
 msgid "• {icon} Channels: {count}"
 msgstr "• {icon} Каналів: {count}"
 
-#: userbot/commands/about.py:162
+#: userbot/commands/about.py:161
 #, python-brace-format
 msgid "• {icon} Archived: {count}"
 msgstr "• {icon} Архівовано: {count}"
 
-#: userbot/commands/about.py:175
+#: userbot/commands/about.py:174
 #, python-brace-format
 msgid "{icon} GIFs: {count}/{total}"
 msgstr "{icon} GIF-анiмацiй: {count}/{total}"
 
-#: userbot/commands/about.py:180
+#: userbot/commands/about.py:179
 #, python-brace-format
 msgid "{icon} Stickers: {count}/{total}"
 msgstr "{icon} Стікерів: {count}/{total}"
 
-#: userbot/commands/about.py:185
+#: userbot/commands/about.py:184
 #, python-brace-format
 msgid "{icon} Archived stickers: {count}"
 msgstr "{icon} Заархівованих стікерів: {count}"
 
-#: userbot/commands/about.py:189
+#: userbot/commands/about.py:188
 #, python-brace-format
 msgid "{icon} Custom emoji: {count}"
 msgstr "{icon} Користувацький емодзі: {count}"
 
-#: userbot/commands/about.py:191
+#: userbot/commands/about.py:190
 msgid "Unavailable"
 msgstr "Недоступно"
 
@@ -210,60 +227,60 @@ msgstr ""
 msgid "{icon_perms} <b>New permissions:</b>"
 msgstr "{icon_perms} <b>Нові права:</b>"
 
-#: userbot/commands/chat_admin.py:209
+#: userbot/commands/chat_admin.py:208
 #, python-brace-format
 msgid "<b>Reason:</b> {reason}"
 msgstr "<b>Причина:</b> {reason}"
 
-#: userbot/commands/chat_admin.py:241
+#: userbot/commands/chat_admin.py:239
 #, python-brace-format
 msgid "{icon} {user_links} <b>unbanned</b> in this chat"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:279
+#: userbot/commands/chat_admin.py:276
 #, python-brace-format
 msgid "{icon} Chat title for the person was set to <i>{title}</i>"
 msgstr "{icon} Посаду людини в чаті змінено на <i>{title}</i>"
 
-#: userbot/commands/chat_admin.py:313
+#: userbot/commands/chat_admin.py:310
 msgid "Recently banned:"
 msgstr "Нещодавно заблоковані:"
 
-#: userbot/commands/chat_admin.py:343 userbot/commands/chat_admin.py:361
-#: userbot/commands/chat_admin.py:473
+#: userbot/commands/chat_admin.py:339 userbot/commands/chat_admin.py:356
+#: userbot/commands/chat_admin.py:460
 #, python-brace-format
 msgid "{icon} Not a group chat"
 msgstr "{icon} Не груповий чат"
 
-#: userbot/commands/chat_admin.py:345 userbot/commands/chat_admin.py:475
+#: userbot/commands/chat_admin.py:341 userbot/commands/chat_admin.py:462
 #, python-brace-format
 msgid "{icon} Cannot ban users in the chat"
 msgstr "{icon} Неможливо забанити користувачів у чаті"
 
-#: userbot/commands/chat_admin.py:365
+#: userbot/commands/chat_admin.py:360
 #, python-brace-format
 msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
 msgstr "{icon} Відстеження реакцій на повідомленні, щоб забанити користувача, було вимкнено"
 
-#: userbot/commands/chat_admin.py:408
+#: userbot/commands/chat_admin.py:400
 #, python-brace-format
 msgid "{icon} Message pinned"
 msgstr "{icon} Повідомлення прикріплено"
 
-#: userbot/commands/chat_admin.py:410
+#: userbot/commands/chat_admin.py:402
 msgid "silently"
 msgstr ""
 
-#: userbot/commands/chat_admin.py:459
+#: userbot/commands/chat_admin.py:447
 msgid "<i>Clearing Deleted Accounts...</i>"
 msgstr "<i>Очищення видалених облікових записів...</i>"
 
-#: userbot/commands/chat_admin.py:495
+#: userbot/commands/chat_admin.py:482
 #, python-brace-format
 msgid "<b>Kicked</b> Deleted Accounts: <i>{n}/{total_deleted}</i>"
 msgstr "<b>Видалено</b> Видалено облікових записів: <i>{n}/{total_deleted}</i>"
 
-#: userbot/commands/chat_admin.py:499
+#: userbot/commands/chat_admin.py:486
 #, python-brace-format
 msgid "<i>({n} member checked)</i>"
 msgid_plural "<i>({n} members checked)</i>"
@@ -272,82 +289,87 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] "<i>({n} учасників перевірено)</i>"
 
-#: userbot/commands/chat_admin.py:519
+#: userbot/commands/chat_admin.py:507
 #, python-brace-format
 msgid "{icon} <i>{value}</i> has been invited to the chat"
 msgstr ""
 
-#: userbot/commands/chat_info.py:96
+#: userbot/commands/chat_info.py:95
 #, python-brace-format
 msgid "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
 msgstr "{icon} <b>Новий аватар чату було встановлено!</b> <a href='{msg_link}'>Джерело</a>\n"
 
-#: userbot/commands/chat_info.py:102
+#: userbot/commands/chat_info.py:101
 #, python-brace-format
 msgid "{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>"
 msgstr "{icon} <b>Нова назва чату була встановлена!</b> <a href='{msg_link}'>Джерело</a>"
 
-#: userbot/commands/chat_info.py:114
+#: userbot/commands/chat_info.py:113
 msgid "<a href='{msg.link}'>Random message (#{msg.id})</a>"
 msgstr "<a href='{msg.link}'>Випадкове повідомлення (#{msg.id})</a>"
 
-#: userbot/commands/colors.py:49
+#: userbot/commands/colors.py:48
 #, python-brace-format
 msgid "{icon} Color {color_spec}"
 msgstr "{icon} Колір {color_spec}"
 
-#: userbot/commands/colors.py:72
+#: userbot/commands/colors.py:70
 #, python-brace-format
 msgid "{icon} No users were specified"
 msgstr ""
 
-#: userbot/commands/colors.py:74
+#: userbot/commands/colors.py:72
 #, python-brace-format
 msgid "{icon} Multiple user are not supported here"
 msgstr ""
 
-#: userbot/commands/colors.py:84
+#: userbot/commands/colors.py:82
 #, python-brace-format
 msgid "{icon} Color of the user {user} is {c}"
 msgstr ""
 
-#: userbot/commands/content_converters.py:57
+#: userbot/commands/content_converters.py:62
 msgid "<i>Converting to mpeg4gif...</i>"
 msgstr "<i>Конвертування до mpeg4gif...</i>"
 
-#: userbot/commands/content_converters.py:69 userbot/commands/content_converters.py:126
+#: userbot/commands/content_converters.py:73 userbot/commands/content_converters.py:129
 #, python-brace-format
 msgid "{icon} No video found"
 msgstr "{icon} Відео не знайдено"
 
-#: userbot/commands/content_converters.py:81
+#: userbot/commands/content_converters.py:85
 msgid "<i>Converting to sticker...</i>"
 msgstr "<i>Конвертування до стікеру...</i>"
 
-#: userbot/commands/content_converters.py:114
+#: userbot/commands/content_converters.py:118
 msgid "<i>Extracting audio...</i>"
 msgstr "<i>Вилучення аудіо...</i>"
 
-#: userbot/commands/download.py:42
+#: userbot/commands/content_converters.py:158
+#, python-brace-format
+msgid "{icon} No voice or video note found"
+msgstr ""
+
+#: userbot/commands/download.py:41
 #, python-brace-format
 msgid "{icon} No downloadable media found"
 msgstr "{icon} Не знайдено файлів для завантаження"
 
-#: userbot/commands/download.py:67
+#: userbot/commands/download.py:66
 #, python-brace-format
 msgid "{icon} The file has been downloaded to <code>{output}</code>"
 msgstr "{icon} Файл завантажений до <code>{output}</code>"
 
-#: userbot/commands/download.py:77
+#: userbot/commands/download.py:76
 msgid "<i>Downloading file(s)...</i>"
 msgstr "<i>Завантаження файлу(ів)...</i>"
 
 #. i18n: flag must be country flag for the language
-#: userbot/commands/language.py:29
+#: userbot/commands/language.py:28
 msgid "🇺🇸"
 msgstr "🇺🇦"
 
-#: userbot/commands/language.py:37
+#: userbot/commands/language.py:36
 #, python-brace-format
 msgid "{icon} Current chat language: {flag} {lang}\n\n"
 "To change it, type <code>{message_text} code</code>\n"
@@ -358,7 +380,7 @@ msgstr "{icon} Поточна мова чату: {flag} {lang}\n\n"
 "Доступні мови:\n"
 "{languages}"
 
-#: userbot/commands/language.py:49
+#: userbot/commands/language.py:48
 #, python-brace-format
 msgid "{icon} Invalid language code {lang!r}\n\n"
 "Available languages:\n"
@@ -367,12 +389,12 @@ msgstr "{icon} Невірний код мови {lang!r}\n\n"
 "Доступні мови:\n"
 "{languages}"
 
-#: userbot/commands/language.py:59
+#: userbot/commands/language.py:58
 #, python-brace-format
 msgid "{icon} Language changed to {flag} {lang}"
 msgstr "{icon} Мова змінена на {flag} {lang}"
 
-#: userbot/commands/messages.py:48
+#: userbot/commands/messages.py:47
 #, python-brace-format
 msgid "{icon} <b>Invalid jq query:</b> <code>{attr}</code>\n"
 "<b>Details:</b>\n"
@@ -383,94 +405,94 @@ msgstr "{icon} <b>Неприпустимий jq запит:</b> <code>{attr}</co
 "<pre>{e}</pre>\n\n"
 "<b>Можливе виправлення:</b> <code>{full_command} .{attr}</code>"
 
-#: userbot/commands/messages.py:64
+#: userbot/commands/messages.py:63
 #, python-brace-format
 msgid "<b>Attribute</b> <code>{attr}</code>\n\n"
 "<pre>{text}</pre>"
 msgstr "<b>Атрибут</b> <code>{attr}</code>\n\n"
 "<pre>{text}</pre>"
 
-#: userbot/commands/messages.py:72
+#: userbot/commands/messages.py:71
 msgid "<i>Searching for user's first message...</i>"
 msgstr "<i>Пошук першого повідомлення користувача...</i>"
 
-#: userbot/commands/messages.py:85
+#: userbot/commands/messages.py:83
 #, python-brace-format
 msgid "{icon} Cannot search for first message from channel"
 msgstr "{icon} Неможливо шукати перше повідомлення з каналу"
 
-#: userbot/commands/messages.py:117
+#: userbot/commands/messages.py:115
 #, python-brace-format
 msgid "This is the first message of {mention}"
 msgstr "Це перше повідомлення від користувача {mention}"
 
-#: userbot/commands/messages.py:120
+#: userbot/commands/messages.py:118
 msgid "Permalink:"
 msgstr "Постійне посилання:"
 
-#: userbot/commands/notes.py:35
+#: userbot/commands/notes.py:34
 #, python-brace-format
 msgid "{icon} Note with key <code>{key}</code> not found"
 msgstr ""
 
-#: userbot/commands/notes.py:54
+#: userbot/commands/notes.py:53
 #, python-brace-format
 msgid "{icon} <b>File reference expired, please save the note again.</b>\n"
 "<i>Note key:</i> <code>{key}</code>"
 msgstr "{icon} <b>Посилання на файл застаріло, будь ласка, збережіть нотаток знову.</b>\n"
 "<i>Ключ замітки:</i> <code>{key}</code>"
 
-#: userbot/commands/notes.py:86
+#: userbot/commands/notes.py:84
 #, python-brace-format
 msgid "{icon} Note <code>{key}</code> saved"
 msgstr "{icon} Замітка <code>{key}</code> збережена"
 
-#: userbot/commands/notes.py:97
+#: userbot/commands/notes.py:95
 #, python-brace-format
 msgid "{icon} <b>Saved notes:</b>\n"
 "{t}"
 msgstr "{icon} <b>Збережені нотатки:</b>\n"
 "{t}"
 
-#: userbot/commands/notes.py:111
+#: userbot/commands/notes.py:108
 #, python-brace-format
 msgid "{icon} Note <code>{key}</code> deleted"
 msgstr "{icon} Примітка <code>{key}</code> видалена"
 
-#: userbot/commands/reactions.py:56
+#: userbot/commands/reactions.py:55
 #, python-brace-format
 msgid "{icon} <i>Message not found or has no reactions</i>"
 msgstr "{icon} <i>Повідомлення не знайдено або не має реакцій</i>"
 
-#: userbot/commands/reactions.py:77
+#: userbot/commands/reactions.py:76
 #, python-brace-format
 msgid "Custom reaction #<code>{r}</code>"
 msgstr "Користувацька реакція #<code>{r}</code>"
 
-#: userbot/commands/reactions.py:84
+#: userbot/commands/reactions.py:83
 msgid "Deleted Account"
 msgstr "Видалений обліковий запис"
 
-#: userbot/commands/reactions.py:87
+#: userbot/commands/reactions.py:86
 msgid "Unknown user"
 msgstr "Невідомий користувач"
 
-#: userbot/commands/reactions.py:89
+#: userbot/commands/reactions.py:88
 #, python-brace-format
 msgid "{icon} <i>No reactions here</i>"
 msgstr "{icon} <i>Жодних реакцій</i>"
 
-#: userbot/commands/reminders.py:43
+#: userbot/commands/reminders.py:42
 #, python-brace-format
 msgid "{icon} <b>Reminder!</b>"
 msgstr "{icon} <b>Нагадування!</b>"
 
-#: userbot/commands/reminders.py:54
+#: userbot/commands/reminders.py:53
 #, python-brace-format
 msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
 msgstr "{icon} Нагадування {maybe_for_self}було встановлено на <i>{:%Y-%m-%d %H:%M:%S %Z}</i>"
 
-#: userbot/commands/reminders.py:59
+#: userbot/commands/reminders.py:58
 msgid "for myself"
 msgstr "для мене"
 
@@ -482,7 +504,7 @@ msgstr "<i>Вибір випадкової наліпки...</i>"
 msgid "Maybe you mean:"
 msgstr "Можливо, ви маєте на увазі:"
 
-#: userbot/commands/text_converters.py:113
+#: userbot/commands/text_converters.py:112
 #, python-brace-format
 msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
 "Possible fix: <code>{message_text}/</code>"
@@ -528,7 +550,7 @@ msgstr "{chat_id}: Неможливо визначити учасника"
 msgid "{chat_id}: Not a user"
 msgstr "{chat_id}: Не користувач"
 
-#: userbot/commands/user_groups.py:83
+#: userbot/commands/user_groups.py:82
 #, python-brace-format
 msgid "{icon} Added {count} user to user group {group_name}"
 msgid_plural "{icon} Added {count} users to user group {group_name}"
@@ -537,11 +559,11 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] "{icon} Додано {count} користувачів до групи користувачів {group_name}"
 
-#: userbot/commands/user_groups.py:90 userbot/commands/user_groups.py:129
+#: userbot/commands/user_groups.py:89 userbot/commands/user_groups.py:127
 msgid "<b>Errors:</b>"
 msgstr "<b>Помилки:</b>"
 
-#: userbot/commands/user_groups.py:122
+#: userbot/commands/user_groups.py:120
 #, python-brace-format
 msgid "{icon} Removed {count} user from user group {group_name}"
 msgid_plural "{icon} Removed {count} users from user group {group_name}"
@@ -550,28 +572,73 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] "{icon} Видалено {count} користувачів з групи користувачів {group_name}"
 
-#: userbot/commands/user_groups.py:152
+#: userbot/commands/user_groups.py:149
 #, python-brace-format
 msgid "{icon} Users in user group {key}:"
 msgstr "{icon} Користувачі у групі користувачів {key}:"
 
-#: userbot/commands/user_groups.py:171
+#: userbot/commands/user_groups.py:167
 #, python-brace-format
 msgid "{icon} User groups:"
 msgstr "{icon} Групи користувачів:"
 
-#: userbot/meta/modules/base.py:103
+#: userbot/commands/wakatime.py:78
+msgid "Collecting Wakatime stats..."
+msgstr ""
+
+#: userbot/commands/wakatime.py:86
+#, python-brace-format
+msgid "{icon} <b>Wakatime is not configured.</b> Please set up your API key in order to use this command. See project README for more."
+msgstr ""
+
+#: userbot/commands/wakatime.py:95
+#, python-brace-format
+msgid "{icon} <b>Wakatime is not responding. Please, try again later.</b>"
+msgstr ""
+
+#: userbot/commands/wakatime.py:99
+#, python-brace-format
+msgid "{icon} Stats are refreshing, please try again in a few seconds."
+msgstr ""
+
+#: userbot/commands/wakatime.py:108
+msgid "<b>My Wakatime stats:</b>"
+msgstr ""
+
+#: userbot/commands/wakatime.py:109
+#, python-brace-format
+msgid "• <i>Total time for today:</i> {today_time}"
+msgstr ""
+
+#: userbot/commands/wakatime.py:112
+#, python-brace-format
+msgid "• <i>Total time for the last 7 days:</i> {total_time}"
+msgstr ""
+
+#: userbot/commands/wakatime.py:116
+msgid "• <i>Top languages:</i>"
+msgstr ""
+
+#: userbot/commands/wakatime.py:119
+msgid "• <i>Top editors:</i>"
+msgstr ""
+
+#: userbot/commands/wakatime.py:122
+msgid "• <i>Top projects:</i>"
+msgstr ""
+
+#: userbot/meta/modules/base.py:102
 msgid "<i>Userbot is processing the message...</i>"
 msgstr "<i>Користувальницький бот обробляє повідомлення...</i>"
 
-#: userbot/meta/modules/base.py:122
+#: userbot/meta/modules/base.py:120
 #, python-brace-format
 msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
 "<i>More info can be found in logs.</i>"
 msgstr "{icon} <b> Обробка повідомлення перервана за тайм-аутом{timeout}.</b>\n"
 "<i>Більше інформації можна знайти в журналах.</i>"
 
-#: userbot/meta/modules/base.py:127
+#: userbot/meta/modules/base.py:125
 #, python-brace-format
 msgid "{timeout} second"
 msgid_plural "{timeout} seconds"
@@ -580,12 +647,12 @@ msgstr[1] "{timeout} секунди"
 msgstr[2] "{timeout} секунди"
 msgstr[3] "{timeout} секунди"
 
-#: userbot/meta/modules/commands.py:212
+#: userbot/meta/modules/commands.py:211
 #, python-brace-format
 msgid "{icon} <b>An error occurred during executing command.</b>"
 msgstr "{icon} <b>Сталася помилка під час виконання команди.</b>"
 
-#: userbot/meta/modules/commands.py:216
+#: userbot/meta/modules/commands.py:215
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Traceback:</b>\n"
@@ -596,7 +663,7 @@ msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
 "{traceback}\n\n"
 "<i>Бiльше iнформацiї можна знайти в журналах.</i>"
 
-#: userbot/meta/modules/commands.py:229
+#: userbot/meta/modules/commands.py:228
 #, python-brace-format
 msgid "<b>Message:</b> {msg}\n"
 "<b>Traceback:</b>\n"
@@ -605,7 +672,7 @@ msgstr "<b>Повідомлення:</b> {msg}\n"
 "<b>Послiдовнiсть викликiв:</b>\n"
 "{traceback}"
 
-#: userbot/meta/modules/commands.py:240
+#: userbot/meta/modules/commands.py:239
 #, python-brace-format
 msgid "<b>Command:</b> <code>{message_text}</code>\n"
 "<b>Exception:</b> <code>{exception}</code>\n\n"
@@ -614,7 +681,7 @@ msgstr "<b>Команда:</b> <code>{message_text}</code>\n"
 "<b>Виключення:</b> <code>{exception}</code>\n\n"
 "<i>Більше інформації можна знайти в журналі, або в чаті трасування.</i>"
 
-#: userbot/meta/modules/commands.py:252
+#: userbot/meta/modules/commands.py:250
 #, python-brace-format
 msgid "{icon} <b>Successfully executed.</b>\n\n"
 "<b>Command:</b> <code>{message_text}</code>\n\n"
@@ -623,18 +690,18 @@ msgstr "{icon} <b>Успішно виконано.</b>\n\n"
 "<b>Команда:</b> <code>{message_text}</code>\n\n"
 "<b>Результат:</b>"
 
-#: userbot/meta/modules/commands.py:263
+#: userbot/meta/modules/commands.py:261
 #, python-brace-format
 msgid "{text} <i>See reply.</i>"
 msgstr "{text} <i>Перегляньте відповідь.</i>"
 
-#: userbot/meta/modules/commands.py:440
+#: userbot/meta/modules/commands.py:438
 #, python-brace-format
 msgid "<b>Help for {query}:</b>\n"
 "{usage}"
 msgstr ""
 
-#: userbot/meta/modules/commands.py:446
+#: userbot/meta/modules/commands.py:444
 msgid "<b>List of userbot commands available:</b>"
 msgstr "<b>Список доступних команд користувацького боту:</b>"
 
