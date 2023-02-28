@@ -1,0 +1,387 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: evgfilim1-userbot\n"
+"Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
+"POT-Creation-Date: 2022-11-08 13:37+0500\n"
+"PO-Revision-Date: 2022-11-08 09:05\n"
+"Last-Translator: \n"
+"Language-Team: English (upside down)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: evgfilim1-userbot\n"
+"X-Crowdin-Project-ID: 540430\n"
+"X-Crowdin-Language: en-UD\n"
+"X-Crowdin-File: /master/locales/evgfilim1-userbot.pot\n"
+"X-Crowdin-File-ID: 18\n"
+"Language: en_UD\n"
+
+#: userbot/commands/about.py:24
+msgid "staging"
+msgstr "ƃuᴉƃɐʇs"
+
+#: userbot/commands/about.py:29
+msgid "<i>Repo:</i>"
+msgstr "<i>:odǝɹ</i>"
+
+#: userbot/commands/about.py:30
+msgid "<i>Commit:</i>"
+msgstr "<i>:ʇᴉɯɯoƆ</i>"
+
+#: userbot/commands/about.py:31
+#, python-brace-format
+msgid "{icon} <b>About userbot</b>\n"
+msgstr ""
+
+#: userbot/commands/about.py:37
+#, python-brace-format
+msgid " (<a href='{base_url}/deployments'>deployments</a>)"
+msgstr ""
+
+#: userbot/commands/about.py:40
+#, python-brace-format
+msgid "\n"
+"{icon} <a href='{url}'>Contribute userbot translations</a>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:24
+msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
+"This message is protected from reactions. Anyone who puts a reaction here will be <b>banned</b> in the chat for half a year."
+msgstr ""
+
+#: userbot/commands/chat_admin.py:63
+#, python-brace-format
+msgid "{icon} {user_link} <b>banned</b> in this chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:68
+#, python-brace-format
+msgid " until <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:71
+#, python-brace-format
+msgid "\n"
+"<b>Reason:</b> {reason}"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:90
+#, python-brace-format
+msgid "{icon} {user_link} <b>unbanned</b> in this chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:125
+#, python-brace-format
+msgid "{icon} Chat title for the person was set to <i>{title}</i>"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:159
+msgid "Recently banned:"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:189 userbot/commands/chat_admin.py:208
+#, python-brace-format
+msgid "{icon} Not a group chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:192
+#, python-brace-format
+msgid "{icon} Cannot ban users in the chat"
+msgstr ""
+
+#: userbot/commands/chat_admin.py:212
+#, python-brace-format
+msgid "{icon} Reacting to the message to ban a user has been disabled on the message"
+msgstr ""
+
+#: userbot/commands/chat_info.py:95
+#, python-brace-format
+msgid "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
+msgstr ""
+
+#: userbot/commands/chat_info.py:101
+#, python-brace-format
+msgid "{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>"
+msgstr ""
+
+#: userbot/commands/chat_info.py:113
+msgid "<a href='{msg.link}'>Random message (#{msg.id})</a>"
+msgstr ""
+
+#: userbot/commands/colors.py:47
+#, python-brace-format
+msgid "{icon} Color {color_spec}"
+msgstr ""
+
+#: userbot/commands/colors.py:71
+#, python-brace-format
+msgid "{icon} Color of the user is {c}"
+msgstr ""
+
+#: userbot/commands/content_converters.py:57
+msgid "<i>Converting to mpeg4gif...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:68 userbot/commands/content_converters.py:120
+#, python-brace-format
+msgid "{icon} No video found"
+msgstr ""
+
+#: userbot/commands/content_converters.py:80
+msgid "<i>Converting to sticker...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:109
+msgid "<i>Extracting audio...</i>"
+msgstr ""
+
+#: userbot/commands/download.py:43
+#, python-brace-format
+msgid "{icon} No downloadable media found"
+msgstr ""
+
+#: userbot/commands/download.py:68
+#, python-brace-format
+msgid "{icon} The file has been downloaded to <code>{output}</code>"
+msgstr ""
+
+#: userbot/commands/download.py:78
+msgid "<i>Downloading file(s)...</i>"
+msgstr ""
+
+#. i18n: flag must be country flag for the language
+#: userbot/commands/language.py:30
+msgid "🇺🇸"
+msgstr ""
+
+#: userbot/commands/language.py:37
+#, python-brace-format
+msgid "{icon} Current chat language: {flag} {lang}\n\n"
+"To change it, type <code>{message_text} code</code>\n"
+"Available languages:\n"
+"{languages}"
+msgstr ""
+
+#: userbot/commands/language.py:50
+#, python-brace-format
+msgid "{icon} Invalid language code {lang!r}\n\n"
+"Available languages:\n"
+"{languages}"
+msgstr ""
+
+#: userbot/commands/language.py:60
+#, python-brace-format
+msgid "{icon} Language changed to {flag} {lang}"
+msgstr ""
+
+#: userbot/commands/messages.py:48
+#, python-brace-format
+msgid "{icon} <b>Invalid jq query:</b> <code>{attr}</code>\n"
+"<b>Details:</b>\n"
+"<pre>{e}</pre>\n\n"
+"<b>Possible fix:</b> <code>{full_command} .{attr}</code>"
+msgstr ""
+
+#: userbot/commands/messages.py:64
+#, python-brace-format
+msgid "<b>Attribute</b> <code>{attr}</code>\n\n"
+"<pre>{text}</pre>"
+msgstr ""
+
+#: userbot/commands/messages.py:73
+msgid "<i>Searching for user's first message...</i>"
+msgstr ""
+
+#: userbot/commands/messages.py:84
+#, python-brace-format
+msgid "{icon} Cannot search for first message from channel"
+msgstr ""
+
+#: userbot/commands/messages.py:116
+#, python-brace-format
+msgid "This is the first message of {mention}"
+msgstr ""
+
+#: userbot/commands/messages.py:118
+#, python-brace-format
+msgid "\n"
+"Permalink: https://t.me/c/{channel_id}/{msg_id}"
+msgstr ""
+
+#: userbot/commands/notes.py:34
+#, python-brace-format
+msgid "{icon} No name specified"
+msgstr ""
+
+#: userbot/commands/notes.py:37
+#, python-brace-format
+msgid "{icon} Message with key={key!r} not found"
+msgstr ""
+
+#: userbot/commands/notes.py:53
+#, python-brace-format
+msgid "{icon} <b>File reference expired, please save the note again.</b>\n"
+"<i>Note key:</i> <code>{key}</code>"
+msgstr ""
+
+#: userbot/commands/notes.py:78 userbot/commands/notes.py:113
+#, python-brace-format
+msgid "{icon} Please specify note key\n\n"
+"Possible fix: <code>{message_text} key</code>"
+msgstr ""
+
+#: userbot/commands/notes.py:88
+#, python-brace-format
+msgid "{icon} Note <code>{key}</code> saved"
+msgstr ""
+
+#: userbot/commands/notes.py:99
+#, python-brace-format
+msgid "{icon} <b>Saved notes:</b>\n"
+"{t}"
+msgstr ""
+
+#: userbot/commands/notes.py:117
+#, python-brace-format
+msgid "{icon} Note <code>{key}</code> deleted"
+msgstr ""
+
+#: userbot/commands/reactions.py:55
+#, python-brace-format
+msgid "{icon} <i>Message not found or has no reactions</i>"
+msgstr ""
+
+#: userbot/commands/reactions.py:75
+#, python-brace-format
+msgid "Custom reaction #<code>{r}</code>"
+msgstr ""
+
+#: userbot/commands/reactions.py:82
+msgid "Deleted Account"
+msgstr ""
+
+#: userbot/commands/reactions.py:85
+msgid "Unknown user"
+msgstr ""
+
+#: userbot/commands/reactions.py:87
+#, python-brace-format
+msgid "{icon} <i>No reactions here</i>"
+msgstr ""
+
+#: userbot/commands/reminders.py:44
+#, python-brace-format
+msgid "{icon} <b>Reminder!</b>"
+msgstr ""
+
+#: userbot/commands/reminders.py:55
+#, python-brace-format
+msgid "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
+msgstr ""
+
+#: userbot/commands/reminders.py:60
+msgid "for myself "
+msgstr ""
+
+#: userbot/commands/stickers.py:38
+msgid "<i>Picking random sticker...</i>"
+msgstr ""
+
+#: userbot/commands/text_converters.py:90
+#, python-brace-format
+msgid "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n\n"
+"Possible fix: <code>{message_text}/</code>"
+msgstr ""
+
+#: userbot/commands/text_converters.py:104
+msgid "Maybe you mean:\n\n"
+msgstr ""
+
+#: userbot/commands/tools.py:83
+#, python-brace-format
+msgid "<b>Code:</b>\n"
+"<pre><code class='language-python'>{code}</code></pre>"
+msgstr ""
+
+#: userbot/commands/tools.py:86
+#, python-brace-format
+msgid "<b>Result:</b>\n"
+"<pre><code class='language-python'>{result}</code></pre>"
+msgstr ""
+
+#: userbot/commands/tools.py:127
+#, python-brace-format
+msgid "{icon} Done sleeping for {sec} seconds"
+msgstr ""
+
+#: userbot/commands/tools.py:136
+#, python-brace-format
+msgid "{icon} <b>Stopping userbot...</b>"
+msgstr ""
+
+#: userbot/modules/base.py:103
+msgid "<i>Userbot is processing the message...</i>"
+msgstr ""
+
+#: userbot/modules/base.py:122
+#, python-brace-format
+msgid "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
+"<i>More info can be found in logs.</i>"
+msgstr ""
+
+#: userbot/modules/base.py:127
+#, python-brace-format
+msgid "{timeout} second"
+msgid_plural "{timeout} seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: userbot/modules/commands.py:206
+#, python-brace-format
+msgid "{icon} <b>An error occurred during executing command.</b>\n\n"
+"<b>Command:</b> <code>{message_text}</code>\n"
+"<b>Traceback:</b>\n"
+"{tb}\n\n"
+"<i>More info can be found in logs.</i>"
+msgstr ""
+
+#: userbot/modules/commands.py:222
+#, python-brace-format
+msgid "{icon} <b>Successfully executed.</b>\n\n"
+"<b>Command:</b> <code>{message_text}</code>\n\n"
+"<b>Result:</b>"
+msgstr ""
+
+#: userbot/modules/commands.py:233
+#, python-brace-format
+msgid "{text} <i>See reply.</i>"
+msgstr ""
+
+#: userbot/modules/commands.py:400
+#, python-brace-format
+msgid "<b>Help for {args}:</b>\n"
+"{usage}"
+msgstr ""
+
+#: userbot/modules/commands.py:406
+msgid "<b>List of userbot commands available:</b>\n\n"
+msgstr ""
+
+#: userbot/modules/hooks.py:34
+#, python-brace-format
+msgid "Hooks in this chat:\n"
+"{hooks}"
+msgstr ""
+
+#: userbot/modules/hooks.py:213
+#, python-brace-format
+msgid "Available hooks:\n"
+"{hooks}"
+msgstr ""
+
+#: userbot/utils/messages.py:57
+msgid "<b>Maybe you mean:</b>\n\n"
+msgstr "<b>:uɐǝɯ noʎ ǝqʎɐW</b>\n\n"
+
