@@ -26,7 +26,7 @@ def _migration_runner(name: str) -> bool:
 
 
 def main():
-    data_dir = Path(os.getenv("DATA_LOCATION", ".dockerdata/userbot")).resolve()
+    data_dir = Path(os.getenv("DATA_LOCATION", "/data")).resolve()
 
     _log.debug("Checking data directory %s", data_dir)
     if not data_dir.exists():
