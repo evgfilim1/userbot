@@ -61,6 +61,7 @@ Content converters:
 • toaudio — Extracts audio from video.
 • togif — Converts a video to a mpeg4 gif.
 • tosticker ['png'|'webp'] — Converts a photo to a sticker-ready png or webp.
+• <in reply> totext — Transcribes speech in voice and video messages to text.
 
 Dice:
 • roll|dice <dice_spec> — Rolls dice according to `d20.roll` syntax.

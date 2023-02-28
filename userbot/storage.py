@@ -153,6 +153,18 @@ class Storage(ABC):
     async def remove_users_from_group(self, user_ids: Iterable[int], group_name: str) -> None:
         _log.debug("Users %r removed from group %r", set(user_ids), group_name)
 
+    @abstractmethod
+    async def save_transcription(self, transcription_id: int, message_id: int) -> None:
+        pass
+
+    @abstractmethod
+    async def get_transcription(self, transcription_id: int) -> int | None:
+        pass
+
+    @abstractmethod
+    async def delete_transcription(self, transcription_id: int) -> None:
+        pass
+
 
 class RedisStorage(Storage):
     def __init__(self, host: str, port: int, db: int, password: str | None = None) -> None:
@@ -312,3 +324,17 @@ class RedisStorage(Storage):
     async def remove_users_from_group(self, user_ids: Iterable[int], group_name: str) -> None:
         await self._pool.srem(self._key("groups", group_name), *user_ids)
         await super().remove_users_from_group(user_ids, group_name)
+
+    async def save_transcription(self, transcription_id: int, message_id: int) -> None:
+        await self._pool.set(self._key("transcriptions", transcription_id), message_id)
+        await super().save_transcription(transcription_id, message_id)
+
+    async def get_transcription(self, transcription_id: int) -> int | None:
+        res = await self._pool.get(self._key("transcriptions", transcription_id))
+        if res is not None:
+            return int(res)
+        return None
+
+    async def delete_transcription(self, transcription_id: int) -> None:
+        await self._pool.delete(self._key("transcriptions", transcription_id))
+        await super().delete_transcription(transcription_id)

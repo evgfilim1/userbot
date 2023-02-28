@@ -12,6 +12,7 @@ from pyrogram.methods.utilities.idle import idle
 from userbot import __version__
 from userbot.commands import commands
 from userbot.commands.chat_admin import react2ban_raw_reaction_handler
+from userbot.commands.content_converters import transcribed_audio_raw_handler
 from userbot.config import (
     AppConfig,
     RedisConfig,
@@ -34,6 +35,7 @@ from userbot.storage import RedisStorage, Storage
 from userbot.utils import AppLimitsController, SecretValue, StatsController, fetch_stickers
 from userbot.utils.clients import GitHubClient, WakatimeClient
 
+RAW_UPDATES_GROUP = 1
 _log = logging.getLogger(__name__)
 
 
@@ -110,7 +112,11 @@ def main() -> None:
     _log.debug("Registering handlers...")
     client.add_handler(
         RawUpdateHandler(partial(react2ban_raw_reaction_handler, storage=storage)),
-        group=1,
+        group=RAW_UPDATES_GROUP,
+    )
+    client.add_handler(
+        RawUpdateHandler(partial(transcribed_audio_raw_handler, storage=storage)),
+        group=RAW_UPDATES_GROUP,
     )
 
     root_commands = CommandsModule(default_prefix=app_config.command_prefix)

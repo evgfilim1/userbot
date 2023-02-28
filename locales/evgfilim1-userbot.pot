@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-26 14:16+0500\n"
+"POT-Creation-Date: 2023-02-28 15:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,21 +311,43 @@ msgstr ""
 msgid "{icon} Color of the user {user} is {c}"
 msgstr ""
 
-#: userbot/commands/content_converters.py:57
+#: userbot/commands/content_converters.py:62
 msgid "<i>Converting to mpeg4gif...</i>"
 msgstr ""
 
-#: userbot/commands/content_converters.py:69 userbot/commands/content_converters.py:126
+#: userbot/commands/content_converters.py:74 userbot/commands/content_converters.py:131
 #, python-brace-format
 msgid "{icon} No video found"
 msgstr ""
 
-#: userbot/commands/content_converters.py:81
+#: userbot/commands/content_converters.py:86
 msgid "<i>Converting to sticker...</i>"
 msgstr ""
 
-#: userbot/commands/content_converters.py:114
+#: userbot/commands/content_converters.py:119
 msgid "<i>Extracting audio...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:160
+#, python-brace-format
+msgid "{icon} No voice or video note found"
+msgstr ""
+
+#: userbot/commands/content_converters.py:170
+#, python-brace-format
+msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:176
+#, python-brace-format
+msgid "{icon} <i>Transcription is pending...</i>"
+msgstr ""
+
+#: userbot/commands/content_converters.py:177 userbot/commands/content_converters.py:209
+#, python-brace-format
+msgid ""
+"{icon} <b>Transcribed text:</b>\n"
+"{text}"
 msgstr ""
 
 #: userbot/commands/download.py:42

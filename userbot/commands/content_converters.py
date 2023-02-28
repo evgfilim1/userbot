@@ -1,5 +1,6 @@
 __all__ = [
     "commands",
+    "transcribed_audio_raw_handler",
 ]
 
 import asyncio
@@ -9,12 +10,16 @@ from tempfile import NamedTemporaryFile
 from typing import BinaryIO
 
 from PIL import Image
-from pyrogram import Client
+from pyrogram import Client, ContinuePropagation
+from pyrogram.errors import BadRequest
+from pyrogram.raw import base, functions, types
 from pyrogram.types import Message
+from pyrogram.utils import get_channel_id
 
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
+from ..storage import Storage
 from ..utils import Translation, gettext
 
 commands = CommandsModule("Content converters")
@@ -139,3 +144,71 @@ async def video_to_audio(
         )
     if reply is not None:
         await message.delete()
+
+
+@commands.add("totext", reply_required=True)
+async def speech_to_text(
+    client: Client,
+    message: Message,
+    reply: Message,
+    storage: Storage,
+    tr: Translation,
+) -> str | None:
+    """Transcribes speech in voice and video messages to text."""
+    _ = tr.gettext
+    if reply.video_note is None and reply.voice is None:
+        return _("{icon} No voice or video note found").format(icon=Icons.STOP)
+    try:
+        transcribed: types.messages.TranscribedAudio = await client.invoke(
+            functions.messages.TranscribeAudio(
+                peer=await client.resolve_peer(reply.chat.id),
+                msg_id=reply.id,
+            )
+        )
+    except BadRequest as e:
+        if isinstance(e.value, str) and "TRANSCRIPTION_FAILED" in e.value:
+            return _(
+                "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+            ).format(icon=Icons.WARNING)
+        raise
+    if transcribed.pending:
+        await storage.save_transcription(transcribed.transcription_id, message.id)
+        return _("{icon} <i>Transcription is pending...</i>").format(icon=Icons.WATCH)
+    return _("{icon} <b>Transcribed text:</b>\n{text}").format(
+        icon=Icons.SPEECH_TO_TEXT,
+        text=transcribed.text,
+    )
+
+
+async def transcribed_audio_raw_handler(
+    client: Client,
+    update: base.Update,
+    *___: dict[int, types.User | types.Chat | types.Channel],
+    storage: Storage,
+) -> None:
+    if not isinstance(update, types.UpdateTranscribedAudio) or update.pending:
+        raise ContinuePropagation()
+    msg_id = await storage.get_transcription(update.transcription_id)
+    if msg_id is None:
+        raise ContinuePropagation()
+
+    if isinstance(update.peer, types.PeerUser):
+        chat_id = update.peer.user_id
+    elif isinstance(update.peer, types.PeerChat):
+        chat_id = -update.peer.chat_id
+    elif isinstance(update.peer, types.PeerChannel):
+        chat_id = get_channel_id(update.peer.channel_id)
+    else:
+        raise AssertionError("Unknown peer type")
+
+    _ = Translation(await storage.get_chat_language(chat_id)).gettext
+
+    await client.edit_message_text(
+        chat_id=chat_id,
+        message_id=msg_id,
+        text=_("{icon} <b>Transcribed text:</b>\n{text}").format(
+            icon=Icons.SPEECH_TO_TEXT,
+            text=update.text,
+        ),
+    )
+    await storage.delete_transcription(update.transcription_id)
