@@ -3,7 +3,6 @@ __all__: list[str] = []
 import logging
 import os
 from functools import partial
-from itertools import product
 
 from pyrogram import Client
 from pyrogram.handlers import RawUpdateHandler
@@ -141,8 +140,11 @@ def main() -> None:
             "wakatime_client": wakatime_client,
         }
     )
-    for module, middleware in product(all_modules, (kwargs_middleware, translate_middleware)):
-        module.add_middleware(middleware)
+    common_middlewares = (kwargs_middleware, translate_middleware)
+
+    for module in all_modules:
+        for middleware in common_middlewares:
+            module.add_middleware(middleware)
     root_commands.add_middleware(ParseCommandMiddleware(app_config.command_prefix))
     root_commands.add_middleware(update_command_stats_middleware)
 

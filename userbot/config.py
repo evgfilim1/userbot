@@ -24,7 +24,7 @@ _T = TypeVar("_T")
 
 _TRUTHY_VALUES = frozenset(("1", "true", "yes"))
 _FALSY_VALUES = frozenset(("0", "false", "no", ""))
-_UNION_TYPES = (type(int | str), type(Union[int, str]))
+_UNION_TYPES = type(int | str), type(Union[int, str])
 _SECRETS = frozenset(("phone_number", "password", "session_string"))
 
 
