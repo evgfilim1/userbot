@@ -29,7 +29,6 @@ class _Result(NamedTuple):
 def _remind_common(
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
     *,
     for_myself: bool,
@@ -40,7 +39,7 @@ def _remind_common(
     args = command.args
     text = args["message"]
     if text is None:
-        text = _("{icon} <b>Reminder!</b>").format(icon=icons.NOTIFICATION)
+        text = _("{icon} <b>Reminder!</b>").format(icon=Icons.NOTIFICATION)
     if for_myself and message.reply_to_message is not None:
         # Add a link to the replied message
         if message.chat.type == ChatType.SUPERGROUP:
@@ -54,7 +53,7 @@ def _remind_common(
         response = _(
             "{icon} Reminder {maybe_for_self}was set for <i>{t:%Y-%m-%d %H:%M:%S %Z}</i>"
         ).format(
-            icon=icons.NOTIFICATION,
+            icon=Icons.NOTIFICATION,
             t=t.astimezone(),
             maybe_for_self=(_("for myself") + " ") if for_myself else "",
         )
@@ -68,7 +67,6 @@ async def remind(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets a reminder in the chat.
@@ -77,7 +75,7 @@ async def remind(
 
     Message will be scheduled via Telegram's message scheduling system.
     """
-    r = _remind_common(message, command, icons, tr, for_myself=False)
+    r = _remind_common(message, command, tr, for_myself=False)
     await client.send_message(
         message.chat.id,
         r.text,
@@ -93,7 +91,6 @@ async def remind_me(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets a reminder for myself.
@@ -102,7 +99,7 @@ async def remind_me(
 
     Message will be scheduled via Telegram's message scheduling system.
     """
-    r = _remind_common(message, command, icons, tr, for_myself=True)
+    r = _remind_common(message, command, tr, for_myself=True)
     await client.send_message(
         "me",
         r.text,
@@ -117,7 +114,6 @@ async def silent_remind(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sets a silent reminder in the chat (no confirmation about scheduled message).
@@ -126,7 +122,7 @@ async def silent_remind(
 
     Message will be scheduled via Telegram's message scheduling system.
     """
-    r = _remind_common(message, command, icons, tr, for_myself=False, silent=True)
+    r = _remind_common(message, command, tr, for_myself=False, silent=True)
     await client.send_message(
         message.chat.id,
         r.text,
@@ -142,7 +138,6 @@ async def silent_remind_me(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sets a silent reminder for myself (no confirmation about scheduled message).
@@ -151,7 +146,7 @@ async def silent_remind_me(
 
     Message will be scheduled via Telegram's message scheduling system.
     """
-    r = _remind_common(message, command, icons, tr, for_myself=True, silent=True)
+    r = _remind_common(message, command, tr, for_myself=True, silent=True)
     await client.send_message(
         "me",
         r.text,

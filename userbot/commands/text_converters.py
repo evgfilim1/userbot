@@ -94,7 +94,6 @@ async def sed(
     message: Message,
     command: CommandObject,
     reply: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """sed-like replacement.
@@ -113,7 +112,7 @@ async def sed(
             return _(
                 "{icon} Not enough values to unpack. Seems like you forgot to add trailing slash.\n"
                 "\nPossible fix: <code>{message_text}/</code>"
-            ).format(icon=icons.WARNING, message_text=message.text)
+            ).format(icon=Icons.WARNING, message_text=message.text)
         raise
     find_re = find_re.replace("\\/", "/")
     replace_re = replace_re.replace("\\/", "/")

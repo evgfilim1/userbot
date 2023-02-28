@@ -154,7 +154,6 @@ async def restrict_user(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Restricts or bans a user in a chat.
@@ -200,8 +199,8 @@ async def restrict_user(
             await client.ban_chat_member(message.chat.id, user_id, t)
     chat = await client.get_chat(message.chat.id)
     text = _get_restrict_info(perms, chat.permissions, tr=tr, is_forever=is_forever).format(
-        icon=icons.PERSON_BLOCK,
-        icon_perms=icons.LOCK,
+        icon=Icons.PERSON_BLOCK,
+        icon_perms=Icons.LOCK,
         users=", ".join(users),
         t=t.astimezone(),
     )
@@ -216,7 +215,6 @@ async def chat_unban(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Unbans a user in a chat.
@@ -239,7 +237,7 @@ async def chat_unban(
         await client.unban_chat_member(message.chat.id, user_id)
     return (
         _("{icon} {user_links} <b>unbanned</b> in this chat").format(
-            icon=icons.PERSON_TICK,
+            icon=Icons.PERSON_TICK,
             user_links=", ".join(links),
         )
         + "\n"
@@ -251,7 +249,6 @@ async def promote(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Promotes a user to an admin without any rights but with title."""
@@ -277,7 +274,7 @@ async def promote(
         )
     )
     return _("{icon} Chat title for the person was set to <i>{title}</i>").format(
-        icon=icons.PENCIL,
+        icon=Icons.PENCIL,
         title=html.escape(title),
     )
 
@@ -334,15 +331,14 @@ async def react2ban(
     client: Client,
     message: Message,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Bans a user whoever reacted to the message."""
     _ = tr.gettext
     if message.chat.id > 0:
-        return _("{icon} Not a group chat").format(icon=icons.STOP)
+        return _("{icon} Not a group chat").format(icon=Icons.STOP)
     if not await _check_can_ban_members(client, message.chat.id):
-        return _("{icon} Cannot ban users in the chat").format(icon=icons.STOP)
+        return _("{icon} Cannot ban users in the chat").format(icon=Icons.STOP)
     await storage.add_react2ban(message.chat.id, message.id)
     return _(_REACT2BAN_TEXT)
 
@@ -351,19 +347,18 @@ async def react2ban(
 async def no_react2ban(
     message: Message,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Stops react2ban on the message."""
     # TODO (2022-08-04): handle the case when the message with react2ban is deleted
     _ = tr.gettext
     if message.chat.id > 0:
-        return _("{icon} Not a group chat").format(icon=icons.STOP)
+        return _("{icon} Not a group chat").format(icon=Icons.STOP)
     reply = message.reply_to_message
     await storage.remove_react2ban(message.chat.id, reply.id)
     await reply.edit(
         _("{icon} Reacting to the message to ban a user has been disabled on the message").format(
-            icon=icons.INFO
+            icon=Icons.INFO
         )
     )
     await message.delete()
@@ -374,7 +369,6 @@ async def _pin_common(
     message: Message,
     *,
     no_notify: bool,
-    icons: type[Icons],
     tr: Translation,
     return_result: Literal[False],
 ) -> None:
@@ -386,7 +380,6 @@ async def _pin_common(
     message: Message,
     *,
     no_notify: bool,
-    icons: type[Icons],
     tr: Translation,
     return_result: Literal[True],
 ) -> str:
@@ -397,7 +390,6 @@ async def _pin_common(
     message: Message,
     *,
     no_notify: bool,
-    icons: type[Icons],
     tr: Translation,
     return_result: bool,
 ) -> str | None:
@@ -405,7 +397,7 @@ async def _pin_common(
     _ = tr.gettext
     await message.pin(disable_notification=no_notify, both_sides=True)
     if return_result:
-        r = _("{icon} Message pinned").format(icon=icons.PIN)
+        r = _("{icon} Message pinned").format(icon=Icons.PIN)
         if no_notify:
             r += " " + _("silently")
         return r
@@ -416,7 +408,6 @@ async def _pin_common(
 async def pin(
     command: CommandObject,
     reply: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Pins the message.
@@ -426,7 +417,6 @@ async def pin(
     return await _pin_common(
         reply,
         no_notify=command.args[0] == "silent",
-        icons=icons,
         tr=tr,
         return_result=True,
     )
@@ -437,7 +427,6 @@ async def s_pin(
     message: Message,
     command: CommandObject,
     reply: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Pins the message silently (without returning the result).
@@ -447,7 +436,6 @@ async def s_pin(
     await _pin_common(
         reply,
         no_notify=command.args[0] == "silent",
-        icons=icons,
         tr=tr,
         return_result=True,
     )
@@ -462,7 +450,6 @@ async def s_pin(
 async def kick_deleted_accounts(
     client: Client,
     message: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Kicks Deleted Accounts from the chat."""
@@ -470,9 +457,9 @@ async def kick_deleted_accounts(
     __ = tr.ngettext
     chat_id = message.chat.id
     if chat_id > 0:
-        return _("{icon} Not a group chat").format(icon=icons.STOP)
+        return _("{icon} Not a group chat").format(icon=Icons.STOP)
     if not await _check_can_ban_members(client, chat_id):
-        return _("{icon} Cannot ban users in the chat").format(icon=icons.STOP)
+        return _("{icon} Cannot ban users in the chat").format(icon=Icons.STOP)
     kicked = 0
     failed = 0
     total = 0
@@ -501,7 +488,7 @@ async def kick_deleted_accounts(
         "<i>({n} members checked)</i>",
         total,
     ).format(n=total)
-    return f"{icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
+    return f"{Icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
 
 
 @commands.add("chatinvite", usage="<user_id|username|user_group>")
@@ -510,7 +497,6 @@ async def invite_to_chat(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Invites users to the current chat."""
@@ -519,6 +505,6 @@ async def invite_to_chat(
     users = await resolve_users(client, storage, value)
     await message.chat.add_members(list(users))
     return _("{icon} <i>{value}</i> has been invited to the chat").format(
-        icon=icons.PERSON_TICK,
+        icon=Icons.PERSON_TICK,
         value=value,
     )

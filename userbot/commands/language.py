@@ -18,7 +18,6 @@ async def chat_language(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
     lang: str,
 ) -> str:
@@ -39,7 +38,7 @@ async def chat_language(
             "To change it, type <code>{message_text} code</code>\n"
             "Available languages:\n{languages}"
         ).format(
-            icon=icons.GLOBE,
+            icon=Icons.GLOBE,
             flag=_(flag),
             lang=lang,
             message_text=message.text,
@@ -49,7 +48,7 @@ async def chat_language(
         return _(
             "{icon} Invalid language code {lang!r}\n\nAvailable languages:\n{languages}"
         ).format(
-            icon=icons.WARNING,
+            icon=Icons.WARNING,
             lang=new_lang,
             languages=languages,
         )
@@ -57,7 +56,7 @@ async def chat_language(
     # Change the language on-the-fly for middlewares and current handler
     tr.change_language(new_lang)
     return _("{icon} Language changed to {flag} {lang}").format(
-        icon=icons.GLOBE,
+        icon=Icons.GLOBE,
         flag=_(flag),
         lang=new_lang,
     )

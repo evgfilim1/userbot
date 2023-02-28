@@ -64,14 +64,13 @@ async def video_to_gif(
     client: Client,
     message: Message,
     reply: Message | None,
-    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Converts a video to a mpeg4 gif."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (video := msg.video) is None:
-        return _("{icon} No video found").format(icon=icons.STOP)
+        return _("{icon} No video found").format(icon=Icons.STOP)
     with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".mp4") as dst:
         await client.download_media(video.file_id, src.name)
         await _call_ffmpeg(src.name, dst.name, *("-c copy -an -movflags +faststart".split()))
@@ -121,14 +120,13 @@ async def video_to_audio(
     client: Client,
     message: Message,
     reply: Message | None,
-    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Extracts audio from video."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (video := msg.video) is None:
-        return _("{icon} No video found").format(icon=icons.STOP)
+        return _("{icon} No video found").format(icon=Icons.STOP)
     with NamedTemporaryFile(suffix=".mp4") as src, NamedTemporaryFile(suffix=".m4a") as dst:
         await client.download_media(video.file_id, src.name)
         await _call_ffmpeg(src.name, dst.name, *("-vn -acodec copy".split()))

@@ -24,7 +24,7 @@ commands = CommandsModule("About")
 
 
 @commands.add("about")
-async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
+async def about(client: Client, tr: Translation) -> str:
     """Shows information about this userbot."""
     _ = tr.gettext
     base_url = "https://github.com/evgfilim1/userbot"
@@ -37,7 +37,7 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
     else:
         github_icon = _("<i>Repo:</i>")
         commit_icon = _("<i>Commit:</i>")
-    t = _("{icon} <b>About userbot</b>").format(icon=icons.INFO)
+    t = _("{icon} <b>About userbot</b>").format(icon=Icons.INFO)
     t += (
         f"\n{github_icon} <a href='{base_url}'>evgfilim1/userbot</a>"
         f"\n{commit_icon} <code>{commit}</code>"
@@ -47,7 +47,7 @@ async def about(client: Client, icons: type[Icons], tr: Translation) -> str:
             base_url=base_url,
         )
     t += "\n" + _("{icon} <a href='{url}'>Contribute userbot translations</a>").format(
-        icon=icons.GLOBE,
+        icon=Icons.GLOBE,
         url="https://crowdin.com/project/evgfilim1-userbot",
     )
     return t
@@ -63,7 +63,6 @@ async def stats_handler(
     client: Client,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
     stats: StatsController,
     limits: AppLimitsController,
@@ -116,22 +115,22 @@ async def stats_handler(
         archived_stickers_count = None
 
     top5 = [
-        f"• {icons.DIAGRAM} <code>{cmd}</code>: {count}"
+        f"• {Icons.DIAGRAM} <code>{cmd}</code>: {count}"
         async for cmd, count in storage.list_command_usage(limit=5)
     ]
 
     lines = [
         _("<b>Statistics:</b>"),
         _("{icon} Uptime: {uptime}").format(
-            icon=icons.SETTINGS,
+            icon=Icons.SETTINGS,
             uptime=format_timedelta(stats.uptime),
         ),
         "{icon} {premium}".format(
-            icon=icons.PREMIUM,
+            icon=Icons.PREMIUM,
             premium=_("Has premium") if me.is_premium else _("Has no premium"),
         ),
         _("{icon} Commands used: {count}").format(
-            icon=icons.COMMAND,
+            icon=Icons.COMMAND,
             count=await storage.get_total_command_usage(),
         ),
         *top5,
@@ -140,27 +139,27 @@ async def stats_handler(
         lines.extend(
             (
                 _("{icon} Total chats: {count}").format(
-                    icon=icons.MESSAGE,
+                    icon=Icons.MESSAGE,
                     count=dialogs_count.total + archived_dialogs_count.total,
                 ),
                 _("• {icon} Private: {count}").format(
-                    icon=icons.PRIVATE_CHAT,
+                    icon=Icons.PRIVATE_CHAT,
                     count=dialogs_count.private,
                 ),
                 _("• {icon} Bots: {count}").format(
-                    icon=icons.BOT,
+                    icon=Icons.BOT,
                     count=dialogs_count.bots,
                 ),
                 _("• {icon} Groups and supergroups: {count}").format(
-                    icon=icons.GROUP_CHAT,
+                    icon=Icons.GROUP_CHAT,
                     count=dialogs_count.group_chats,
                 ),
                 _("• {icon} Channels: {count}").format(
-                    icon=icons.CHANNEL_CHAT,
+                    icon=Icons.CHANNEL_CHAT,
                     count=dialogs_count.channels,
                 ),
                 _("• {icon} Archived: {count}").format(
-                    icon=icons.ARCHIVED_CHAT,
+                    icon=Icons.ARCHIVED_CHAT,
                     count=archived_dialogs_count.total,
                 ),
             )
@@ -173,21 +172,21 @@ async def stats_handler(
         lines.extend(
             (
                 _("{icon} GIFs: {count}/{total}").format(
-                    icon=icons.GIF,
+                    icon=Icons.GIF,
                     count=len(saved_gifs.gifs),
                     total=limits.limits.saved_gifs.get(me.is_premium),
                 ),
                 _("{icon} Stickers: {count}/{total}").format(
-                    icon=icons.STICKER,
+                    icon=Icons.STICKER,
                     count=len(saved_stickers.sets),
                     total=limits.limits.stickers.get(me.is_premium),
                 ),
                 _("{icon} Archived stickers: {count}").format(
-                    icon=icons.ARCHIVED_STICKER,
+                    icon=Icons.ARCHIVED_STICKER,
                     count=archived_stickers_count,
                 ),
                 _("{icon} Custom emoji: {count}").format(
-                    icon=icons.EMOJI,
+                    icon=Icons.EMOJI,
                     count=len(saved_emoji.sets) if saved_emoji is not None else _("Unavailable"),
                 ),
             )

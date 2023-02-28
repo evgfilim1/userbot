@@ -24,7 +24,6 @@ async def get_note(
     message: Message,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Sends saved note."""
@@ -33,7 +32,7 @@ async def get_note(
     data = await storage.get_note(key)
     if data is None:
         return _("{icon} Note with key <code>{key}</code> not found").format(
-            icon=icons.WARNING,
+            icon=Icons.WARNING,
             key=key,
         )
     content, type_ = json.loads(data[0]), data[1]
@@ -54,7 +53,7 @@ async def get_note(
             return _(
                 "{icon} <b>File reference expired, please save the note again.</b>\n"
                 "<i>Note key:</i> <code>{key}</code>"
-            ).format(icon=icons.WARNING, key=key)
+            ).format(icon=Icons.WARNING, key=key)
     else:
         await client.copy_message(
             message.chat.id,
@@ -70,7 +69,6 @@ async def save_note(
     reply: Message,
     storage: Storage,
     notes_chat: int | str,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Saves replied message as note for later use."""
@@ -83,29 +81,28 @@ async def save_note(
         target = await target.copy(notes_chat)
     content, type_ = get_message_content(target)
     await storage.save_note(key, json.dumps(content), type_)
-    return _("{icon} Note <code>{key}</code> saved").format(icon=icons.BOOKMARK, key=key)
+    return _("{icon} Note <code>{key}</code> saved").format(icon=Icons.BOOKMARK, key=key)
 
 
 @commands.add("notes", "ns")
-async def saved_notes(storage: Storage, icons: type[Icons], tr: Translation) -> str:
+async def saved_notes(storage: Storage, tr: Translation) -> str:
     """Shows all saved notes."""
     _ = tr.gettext
     t = ""
     async for key in storage.saved_notes():
         __, type_ = await storage.get_note(key)
         t += f"• <code>{key}</code> ({type_})\n"
-    return _("{icon} <b>Saved notes:</b>\n{t}").format(icon=icons.BOOKMARK, t=t)
+    return _("{icon} <b>Saved notes:</b>\n{t}").format(icon=Icons.BOOKMARK, t=t)
 
 
 @commands.add("note_del", "ndel", usage="<key...>")
 async def delete_note(
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Deletes saved note."""
     _ = tr.gettext
     key = command.args["key"]
     await storage.delete_note(key)
-    return _("{icon} Note <code>{key}</code> deleted").format(icon=icons.TRASH, key=key)
+    return _("{icon} Note <code>{key}</code> deleted").format(icon=Icons.TRASH, key=key)

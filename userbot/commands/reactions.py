@@ -37,7 +37,6 @@ async def get_reactions(
     client: Client,
     message: Message,
     reply: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Gets message reactions with users who reacted to it."""
@@ -53,7 +52,7 @@ async def get_reactions(
             )
         )
     except MsgIdInvalid:
-        return _("{icon} <i>Message not found or has no reactions</i>").format(icon=icons.WARNING)
+        return _("{icon} <i>Message not found or has no reactions</i>").format(icon=Icons.WARNING)
     reactions: dict[int | str, set[int]] = {}
     for r in messages.reactions:
         if isinstance(r.reaction, types.ReactionCustomEmoji):
@@ -86,7 +85,7 @@ async def get_reactions(
             else:
                 peer_name = _("Unknown user")
             t += f"- <a href='tg://user?id={peer_id}'>{peer_name}</a> (#<code>{peer_id}</code>)\n"
-    return t or _("{icon} <i>No reactions here</i>").format(icon=icons.WARNING)
+    return t or _("{icon} <i>No reactions here</i>").format(icon=Icons.WARNING)
 
 
 @commands.add("rr", reply_required=True)

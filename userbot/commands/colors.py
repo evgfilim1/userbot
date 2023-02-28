@@ -32,7 +32,6 @@ async def color(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sends a specified color sample.
@@ -46,7 +45,7 @@ async def color(
     await client.send_photo(
         message.chat.id,
         tmp,
-        caption=_("{icon} Color {color_spec}").format(icon=icons.COLOR, color_spec=color_spec),
+        caption=_("{icon} Color {color_spec}").format(icon=Icons.COLOR, color_spec=color_spec),
         reply_to_message_id=reply,
         disable_notification=True,
     )
@@ -60,7 +59,6 @@ async def user_color(
     command: CommandObject,
     storage: Storage,
     reply: Message,
-    icons: type[Icons],
     tr: Translation,
 ) -> None:
     """Sends a color sample of user's color as shown in clients."""
@@ -69,9 +67,9 @@ async def user_color(
     if user is not None:
         user_ids = await resolve_users(client, storage, user)
         if len(user_ids) == 0:
-            return _("{icon} No users were specified").format(icon=icons.STOP)
+            return _("{icon} No users were specified").format(icon=Icons.STOP)
         if len(user_ids) > 1:
-            return _("{icon} Multiple user are not supported here").format(icon=icons.STOP)
+            return _("{icon} Multiple user are not supported here").format(icon=Icons.STOP)
         user_id = user_ids.pop()
     else:
         user_id = reply.from_user.id
@@ -82,7 +80,7 @@ async def user_color(
         message.chat.id,
         tmp,
         caption=_("{icon} Color of the user {user} is {c}").format(
-            icon=icons.COLOR,
+            icon=Icons.COLOR,
             user=user_id,
             c=c,
         ),

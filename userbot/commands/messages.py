@@ -35,7 +35,6 @@ async def dump(
     message: Message,
     command: CommandObject,
     reply: Message | None,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Dumps entire message or its attribute specified with `jq` syntax."""
@@ -50,7 +49,7 @@ async def dump(
             "<b>Details:</b>\n<pre>{e}</pre>\n\n"
             "<b>Possible fix:</b> <code>{full_command} .{attr}</code>"
         ).format(
-            icon=icons.WARNING,
+            icon=Icons.WARNING,
             attr=html.escape(q),
             e=str(e),
             full_command=command.full_command,
@@ -75,14 +74,13 @@ async def user_first_message(
     client: Client,
     message: Message,
     reply: Message | None,
-    icons: type[Icons],
     tr: Translation,
 ) -> str | None:
     """Looks for the user's very first message in the chat."""
     _ = tr.gettext
     msg = reply if reply is not None else message
     if (user := msg.from_user) is None:
-        return _("{icon} Cannot search for first message from channel").format(icon=icons.WARNING)
+        return _("{icon} Cannot search for first message from channel").format(icon=Icons.WARNING)
     chat_peer = await client.resolve_peer(message.chat.id)
     user_peer = await client.resolve_peer(user.id)
     first_msg_raw = None

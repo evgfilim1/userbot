@@ -81,7 +81,6 @@ async def random_chat_info(
     client: Client,
     message: Message,
     command: CommandObject,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Sets random chat photo and/or title.
@@ -95,12 +94,12 @@ async def random_chat_info(
         msg = await _set_random_chat_photo(message.chat.id, client)
         text += _(
             "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
-        ).format(icon=icons.PICTURE, msg_link=msg.link)
+        ).format(icon=Icons.PICTURE, msg_link=msg.link)
         await sleep(0.1)
     if what == "title" or what is None:
         msg = await _set_random_chat_title(message.chat.id, client)
         text += _("{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>").format(
-            icon=icons.PENCIL, msg_link=msg.link
+            icon=Icons.PENCIL, msg_link=msg.link
         )
         await sleep(0.1)
     return text

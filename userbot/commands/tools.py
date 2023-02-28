@@ -123,7 +123,7 @@ async def test_error() -> NoReturn:
 
 
 @commands.add("sleep", usage="<seconds>", hidden=True)
-async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> str:
+async def sleep(command: CommandObject, tr: Translation) -> str:
     """Sleeps for a specified amount of time.
 
     This is a test command to check the command waiting message and timeout.
@@ -131,11 +131,11 @@ async def sleep(command: CommandObject, icons: type[Icons], tr: Translation) -> 
     _ = tr.gettext
     sec = float(command.args["seconds"])
     await asyncio.sleep(sec)
-    return _("{icon} Done sleeping for {sec} seconds").format(icon=icons.WATCH, sec=sec)
+    return _("{icon} Done sleeping for {sec} seconds").format(icon=Icons.WATCH, sec=sec)
 
 
 @commands.add("stopself", hidden=True)
-async def stop_self(message: Message, icons: type[Icons], tr: Translation) -> None:
+async def stop_self(message: Message, tr: Translation) -> None:
     """Stops the bot.
 
     This effectively works like pressing Ctrl-C in the terminal.
@@ -145,5 +145,5 @@ async def stop_self(message: Message, icons: type[Icons], tr: Translation) -> No
     the default behavior for production docker-compose config in this repo.
     """
     _ = tr.gettext
-    await message.edit(_("{icon} <b>Stopping userbot...</b>").format(icon=icons.WARNING))
+    await message.edit(_("{icon} <b>Stopping userbot...</b>").format(icon=Icons.WARNING))
     kill(getpid(), SIGINT)

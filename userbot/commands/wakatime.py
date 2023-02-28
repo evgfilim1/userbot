@@ -77,7 +77,6 @@ def _format_top(
 
 @commands.add("wakatime", "waka", waiting_message=gettext("Collecting Wakatime stats..."))
 async def wakatime_handler(
-    icons: type[Icons],
     wakatime_client: WakatimeClient | None,
     tr: Translation,
 ) -> str:
@@ -87,18 +86,18 @@ async def wakatime_handler(
         return _(
             "{icon} <b>Wakatime is not configured.</b>"
             " Please set up your API key in order to use this command. See project README for more."
-        ).format(icon=icons.STOP)
+        ).format(icon=Icons.STOP)
 
     try:
         today_time = await wakatime_client.get_today_time()
         stats = await wakatime_client.get_stats()
     except (ConnectTimeout, ReadTimeout):
         return _("{icon} <b>Wakatime is not responding. Please, try again later.</b>").format(
-            icon=icons.WARNING,
+            icon=Icons.WARNING,
         )
     if stats is None:
         return _("{icon} Stats are refreshing, please try again in a few seconds.").format(
-            icon=icons.WATCH,
+            icon=Icons.WATCH,
         )
 
     top_languages = _format_top(stats.languages, _LANGUAGES, length=5)

@@ -25,7 +25,6 @@ async def _downloader(
     message: Message,
     filename: str | None,
     data_dir: Path,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     _ = tr.gettext
@@ -39,7 +38,7 @@ async def _downloader(
         MessageMediaType.DICE,
         MessageMediaType.GAME,
     ):
-        return _("{icon} No downloadable media found").format(icon=icons.STOP)
+        return _("{icon} No downloadable media found").format(icon=Icons.STOP)
     media_type = message.media.value
     media_dir = data_dir
     if not filename:
@@ -65,7 +64,7 @@ async def _downloader(
         while chunk := output_io.read(_CHUNK_SIZE):
             await f.write(chunk)
     return _("{icon} The file has been downloaded to <code>{output}</code>").format(
-        icon=icons.DOWNLOAD,
+        icon=Icons.DOWNLOAD,
         output=output,
     )
 
@@ -82,7 +81,6 @@ async def download(
     command: CommandObject,
     reply: Message | None,
     data_dir: Path,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Downloads a file or files.
@@ -104,9 +102,9 @@ async def download(
         except IndexError:
             filename = None
         try:
-            t += await _downloader(client, target, filename, data_dir, icons, tr)
+            t += await _downloader(client, target, filename, data_dir, tr)
         except Exception as e:
-            t += f"{icons.WARNING} <code>{type(e).__name__}: {e}</code>"
+            t += f"{Icons.WARNING} <code>{type(e).__name__}: {e}</code>"
         finally:
             t += "\n"
     return t

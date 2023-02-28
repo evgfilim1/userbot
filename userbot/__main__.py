@@ -20,7 +20,6 @@ from userbot.config import (
     TelegramConfig,
     ThirdPartyServicesConfig,
 )
-from userbot.constants import Icons
 from userbot.hooks import hooks
 from userbot.meta.job_manager import AsyncJobManager
 from userbot.meta.modules import CommandsModule, HooksModule
@@ -132,7 +131,6 @@ def main() -> None:
     kwargs_middleware = KwargsMiddleware(
         {
             "storage": storage,
-            "icons": Icons,
             "data_dir": storage_config.data_location,
             "notes_chat": app_config.media_notes_chat,
             "github_client": github_client,

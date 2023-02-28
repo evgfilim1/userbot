@@ -191,14 +191,13 @@ class ParseCommandMiddleware(Middleware[str | None]):
         command_info: _CommandInfo,
         data: dict[str, Any],
     ) -> str:
-        icons: type[Icons] = data["icons"]
         _ = data["tr"].gettext
         handler: CommandsHandler = data["handler_obj"]
         return _(
             "{icon} <b>{error}</b>\n<b>Usage:</b> {usage}\n\n"
             "To get more info about a command, send <code>{prefix}help {command}</code>.",
         ).format(
-            icon=icons.STOP,
+            icon=Icons.STOP,
             error=html.escape(error),
             usage=html.escape(handler.format_usage()),
             prefix=self._default_prefix,

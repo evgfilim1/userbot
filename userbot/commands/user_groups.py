@@ -61,7 +61,6 @@ async def group_add(
     command: CommandObject,
     reply: Message | None,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Adds a user to the user group for later use with user resolving.
@@ -82,7 +81,7 @@ async def group_add(
         "{icon} Added {count} users to user group {group_name}",
         len(user_ids),
     ).format(
-        icon=icons.PERSON_TICK,
+        icon=Icons.PERSON_TICK,
         count=len(user_ids),
         group_name=group_name,
     )
@@ -103,7 +102,6 @@ async def group_del(
     command: CommandObject,
     reply: Message | None,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Removes a user from the user group."""
@@ -121,7 +119,7 @@ async def group_del(
         "{icon} Removed {count} users from user group {group_name}",
         len(user_ids),
     ).format(
-        icon=icons.PERSON_BLOCK,
+        icon=Icons.PERSON_BLOCK,
         count=len(user_ids),
         group_name=group_name,
     )
@@ -137,7 +135,6 @@ async def group_list(
     client: Client,
     command: CommandObject,
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Lists the users in the user group.
@@ -149,7 +146,7 @@ async def group_list(
     group_name = args["group_name"]
     resolve = args[1] == "resolve"
     users: list[int] = [x async for x in storage.list_users_in_group(group_name)]
-    t = _("{icon} Users in user group {key}:").format(icon=icons.GROUP_CHAT, key=group_name)
+    t = _("{icon} Users in user group {key}:").format(icon=Icons.GROUP_CHAT, key=group_name)
     if resolve:
         for user in await client.get_users(users):
             username = f"@{user.username}" if user.username is not None else None
@@ -163,12 +160,11 @@ async def group_list(
 @commands.add("usergroups", "ugs")
 async def groups(
     storage: Storage,
-    icons: type[Icons],
     tr: Translation,
 ) -> str:
     """Lists all user groups."""
     _ = tr.gettext
-    t = _("{icon} User groups:").format(icon=icons.GROUP_CHAT)
+    t = _("{icon} User groups:").format(icon=Icons.GROUP_CHAT)
     async for group in storage.list_groups():
         t += f"\n• <code>{group}</code>"
     return t

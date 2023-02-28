@@ -93,7 +93,6 @@ class BaseHandler(ABC):
         """Edits a message after some time to show that the bot is working on the message."""
         await asyncio.sleep(0.75)
         message: Message = data["message"]
-        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         if self.waiting_message is not None:
@@ -101,7 +100,7 @@ class BaseHandler(ABC):
             text = _(self.waiting_message).strip()
         else:
             text = _("<i>Userbot is processing the message...</i>")
-        message, edited = await self._edit_or_reply_html_text(message, f"{icons.WATCH} {text}")
+        message, edited = await self._edit_or_reply_html_text(message, f"{Icons.WATCH} {text}")
         if not edited:
             data["new_message"] = message
 
@@ -113,7 +112,6 @@ class BaseHandler(ABC):
             exc_info=True,
             extra={"data": data},
         )
-        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         __ = tr.ngettext
@@ -123,7 +121,7 @@ class BaseHandler(ABC):
             "{icon} <b>Timed out after {timeout} while processing the message.</b>\n"
             "<i>More info can be found in logs.</i>"
         ).format(
-            icon=icons.STOP,
+            icon=Icons.STOP,
             timeout=__("{timeout} second", "{timeout} seconds", timeout).format(timeout=timeout),
         )
 

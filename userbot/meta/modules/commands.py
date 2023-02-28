@@ -201,7 +201,6 @@ class CommandsHandler(BaseHandler):
         # the fallback values
         if "tr" not in data:
             data["tr"] = Translation(None)
-        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         traceback_chat: int | str | None = data.get("traceback_chat", None)
@@ -210,7 +209,7 @@ class CommandsHandler(BaseHandler):
         traceback += _format_exception(e)
         traceback = f"<pre><code class='language-python'>{html.escape(traceback)}</code></pre>"
         header = _("{icon} <b>An error occurred during executing command.</b>").format(
-            icon=icons.STOP,
+            icon=Icons.STOP,
         )
         if traceback_chat is None:
             footer = _(
@@ -246,14 +245,13 @@ class CommandsHandler(BaseHandler):
 
     async def _message_too_long_handler(self, result: str, data: dict[str, Any]) -> None:
         message: Message = data["message"]
-        icons: type[Icons] = data["icons"]
         tr: Translation = data["tr"]
         _ = tr.gettext
         text = _(
             "{icon} <b>Successfully executed.</b>\n\n"
             "<b>Command:</b> <code>{message_text}</code>\n\n"
             "<b>Result:</b>"
-        ).format(icon=icons.INFO, message_text=html.escape(message.text))
+        ).format(icon=Icons.INFO, message_text=html.escape(message.text))
         async with AsyncClient(base_url="https://nekobin.com/") as nekobin:
             try:
                 res = await nekobin.post("/api/documents", json={"content": result})
