@@ -1,4 +1,3 @@
-version: "3"
 services:
   main:
     image: "${REGISTRY:?}/${IMAGE_NAME:?}:${IMAGE_TAG:?}"
@@ -14,6 +13,8 @@ services:
       REDIS_HOST: "redis"
     volumes:
       - /home/github/userbot/data:/data
+    depends_on:
+      - redis
   redis:
     image: redis:7.0-alpine
     restart: unless-stopped
