@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
 "POT-Creation-Date: 2023-02-28 17:07+0500\n"
-"PO-Revision-Date: 2023-02-28 19:05\n"
+"PO-Revision-Date: 2023-03-05 06:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -597,7 +597,7 @@ msgstr "{icon} <b>Wakatime не настроен.</b> Пожалуйста, на
 #: userbot/commands/wakatime.py:95
 #, python-brace-format
 msgid "{icon} <b>Wakatime is not responding. Please, try again later.</b>"
-msgstr "{icon} <b>Wakatime не отвечает. Попробуйте, пожалуйста, позже</b>"
+msgstr "{icon} <b>Wakatime не отвечает. Пожалуйста, повторите попытку позже.</b>"
 
 #: userbot/commands/wakatime.py:99
 #, python-brace-format
