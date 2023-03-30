@@ -104,7 +104,7 @@ async def sed(
     # TODO (2022-02-17): work with entities
     _ = tr.gettext
     text = get_message_text(reply)
-    args = command.args
+    args = command.args[0]
     try:
         find_re, replace_re, flags_str = re.split(r"(?<!\\)/", args)
     except ValueError as e:
