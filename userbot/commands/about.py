@@ -69,18 +69,18 @@ async def stats_handler(
 ) -> str:
     """Shows some statistics about this userbot.
 
-    If 'bot' is passed as an argument, shows userbot stats only. No API calls will be made.
+    If 'bot' is passed as an argument, shows userbot stats only. This is the default.
+    No API calls will be made.
 
-    If 'short' is passed as an argument, shows the stats without dialogs count (default).
+    If 'short' is passed as an argument, shows the stats without dialogs count.
 
     If 'full' is passed as an argument, shows full stats. If you have a lot of dialogs, this may
     take a while.
     """
     _ = tr.gettext
 
-    me = await client.get_me()
     report_type = command.args[0]
-    if report_type in ("short", "full", ""):
+    if report_type in ("short", "full"):
         saved_gifs: types.messages.SavedGifs | None = await client.invoke(
             functions.messages.GetSavedGifs(hash=0),
         )
@@ -95,12 +95,9 @@ async def stats_handler(
                 ),
             )
         ).count
-        if me.is_premium:
-            saved_emoji: types.messages.AllStickers | None = await client.invoke(
-                functions.messages.GetEmojiStickers(hash=0),
-            )
-        else:
-            saved_emoji = None
+        saved_emoji: types.messages.AllStickers | None = await client.invoke(
+            functions.messages.GetEmojiStickers(hash=0),
+        )
         if report_type == "full":
             dialogs_count, archived_dialogs_count = await get_dialogs_count(client)
         else:
@@ -124,10 +121,6 @@ async def stats_handler(
         _("{icon} Uptime: {uptime}").format(
             icon=Icons.SETTINGS,
             uptime=format_timedelta(stats.uptime),
-        ),
-        "{icon} {premium}".format(
-            icon=Icons.PREMIUM,
-            premium=_("Has premium") if me.is_premium else _("Has no premium"),
         ),
         _("{icon} Commands used: {count}").format(
             icon=Icons.COMMAND,
@@ -169,6 +162,7 @@ async def stats_handler(
         and saved_stickers is not None
         and archived_stickers_count is not None
     ):
+        me = await client.get_me()
         lines.extend(
             (
                 _("{icon} GIFs: {count}/{total}").format(
@@ -187,7 +181,7 @@ async def stats_handler(
                 ),
                 _("{icon} Custom emoji: {count}").format(
                     icon=Icons.EMOJI,
-                    count=len(saved_emoji.sets) if saved_emoji is not None else _("Unavailable"),
+                    count=len(saved_emoji.sets),
                 ),
             )
         )
