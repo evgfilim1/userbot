@@ -68,7 +68,7 @@ async def on_voice_or_video(
 ) -> None:
     _ = tr.gettext
     result = await transcribe_message(client, message)
-    if result is None:
+    if result is None or result == "":
         await message.reply_text(
             _(
                 "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"

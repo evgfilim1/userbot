@@ -157,7 +157,7 @@ async def speech_to_text(
     if reply.video_note is None and reply.voice is None:
         return _("{icon} No voice or video note found").format(icon=Icons.STOP)
     result = await transcribe_message(client, reply)
-    if result is None:
+    if result is None or result == "":
         return _(
             "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
         ).format(icon=Icons.WARNING)
@@ -193,12 +193,19 @@ async def transcribed_audio_raw_handler(
 
     _ = Translation(await storage.get_chat_language(chat_id)).gettext
 
+    result = update.text
+    if result == "":
+        new_text = _(
+            "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
+        ).format(icon=Icons.WARNING)
+    else:
+        new_text = _("{icon} <b>Transcribed text:</b>\n{text}").format(
+            icon=Icons.SPEECH_TO_TEXT,
+            text=update.text,
+        )
     await client.edit_message_text(
         chat_id=chat_id,
         message_id=msg_id,
-        text=_("{icon} <b>Transcribed text:</b>\n{text}").format(
-            icon=Icons.SPEECH_TO_TEXT,
-            text=update.text,
-        ),
+        text=new_text,
     )
     await storage.delete_transcription(update.transcription_id)
