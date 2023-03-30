@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-02-28 17:07+0500\n"
-"PO-Revision-Date: 2023-03-05 06:50\n"
+"POT-Creation-Date: 2023-03-30 10:19+0500\n"
+"PO-Revision-Date: 2023-03-30 05:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,8 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: ru_RU\n"
 
-#: userbot/commands/content_converters.py:161 userbot/hooks.py:73
+#: userbot/commands/content_converters.py:161 userbot/commands/content_converters.py:198
+#: userbot/hooks.py:73
 #, python-brace-format
 msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
 msgstr "{icon} <i>Транскрипция не удалась, возможно, сообщение не имеет распознаваемого голоса?</i>"
@@ -32,7 +33,7 @@ msgstr "{icon} <i>Транскрипция не удалась, возможно
 msgid "{icon} <i>Transcription is pending...</i>"
 msgstr "{icon} <i>Транскрипция в обработке...</i>"
 
-#: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:199
+#: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:202
 #: userbot/hooks.py:85
 #, python-brace-format
 msgid "{icon} <b>Transcribed text:</b>\n"
@@ -88,81 +89,69 @@ msgstr "{icon} <a href='{url}'>Внести вклад в перевод пол�
 msgid "<i>Collecting stats...</i>"
 msgstr "<i>Сбор статистики...</i>"
 
-#: userbot/commands/about.py:123
+#: userbot/commands/about.py:120
 msgid "<b>Statistics:</b>"
 msgstr "<b>Статистика:</b>"
 
-#: userbot/commands/about.py:124
+#: userbot/commands/about.py:121
 #, python-brace-format
 msgid "{icon} Uptime: {uptime}"
 msgstr "{icon} Время непрерывной работы: {uptime}"
 
-#: userbot/commands/about.py:130
-msgid "Has premium"
-msgstr "Имеет премиум"
-
-#: userbot/commands/about.py:130
-msgid "Has no premium"
-msgstr "Не имеет премиум"
-
-#: userbot/commands/about.py:132
+#: userbot/commands/about.py:125
 #, python-brace-format
 msgid "{icon} Commands used: {count}"
 msgstr "{icon} Использовано команд: {count}"
 
-#: userbot/commands/about.py:141
+#: userbot/commands/about.py:134
 #, python-brace-format
 msgid "{icon} Total chats: {count}"
 msgstr "{icon} Всего чатов: {count}"
 
-#: userbot/commands/about.py:145
+#: userbot/commands/about.py:138
 #, python-brace-format
 msgid "• {icon} Private: {count}"
 msgstr "• {icon} Личных: {count}"
 
-#: userbot/commands/about.py:149
+#: userbot/commands/about.py:142
 #, python-brace-format
 msgid "• {icon} Bots: {count}"
 msgstr "• {icon} С ботами: {count}"
 
-#: userbot/commands/about.py:153
+#: userbot/commands/about.py:146
 #, python-brace-format
 msgid "• {icon} Groups and supergroups: {count}"
 msgstr "• {icon} Групп и супергрупп: {count}"
 
-#: userbot/commands/about.py:157
+#: userbot/commands/about.py:150
 #, python-brace-format
 msgid "• {icon} Channels: {count}"
 msgstr "• {icon} Каналов: {count}"
 
-#: userbot/commands/about.py:161
+#: userbot/commands/about.py:154
 #, python-brace-format
 msgid "• {icon} Archived: {count}"
 msgstr "• {icon} Архивированных: {count}"
 
-#: userbot/commands/about.py:174
+#: userbot/commands/about.py:168
 #, python-brace-format
 msgid "{icon} GIFs: {count}/{total}"
 msgstr "{icon} GIF-анимаций: {count}/{total}"
 
-#: userbot/commands/about.py:179
+#: userbot/commands/about.py:173
 #, python-brace-format
 msgid "{icon} Stickers: {count}/{total}"
 msgstr "{icon} Стикеров: {count}/{total}"
 
-#: userbot/commands/about.py:184
+#: userbot/commands/about.py:178
 #, python-brace-format
 msgid "{icon} Archived stickers: {count}"
 msgstr "{icon} Архивированных стикеров: {count}"
 
-#: userbot/commands/about.py:188
+#: userbot/commands/about.py:182
 #, python-brace-format
 msgid "{icon} Custom emoji: {count}"
 msgstr "{icon} Пользовательских эмодзи: {count}"
-
-#: userbot/commands/about.py:190
-msgid "Unavailable"
-msgstr "Недоступно"
 
 #: userbot/commands/chat_admin.py:24
 msgid "<b>⚠⚠⚠ IT'S NOT A JOKE ⚠⚠⚠</b>\n"
