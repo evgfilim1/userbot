@@ -27,4 +27,6 @@ async def transcribe_message(client: Client, message: Message) -> str | int | No
         raise
     if transcribed.pending:
         return transcribed.transcription_id
+    if transcribed.text == "":
+        return None
     return transcribed.text

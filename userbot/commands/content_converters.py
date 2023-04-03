@@ -153,7 +153,7 @@ async def speech_to_text(
     if reply.video_note is None and reply.voice is None:
         return _("{icon} No voice or video note found").format(icon=Icons.STOP)
     result = await transcribe_message(client, reply)
-    if result is None or result == "":
+    if result is None:
         return _(
             "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
         ).format(icon=Icons.WARNING)
