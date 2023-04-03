@@ -2,6 +2,7 @@ __all__ = [
     "AppLimits",
     "AppLimitsController",
     "async_partial",
+    "call_subprocess",
     "DialogCount",
     "edit_replied_or_reply",
     "fetch_stickers",
@@ -22,6 +23,7 @@ __all__ = [
     "StatsController",
     "StickerFilter",
     "StickerInfo",
+    "SubprocessResult",
     "Translation",
     "Unset",
 ]
@@ -37,6 +39,7 @@ from .messages import (
     is_my_message,
 )
 from .misc import SecretValue, StatsController, Unset, async_partial
+from .os import SubprocessResult, call_subprocess
 from .stickers import StickerInfo, fetch_stickers
 from .telegram_json import json_value_to_python
 from .time import format_timedelta, parse_timespec

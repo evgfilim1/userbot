@@ -15,6 +15,7 @@ from ..utils import (
     DialogCount,
     StatsController,
     Translation,
+    call_subprocess,
     format_timedelta,
     get_dialogs_count,
     gettext,
@@ -28,8 +29,17 @@ async def about(client: Client, tr: Translation) -> str:
     """Shows information about this userbot."""
     _ = tr.gettext
     base_url = "https://github.com/evgfilim1/userbot"
-    # TODO (2022-07-13): get this from the git repo also
-    commit = __git_commit__ if __git_commit__ else _("staging")
+    if __git_commit__:
+        commit = __git_commit__
+    else:
+        is_git_installed = bool(await call_subprocess("git", "--version"))
+        if is_git_installed:
+            commit = (await call_subprocess("git", "rev-parse", "HEAD")).stdout.decode().strip()
+            is_clean = bool(await call_subprocess("git", "diff", "--quiet"))
+            if not is_clean:
+                commit += " " + _("(dirty)")
+        else:
+            commit = _("staging")
     me = await client.get_me()
     if me.is_premium:
         github_icon = Icons.GITHUB

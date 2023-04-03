@@ -3,7 +3,6 @@ __all__ = [
     "transcribed_audio_raw_handler",
 ]
 
-import asyncio
 from io import BytesIO
 from os import path
 from tempfile import NamedTemporaryFile
@@ -19,7 +18,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation, gettext
+from ..utils import Translation, call_subprocess, gettext
 from ..utils.premium import transcribe_message
 
 commands = CommandsModule("Content converters")
@@ -31,8 +30,7 @@ async def _call_ffmpeg(
     *args: str,
 ) -> None:
     """Calls ffmpeg with the given arguments."""
-    proc = await asyncio.subprocess.create_subprocess_exec(
-        "/usr/bin/env",
+    result = await call_subprocess(
         "ffmpeg",
         "-hide_banner",
         "-i",
@@ -40,13 +38,11 @@ async def _call_ffmpeg(
         *args,
         "-y",
         output_file,
-        stdin=asyncio.subprocess.DEVNULL,
-        stdout=asyncio.subprocess.DEVNULL,
-        stderr=asyncio.subprocess.PIPE,
     )
-    __, stderr = await proc.communicate()
-    if proc.returncode != 0:
-        raise RuntimeError(f"Process finished with error code {proc.returncode}\n{stderr.decode()}")
+    if not result:
+        raise RuntimeError(
+            f"Process finished with error code {result.return_code}\n{result.stderr.decode()}"
+        )
 
 
 def _convert_to_sticker(photo: BinaryIO, fmt: str) -> BytesIO:
