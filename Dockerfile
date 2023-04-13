@@ -7,7 +7,7 @@ COPY locales /tmp/locales
 # Having no locales raises an error and is expected to fail, continuing anyway
 RUN pybabel compile -D evgfilim1-userbot -d /tmp/locales || true
 
-FROM jrottenberg/ffmpeg:5.1-ubuntu2004 AS runtime
+FROM jrottenberg/ffmpeg:6.0-ubuntu2004 AS runtime
 
 WORKDIR /app
 
