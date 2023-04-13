@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1-userbot\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-03-30 10:19+0500\n"
-"PO-Revision-Date: 2023-03-30 05:27\n"
+"POT-Creation-Date: 2023-04-03 14:27+0500\n"
+"PO-Revision-Date: 2023-04-13 08:06\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -22,18 +22,18 @@ msgstr ""
 "X-Crowdin-File-ID: 18\n"
 "Language: ru_RU\n"
 
-#: userbot/commands/content_converters.py:161 userbot/commands/content_converters.py:198
+#: userbot/commands/content_converters.py:157 userbot/commands/content_converters.py:194
 #: userbot/hooks.py:73
 #, python-brace-format
 msgid "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
 msgstr "{icon} <i>Транскрипция не удалась, возможно, сообщение не имеет распознаваемого голоса?</i>"
 
-#: userbot/commands/content_converters.py:166 userbot/hooks.py:80
+#: userbot/commands/content_converters.py:162 userbot/hooks.py:80
 #, python-brace-format
 msgid "{icon} <i>Transcription is pending...</i>"
 msgstr "{icon} <i>Транскрипция в обработке...</i>"
 
-#: userbot/commands/content_converters.py:167 userbot/commands/content_converters.py:202
+#: userbot/commands/content_converters.py:163 userbot/commands/content_converters.py:198
 #: userbot/hooks.py:85
 #, python-brace-format
 msgid "{icon} <b>Transcribed text:</b>\n"
@@ -58,97 +58,101 @@ msgstr "{icon} <b>{error}</b>\n"
 "<b>Использование:</b> {usage}\n\n"
 "Чтобы получить больше информации о команде, отправьте <code>{prefix}help {command}</code>."
 
-#: userbot/commands/about.py:32
+#: userbot/commands/about.py:40
+msgid "(dirty)"
+msgstr ""
+
+#: userbot/commands/about.py:42
 msgid "staging"
 msgstr "в разработке"
 
-#: userbot/commands/about.py:38
+#: userbot/commands/about.py:48
 msgid "<i>Repo:</i>"
 msgstr "<i>Репозиторий:</i>"
 
-#: userbot/commands/about.py:39
+#: userbot/commands/about.py:49
 msgid "<i>Commit:</i>"
 msgstr "<i>Коммит:</i>"
 
-#: userbot/commands/about.py:40
+#: userbot/commands/about.py:50
 #, python-brace-format
 msgid "{icon} <b>About userbot</b>"
 msgstr "{icon} <b>О пользовательском боте</b>"
 
-#: userbot/commands/about.py:46
+#: userbot/commands/about.py:56
 #, python-brace-format
 msgid "(<a href='{base_url}/deployments'>deployments</a>)"
 msgstr "(<a href='{base_url}/deployments'>развёртывания</a>)"
 
-#: userbot/commands/about.py:49
+#: userbot/commands/about.py:59
 #, python-brace-format
 msgid "{icon} <a href='{url}'>Contribute userbot translations</a>"
 msgstr "{icon} <a href='{url}'>Внести вклад в перевод пользовательского бота</a>"
 
-#: userbot/commands/about.py:59
+#: userbot/commands/about.py:69
 msgid "<i>Collecting stats...</i>"
 msgstr "<i>Сбор статистики...</i>"
 
-#: userbot/commands/about.py:120
+#: userbot/commands/about.py:130
 msgid "<b>Statistics:</b>"
 msgstr "<b>Статистика:</b>"
 
-#: userbot/commands/about.py:121
+#: userbot/commands/about.py:131
 #, python-brace-format
 msgid "{icon} Uptime: {uptime}"
 msgstr "{icon} Время непрерывной работы: {uptime}"
 
-#: userbot/commands/about.py:125
+#: userbot/commands/about.py:135
 #, python-brace-format
 msgid "{icon} Commands used: {count}"
 msgstr "{icon} Использовано команд: {count}"
 
-#: userbot/commands/about.py:134
+#: userbot/commands/about.py:144
 #, python-brace-format
 msgid "{icon} Total chats: {count}"
 msgstr "{icon} Всего чатов: {count}"
 
-#: userbot/commands/about.py:138
+#: userbot/commands/about.py:148
 #, python-brace-format
 msgid "• {icon} Private: {count}"
 msgstr "• {icon} Личных: {count}"
 
-#: userbot/commands/about.py:142
+#: userbot/commands/about.py:152
 #, python-brace-format
 msgid "• {icon} Bots: {count}"
 msgstr "• {icon} С ботами: {count}"
 
-#: userbot/commands/about.py:146
+#: userbot/commands/about.py:156
 #, python-brace-format
 msgid "• {icon} Groups and supergroups: {count}"
 msgstr "• {icon} Групп и супергрупп: {count}"
 
-#: userbot/commands/about.py:150
+#: userbot/commands/about.py:160
 #, python-brace-format
 msgid "• {icon} Channels: {count}"
 msgstr "• {icon} Каналов: {count}"
 
-#: userbot/commands/about.py:154
+#: userbot/commands/about.py:164
 #, python-brace-format
 msgid "• {icon} Archived: {count}"
 msgstr "• {icon} Архивированных: {count}"
 
-#: userbot/commands/about.py:168
+#: userbot/commands/about.py:178
 #, python-brace-format
 msgid "{icon} GIFs: {count}/{total}"
 msgstr "{icon} GIF-анимаций: {count}/{total}"
 
-#: userbot/commands/about.py:173
+#: userbot/commands/about.py:183
 #, python-brace-format
 msgid "{icon} Stickers: {count}/{total}"
 msgstr "{icon} Стикеров: {count}/{total}"
 
-#: userbot/commands/about.py:178
+#: userbot/commands/about.py:188
 #, python-brace-format
 msgid "{icon} Archived stickers: {count}"
 msgstr "{icon} Архивированных стикеров: {count}"
 
-#: userbot/commands/about.py:182
+#: userbot/commands/about.py:192
 #, python-brace-format
 msgid "{icon} Custom emoji: {count}"
 msgstr "{icon} Пользовательских эмодзи: {count}"
@@ -320,24 +324,24 @@ msgstr "{icon} Несколько пользователей здесь не п�
 msgid "{icon} Color of the user {user} is {c}"
 msgstr "{icon} Цвет пользователя {user} — {c}"
 
-#: userbot/commands/content_converters.py:62
+#: userbot/commands/content_converters.py:58
 msgid "<i>Converting to mpeg4gif...</i>"
 msgstr "<i>Преобразование в mpeg4gif...</i>"
 
-#: userbot/commands/content_converters.py:73 userbot/commands/content_converters.py:129
+#: userbot/commands/content_converters.py:69 userbot/commands/content_converters.py:125
 #, python-brace-format
 msgid "{icon} No video found"
 msgstr "{icon} Видео не найдено"
 
-#: userbot/commands/content_converters.py:85
+#: userbot/commands/content_converters.py:81
 msgid "<i>Converting to sticker...</i>"
 msgstr "<i>Преобразование в стикер...</i>"
 
-#: userbot/commands/content_converters.py:118
+#: userbot/commands/content_converters.py:114
 msgid "<i>Extracting audio...</i>"
 msgstr "<i>Извлечение аудио...</i>"
 
-#: userbot/commands/content_converters.py:158
+#: userbot/commands/content_converters.py:154
 #, python-brace-format
 msgid "{icon} No voice or video note found"
 msgstr "{icon} Это сообщение не является голосовым или видео"
