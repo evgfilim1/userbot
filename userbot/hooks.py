@@ -6,6 +6,8 @@ import random
 import re
 
 from pyrogram import Client, filters
+from pyrogram.enums import ChatAction
+from pyrogram.errors import ReactionInvalid
 from pyrogram.types import Message
 
 from .constants import (
@@ -19,7 +21,7 @@ from .constants import (
 )
 from .meta.modules import HooksModule
 from .storage import Storage
-from .utils import StickerFilter, Translation
+from .utils import StickerFilter, Translation, react
 from .utils.premium import transcribe_message
 
 hooks = HooksModule()
@@ -69,17 +71,17 @@ async def on_voice_or_video(
     _ = tr.gettext
     result = await transcribe_message(client, message)
     if result is None:
-        await message.reply_text(
-            _(
-                "{icon} <i>Transcription failed, maybe the message has no recognizable voice?</i>"
-            ).format(icon=Icons.WARNING)
-        )
         return
     if isinstance(result, int):
-        msg = await message.reply_text(
-            _("{icon} <i>Transcription is pending...</i>").format(icon=Icons.WATCH)
-        )
-        await storage.save_transcription(result, msg.id)
+        try:
+            await react(client, message.chat.id, message.id, Icons.SPEECH_TO_TEXT.document_id)
+        except ReactionInvalid:
+            try:
+                await react(client, message.chat.id, message.id, "✍")
+            except ReactionInvalid:
+                await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        # Using negative value to show that message is not from me
+        await storage.save_transcription(result, -message.id)
         return
     await message.reply_text(
         _("{icon} <b>Transcribed text:</b>\n{text}").format(

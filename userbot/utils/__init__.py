@@ -18,6 +18,7 @@ __all__ = [
     "Limit",
     "ngettext",
     "parse_timespec",
+    "react",
     "resolve_users",
     "SecretValue",
     "StatsController",
@@ -40,6 +41,7 @@ from .messages import (
 )
 from .misc import SecretValue, StatsController, Unset, async_partial
 from .os import SubprocessResult, call_subprocess
+from .reactions import react
 from .stickers import StickerInfo, fetch_stickers
 from .telegram_json import json_value_to_python
 from .time import format_timedelta, parse_timespec

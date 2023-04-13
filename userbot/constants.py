@@ -152,5 +152,12 @@ class Icons(Enum):
     OS_WINDOWS = (5366318141771096216, "👩‍💻")
 
     def __str__(self) -> str:
-        custom_emoji_id, emoji = self.value[:2]
-        return f"<emoji id={custom_emoji_id}>{emoji}</emoji>"
+        return f"<emoji id={self.document_id}>{self.emoji}</emoji>"
+
+    @property
+    def document_id(self) -> int:
+        return self.value[0]
+
+    @property
+    def emoji(self) -> str:
+        return self.value[1]

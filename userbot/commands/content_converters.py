@@ -10,6 +10,7 @@ from typing import BinaryIO
 
 from PIL import Image
 from pyrogram import Client, ContinuePropagation
+from pyrogram.errors import ReactionInvalid
 from pyrogram.raw import base, types
 from pyrogram.types import Message
 from pyrogram.utils import get_channel_id
@@ -18,7 +19,7 @@ from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
 from ..storage import Storage
-from ..utils import Translation, call_subprocess, gettext
+from ..utils import Translation, call_subprocess, gettext, react
 from ..utils.premium import transcribe_message
 
 commands = CommandsModule("Content converters")
@@ -199,9 +200,23 @@ async def transcribed_audio_raw_handler(
             icon=Icons.SPEECH_TO_TEXT,
             text=update.text,
         )
-    await client.edit_message_text(
-        chat_id=chat_id,
-        message_id=msg_id,
-        text=new_text,
-    )
+    if msg_id < 0:
+        # not my message => cannot edit
+        if result != "":
+            # trying to be as silent as possible, so send the result only if speech was recognized
+            await client.send_message(
+                chat_id=chat_id,
+                text=new_text,
+                reply_to_message_id=-msg_id,
+            )
+        try:
+            await react(client, chat_id, -msg_id, None)
+        except ReactionInvalid:
+            pass
+    else:
+        await client.edit_message_text(
+            chat_id=chat_id,
+            message_id=msg_id,
+            text=new_text,
+        )
     await storage.delete_transcription(update.transcription_id)
