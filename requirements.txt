@@ -1,7 +1,7 @@
 aiofiles~=23.1.0
 d20~=1.1.2
 httpx[http2]~=0.24.0
-jq~=1.4.0
+jq~=1.4.1
 lark~=1.1.5
 Pillow~=9.5.0
 Pyrogram==2.0.97
