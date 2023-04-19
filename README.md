@@ -41,7 +41,7 @@ About:
 Chat administration:
 • chatban|chatrestrict <'reply'|user_id|username|user_group> ['0'|'forever'|timespec] ['*'|perms] [reason...] — Restricts or bans a user in a chat.
 • chatcleardel — Kicks Deleted Accounts from the chat.
-• chatinvite <user_id|username|user_group> — Invites users to the current chat.
+• chatinvite <user_id|username|user_group> ['verify'] — Invites users to the current chat.
 • chatunban <'reply'|user_id|username|user_group> — Unbans a user in a chat.
 • <in reply> no_react2ban|noreact2ban — Stops react2ban on the message.
 • <in reply> pin ['silent'] — Pins the message.

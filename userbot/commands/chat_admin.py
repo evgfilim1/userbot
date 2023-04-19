@@ -9,8 +9,14 @@ from datetime import datetime, timedelta
 from typing import Literal, overload
 
 from pyrogram import Client, ContinuePropagation
-from pyrogram.enums import ChatMemberStatus
-from pyrogram.errors import FloodWait, UserAdminInvalid
+from pyrogram.enums import ChatMemberStatus, ChatType
+from pyrogram.errors import (
+    FloodWait,
+    UserAdminInvalid,
+    UserAlreadyParticipant,
+    UserNotParticipant,
+    UserPrivacyRestricted,
+)
 from pyrogram.raw import base, functions, types
 from pyrogram.types import ChatPermissions, Message
 from pyrogram.utils import get_channel_id, zero_datetime
@@ -491,7 +497,7 @@ async def kick_deleted_accounts(
     return f"{Icons.PERSON_BLOCK} {kicked_text} {total_checked_text}"
 
 
-@commands.add("chatinvite", usage="<user_id|username|user_group>")
+@commands.add("chatinvite", usage="<user_id|username|user_group> ['verify']")
 async def invite_to_chat(
     client: Client,
     message: Message,
@@ -499,12 +505,68 @@ async def invite_to_chat(
     storage: Storage,
     tr: Translation,
 ) -> None:
-    """Invites users to the current chat."""
+    """Invites users to the current chat.
+
+    If 'verify' is specified, the bot will verify the users were actually added to the group.
+    """
     _ = tr.gettext
     value = command.args[0]
     users = await resolve_users(client, storage, value)
-    await message.chat.add_members(list(users))
-    return _("{icon} <i>{value}</i> has been invited to the chat").format(
+    if message.chat.type == ChatType.GROUP:
+        for user in users:
+            try:
+                await client.add_chat_members(message.chat.id, user)
+            except UserAlreadyParticipant:
+                pass  # ignore
+            except UserPrivacyRestricted:
+                pass  # ignore
+    else:
+        try:
+            await client.add_chat_members(message.chat.id, list(users))
+        except UserPrivacyRestricted:
+            pass  # ignore
+    if command.args[1] == "verify":
+        added = set()
+        failed = set()
+        if message.chat.type == ChatType.GROUP:
+            full_chat: types.messages.ChatFull = await client.invoke(
+                functions.messages.GetFullChat(
+                    chat_id=(await client.resolve_peer(message.chat.id)).chat_id,
+                )
+            )
+            members = set(p.user_id for p in full_chat.full_chat.participants.participants)
+            for user in users:
+                if user not in members:
+                    failed.add(user)
+                else:
+                    added.add(user)
+        else:
+            for user in users:
+                try:
+                    participant: types.channels.ChannelParticipant = await client.invoke(
+                        functions.channels.GetParticipant(
+                            channel=await client.resolve_peer(message.chat.id),
+                            participant=await client.resolve_peer(user),
+                        )
+                    )
+                except UserNotParticipant:
+                    failed.add(user)
+                    continue
+                p = participant.participant
+                if isinstance(p, (types.ChannelParticipantLeft, types.ChannelParticipantBanned)):
+                    failed.add(user)
+                else:
+                    added.add(user)
+        return _(
+            "{icon} Add <code>{value}</code> to the chat:"
+            " <i>{added}</i> added, <i>{failed}</i> failed."
+        ).format(
+            icon=Icons.PERSON_TICK,
+            value=value,
+            added=len(added),
+            failed=len(failed),
+        )
+    return _("{icon} <code>{value}</code> has been invited to the chat").format(
         icon=Icons.PERSON_TICK,
         value=value,
     )
