@@ -109,6 +109,8 @@ async def resolve_users(
 
     The square brackets are optional if there are no parameters.
 
+    If `resolve_ids` is set, integer user IDs will be checked for existence via API.
+
     Returns a set of user IDs resolved.
     """
     if isinstance(value, Iterable) and not isinstance(value, str):

@@ -113,6 +113,7 @@ Tools:
 • calc|eval <python_expr...> — Evaluates Python expression.
 • exec <python_code...> — Executes Python code.
 • <in reply> id — Sends replied user's ID as link.
+• ugping <user_group> [text...] — Pings a user group with optional text.
 
 User groups:
 • usergroupadd|ugadd <group_name> [user_id|username|user_group]... — Adds a user to the user group for later use with user resolving.

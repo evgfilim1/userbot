@@ -11,12 +11,15 @@ from os import getpid, kill
 from signal import SIGINT
 from typing import Any, NoReturn
 
+from pyrogram import Client
+from pyrogram.enums import ParseMode
 from pyrogram.types import Message
 
 from ..constants import Icons
 from ..meta.modules import CommandsModule
 from ..middlewares import CommandObject
-from ..utils import Translation
+from ..storage import Storage
+from ..utils import Translation, resolve_users
 
 commands = CommandsModule("Tools")
 
@@ -147,3 +150,39 @@ async def stop_self(message: Message, tr: Translation) -> None:
     _ = tr.gettext
     await message.edit(_("{icon} <b>Stopping userbot...</b>").format(icon=Icons.WARNING))
     kill(getpid(), SIGINT)
+
+
+@commands.add("ugping", usage="<user_group> [text...]")
+async def ping_user_group(
+    client: Client,
+    message: Message,
+    command: CommandObject,
+    storage: Storage,
+    tr: Translation,
+) -> None:
+    """Pings a user group with optional text."""
+    _ = tr.gettext
+    user_group = command.args["user_group"]
+    text = command.args["text"]
+    res = ""
+    users = list(await resolve_users(client, storage, user_group))  # Pyrogram doesn't like sets
+    if len(users) == 0:
+        return _("{icon} No users in <code>{user_group}</code>").format(
+            icon=Icons.WARNING,
+            user_group=user_group,
+        )
+    for user in await client.get_users(users):
+        if user.username is not None:
+            res += f"@{user.username}"
+        else:
+            res += f"{user.mention(style=ParseMode.HTML)}"
+        res += " "
+    if text is not None:
+        res += text
+    await client.send_message(
+        chat_id=message.chat.id,
+        text=res,
+        parse_mode=ParseMode.HTML,
+        reply_to_message_id=message.reply_to_message_id,
+    )
+    await message.delete()

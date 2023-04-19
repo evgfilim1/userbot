@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-04-13 13:03+0500\n"
+"POT-Creation-Date: 2023-04-19 21:27+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: userbot/commands/content_converters.py:164 userbot/commands/content_converters.py:199
 #: userbot/hooks.py:87
@@ -504,33 +504,38 @@ msgid ""
 "Possible fix: <code>{message_text}/</code>"
 msgstr ""
 
-#: userbot/commands/tools.py:36 userbot/commands/tools.py:47
+#: userbot/commands/tools.py:39 userbot/commands/tools.py:50
 #, python-brace-format
 msgid "{icon} Unsafe commands are disabled in the config"
 msgstr ""
 
-#: userbot/commands/tools.py:88
+#: userbot/commands/tools.py:91
 #, python-brace-format
 msgid ""
 "<b>Code:</b>\n"
 "<pre><code class='language-python'>{code}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:91
+#: userbot/commands/tools.py:94
 #, python-brace-format
 msgid ""
 "<b>Result:</b>\n"
 "<pre><code class='language-python'>{result}</code></pre>"
 msgstr ""
 
-#: userbot/commands/tools.py:134
+#: userbot/commands/tools.py:137
 #, python-brace-format
 msgid "{icon} Done sleeping for {sec} seconds"
 msgstr ""
 
-#: userbot/commands/tools.py:148
+#: userbot/commands/tools.py:151
 #, python-brace-format
 msgid "{icon} <b>Stopping userbot...</b>"
+msgstr ""
+
+#: userbot/commands/tools.py:170
+#, python-brace-format
+msgid "{icon} No users in <code>{user_group}</code>"
 msgstr ""
 
 #: userbot/commands/user_groups.py:41
