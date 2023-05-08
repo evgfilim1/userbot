@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evgfilim1/userbot 0.6.x\n"
 "Report-Msgid-Bugs-To: https://github.com/evgfilim1/userbot/issues\n"
-"POT-Creation-Date: 2023-04-20 00:46+0500\n"
+"POT-Creation-Date: 2023-05-08 19:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,17 +282,17 @@ msgstr ""
 msgid "{icon} <code>{value}</code> has been invited to the chat"
 msgstr ""
 
-#: userbot/commands/chat_info.py:95
+#: userbot/commands/chat_info.py:118
 #, python-brace-format
 msgid "{icon} <b>New chat avatar was set!</b> <a href='{msg_link}'>Source</a>\n"
 msgstr ""
 
-#: userbot/commands/chat_info.py:101
+#: userbot/commands/chat_info.py:127
 #, python-brace-format
 msgid "{icon} <b>New chat title was set!</b> <a href='{msg_link}'>Source</a>"
 msgstr ""
 
-#: userbot/commands/chat_info.py:113
+#: userbot/commands/chat_info.py:139
 msgid "<a href='{msg.link}'>Random message (#{msg.id})</a>"
 msgstr ""
 
