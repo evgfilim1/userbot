@@ -1,6 +1,6 @@
 aiofiles~=23.1.0
 d20~=1.1.2
-httpx[http2]~=0.24.0
+httpx[http2]~=0.24.1
 jq~=1.4.1
 lark~=1.1.5
 Pillow~=9.5.0
