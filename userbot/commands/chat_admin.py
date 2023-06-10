@@ -14,6 +14,7 @@ from pyrogram.errors import (
     FloodWait,
     UserAdminInvalid,
     UserAlreadyParticipant,
+    UserNotMutualContact,
     UserNotParticipant,
     UserPrivacyRestricted,
 )
@@ -519,6 +520,8 @@ async def invite_to_chat(
             except UserAlreadyParticipant:
                 pass  # ignore
             except UserPrivacyRestricted:
+                pass  # ignore
+            except UserNotMutualContact:
                 pass  # ignore
     else:
         try:
