@@ -3,7 +3,7 @@ d20~=1.1.2
 httpx[http2]~=0.24.0
 jq~=1.4.1
 lark~=1.1.5
-Pillow~=9.5.0
+Pillow~=10.0.0
 Pyrogram==2.0.97
 python-magic~=0.4.27
 redis~=4.5.4
